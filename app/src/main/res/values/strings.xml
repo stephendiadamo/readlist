@@ -1,14 +1,16 @@
 <resources>
     <string name="app_name">Readlist</string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-
+    <!-- General Labels-->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_example">Example action</string>
-
     <string name="action_settings">Settings</string>
+
+    <!-- Navigation Drawer Labels-->
+    <string name="navigation_drawer_reading">Reading</string>
+    <string name="navigation_drawer_bookshelves">Bookshelves</string>
+    <string name="navigation_drawer_goals">Goals</string>
+    <string name="navigation_drawer_statistics">Statistics</string>
+
 </resources>
