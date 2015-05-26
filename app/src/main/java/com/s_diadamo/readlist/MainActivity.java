@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -30,7 +31,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle = getString(R.string.app_name);
+    private CharSequence mTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +50,45 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+        Fragment objFragment = null;
+
+        switch (position) {
+            case 0:
+                objFragment = new ReadingFragment();
+                break;
+            case 1:
+                objFragment = new GoalsFragment();
+                break;
+            case 2:
+                objFragment = new GoalsFragment();
+                break;
+            case 3:
+                objFragment = new StatisticsFragment();
+                break;
+        }
+
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, objFragment)
                 .commit();
     }
 
     public void onSectionAttached(int number) {
-        return;
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.navigation_drawer_reading);
+                break;
+            case 2:
+                mTitle = getString(R.string.navigation_drawer_bookshelves);
+                break;
+            case 3:
+                mTitle = getString(R.string.navigation_drawer_goals);
+                break;
+            case 4:
+                mTitle = getString(R.string.navigation_drawer_statistics);
+                break;
+        }
     }
 
     public void restoreActionBar() {
@@ -66,7 +97,6 @@ public class MainActivity extends ActionBarActivity
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
