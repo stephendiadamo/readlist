@@ -6,6 +6,7 @@ public class Book {
 
     int _id;
     String _title;
+    String _author;
     int _shelf;
     String _date_added;
     int _num_pages;
@@ -17,9 +18,10 @@ public class Book {
     public Book() {
     }
 
-    public Book(int id, String title, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
+    public Book(int id, String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
         this._id = id;
         this._title = title;
+        this._author = author;
         this._shelf = shelf;
         this._date_added = dateAdded;
         this._num_pages = numPages;
@@ -29,8 +31,9 @@ public class Book {
         this._cover_picture_url = coverPictureUrl;
     }
 
-    public Book(String title, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
+    public Book(String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
         this._title = title;
+        this._author = author;
         this._shelf = shelf;
         this._date_added = dateAdded;
         this._num_pages = numPages;
@@ -46,6 +49,14 @@ public class Book {
 
     public void setTitle(String _title) {
         this._title = _title;
+    }
+
+    public String getAuthor() {
+        return this._author;
+    }
+
+    public void setAuthor(String author) {
+        this._author = author;
     }
 
     public int getID() {
