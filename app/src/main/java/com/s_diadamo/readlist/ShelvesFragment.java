@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ShelvesFragment extends Fragment {
     View rootView;
-    DatabaseHelper dbHelper;
+    ShelfOperations shelfOperations;
 
     @Nullable
     @Override
@@ -31,8 +31,8 @@ public class ShelvesFragment extends Fragment {
         setHasOptionsMenu(true);
         final ListView shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
 
-        dbHelper = new DatabaseHelper(container.getContext());
-        List<Shelf> shelves = dbHelper.getAllShelves();
+        shelfOperations = new ShelfOperations(container.getContext());
+        List<Shelf> shelves = shelfOperations.getAllShelves();
 
         String[] values = new String[shelves.size()];
 
@@ -94,7 +94,7 @@ public class ShelvesFragment extends Fragment {
 
                 if (!shelfName.isEmpty()) {
                     Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
-                    dbHelper.addShelf(shelf);
+                    shelfOperations.addShelf(shelf);
                     addShelfDialog.dismiss();
                 } else {
                     Toast.makeText(v.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();
@@ -103,6 +103,5 @@ public class ShelvesFragment extends Fragment {
         });
         addShelfDialog.show();
     }
-
 }
 
