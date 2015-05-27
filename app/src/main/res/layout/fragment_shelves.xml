@@ -4,9 +4,8 @@
     android:layout_height="match_parent"
     tools:context="com.s_diadamo.readlist.ShelvesFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/navigation_drawer_shelves" />
-
+    <ListView
+        android:id="@+id/shelf_list_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
 </FrameLayout>

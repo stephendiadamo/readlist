@@ -37,21 +37,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
-            KEY_ID + " INTEGER PRIMARY KEY," +
-            BOOK_TITLE + " TEXT," +
-            BOOK_SHELF + " INTEGER," +
-            BOOK_DATE_ADDED + " TEXT," +
-            BOOK_NUM_PAGES + " INTEGER," +
-            BOOK_CURRENT_PAGE + " INTEGER," +
-            BOOK_TILE_COLOR + " TEXT," +
-            BOOK_COMPLETE + " INTEGER," +
+            KEY_ID + " INTEGER PRIMARY KEY, " +
+            BOOK_TITLE + " TEXT, " +
+            BOOK_SHELF + " INTEGER, " +
+            BOOK_DATE_ADDED + " TEXT, " +
+            BOOK_NUM_PAGES + " INTEGER, " +
+            BOOK_CURRENT_PAGE + " INTEGER, " +
+            BOOK_TILE_COLOR + " TEXT, " +
+            BOOK_COMPLETE + " INTEGER, " +
             BOOK_COVER_PICTURE_URL + " TEXT" +
             ")";
 
-    private static final String CREATE_SHELVES_TABLE = "CREATE TABLE " + TABLE_BOOKS +
+    private static final String CREATE_SHELVES_TABLE = "CREATE TABLE " + TABLE_SHELVES +
             "(" +
-            KEY_ID + " INTEGER PRIMARY KEY," +
-            SHELF_NAME + " TEXT," +
+            KEY_ID + " INTEGER PRIMARY KEY, " +
+            SHELF_NAME + " TEXT, " +
             SHELF_COLOR + " TEXT" +
             ")";
 
@@ -215,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public List<Shelf> getAllShelves() {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase();
 
         List<Shelf> shelves = new ArrayList<Shelf>();
         String selectQuery = "SELECT * FROM " + TABLE_SHELVES;

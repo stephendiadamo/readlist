@@ -47,19 +47,6 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         databaseHelper = new DatabaseHelper(this);
-//
-//        Log.d("Adding Test Books: ", "Inserting...");
-//
-//        databaseHelper.addBook(new Book("test1", 0, "hey", 10, 0, "blue", 0, "yoyo"));
-//        databaseHelper.addBook(new Book("test2", 0, "hey", 15, 1, "red", 1, "hehe"));
-//
-//        Log.d("Reading Books: ", "Reading...");
-//
-//        List<Book> books = databaseHelper.getAllBooks();
-//        for (Book b : books) {
-//            String log = "ID: " + b.getID() + ", Title: " + b.getTitle();
-//            Log.d("Book: ", log);
-//        }
     }
 
     @Override
