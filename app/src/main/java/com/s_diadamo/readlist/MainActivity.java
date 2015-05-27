@@ -11,8 +11,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -59,7 +61,6 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 1:
                 objFragment = new ShelvesFragment();
-                initializeShelfMenu();
                 break;
             case 2:
                 objFragment = new GoalsFragment();
@@ -76,12 +77,6 @@ public class MainActivity extends ActionBarActivity
                 .commit();
     }
 
-    private void initializeShelfMenu() {
-        this.menu.clear();
-        MenuItem addShelf = this.menu.add(0, 0, 0, "Add Shelf");
-        addShelf.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    }
-
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
@@ -92,11 +87,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
-//        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-//            getMenuInflater().inflate(R.menu.main, menu);
-//            restoreActionBar();
-//            return true;
-//        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -107,36 +97,7 @@ public class MainActivity extends ActionBarActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
-        switch (id) {
-            case 0:
-                addNewShelf();
-                return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void addNewShelf() {
-        final Dialog addShelfDialog = new Dialog(this);
-        addShelfDialog.setContentView(R.layout.add_shelf);
-        addShelfDialog.setTitle("New Shelf");
-
-        final Button addShelfButton = (Button) addShelfDialog.findViewById(R.id.add_shelf_button);
-        addShelfButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText shelfNameEditText = (EditText) addShelfDialog.findViewById(R.id.shelf_name_edit_text);
-                String shelfName = shelfNameEditText.getText().toString();
-
-                if (!shelfName.isEmpty()) {
-                    databaseHelper.addShelf(new Shelf(shelfName, Shelf.DEFAULT_COLOR));
-                    addShelfDialog.dismiss();
-                } else {
-                    Toast.makeText(v.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        addShelfDialog.show();
-    }
 }
