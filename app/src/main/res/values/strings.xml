@@ -1,16 +1,21 @@
 <resources>
     <string name="app_name">Readlist</string>
 
-    <!-- General Labels-->
+    <!-- General Labels -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
-    <!-- Navigation Drawer Labels-->
+    <!-- Navigation Drawer Labels -->
     <string name="navigation_drawer_reading">Reading</string>
     <string name="navigation_drawer_bookshelves">Bookshelves</string>
     <string name="navigation_drawer_goals">Goals</string>
     <string name="navigation_drawer_statistics">Statistics</string>
+
+    <!-- Shelf Dialog -->
+    <string name="navigation_drawer_shelves">Shelves</string>
+    <string name="shelf_name">Shelf Name:</string>
+    <string name="add">Add</string>
 
 </resources>
