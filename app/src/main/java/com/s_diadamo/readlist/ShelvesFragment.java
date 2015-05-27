@@ -17,30 +17,33 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class ShelvesFragment extends Fragment {
     View rootView;
     ShelfOperations shelfOperations;
+    ListView shelfListView;
+    ArrayAdapter<String> shelfArrayAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_shelves, container, false);
         setHasOptionsMenu(true);
-        final ListView shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
+        shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
 
         shelfOperations = new ShelfOperations(container.getContext());
         List<Shelf> shelves = shelfOperations.getAllShelves();
 
-        String[] values = new String[shelves.size()];
+        ArrayList<String> values = new ArrayList<String>();
 
         for (int i = 0; i < shelves.size(); i++) {
-            values[i] = shelves.get(i).getName();
+            values.add(shelves.get(i).getName());
         }
 
-        ArrayAdapter<String> shelfArrayAdapter = new ArrayAdapter<String>(getActivity(),
+        shelfArrayAdapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, values);
         shelfListView.setAdapter(shelfArrayAdapter);
 
@@ -95,6 +98,7 @@ public class ShelvesFragment extends Fragment {
                 if (!shelfName.isEmpty()) {
                     Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
                     shelfOperations.addShelf(shelf);
+                    shelfArrayAdapter.add(shelf.getName());
                     addShelfDialog.dismiss();
                 } else {
                     Toast.makeText(v.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();
