@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ShelvesFragment extends Fragment {
+public class ShelfFragment extends Fragment {
     View rootView;
     ShelfOperations shelfOperations;
     ListView shelfListView;
@@ -31,9 +31,10 @@ public class ShelvesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_shelves, container, false);
-        setHasOptionsMenu(true);
-        shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
 
+        setHasOptionsMenu(true);
+
+        shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
         shelfOperations = new ShelfOperations(container.getContext());
         List<Shelf> shelves = shelfOperations.getAllShelves();
 
