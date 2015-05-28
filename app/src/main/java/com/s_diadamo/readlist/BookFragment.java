@@ -28,11 +28,11 @@ public class BookFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_reading, container, false);
+        rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
         setHasOptionsMenu(true);
 
-        bookListView = (ListView) rootView.findViewById(R.id.book_list_view);
+        bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
         ArrayList<Book> books = bookOperations.getAllBooks();

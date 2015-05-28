@@ -30,11 +30,11 @@ public class ShelfFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_shelves, container, false);
+        rootView = inflater.inflate(R.layout.fragment_listview, container, false);
 
         setHasOptionsMenu(true);
 
-        shelfListView = (ListView) rootView.findViewById(R.id.shelf_list_view);
+        shelfListView = (ListView) rootView.findViewById(R.id.general_list_view);
         shelfOperations = new ShelfOperations(container.getContext());
         List<Shelf> shelves = shelfOperations.getAllShelves();
 
