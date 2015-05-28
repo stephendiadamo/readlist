@@ -45,10 +45,10 @@ public class MainActivity extends ActionBarActivity
 
         switch (position) {
             case 0:
-                objFragment = new ReadingFragment();
+                objFragment = new BookFragment();
                 break;
             case 1:
-                objFragment = new ShelvesFragment();
+                objFragment = new ShelfFragment();
                 break;
             case 2:
                 objFragment = new GoalsFragment();

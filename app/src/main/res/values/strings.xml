@@ -18,5 +18,11 @@
     <string name="shelf_name">Shelf Name:</string>
     <string name="add">Add</string>
     <string name="add_shelf">Add Shelf</string>
+    <string name="book_cover_image">Book Cover Image</string>
+    <string name="add_book">Add Book</string>
+    <string name="book_title">Book Title:</string>
+    <string name="book_Author">Book Author:</string>
+    <string name="search">Search</string>
+    <string name="add_book_manually">Manual Add</string>
 
 </resources>
