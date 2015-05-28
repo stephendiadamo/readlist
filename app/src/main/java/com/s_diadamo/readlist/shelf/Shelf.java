@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.shelf;
 
 public class Shelf {
 

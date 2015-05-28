@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.book;
 
 import android.app.Dialog;
 import android.support.v4.app.Fragment;
@@ -15,8 +15,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.s_diadamo.readlist.R;
+
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class BookFragment extends Fragment {

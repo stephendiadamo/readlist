@@ -1,13 +1,13 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.book;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.sql.SQLException;
+import com.s_diadamo.readlist.DatabaseHelper;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class BookOperations {
     private String[] BOOK_TABLE_COLUMNS = {

@@ -9,6 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 
+import com.s_diadamo.readlist.book.BookFragment;
+import com.s_diadamo.readlist.goal.GoalsFragment;
+import com.s_diadamo.readlist.shelf.ShelfFragment;
+import com.s_diadamo.readlist.statistics.StatisticsFragment;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
