@@ -40,6 +40,8 @@ public class ShelfFragment extends Fragment {
 
         ArrayList<String> values = new ArrayList<String>();
 
+        // TODO: Going to need to modify this when shelves are more than names
+
         for (int i = 0; i < shelves.size(); i++) {
             values.add(shelves.get(i).getName());
         }
@@ -61,10 +63,10 @@ public class ShelfFragment extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflator) {
-        super.onCreateOptionsMenu(menu, inflator);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
-        inflator.inflate(R.menu.add_shelf, menu);
+        inflater.inflate(R.menu.menu_shelf, menu);
     }
 
     @Override
