@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/set_current_page"
+        android:title="@string/update_page" />
+    <item
+        android:id="@+id/mark_complete"
+        android:title="@string/mark_complete" />
+    <item
+        android:id="@+id/set_color"
+        android:title="@string/set_color" />
+    <item
+        android:id="@+id/edit_num_pages"
+        android:title="@string/edit_num_pages" />
+    <item
+        android:id="@+id/delete_book"
+        android:title="@string/delete_book" />
+</menu>

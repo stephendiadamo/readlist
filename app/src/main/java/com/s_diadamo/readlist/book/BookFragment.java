@@ -1,22 +1,29 @@
 package com.s_diadamo.readlist.book;
 
 import android.app.Dialog;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.s_diadamo.readlist.API;
+import com.s_diadamo.readlist.BookSearchRequest;
 import com.s_diadamo.readlist.R;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -25,6 +32,7 @@ public class BookFragment extends Fragment {
     BookOperations bookOperations;
     ListView bookListView;
     BookAdapter bookAdapter;
+    ArrayList<Book> books;
 
     @Nullable
     @Override
@@ -36,22 +44,29 @@ public class BookFragment extends Fragment {
         bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
-        ArrayList<Book> books = bookOperations.getAllBooks();
+        books = bookOperations.getAllBooks();
 
-        final BookAdapter bookAdapter = new BookAdapter(container.getContext(), R.layout.book_row_element, books);
+        bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, books);
         bookListView.setAdapter(bookAdapter);
+        registerForContextMenu(bookListView);
+        bookListView.setLongClickable(false);
 
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Book book = bookAdapter.getItem(position);
-
-                // TODO: Pop up some settings thing
-
-                Toast.makeText(view.getContext(), book.getTitle(), Toast.LENGTH_SHORT).show();
+                getActivity().openContextMenu(view);
             }
         });
+
         return rootView;
+    }
+
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_book_actions, menu);
     }
 
     @Override
@@ -59,6 +74,55 @@ public class BookFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         menu.clear();
         inflater.inflate(R.menu.menu_book, menu);
+    }
+
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        l.showContextMenuForChild(v);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.set_current_page:
+                return true;
+            case R.id.mark_complete:
+                return true;
+            case R.id.set_color:
+                return true;
+            case R.id.edit_num_pages:
+                editNumberOfPages(books.get(info.position));
+                return true;
+            case R.id.delete_book:
+                Book b = books.remove(info.position);
+                bookAdapter.notifyDataSetChanged();
+                bookOperations.deleteBook(b);
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    private void editNumberOfPages(final Book book) {
+        final Dialog editNumberOfPagesDialog = new Dialog(rootView.getContext());
+        editNumberOfPagesDialog.setContentView(R.layout.dialog_edit_book_pages);
+        editNumberOfPagesDialog.setTitle("Edit Book Pages");
+
+        final Button updatePagesButton = (Button) editNumberOfPagesDialog.findViewById(R.id.update_page_button);
+        updatePagesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newNumberOfPages = ((EditText) editNumberOfPagesDialog.findViewById(R.id.update_page_num_value)).getText().toString();
+                if (!newNumberOfPages.isEmpty()) {
+                    int pages = Integer.parseInt(newNumberOfPages);
+                    book.setNumPages(pages);
+                    bookOperations.updateBook(book);
+                    bookAdapter.notifyDataSetChanged();
+                }
+                editNumberOfPagesDialog.dismiss();
+            }
+        });
+        editNumberOfPagesDialog.show();
     }
 
     @Override
@@ -71,7 +135,7 @@ public class BookFragment extends Fragment {
         long id = item.getItemId();
 
         if (id == R.id.add_book) {
-            searchBook();
+            //searchBook();
             return true;
         }
 
@@ -80,14 +144,35 @@ public class BookFragment extends Fragment {
 
     private void searchBook() {
         final Dialog searchBookDialog = new Dialog(rootView.getContext());
-        searchBookDialog.setContentView(R.layout.search_book);
+        searchBookDialog.setContentView(R.layout.dialog_search_book);
         searchBookDialog.setTitle("Search");
 
         final Button searchBookButton = (Button) searchBookDialog.findViewById(R.id.search_book);
         searchBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), "Search Book", Toast.LENGTH_SHORT).show();
+
+                String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
+                String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
+                String searchQuery = bookTitle.trim().replace(" ", "%20") + "+inauthor:" + bookAuthor.trim().replace(" ", "%20");
+
+                String API_KEY = API.getGoogleBooksApiKey();
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.googleapis.com")
+                        .appendPath("books")
+                        .appendPath("v1")
+                        .appendPath("volumes")
+                        .encodedQuery("q=" + searchQuery)
+                        .appendQueryParameter("key", API_KEY);
+
+                ArrayList<Book> bookResults = new ArrayList<Book>();
+                String url = builder.build().toString();
+
+                BookSearchRequest bookSearchRequest = new BookSearchRequest(bookResults);
+                bookSearchRequest.execute(url);
+
                 searchBookDialog.dismiss();
             }
         });

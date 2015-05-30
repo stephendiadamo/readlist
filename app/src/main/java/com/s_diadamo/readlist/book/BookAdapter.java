@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.s_diadamo.readlist.DownloadImageTask;
 import com.s_diadamo.readlist.R;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        BookHolder bookHolder = null;
+        BookHolder bookHolder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
@@ -48,8 +49,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
         Book book = books.get(position);
 
-        //TODO: Deal with images
-
+        new DownloadImageTask(bookHolder.bookCover).execute(book.getCoverPictureURL());
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
