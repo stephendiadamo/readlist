@@ -91,7 +91,7 @@ public class BookFragment extends Fragment {
             case R.id.set_color:
                 return true;
             case R.id.edit_num_pages:
-                editNumberOfPages(books.get(info.position));
+                BookMenuActions.editNumberOfPages(books.get(info.position), rootView, bookOperations, bookAdapter);
                 return true;
             case R.id.delete_book:
                 Book b = books.remove(info.position);
@@ -101,28 +101,6 @@ public class BookFragment extends Fragment {
         }
 
         return super.onContextItemSelected(item);
-    }
-
-    private void editNumberOfPages(final Book book) {
-        final Dialog editNumberOfPagesDialog = new Dialog(rootView.getContext());
-        editNumberOfPagesDialog.setContentView(R.layout.dialog_edit_book_pages);
-        editNumberOfPagesDialog.setTitle("Edit Book Pages");
-
-        final Button updatePagesButton = (Button) editNumberOfPagesDialog.findViewById(R.id.update_page_button);
-        updatePagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newNumberOfPages = ((EditText) editNumberOfPagesDialog.findViewById(R.id.update_page_num_value)).getText().toString();
-                if (!newNumberOfPages.isEmpty()) {
-                    int pages = Integer.parseInt(newNumberOfPages);
-                    book.setNumPages(pages);
-                    bookOperations.updateBook(book);
-                    bookAdapter.notifyDataSetChanged();
-                }
-                editNumberOfPagesDialog.dismiss();
-            }
-        });
-        editNumberOfPagesDialog.show();
     }
 
     @Override
