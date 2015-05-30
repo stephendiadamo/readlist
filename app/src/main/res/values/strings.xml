@@ -24,5 +24,12 @@
     <string name="book_Author">Book Author:</string>
     <string name="search">Search</string>
     <string name="add_book_manually">Manual Add</string>
+    <string name="update_page">Update Page</string>
+    <string name="mark_complete">Mark Complete</string>
+    <string name="set_color">Set Color</string>
+    <string name="edit_num_pages">Edit Number of Pages</string>
+    <string name="delete_book">Delete Book</string>
+    <string name="new_page_number">Number of Pages:</string>
+    <string name="Update">Update</string>
 
 </resources>

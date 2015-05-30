@@ -90,7 +90,7 @@ public class ShelfFragment extends Fragment {
 
     private void addNewShelf() {
         final Dialog addShelfDialog = new Dialog(rootView.getContext());
-        addShelfDialog.setContentView(R.layout.add_shelf);
+        addShelfDialog.setContentView(R.layout.dialog_add_shelf);
         addShelfDialog.setTitle("New Shelf");
 
         final Button addShelfButton = (Button) addShelfDialog.findViewById(R.id.add_shelf_button);
