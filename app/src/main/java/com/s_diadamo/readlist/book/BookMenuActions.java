@@ -7,9 +7,6 @@ import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
 
-/**
- * Created by s-diadamo on 15-05-29.
- */
 public class BookMenuActions {
 
     public static void editNumberOfPages(final Book book, View view, final BookOperations bookOperations, final BookAdapter bookAdapter) {
