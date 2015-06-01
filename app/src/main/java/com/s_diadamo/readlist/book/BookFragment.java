@@ -123,6 +123,9 @@ public class BookFragment extends Fragment {
         if (id == R.id.add_book) {
             //searchBook();
             return true;
+        } else if (id == R.id.add_book_manually) {
+            BookMenuActions.manuallyAddBook(rootView, bookOperations, bookAdapter);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
