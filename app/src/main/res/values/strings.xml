@@ -31,5 +31,8 @@
     <string name="delete_book">Delete Book</string>
     <string name="new_page_number">Number of Pages:</string>
     <string name="Update">Update</string>
+    <string name="plus_twenty">+20</string>
+    <string name="plus_fifty">+50</string>
+    <string name="done">Done</string>
 
 </resources>

@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 
 import com.s_diadamo.readlist.R;
 
@@ -29,5 +30,45 @@ public class BookMenuActions {
             }
         });
         editNumberOfPagesDialog.show();
+    }
+
+    public static void setCurrentPage(final Book book, View view, final BookOperations bookOperations, final BookAdapter bookAdapter) {
+        final Dialog setCurrentPageDialog = new Dialog(view.getContext());
+        setCurrentPageDialog.setContentView(R.layout.dialog_set_book_current_page);
+        setCurrentPageDialog.setTitle("Update Page");
+
+        final NumberPicker pagePicker = (NumberPicker) setCurrentPageDialog.findViewById(R.id.set_page_picker);
+        pagePicker.setMinValue(0);
+        pagePicker.setMaxValue(book.getNumPages());
+        pagePicker.setValue(book.getCurrentPage());
+
+        Button addTwenty = (Button) setCurrentPageDialog.findViewById(R.id.set_page_plus_twenty);
+        Button addFifty = (Button) setCurrentPageDialog.findViewById(R.id.set_page_plus_fifty);
+        Button done = (Button) setCurrentPageDialog.findViewById(R.id.set_page_done);
+
+        addTwenty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pagePicker.setValue(pagePicker.getValue() + 20);
+            }
+        });
+
+        addFifty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pagePicker.setValue(pagePicker.getValue() + 50);
+            }
+        });
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                book.setCurrentPage(pagePicker.getValue());
+                bookOperations.updateBook(book);
+                bookAdapter.notifyDataSetChanged();
+                setCurrentPageDialog.dismiss();
+            }
+        });
+        setCurrentPageDialog.show();
     }
 }

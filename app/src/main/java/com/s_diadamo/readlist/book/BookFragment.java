@@ -83,10 +83,17 @@ public class BookFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Book b;
         switch (item.getItemId()) {
             case R.id.set_current_page:
+                BookMenuActions.setCurrentPage(books.get(info.position), rootView, bookOperations, bookAdapter);
                 return true;
             case R.id.mark_complete:
+                // TODO: rip this out
+                b = books.get(info.position);
+                b.setComplete(true);
+                bookAdapter.notifyDataSetChanged();
+                bookOperations.updateBook(b);
                 return true;
             case R.id.set_color:
                 return true;
@@ -94,7 +101,8 @@ public class BookFragment extends Fragment {
                 BookMenuActions.editNumberOfPages(books.get(info.position), rootView, bookOperations, bookAdapter);
                 return true;
             case R.id.delete_book:
-                Book b = books.remove(info.position);
+                // TODO: rip this out
+                b = books.remove(info.position);
                 bookAdapter.notifyDataSetChanged();
                 bookOperations.deleteBook(b);
                 return true;
