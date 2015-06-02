@@ -12,18 +12,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.s_diadamo.readlist.API;
-import com.s_diadamo.readlist.BookSearchRequest;
 import com.s_diadamo.readlist.R;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 
@@ -121,7 +124,7 @@ public class BookFragment extends Fragment {
         long id = item.getItemId();
 
         if (id == R.id.add_book) {
-            //searchBook();
+            searchBook();
             return true;
         } else if (id == R.id.add_book_manually) {
             BookMenuActions.manuallyAddBook(rootView, bookOperations, bookAdapter);
@@ -130,6 +133,8 @@ public class BookFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
+    // TODO: Clean this up
 
     private void searchBook() {
         final Dialog searchBookDialog = new Dialog(rootView.getContext());
@@ -156,15 +161,33 @@ public class BookFragment extends Fragment {
                         .encodedQuery("q=" + searchQuery)
                         .appendQueryParameter("key", API_KEY);
 
-                ArrayList<Book> bookResults = new ArrayList<Book>();
                 String url = builder.build().toString();
-
-                BookSearchRequest bookSearchRequest = new BookSearchRequest(bookResults);
-                bookSearchRequest.execute(url);
+                getSearchResultsAndShowSearchDialog(url);
 
                 searchBookDialog.dismiss();
             }
         });
         searchBookDialog.show();
     }
+
+    // TODO: Rip this out
+
+    private void getSearchResultsAndShowSearchDialog(String url){
+        RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                Toast.makeText(rootView.getContext(), response.substring(0, 100), Toast.LENGTH_LONG).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(rootView.getContext(), "Failed!", Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+
 }
