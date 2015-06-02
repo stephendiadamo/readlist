@@ -7,13 +7,13 @@ public class Book {
     int _id;
     String _title;
     String _author;
-    int _shelf;
+    int _shelf = 0;
     String _date_added;
     int _num_pages;
-    int _current_page;
+    int _current_page = 0;
     String _tile_color;
-    Boolean _complete;
-    String _cover_picture_url;
+    Boolean _complete = false;
+    String _cover_picture_url = "";
 
     public Book() {
     }

@@ -24,11 +24,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
-
 
 public class BookFragment extends Fragment {
     View rootView;
@@ -149,6 +152,7 @@ public class BookFragment extends Fragment {
                 String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
                 String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
                 String searchQuery = bookTitle.trim().replace(" ", "%20") + "+inauthor:" + bookAuthor.trim().replace(" ", "%20");
+                String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
 
                 String API_KEY = API.getGoogleBooksApiKey();
 
@@ -162,6 +166,7 @@ public class BookFragment extends Fragment {
                         .appendQueryParameter("key", API_KEY);
 
                 String url = builder.build().toString();
+                url += "&fields=" + fields;
                 getSearchResultsAndShowSearchDialog(url);
 
                 searchBookDialog.dismiss();
@@ -172,13 +177,13 @@ public class BookFragment extends Fragment {
 
     // TODO: Rip this out
 
-    private void getSearchResultsAndShowSearchDialog(String url){
+    private void getSearchResultsAndShowSearchDialog(String url) {
         RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-
-                Toast.makeText(rootView.getContext(), response.substring(0, 100), Toast.LENGTH_LONG).show();
+                ArrayList<Book> books = getBooksFromJSONResponse(response);
+                displaySearchResults(books);
             }
         }, new Response.ErrorListener() {
             @Override
@@ -189,5 +194,64 @@ public class BookFragment extends Fragment {
         queue.add(stringRequest);
     }
 
+    private ArrayList<Book> getBooksFromJSONResponse(String response) {
+        ArrayList<Book> books = new ArrayList<Book>();
+        try {
+            JsonParser jsonParser = new JsonFactory().createParser(response);
+            jsonParser.nextToken();
+            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                String attributeName = jsonParser.getCurrentName();
+                if (attributeName.equals("kind")) {
+                    jsonParser.nextToken();
+                } else if (attributeName.equals("items")) {
+                    jsonParser.nextToken();
+                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                        jsonParser.nextToken();
+                        attributeName = jsonParser.getCurrentName();
+                        if (attributeName.equals("volumeInfo")) {
+                            jsonParser.nextToken();
+                            Book book = new Book();
+                            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
+                                attributeName = jsonParser.getCurrentName();
+                                if (attributeName.equals("title")) {
+                                    jsonParser.nextToken();
+                                    book.setTitle(jsonParser.getText());
+                                } else if (attributeName.equals("authors")) {
+                                    jsonParser.nextToken();
+                                    StringBuilder stringBuilder = new StringBuilder();
+                                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                                        stringBuilder.append(jsonParser.getText());
+                                        stringBuilder.append(", ");
+                                    }
+                                    String authors = stringBuilder.toString();
+                                    if (!authors.isEmpty()) {
+                                        book.setAuthor(authors.substring(0, authors.length() - 2));
+                                    }
+                                } else if (attributeName.equals("pageCount")) {
+                                    jsonParser.nextToken();
+                                    book.setNumPages(Integer.parseInt(jsonParser.getText()));
+                                } else if (attributeName.equals("imageLinks")) {
+                                    jsonParser.nextToken();
+                                    jsonParser.nextToken();
+                                    jsonParser.nextToken();
+                                    book.setCoverPictureURL(jsonParser.getText());
+                                    jsonParser.nextToken();
+                                }
+                            }
+                            books.add(book);
+                            jsonParser.nextToken();
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        return books;
+    }
+
+    private void displaySearchResults(ArrayList<Book> books) {
+
+    }
 }
