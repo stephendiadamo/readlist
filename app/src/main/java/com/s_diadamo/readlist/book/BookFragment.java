@@ -1,8 +1,6 @@
 package com.s_diadamo.readlist.book;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -31,7 +29,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.search.SearchAdapter;
+import com.s_diadamo.readlist.search.SearchResultDialog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,7 +39,7 @@ public class BookFragment extends Fragment {
     BookOperations bookOperations;
     ListView bookListView;
     BookAdapter bookAdapter;
-    ArrayList<Book> books;
+    ArrayList<Book> userBooks;
 
     @Nullable
     @Override
@@ -53,9 +51,9 @@ public class BookFragment extends Fragment {
         bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
-        books = bookOperations.getAllBooks();
+        userBooks = bookOperations.getAllBooks();
 
-        bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, books);
+        bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, userBooks);
         bookListView.setAdapter(bookAdapter);
         registerForContextMenu(bookListView);
         bookListView.setLongClickable(false);
@@ -95,11 +93,11 @@ public class BookFragment extends Fragment {
         Book b;
         switch (item.getItemId()) {
             case R.id.set_current_page:
-                BookMenuActions.setCurrentPage(books.get(info.position), rootView, bookOperations, bookAdapter);
+                BookMenuActions.setCurrentPage(userBooks.get(info.position), rootView, bookOperations, bookAdapter);
                 return true;
             case R.id.mark_complete:
                 // TODO: rip this out
-                b = books.get(info.position);
+                b = userBooks.get(info.position);
                 b.setComplete(true);
                 bookAdapter.notifyDataSetChanged();
                 bookOperations.updateBook(b);
@@ -107,11 +105,11 @@ public class BookFragment extends Fragment {
             case R.id.set_color:
                 return true;
             case R.id.edit_num_pages:
-                BookMenuActions.editNumberOfPages(books.get(info.position), rootView, bookOperations, bookAdapter);
+                BookMenuActions.editNumberOfPages(userBooks.get(info.position), rootView, bookOperations, bookAdapter);
                 return true;
             case R.id.delete_book:
                 // TODO: rip this out
-                b = books.remove(info.position);
+                b = userBooks.remove(info.position);
                 bookAdapter.notifyDataSetChanged();
                 bookOperations.deleteBook(b);
                 return true;
@@ -256,24 +254,8 @@ public class BookFragment extends Fragment {
         return books;
     }
 
-    private void displaySearchResults(ArrayList<Book> books) {
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
-        builder.setTitle("Search Results");
-
-        ListView listView = new ListView(rootView.getContext());
-
-        final SearchAdapter searchAdapter = new SearchAdapter(builder.getContext(), R.layout.row_search_result, books);
-
-        listView.setAdapter(searchAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(view.getContext(), "Picked a book!", Toast.LENGTH_SHORT).show();
-            }
-        });
-        builder.setView(listView);
-        final Dialog d = builder.create();
-        d.show();
+    private void displaySearchResults(final ArrayList<Book> books) {
+        SearchResultDialog searchResultDialog = new SearchResultDialog(rootView.getContext(), books, bookAdapter, bookOperations);
+        searchResultDialog.show();
     }
 }
