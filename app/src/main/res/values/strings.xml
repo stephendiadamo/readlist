@@ -36,5 +36,6 @@
     <string name="done">Done</string>
     <string name="book_author">Book Author</string>
     <string name="pages">Pages</string>
+    <string name="pages_colon">Pages:</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.book;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -29,6 +31,7 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.search.SearchAdapter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -194,6 +197,8 @@ public class BookFragment extends Fragment {
         queue.add(stringRequest);
     }
 
+    //TODO: There must be a better way...
+
     private ArrayList<Book> getBooksFromJSONResponse(String response) {
         ArrayList<Book> books = new ArrayList<Book>();
         try {
@@ -253,5 +258,22 @@ public class BookFragment extends Fragment {
 
     private void displaySearchResults(ArrayList<Book> books) {
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+        builder.setTitle("Search Results");
+
+        ListView listView = new ListView(rootView.getContext());
+
+        final SearchAdapter searchAdapter = new SearchAdapter(builder.getContext(), R.layout.row_search_result, books);
+
+        listView.setAdapter(searchAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(view.getContext(), "Picked a book!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        builder.setView(listView);
+        final Dialog d = builder.create();
+        d.show();
     }
 }
