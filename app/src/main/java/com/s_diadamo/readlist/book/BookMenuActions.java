@@ -1,19 +1,40 @@
 package com.s_diadamo.readlist.book;
 
 import android.app.Dialog;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.search.SearchResultDialog;
+import com.s_diadamo.readlist.search.SearchResultJSONParser;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class BookMenuActions {
 
-    public static void editNumberOfPages(final Book book, View view, final BookOperations bookOperations, final BookAdapter bookAdapter) {
+    View view;
+    BookOperations bookOperations;
+    BookAdapter bookAdapter;
+
+    public BookMenuActions(View view, BookOperations bookOperations, BookAdapter bookAdapter) {
+        this.view = view;
+        this.bookOperations = bookOperations;
+        this.bookAdapter = bookAdapter;
+    }
+
+    public void editNumberOfPages(final Book book) {
         final Dialog editNumberOfPagesDialog = new Dialog(view.getContext());
         editNumberOfPagesDialog.setContentView(R.layout.dialog_edit_book_pages);
         editNumberOfPagesDialog.setTitle("Edit Book Pages");
@@ -35,7 +56,7 @@ public class BookMenuActions {
         editNumberOfPagesDialog.show();
     }
 
-    public static void setCurrentPage(final Book book, View view, final BookOperations bookOperations, final BookAdapter bookAdapter) {
+    public void setCurrentPage(final Book book) {
         final Dialog setCurrentPageDialog = new Dialog(view.getContext());
         setCurrentPageDialog.setContentView(R.layout.dialog_set_book_current_page);
         setCurrentPageDialog.setTitle("Update Page");
@@ -75,7 +96,7 @@ public class BookMenuActions {
         setCurrentPageDialog.show();
     }
 
-    public static void manuallyAddBook(View view, final BookOperations bookOperations, final BookAdapter bookAdapter) {
+    public void manuallyAddBook() {
         final Dialog manuallyAddBookDialog = new Dialog(view.getContext());
         manuallyAddBookDialog.setContentView(R.layout.dialog_manually_add_book);
         manuallyAddBookDialog.setTitle("Add New Book");
@@ -106,5 +127,59 @@ public class BookMenuActions {
         });
 
         manuallyAddBookDialog.show();
+    }
+
+    public void searchBook() {
+        final Dialog searchBookDialog = new Dialog(view.getContext());
+        searchBookDialog.setContentView(R.layout.dialog_search_book);
+        searchBookDialog.setTitle("Search");
+
+        final Button searchBookButton = (Button) searchBookDialog.findViewById(R.id.search_book);
+        searchBookButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
+                String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
+                String searchQuery = bookTitle.trim().replace(" ", "%20") + "+inauthor:" + bookAuthor.trim().replace(" ", "%20");
+                String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
+
+                String API_KEY = API.getGoogleBooksApiKey();
+
+                Uri.Builder builder = new Uri.Builder();
+                builder.scheme("https")
+                        .authority("www.googleapis.com")
+                        .appendPath("books")
+                        .appendPath("v1")
+                        .appendPath("volumes")
+                        .encodedQuery("q=" + searchQuery)
+                        .appendQueryParameter("key", API_KEY);
+
+                String url = builder.build().toString();
+                url += "&fields=" + fields;
+                getSearchResultsAndShowSearchDialog(url);
+
+                searchBookDialog.dismiss();
+            }
+        });
+        searchBookDialog.show();
+    }
+
+    private void getSearchResultsAndShowSearchDialog(String url) {
+        RequestQueue queue = Volley.newRequestQueue(view.getContext());
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response);
+                SearchResultDialog searchResultDialog = new SearchResultDialog(view.getContext(), books, bookAdapter, bookOperations);
+                searchResultDialog.show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Toast.makeText(view.getContext(), "Failed!", Toast.LENGTH_LONG).show();
+            }
+        });
+        queue.add(stringRequest);
     }
 }

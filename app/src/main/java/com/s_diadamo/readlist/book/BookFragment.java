@@ -40,6 +40,7 @@ public class BookFragment extends Fragment {
     ListView bookListView;
     BookAdapter bookAdapter;
     ArrayList<Book> userBooks;
+    BookMenuActions bookMenuActions;
 
     @Nullable
     @Override
@@ -64,6 +65,8 @@ public class BookFragment extends Fragment {
                 getActivity().openContextMenu(view);
             }
         });
+
+        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter);
 
         return rootView;
     }
@@ -93,7 +96,7 @@ public class BookFragment extends Fragment {
         Book b;
         switch (item.getItemId()) {
             case R.id.set_current_page:
-                BookMenuActions.setCurrentPage(userBooks.get(info.position), rootView, bookOperations, bookAdapter);
+                bookMenuActions.setCurrentPage(userBooks.get(info.position));
                 return true;
             case R.id.mark_complete:
                 // TODO: rip this out
@@ -105,7 +108,7 @@ public class BookFragment extends Fragment {
             case R.id.set_color:
                 return true;
             case R.id.edit_num_pages:
-                BookMenuActions.editNumberOfPages(userBooks.get(info.position), rootView, bookOperations, bookAdapter);
+                bookMenuActions.editNumberOfPages(userBooks.get(info.position));
                 return true;
             case R.id.delete_book:
                 // TODO: rip this out
@@ -128,134 +131,13 @@ public class BookFragment extends Fragment {
         long id = item.getItemId();
 
         if (id == R.id.add_book) {
-            searchBook();
+            bookMenuActions.searchBook();
             return true;
         } else if (id == R.id.add_book_manually) {
-            BookMenuActions.manuallyAddBook(rootView, bookOperations, bookAdapter);
+            bookMenuActions.manuallyAddBook();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    // TODO: Clean this up
-
-    private void searchBook() {
-        final Dialog searchBookDialog = new Dialog(rootView.getContext());
-        searchBookDialog.setContentView(R.layout.dialog_search_book);
-        searchBookDialog.setTitle("Search");
-
-        final Button searchBookButton = (Button) searchBookDialog.findViewById(R.id.search_book);
-        searchBookButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
-                String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
-                String searchQuery = bookTitle.trim().replace(" ", "%20") + "+inauthor:" + bookAuthor.trim().replace(" ", "%20");
-                String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
-
-                String API_KEY = API.getGoogleBooksApiKey();
-
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("https")
-                        .authority("www.googleapis.com")
-                        .appendPath("books")
-                        .appendPath("v1")
-                        .appendPath("volumes")
-                        .encodedQuery("q=" + searchQuery)
-                        .appendQueryParameter("key", API_KEY);
-
-                String url = builder.build().toString();
-                url += "&fields=" + fields;
-                getSearchResultsAndShowSearchDialog(url);
-
-                searchBookDialog.dismiss();
-            }
-        });
-        searchBookDialog.show();
-    }
-
-    // TODO: Rip this out
-
-    private void getSearchResultsAndShowSearchDialog(String url) {
-        RequestQueue queue = Volley.newRequestQueue(rootView.getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                ArrayList<Book> books = getBooksFromJSONResponse(response);
-                displaySearchResults(books);
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(rootView.getContext(), "Failed!", Toast.LENGTH_LONG).show();
-            }
-        });
-        queue.add(stringRequest);
-    }
-
-    //TODO: There must be a better way...
-
-    private ArrayList<Book> getBooksFromJSONResponse(String response) {
-        ArrayList<Book> books = new ArrayList<Book>();
-        try {
-            JsonParser jsonParser = new JsonFactory().createParser(response);
-            jsonParser.nextToken();
-            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                String attributeName = jsonParser.getCurrentName();
-                if (attributeName.equals("kind")) {
-                    jsonParser.nextToken();
-                } else if (attributeName.equals("items")) {
-                    jsonParser.nextToken();
-                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                        jsonParser.nextToken();
-                        attributeName = jsonParser.getCurrentName();
-                        if (attributeName.equals("volumeInfo")) {
-                            jsonParser.nextToken();
-                            Book book = new Book();
-                            while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
-                                attributeName = jsonParser.getCurrentName();
-                                if (attributeName.equals("title")) {
-                                    jsonParser.nextToken();
-                                    book.setTitle(jsonParser.getText());
-                                } else if (attributeName.equals("authors")) {
-                                    jsonParser.nextToken();
-                                    StringBuilder stringBuilder = new StringBuilder();
-                                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                                        stringBuilder.append(jsonParser.getText());
-                                        stringBuilder.append(", ");
-                                    }
-                                    String authors = stringBuilder.toString();
-                                    if (!authors.isEmpty()) {
-                                        book.setAuthor(authors.substring(0, authors.length() - 2));
-                                    }
-                                } else if (attributeName.equals("pageCount")) {
-                                    jsonParser.nextToken();
-                                    book.setNumPages(Integer.parseInt(jsonParser.getText()));
-                                } else if (attributeName.equals("imageLinks")) {
-                                    jsonParser.nextToken();
-                                    jsonParser.nextToken();
-                                    jsonParser.nextToken();
-                                    book.setCoverPictureURL(jsonParser.getText());
-                                    jsonParser.nextToken();
-                                }
-                            }
-                            books.add(book);
-                            jsonParser.nextToken();
-                        }
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return books;
-    }
-
-    private void displaySearchResults(final ArrayList<Book> books) {
-        SearchResultDialog searchResultDialog = new SearchResultDialog(rootView.getContext(), books, bookAdapter, bookOperations);
-        searchResultDialog.show();
     }
 }
