@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Tables
     public static final String TABLE_BOOKS = "books";
     public static final String TABLE_SHELVES = "shelves";
+    public static final String TABLE_UPDATES = "updates";
 
     // Common columns
     public static final String KEY_ID = "id";
@@ -29,12 +30,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_CURRENT_PAGE = "current_page";
     public static final String BOOK_TILE_COLOR = "tile_color";
     public static final String BOOK_COMPLETE = "complete";
+    public static final String BOOK_COMPLETION_DATE = "completion_date";
     public static final String BOOK_COVER_PICTURE_URL = "cover_picture_url";
 
     // Shelves table columns
     public static final String SHELF_NAME = "name";
     public static final String SHELF_COLOR = "color";
 
+    // Updates table columns
+    public static final String UPDATE_BOOK_ID = "book_id";
+    public static final String UPDATE_DATE = "date";
+    public static final String UPDATE_PAGES = "pages";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
@@ -47,6 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BOOK_CURRENT_PAGE + " INTEGER, " +
             BOOK_TILE_COLOR + " TEXT, " +
             BOOK_COMPLETE + " INTEGER, " +
+            BOOK_COMPLETION_DATE + " TEXT, " +
             BOOK_COVER_PICTURE_URL + " TEXT" +
             ")";
 
@@ -57,6 +64,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SHELF_COLOR + " TEXT" +
             ")";
 
+    private static final String CREATE_UPDATES_TABLE = "CREATE TABLE " + TABLE_UPDATES +
+            "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            UPDATE_BOOK_ID + " INTEGER, " +
+            UPDATE_DATE + " TEXT, " +
+            UPDATE_PAGES + " INTEGER" +
+            ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -65,12 +80,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_BOOKS_TABLE);
         db.execSQL(CREATE_SHELVES_TABLE);
+        db.execSQL(CREATE_UPDATES_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHELVES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_UPDATES);
         onCreate(db);
     }
 

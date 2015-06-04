@@ -49,7 +49,7 @@ public class SearchAdapter extends ArrayAdapter<Book> {
 
         Book result = results.get(position);
 
-        new DownloadImageTask(resultHolder.resultBookCover).execute(result.getCoverPictureURL());
+        new DownloadImageTask(resultHolder.resultBookCover).execute(result.getCoverPictureUrl());
 
         resultHolder.resultBookTitle.setText(result.getTitle());
         resultHolder.resultBookAuthor.setText(result.getAuthor());

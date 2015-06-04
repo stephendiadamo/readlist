@@ -4,119 +4,132 @@ import java.util.Calendar;
 
 public class Book {
 
-    int _id;
-    String _title;
-    String _author;
-    int _shelf = 0;
-    String _date_added;
-    int _num_pages;
-    int _current_page = 0;
-    String _tile_color;
-    Boolean _complete = false;
-    String _cover_picture_url = "";
+    int id;
+    String title;
+    String author;
+    int shelf = 0;
+    String dateAdded;
+    int numPages;
+    int currentPage = 0;
+    String tileColor;
+    Boolean complete = false;
+    String completionDate = "";
+    String coverPictureUrl = "";
 
     public Book() {
     }
 
     public Book(int id, String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
-        this._id = id;
-        this._title = title;
-        this._author = author;
-        this._shelf = shelf;
-        this._date_added = dateAdded;
-        this._num_pages = numPages;
-        this._current_page = currentPage;
-        this._tile_color = tileColor;
-        this._complete = (complete == 1);
-        this._cover_picture_url = coverPictureUrl;
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.shelf = shelf;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
+        this.tileColor = tileColor;
+        this.complete = (complete == 1);
+        this.coverPictureUrl = coverPictureUrl;
     }
 
     public Book(String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
-        this._title = title;
-        this._author = author;
-        this._shelf = shelf;
-        this._date_added = dateAdded;
-        this._num_pages = numPages;
-        this._current_page = currentPage;
-        this._tile_color = tileColor;
-        this._complete = (complete == 1);
-        this._cover_picture_url = coverPictureUrl;
+        this.title = title;
+        this.author = author;
+        this.shelf = shelf;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
+        this.tileColor = tileColor;
+        this.complete = (complete == 1);
+        this.coverPictureUrl = coverPictureUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
-        return _title;
+        return title;
     }
 
-    public void setTitle(String _title) {
-        this._title = _title;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAuthor() {
-        return this._author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        this._author = author;
-    }
-
-    public int getID() {
-        return _id;
-    }
-
-    public void setID(int id) {
-        this._id = id;
+        this.author = author;
     }
 
     public int getShelf() {
-        return _shelf;
+        return shelf;
     }
 
-    public void setShelf(int _shelf) {
-        this._shelf = _shelf;
-    }
-
-    public int getNumPages() {
-        return _num_pages;
-    }
-
-    public void setNumPages(int _num_pages) {
-        this._num_pages = _num_pages;
-    }
-
-    public int getCurrentPage() {
-        return _current_page;
-    }
-
-    public void setCurrentPage(int _current_page) {
-        this._current_page = _current_page;
-    }
-
-    public String getTileColor() {
-        return _tile_color;
-    }
-
-    public void setTileColor(String _tile_color) {
-        this._tile_color = _tile_color;
-    }
-
-    public int getComplete() {
-        return _complete ? 1 : 0;
-    }
-
-    public void setComplete(Boolean _complete) {
-        this._complete = _complete;
-    }
-
-    public String getCoverPictureURL() {
-        return _cover_picture_url;
-    }
-
-    public void setCoverPictureURL(String _cover_picture_url) {
-        this._cover_picture_url = _cover_picture_url;
+    public void setShelf(int shelf) {
+        this.shelf = shelf;
     }
 
     public String getDateAdded() {
-        return this._date_added;
+        return dateAdded;
+    }
+
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
+    }
+
+    public int getNumPages() {
+        return numPages;
+    }
+
+    public void setNumPages(int numPages) {
+        this.numPages = numPages;
+    }
+
+    public int getCurrentPage() {
+        return currentPage;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public String getTileColor() {
+        return tileColor;
+    }
+
+    public void setTileColor(String tileColor) {
+        this.tileColor = tileColor;
+    }
+
+    public Boolean getComplete() {
+        return complete;
+    }
+
+    public void setComplete(Boolean complete) {
+        this.complete = complete;
+    }
+
+    public String getCompletionDate() {
+        return completionDate;
+    }
+
+    public void setCompletionDate(String completionDate) {
+        this.completionDate = completionDate;
+    }
+
+    public String getCoverPictureUrl() {
+        return coverPictureUrl;
+    }
+
+    public void setCoverPictureUrl(String coverPictureUrl) {
+        this.coverPictureUrl = coverPictureUrl;
     }
 
 //    private String getCurrentDate() {

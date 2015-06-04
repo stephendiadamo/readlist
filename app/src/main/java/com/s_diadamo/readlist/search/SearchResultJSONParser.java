@@ -50,7 +50,7 @@ public class SearchResultJSONParser {
                                     jsonParser.nextToken();
                                     jsonParser.nextToken();
                                     jsonParser.nextToken();
-                                    book.setCoverPictureURL(jsonParser.getText());
+                                    book.setCoverPictureUrl(jsonParser.getText());
                                     jsonParser.nextToken();
                                 }
                             }

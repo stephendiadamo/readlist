@@ -4,45 +4,45 @@ public class Shelf {
 
     public static final String DEFAULT_COLOR = "#111";
 
-    int _id;
-    String _name;
-    String _color;
+    int id;
+    String name;
+    String colour;
 
     public Shelf() {
     }
 
     public Shelf(int id, String name, String color) {
-        this._id = id;
-        this._name = name;
-        this._color = color;
+        this.id = id;
+        this.name = name;
+        this.colour = color;
     }
 
     public Shelf(String name, String color) {
-        this._name = name;
-        this._color = color;
+        this.name = name;
+        this.colour = color;
     }
 
-    public int getID() {
-        return _id;
+    public int getId() {
+        return id;
     }
 
-    public void setID(int id) {
-        this._id = id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
-        return this._name;
+        return this.name;
     }
 
     public void setName(String name) {
-        this._name = name;
+        this.name = name;
     }
 
-    public String getColor() {
-        return this._color;
+    public String getColour() {
+        return this.colour;
     }
 
-    public void setColor(String color) {
-        this._color = color;
+    public void setColour(String color) {
+        this.colour = color;
     }
 }

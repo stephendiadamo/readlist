@@ -20,6 +20,7 @@ public class BookOperations {
             DatabaseHelper.BOOK_CURRENT_PAGE,
             DatabaseHelper.BOOK_TILE_COLOR,
             DatabaseHelper.BOOK_COMPLETE,
+            DatabaseHelper.BOOK_COMPLETION_DATE,
             DatabaseHelper.BOOK_COVER_PICTURE_URL
     };
     private DatabaseHelper dbHelper;
@@ -41,7 +42,8 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
         values.put(DatabaseHelper.BOOK_TILE_COLOR, book.getTileColor());
         values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
-        values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureURL());
+        values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
+        values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
         long bookID = db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
         db.close();
@@ -100,10 +102,11 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
         values.put(DatabaseHelper.BOOK_TILE_COLOR, book.getTileColor());
         values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
-        values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureURL());
+        values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
+        values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
         int updateInt = db.update(DatabaseHelper.TABLE_BOOKS, values, DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(book.getID())});
+                new String[]{String.valueOf(book.getId())});
         db.close();
         return updateInt;
     }
@@ -111,7 +114,7 @@ public class BookOperations {
     public void deleteBook(Book book) {
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_BOOKS, DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(book.getID())});
+                new String[]{String.valueOf(book.getId())});
         db.close();
     }
 

@@ -32,7 +32,7 @@ public class ShelfOperations {
         ContentValues values = new ContentValues();
 
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
-        values.put(DatabaseHelper.SHELF_COLOR, shelf.getColor());
+        values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
         long shelfID = db.insert(DatabaseHelper.TABLE_SHELVES, null, values);
         db.close();
@@ -85,10 +85,10 @@ public class ShelfOperations {
         ContentValues values = new ContentValues();
 
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
-        values.put(DatabaseHelper.SHELF_COLOR, shelf.getColor());
+        values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
         int updateInt = db.update(DatabaseHelper.TABLE_SHELVES, values, DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(shelf.getID())});
+                new String[]{String.valueOf(shelf.getId())});
         db.close();
         return updateInt;
     }
@@ -96,7 +96,7 @@ public class ShelfOperations {
     public void deleteShelf(Shelf shelf) {
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_SHELVES, DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(shelf.getID())});
+                new String[]{String.valueOf(shelf.getId())});
         db.close();
     }
 

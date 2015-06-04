@@ -48,8 +48,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder = (BookHolder) row.getTag();
         }
         Book book = books.get(position);
-        if (!book.getCoverPictureURL().isEmpty()) {
-            new DownloadImageTask(bookHolder.bookCover).execute(book.getCoverPictureURL());
+        if (!book.getCoverPictureUrl().isEmpty()) {
+            new DownloadImageTask(bookHolder.bookCover).execute(book.getCoverPictureUrl());
         }
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
