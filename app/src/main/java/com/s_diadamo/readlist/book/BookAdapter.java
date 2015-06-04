@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.DownloadImageTask;
 import com.s_diadamo.readlist.R;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class BookAdapter extends ArrayAdapter<Book> {
@@ -42,6 +44,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.bookAuthor = (TextView) row.findViewById(R.id.book_author);
             bookHolder.currentPage = (TextView) row.findViewById(R.id.book_current_page);
             bookHolder.pages = (TextView) row.findViewById(R.id.book_pages);
+            bookHolder.percentageComplete = (TextView) row.findViewById(R.id.book_percentage_complete);
 
             row.setTag(bookHolder);
         } else {
@@ -56,6 +59,13 @@ public class BookAdapter extends ArrayAdapter<Book> {
         bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
         bookHolder.pages.setText(String.valueOf(book.getNumPages()));
 
+        if (book.numPages != 0) {
+            int complete = (100 * book.getCurrentPage() / book.getNumPages());
+            bookHolder.percentageComplete.setText(String.valueOf(complete) + "%");
+        } else {
+            bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
+        }
+
         return row;
     }
 
@@ -65,5 +75,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView bookAuthor;
         TextView currentPage;
         TextView pages;
+        TextView percentageComplete;
     }
 }

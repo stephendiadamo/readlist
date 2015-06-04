@@ -37,5 +37,6 @@
     <string name="book_author">Book Author</string>
     <string name="pages">Pages</string>
     <string name="pages_colon">Pages:</string>
+    <string name="page_colon">Page:</string>
 
 </resources>
