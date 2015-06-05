@@ -1,7 +1,6 @@
 package com.s_diadamo.readlist.book;
 
-import android.app.Dialog;
-import android.net.Uri;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,34 +12,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.s_diadamo.readlist.API;
+import com.google.zxing.client.android.Intents;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureManager;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.search.SearchResultDialog;
+import com.s_diadamo.readlist.ScanActivity;
+import com.s_diadamo.readlist.search.Search;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class BookFragment extends Fragment {
     View rootView;
-    BookOperations bookOperations;
     ListView bookListView;
-    BookAdapter bookAdapter;
     ArrayList<Book> userBooks;
     BookMenuActions bookMenuActions;
+    BookOperations bookOperations;
+    BookAdapter bookAdapter;
 
     @Nullable
     @Override
@@ -68,6 +60,13 @@ public class BookFragment extends Fragment {
 
         bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter);
 
+        if (getArguments() != null) {
+            String bookISBN = getArguments().getString("BOOK_ISBN");
+            if (!bookISBN.isEmpty()) {
+                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations);
+                search.searchWithISBN(bookISBN);
+            }
+        }
         return rootView;
     }
 
@@ -135,8 +134,18 @@ public class BookFragment extends Fragment {
         } else if (id == R.id.add_book_manually) {
             bookMenuActions.manuallyAddBook();
             return true;
+        } else if (id == R.id.add_book_scan) {
+            // TODO: Make a separate fragment for this
+            launchScanner();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchScanner() {
+        ScanActivity scanActivity = new ScanActivity(rootView.getContext(), bookAdapter, bookOperations);
+        Intent intent = new Intent(rootView.getContext(), scanActivity.getClass());
+        startActivity(intent);
     }
 }

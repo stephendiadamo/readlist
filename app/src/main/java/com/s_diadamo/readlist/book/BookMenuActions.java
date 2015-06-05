@@ -16,6 +16,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.search.SearchResultDialog;
 import com.s_diadamo.readlist.search.SearchResultJSONParser;
 
@@ -75,48 +76,13 @@ public class BookMenuActions {
         searchBookButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
                 String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
-                String searchQuery = bookTitle.trim().replace(" ", "%20") + "+inauthor:" + bookAuthor.trim().replace(" ", "%20");
-                String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
-
-                String API_KEY = API.getGoogleBooksApiKey();
-
-                Uri.Builder builder = new Uri.Builder();
-                builder.scheme("https")
-                        .authority("www.googleapis.com")
-                        .appendPath("books")
-                        .appendPath("v1")
-                        .appendPath("volumes")
-                        .encodedQuery("q=" + searchQuery)
-                        .appendQueryParameter("key", API_KEY);
-
-                String url = builder.build().toString();
-                url += "&fields=" + fields;
-                getSearchResultsAndShowSearchDialog(url);
-
+                Search search = new Search(view.getContext(), bookAdapter, bookOperations);
+                search.searchWithAuthorAndTitle(bookAuthor, bookTitle);
                 searchBookDialog.dismiss();
             }
         });
         searchBookDialog.show();
-    }
-
-    private void getSearchResultsAndShowSearchDialog(String url) {
-        RequestQueue queue = Volley.newRequestQueue(view.getContext());
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response);
-                SearchResultDialog searchResultDialog = new SearchResultDialog(view.getContext(), books, bookAdapter, bookOperations);
-                searchResultDialog.show();
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(view.getContext(), "Failed!", Toast.LENGTH_LONG).show();
-            }
-        });
-        queue.add(stringRequest);
     }
 }

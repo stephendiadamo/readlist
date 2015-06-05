@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -8,7 +9,10 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalsFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
@@ -38,6 +42,30 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         imageLoader = new ImageLoader(this);
 
+        String bookISBN = checkForBookISBN(savedInstanceState);
+        if (bookISBN != null && !bookISBN.isEmpty()) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            BookFragment bookFragment = new BookFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("BOOK_ISBN", bookISBN);
+            bookFragment.setArguments(bundle);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, bookFragment)
+                    .commit();
+        }
+    }
+
+    private String checkForBookISBN(Bundle bundle) {
+        String bookISBN = "";
+        if (bundle == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras != null) {
+                bookISBN = extras.getString("BOOK_ISBN");
+            }
+        } else {
+            bookISBN = (String) bundle.getSerializable("BOOK_ISBN");
+        }
+        return bookISBN;
     }
 
     @Override

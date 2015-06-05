@@ -23,6 +23,10 @@ android {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
@@ -32,4 +36,6 @@ dependencies {
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
     )
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
+    compile 'com.google.zxing:core:3.2.0'
 }
