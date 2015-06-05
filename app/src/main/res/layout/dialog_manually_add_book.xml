@@ -16,6 +16,7 @@
             android:layout_weight="0.25">
 
             <ImageView
+                android:id="@+id/manual_add_cover_photo"
                 android:layout_width="80dp"
                 android:layout_height="130dp"
                 android:layout_margin="5dp"

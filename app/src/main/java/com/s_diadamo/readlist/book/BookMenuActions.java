@@ -62,36 +62,8 @@ public class BookMenuActions {
     }
 
     public void manuallyAddBook() {
-        final Dialog manuallyAddBookDialog = new Dialog(view.getContext());
-        manuallyAddBookDialog.setContentView(R.layout.dialog_manually_add_book);
-        manuallyAddBookDialog.setTitle("Add New Book");
-
-        final EditText bookTitleEditText = (EditText) manuallyAddBookDialog.findViewById(R.id.manual_add_title);
-        final EditText bookAuthorEditText = (EditText) manuallyAddBookDialog.findViewById(R.id.manual_add_author);
-        final EditText bookPagesEditText = (EditText) manuallyAddBookDialog.findViewById(R.id.manual_add_pages);
-        Button addButton = (Button) manuallyAddBookDialog.findViewById(R.id.manual_add_add_button);
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String bookTitle = bookTitleEditText.getText().toString();
-                String bookAuthor = bookAuthorEditText.getText().toString();
-                String pages = bookPagesEditText.getText().toString();
-
-                if (bookTitle.isEmpty() || bookAuthor.isEmpty() || pages.isEmpty()) {
-                    Toast.makeText(manuallyAddBookDialog.getContext(), "Please fill all information", Toast.LENGTH_LONG).show();
-                } else {
-                    Calendar calendar = Calendar.getInstance();
-                    Book book = new Book(bookTitle, bookAuthor, 0, calendar.getTime().toString(), Integer.parseInt(pages), 0, "", 0, "", "");
-                    bookAdapter.add(book);
-                    bookAdapter.notifyDataSetChanged();
-                    bookOperations.addBook(book);
-                    manuallyAddBookDialog.dismiss();
-                }
-            }
-        });
-
-        manuallyAddBookDialog.show();
+        BookManuallyAddBookDialog bookManuallyAddBookDialog = new BookManuallyAddBookDialog(view.getContext(), bookAdapter, bookOperations);
+        bookManuallyAddBookDialog.show();
     }
 
     public void searchBook() {
