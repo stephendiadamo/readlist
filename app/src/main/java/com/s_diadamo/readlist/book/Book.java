@@ -19,7 +19,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(int id, String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
+    public Book(int id, String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -29,10 +29,11 @@ public class Book {
         this.currentPage = currentPage;
         this.tileColor = tileColor;
         this.complete = (complete == 1);
+        this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
     }
 
-    public Book(String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String coverPictureUrl) {
+    public Book(String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
         this.title = title;
         this.author = author;
         this.shelf = shelf;
@@ -41,6 +42,7 @@ public class Book {
         this.currentPage = currentPage;
         this.tileColor = tileColor;
         this.complete = (complete == 1);
+        this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
     }
 

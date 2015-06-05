@@ -129,7 +129,8 @@ public class BookOperations {
                 Integer.parseInt(cursor.getString(6)),
                 cursor.getString(7),
                 Integer.parseInt(cursor.getString(8)),
-                cursor.getString(9));
+                cursor.getString(9),
+                cursor.getString(10));
         return book;
     }
 }
