@@ -33,3 +33,5 @@ proguard/
 .DS_Store
 /build
 /captures
+
+app/src/main/java/com/s_diadamo/readlist/API.java
