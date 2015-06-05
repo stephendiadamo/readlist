@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.DownloadImageTask;
+import com.s_diadamo.readlist.MainActivity;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.lazylist.ImageLoader;
 
 import org.w3c.dom.Text;
 
@@ -52,7 +54,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
         Book book = books.get(position);
         if (!book.getCoverPictureUrl().isEmpty()) {
-            new DownloadImageTask(bookHolder.bookCover).execute(book.getCoverPictureUrl());
+            MainActivity.imageLoader.DisplayImage(book.getCoverPictureUrl(), bookHolder.bookCover);
         }
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());

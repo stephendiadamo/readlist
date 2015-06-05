@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalsFragment;
+import com.s_diadamo.readlist.lazylist.ImageLoader;
 import com.s_diadamo.readlist.shelf.ShelfFragment;
 import com.s_diadamo.readlist.statistics.StatisticsFragment;
 
@@ -20,6 +21,7 @@ public class MainActivity extends ActionBarActivity
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
+    public static ImageLoader imageLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+        imageLoader = new ImageLoader(this);
 
     }
 
