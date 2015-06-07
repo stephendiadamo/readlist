@@ -27,6 +27,7 @@ public class SearchResultJSONParser {
                         if (attributeName.equals("volumeInfo")) {
                             jsonParser.nextToken();
                             Book book = new Book();
+                            book.setDateAdded(Book.getCurrentDate());
                             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                                 attributeName = jsonParser.getCurrentName();
                                 if (attributeName.equals("title")) {

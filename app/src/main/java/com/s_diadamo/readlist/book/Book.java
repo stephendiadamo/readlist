@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.book;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class Book {
 
@@ -116,6 +118,7 @@ public class Book {
 
     public void setComplete(Boolean complete) {
         this.complete = complete;
+        this.setCompletionDate(getCurrentDate());
     }
 
     public String getCompletionDate() {
@@ -134,9 +137,9 @@ public class Book {
         this.coverPictureUrl = coverPictureUrl;
     }
 
-//    private String getCurrentDate() {
-//        Calendar cal = Calendar.getInstance();
-//        return cal.getTime().toString();
-//    }
-
+    public static String getCurrentDate() {
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.CANADA);
+        return simpleDateFormat.format(cal.getTime());
+    }
 }

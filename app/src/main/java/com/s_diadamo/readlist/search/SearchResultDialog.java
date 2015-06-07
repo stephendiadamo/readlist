@@ -27,9 +27,10 @@ public class SearchResultDialog extends AlertDialog {
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                bookAdapter.add(books.get(position));
+                Book book = books.get(position);
+                bookAdapter.add(book);
                 bookAdapter.notifyDataSetChanged();
-                bookOperations.addBook(books.get(position));
+                bookOperations.addBook(book);
                 dismiss();
             }
         });

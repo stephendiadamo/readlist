@@ -39,5 +39,7 @@
     <string name="pages_colon">Pages:</string>
     <string name="page_colon">Page:</string>
     <string name="scan_book">Scan Book</string>
+    <string name="by_colon">By:</string>
+    <string name="date_added">Date added:</string>
 
 </resources>

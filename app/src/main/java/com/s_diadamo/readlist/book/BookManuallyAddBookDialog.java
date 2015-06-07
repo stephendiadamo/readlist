@@ -42,7 +42,7 @@ public class BookManuallyAddBookDialog extends AlertDialog {
                     Toast.makeText(content.getContext(), "Please fill all information", Toast.LENGTH_LONG).show();
                 } else {
                     Calendar calendar = Calendar.getInstance();
-                    Book book = new Book(bookTitle, bookAuthor, 0, calendar.getTime().toString(), Integer.parseInt(pages), 0, "", 0, "", "");
+                    Book book = new Book(bookTitle, bookAuthor, 0, Book.getCurrentDate(), Integer.parseInt(pages), 0, "", 0, "", "");
                     bookAdapter.add(book);
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.addBook(book);

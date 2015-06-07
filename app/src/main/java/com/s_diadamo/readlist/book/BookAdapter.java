@@ -47,6 +47,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.currentPage = (TextView) row.findViewById(R.id.book_current_page);
             bookHolder.pages = (TextView) row.findViewById(R.id.book_pages);
             bookHolder.percentageComplete = (TextView) row.findViewById(R.id.book_percentage_complete);
+            bookHolder.dateAdded = (TextView) row.findViewById(R.id.book_date_added);
 
             row.setTag(bookHolder);
         } else {
@@ -60,6 +61,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
         bookHolder.pages.setText(String.valueOf(book.getNumPages()));
+        bookHolder.dateAdded.setText(book.getDateAdded());
 
         if (book.numPages != 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
@@ -78,5 +80,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView currentPage;
         TextView pages;
         TextView percentageComplete;
+        TextView dateAdded;
     }
 }
