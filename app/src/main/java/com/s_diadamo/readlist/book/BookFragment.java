@@ -154,6 +154,12 @@ public class BookFragment extends Fragment {
                 Search search = new Search(rootView.getContext(), bookAdapter, bookOperations);
                 search.searchWithISBN(bookISBN);
             }
+        } else {
+            showToast("Scan failed");
         }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(rootView.getContext(), message, Toast.LENGTH_LONG).show();
     }
 }
