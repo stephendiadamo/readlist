@@ -41,31 +41,6 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         imageLoader = new ImageLoader(this);
-
-        String bookISBN = checkForBookISBN(savedInstanceState);
-        if (bookISBN != null && !bookISBN.isEmpty()) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            BookFragment bookFragment = new BookFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("BOOK_ISBN", bookISBN);
-            bookFragment.setArguments(bundle);
-            fragmentManager.beginTransaction()
-                    .replace(R.id.container, bookFragment)
-                    .commit();
-        }
-    }
-
-    private String checkForBookISBN(Bundle bundle) {
-        String bookISBN = "";
-        if (bundle == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                bookISBN = extras.getString("BOOK_ISBN");
-            }
-        } else {
-            bookISBN = (String) bundle.getSerializable("BOOK_ISBN");
-        }
-        return bookISBN;
     }
 
     @Override
@@ -77,26 +52,31 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment objFragment = null;
+        String tag = "";
 
         switch (position) {
             case 0:
                 objFragment = new BookFragment();
+                tag = "BOOK";
                 break;
             case 1:
                 objFragment = new ShelfFragment();
+                tag = "SHELF";
                 break;
             case 2:
                 objFragment = new GoalsFragment();
+                tag = "GOALS";
                 break;
             case 3:
                 objFragment = new StatisticsFragment();
+                tag = "STATS";
                 break;
         }
 
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, objFragment)
+                .replace(R.id.container, objFragment, tag)
                 .commit();
     }
 

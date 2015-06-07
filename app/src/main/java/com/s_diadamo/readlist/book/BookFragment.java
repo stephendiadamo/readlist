@@ -60,13 +60,6 @@ public class BookFragment extends Fragment {
 
         bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter);
 
-        if (getArguments() != null) {
-            String bookISBN = getArguments().getString("BOOK_ISBN");
-            if (!bookISBN.isEmpty()) {
-                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations);
-                search.searchWithISBN(bookISBN);
-            }
-        }
         return rootView;
     }
 
@@ -144,8 +137,23 @@ public class BookFragment extends Fragment {
     }
 
     private void launchScanner() {
-        ScanActivity scanActivity = new ScanActivity(rootView.getContext(), bookAdapter, bookOperations);
-        Intent intent = new Intent(rootView.getContext(), scanActivity.getClass());
-        startActivity(intent);
+        IntentIntegrator integrator = IntentIntegrator.forSupportFragment(this);
+        integrator.setCaptureActivity(ScanActivity.class);
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+        integrator.setOrientationLocked(false);
+        integrator.setPrompt("");
+        integrator.initiateScan();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            String bookISBN = result.getContents();
+            if (bookISBN != null && !bookISBN.isEmpty()) {
+                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations);
+                search.searchWithISBN(bookISBN);
+            }
+        }
     }
 }
