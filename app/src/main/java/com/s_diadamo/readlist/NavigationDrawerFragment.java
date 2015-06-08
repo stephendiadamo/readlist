@@ -19,9 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 public class NavigationDrawerFragment extends Fragment {
 
@@ -35,6 +33,8 @@ public class NavigationDrawerFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
+
+    private NavigationItemAdapter navigationItemAdapter;
 
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
@@ -79,16 +79,11 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                R.layout.drawer_default_nav_item,
-                android.R.id.text1,
-                new String[]{
-                        getString(R.string.navigation_drawer_reading),
-                        getString(R.string.navigation_drawer_bookshelves),
-                        getString(R.string.navigation_drawer_goals),
-                        getString(R.string.navigation_drawer_statistics)
-                }));
+
+
+        navigationItemAdapter = new NavigationItemAdapter(getActivity());
+
+        mDrawerListView.setAdapter(navigationItemAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }

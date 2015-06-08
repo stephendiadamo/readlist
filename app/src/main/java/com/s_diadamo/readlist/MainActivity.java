@@ -69,7 +69,6 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
 
-        // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, objFragment, tag)

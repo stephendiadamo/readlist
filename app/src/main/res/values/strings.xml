@@ -42,4 +42,11 @@
     <string name="by_colon">By:</string>
     <string name="date_added">Date added:</string>
 
+    <string-array name="navigation_element_names">
+        <item>Reading</item>
+        <item>Shelves</item>
+        <item>Goals</item>
+        <item>Statistics</item>
+    </string-array>
+
 </resources>
