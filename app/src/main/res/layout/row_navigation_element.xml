@@ -5,16 +5,31 @@
     android:orientation="horizontal"
     android:weightSum="1">
 
-    <ImageView
-        android:id="@+id/nav_element_image"
-        android:layout_width="43dp"
-        android:layout_height="50dp" />
+
+    <LinearLayout
+        android:layout_width="25dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:id="@+id/nav_element_image"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_book" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/nav_element_label"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="6dp"
+        android:layout_marginStart="6dp"
+        android:gravity="start|center_vertical"
+        android:text="Testing"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 </LinearLayout>
