@@ -12,7 +12,7 @@
 
     <fragment
         android:id="@+id/navigation_drawer"
-        android:name="com.s_diadamo.readlist.NavigationDrawerFragment"
+        android:name="com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment"
         android:layout_width="@dimen/navigation_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"

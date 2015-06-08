@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.navigationDrawer;
 
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -20,6 +20,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.s_diadamo.readlist.R;
 
 public class NavigationDrawerFragment extends Fragment {
 

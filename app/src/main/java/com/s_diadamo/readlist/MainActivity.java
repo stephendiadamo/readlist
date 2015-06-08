@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalsFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
+import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.shelf.ShelfFragment;
 import com.s_diadamo.readlist.statistics.StatisticsFragment;
 
