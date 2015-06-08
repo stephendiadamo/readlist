@@ -1,6 +1,5 @@
 package com.s_diadamo.readlist;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -9,10 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalsFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
