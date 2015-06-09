@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.navigationDrawer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -9,8 +10,10 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.shelf.ShelfAddDialog;
 
 import java.util.ArrayList;
 
@@ -24,6 +27,12 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         super();
         this.context = context;
         this.shelfNames = shelfNames;
+    }
+
+    public void addShelf(String shelfName) {
+        shelfNames.add(shelfName);
+        this.notifyDataSetInvalidated();
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -76,16 +85,41 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
             navShelfParentHolder = new NavigationShelfParentHolder();
             navShelfParentHolder.icon = (ImageView) row.findViewById(R.id.nav_element_image);
             navShelfParentHolder.label = (TextView) row.findViewById(R.id.nav_element_label);
+            navShelfParentHolder.addShelf = (ImageView) row.findViewById(R.id.nav_element_add_shelf);
         } else {
             navShelfParentHolder = (NavigationShelfParentHolder) row.getTag();
         }
         navShelfParentHolder.label.setText("Shelves");
+        navShelfParentHolder.addShelf.setOnTouchListener(new ExpandableListView.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int action = event.getAction();
+                switch (action) {
+                    case MotionEvent.ACTION_DOWN:
+                        // Disallow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(true);
+                        ShelfAddDialog shelfAddDialog = new ShelfAddDialog(getMe().context, getMe());
+                        shelfAddDialog.show();
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        // Allow ScrollView to intercept touch events.
+                        v.getParent().requestDisallowInterceptTouchEvent(false);
+                        break;
+                }
 
-        parent.invalidate();
+                // Handle ListView touch events.
+                v.onTouchEvent(event);
+                return true;
+            }
+        });
 
-        //TODO: Change this icon!
+        //TODO: Set this icon!
         // navShelfParentHolder.icon.setImageResource(R.drawable.ic_book);
         return row;
+    }
+
+    private NavigationExpandableListAdapter getMe() {
+        return this;
     }
 
     @Override

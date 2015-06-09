@@ -57,8 +57,6 @@ public class MainActivity extends AppCompatActivity
                 tag = "BOOK";
                 break;
             case 1:
-                objFragment = new ShelfFragment();
-                tag = "SHELF";
                 break;
             case 2:
                 objFragment = new GoalsFragment();

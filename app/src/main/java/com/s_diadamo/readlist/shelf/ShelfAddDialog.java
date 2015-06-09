@@ -4,23 +4,21 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.navigationDrawer.NavigationExpandableListAdapter;
 
-/**
- * Created by s-diadamo on 15-06-08.
- */
 public class ShelfAddDialog extends AlertDialog {
-
-    public ShelfAddDialog(Context context, final ShelfOperations shelfOperations, final ArrayAdapter<String> shelfArrayAdapter) {
+    public ShelfAddDialog(Context context, final NavigationExpandableListAdapter shelfArrayAdapter) {
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         final View content = layoutInflater.inflate(R.layout.dialog_add_shelf, null);
+
+        final ShelfOperations shelfOperations = new ShelfOperations(context);
 
         setTitle("New Shelf");
 
@@ -35,8 +33,7 @@ public class ShelfAddDialog extends AlertDialog {
                 if (!shelfName.isEmpty()) {
                     Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
                     shelfOperations.addShelf(shelf);
-                    shelfArrayAdapter.add(shelf.getName());
-                    shelfArrayAdapter.notifyDataSetChanged();
+                    shelfArrayAdapter.addShelf(shelf.getName());
                     dismiss();
                 } else {
                     Toast.makeText(content.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();
@@ -46,4 +43,5 @@ public class ShelfAddDialog extends AlertDialog {
 
         setView(content);
     }
+
 }
