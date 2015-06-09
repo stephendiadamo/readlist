@@ -4,6 +4,6 @@
     android:layout_width="@dimen/navigation_drawer_width"
     android:layout_height="wrap_content"
     android:layout_gravity="start"
-    android:background="#ddd"
-    android:divider="#ccc"
+    android:background="#eee"
+    android:divider="#ddd"
     android:dividerHeight="1dp" />

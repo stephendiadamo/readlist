@@ -29,7 +29,6 @@ public class ShelfAddDialog extends AlertDialog {
             @Override
             public void onClick(View v) {
                 String shelfName = shelfNameEditText.getText().toString();
-
                 if (!shelfName.isEmpty()) {
                     Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
                     shelfOperations.addShelf(shelf);

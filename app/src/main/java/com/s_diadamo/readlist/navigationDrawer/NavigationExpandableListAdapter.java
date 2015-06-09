@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.navigationDrawer;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -78,7 +79,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         View row = convertView;
-        NavigationShelfParentHolder navShelfParentHolder;
+        final NavigationShelfParentHolder navShelfParentHolder;
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
             row = inflater.inflate(R.layout.row_navigation_shelves_header, null);
@@ -96,18 +97,16 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
                 int action = event.getAction();
                 switch (action) {
                     case MotionEvent.ACTION_DOWN:
-                        // Disallow ScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(true);
-                        ShelfAddDialog shelfAddDialog = new ShelfAddDialog(getMe().context, getMe());
-                        shelfAddDialog.show();
+                        navShelfParentHolder.addShelf.setBackgroundColor(Color.LTGRAY);
                         break;
                     case MotionEvent.ACTION_UP:
-                        // Allow ScrollView to intercept touch events.
                         v.getParent().requestDisallowInterceptTouchEvent(false);
+                        ShelfAddDialog shelfAddDialog = new ShelfAddDialog(getMe().context, getMe());
+                        shelfAddDialog.show();
+                        navShelfParentHolder.addShelf.setBackgroundColor(Color.TRANSPARENT);
                         break;
                 }
-
-                // Handle ListView touch events.
                 v.onTouchEvent(event);
                 return true;
             }
