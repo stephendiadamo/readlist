@@ -61,8 +61,10 @@ public class BookOperations {
             cursor.moveToFirst();
             Book book = parseBook(cursor);
             cursor.close();
+            db.close();
             return book;
         }
+        db.close();
         return null;
     }
 
@@ -79,6 +81,7 @@ public class BookOperations {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        db.close();
         return books;
     }
 
@@ -87,6 +90,7 @@ public class BookOperations {
         String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKS;
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
+        db.close();
         return cursor.getCount();
     }
 

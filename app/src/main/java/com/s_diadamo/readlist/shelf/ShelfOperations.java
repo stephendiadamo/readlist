@@ -52,8 +52,10 @@ public class ShelfOperations {
         if (cursor != null) {
             cursor.moveToFirst();
             Shelf shelf = parseShelf(cursor);
+            db.close();
             return shelf;
         }
+        db.close();
         return null;
     }
 
@@ -69,6 +71,7 @@ public class ShelfOperations {
                 shelves.add(shelf);
             } while (cursor.moveToNext());
         }
+        db.close();
         return shelves;
     }
 
@@ -77,6 +80,7 @@ public class ShelfOperations {
         String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;
         Cursor cursor = db.rawQuery(countQuery, null);
         cursor.close();
+        db.close();
         return cursor.getCount();
     }
 
