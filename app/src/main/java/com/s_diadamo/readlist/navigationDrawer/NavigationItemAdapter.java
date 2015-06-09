@@ -6,11 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 public class NavigationItemAdapter extends BaseAdapter {
 
@@ -28,7 +27,6 @@ public class NavigationItemAdapter extends BaseAdapter {
         this.context = context;
         navigationElementLabels = context.getResources().getStringArray(R.array.navigation_element_names);
     }
-
 
     @Override
     public int getCount() {
@@ -49,10 +47,23 @@ public class NavigationItemAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
 
-        if (position != 1) {
+        if (position == 1) {
+            NavigationShelfItemHolder navItemShelfHolder = new NavigationShelfItemHolder();
+            if (row == null || row.getTag() == null) {
+                LayoutInflater inflater = LayoutInflater.from(context);
+                row = inflater.inflate(R.layout.row_navigation_shelves, parent, false);
+                navItemShelfHolder.shelves = (NavigationExpandableListView) row.findViewById(R.id.navigation_drawer_expandable_list);
+            } else {
+                navItemShelfHolder = (NavigationShelfItemHolder) row.getTag();
+            }
+            ShelfOperations shelfOperations = new ShelfOperations(row.getContext());
+            NavigationExpandableListAdapter adapter = new NavigationExpandableListAdapter(row.getContext(),
+                    shelfOperations.getAllShelfNames());
+            navItemShelfHolder.shelves.setAdapter(adapter);
+        } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LayoutInflater inflater = LayoutInflater.from(context);
                 row = inflater.inflate(R.layout.row_navigation_element, parent, false);
                 navItemHolder = new NavigationItemHolder();
                 navItemHolder.icon = (ImageView) row.findViewById(R.id.nav_element_image);
@@ -62,27 +73,6 @@ public class NavigationItemAdapter extends BaseAdapter {
             }
             navItemHolder.label.setText(navigationElementLabels[position]);
             navItemHolder.icon.setImageResource(icons[position]);
-        } else {
-            NavigationShelfItemHolder navShelfItemHolder;
-            if (row == null || row.getTag() == null) {
-                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                row = inflater.inflate(R.layout.row_navigation_shelves, parent, false);
-                navShelfItemHolder = new NavigationShelfItemHolder();
-                navShelfItemHolder.icon = (ImageView) row.findViewById(R.id.nav_element_image);
-                navShelfItemHolder.label = (TextView) row.findViewById(R.id.nav_element_label);
-                navShelfItemHolder.addShelf = (ImageView) row.findViewById(R.id.nav_element_add_shelf);
-                navShelfItemHolder.shelves = (ListView) row.findViewById(R.id.nav_element_shelf_list);
-            } else {
-                navShelfItemHolder = (NavigationShelfItemHolder) row.getTag();
-            }
-            navShelfItemHolder.label.setText(navigationElementLabels[position]);
-            navShelfItemHolder.icon.setImageResource(icons[position]);
-            navShelfItemHolder.addShelf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(v.getContext(), "Clicked add :)", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
 
         return row;
@@ -93,9 +83,8 @@ public class NavigationItemAdapter extends BaseAdapter {
         TextView label;
     }
 
-    static class NavigationShelfItemHolder extends NavigationItemHolder {
-        ImageView addShelf;
-        ListView shelves;
+    static class NavigationShelfItemHolder {
+        NavigationExpandableListView shelves;
     }
 }
 

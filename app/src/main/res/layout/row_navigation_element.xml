@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="1">
+    android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/image_container"
         android:layout_width="25dp"
         android:layout_height="50dp">
 
@@ -16,9 +15,9 @@
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp" />
+            android:layout_marginTop="1dp"
+            android:src="@drawable/ic_book" />
     </LinearLayout>
-
 
     <TextView
         android:id="@+id/nav_element_label"
@@ -26,7 +25,10 @@
         android:layout_height="50dp"
         android:layout_marginLeft="6dp"
         android:layout_marginStart="6dp"
+        android:layout_toEndOf="@+id/image_container"
+        android:layout_toRightOf="@+id/image_container"
         android:gravity="start|center_vertical"
+        android:text="Testing"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
-</LinearLayout>
+</RelativeLayout>
