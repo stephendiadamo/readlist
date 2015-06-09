@@ -75,6 +75,22 @@ public class ShelfOperations {
         return shelves;
     }
 
+    public ArrayList<String> getAllShelfNames() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<String> shelfNames = new ArrayList<String>();
+        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Shelf shelf = parseShelf(cursor);
+                shelfNames.add(shelf.getName());
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return shelfNames;
+    }
+
     public int getShelvesCount() {
         db = dbHelper.getReadableDatabase();
         String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;

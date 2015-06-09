@@ -81,36 +81,12 @@ public class ShelfFragment extends Fragment {
         long id = item.getItemId();
 
         if (id == R.id.add_shelf) {
-            addNewShelf();
+            ShelfAddDialog shelfAddDialog = new ShelfAddDialog(rootView.getContext(), shelfOperations, shelfArrayAdapter);
+            shelfAddDialog.show();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void addNewShelf() {
-        final Dialog addShelfDialog = new Dialog(rootView.getContext());
-        addShelfDialog.setContentView(R.layout.dialog_add_shelf);
-        addShelfDialog.setTitle("New Shelf");
-
-        final Button addShelfButton = (Button) addShelfDialog.findViewById(R.id.add_shelf_button);
-        addShelfButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText shelfNameEditText = (EditText) addShelfDialog.findViewById(R.id.shelf_name_edit_text);
-                String shelfName = shelfNameEditText.getText().toString();
-
-                if (!shelfName.isEmpty()) {
-                    Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
-                    shelfOperations.addShelf(shelf);
-                    shelfArrayAdapter.add(shelf.getName());
-                    addShelfDialog.dismiss();
-                } else {
-                    Toast.makeText(v.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-        addShelfDialog.show();
     }
 }
 
