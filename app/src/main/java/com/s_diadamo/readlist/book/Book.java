@@ -9,7 +9,7 @@ public class Book {
     int id;
     String title;
     String author;
-    int shelf = 0;
+    int shelfId = 0;
     String dateAdded;
     int numPages;
     int currentPage = 0;
@@ -21,11 +21,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(int id, String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
-        this.shelf = shelf;
+        this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
         this.currentPage = currentPage;
@@ -35,10 +35,10 @@ public class Book {
         this.coverPictureUrl = coverPictureUrl;
     }
 
-    public Book(String title, String author, int shelf, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
+    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
         this.title = title;
         this.author = author;
-        this.shelf = shelf;
+        this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
         this.currentPage = currentPage;
@@ -72,12 +72,12 @@ public class Book {
         this.author = author;
     }
 
-    public int getShelf() {
-        return shelf;
+    public int getShelfId() {
+        return shelfId;
     }
 
-    public void setShelf(int shelf) {
-        this.shelf = shelf;
+    public void setShelfId(int shelfId) {
+        this.shelfId = shelfId;
     }
 
     public String getDateAdded() {

@@ -30,6 +30,7 @@ public class BookFragment extends Fragment {
     BookMenuActions bookMenuActions;
     BookOperations bookOperations;
     BookAdapter bookAdapter;
+    int shelfId;
 
     @Nullable
     @Override
@@ -41,7 +42,18 @@ public class BookFragment extends Fragment {
         bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
-        userBooks = bookOperations.getAllBooks();
+        Bundle args = getArguments();
+        String bookShelf = "";
+        if (args != null) {
+            bookShelf = args.getString("SHELF_ID");
+        }
+
+        if (!bookShelf.isEmpty()) {
+            shelfId = Integer.parseInt(bookShelf);
+        } else {
+            shelfId = 0;
+        }
+        userBooks = bookOperations.getAllBooksInShelf(shelfId);
 
         bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, userBooks);
         bookListView.setAdapter(bookAdapter);
@@ -55,7 +67,7 @@ public class BookFragment extends Fragment {
             }
         });
 
-        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter);
+        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelfId);
 
         return rootView;
     }
@@ -125,7 +137,6 @@ public class BookFragment extends Fragment {
             bookMenuActions.manuallyAddBook();
             return true;
         } else if (id == R.id.add_book_scan) {
-            // TODO: Make a separate fragment for this
             launchScanner();
             return true;
         }
@@ -148,7 +159,7 @@ public class BookFragment extends Fragment {
         if (result != null) {
             String bookISBN = result.getContents();
             if (bookISBN != null && !bookISBN.isEmpty()) {
-                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations);
+                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations, shelfId);
                 search.searchWithISBN(bookISBN);
             }
         } else {

@@ -32,7 +32,7 @@ public class ShelfAddDialog extends AlertDialog {
                 if (!shelfName.isEmpty()) {
                     Shelf shelf = new Shelf(shelfName, Shelf.DEFAULT_COLOR);
                     shelfOperations.addShelf(shelf);
-                    shelfArrayAdapter.addShelf(shelf.getName());
+                    shelfArrayAdapter.addShelf(shelf);
                     dismiss();
                 } else {
                     Toast.makeText(content.getContext(), "Please enter a shelf name", Toast.LENGTH_LONG).show();

@@ -19,24 +19,20 @@ import com.s_diadamo.readlist.book.BookOperations;
 import java.util.ArrayList;
 
 
-/**
- * Created by s-diadamo on 15-06-05.
- */
 public class Search {
 
     public Context context;
     public BookAdapter bookAdapter;
     public BookOperations bookOperations;
     public String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
+    private int shelfId;
     private String API_KEY = API.getGoogleBooksApiKey();
 
-    public Search() {
-    }
-
-    public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations) {
+    public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations, int shelfId) {
         this.context = context;
         this.bookAdapter = bookAdapter;
         this.bookOperations = bookOperations;
+        this.shelfId = shelfId;
     }
 
     public void searchWithAuthorAndTitle(String author, String title) {
@@ -75,7 +71,7 @@ public class Search {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response);
+                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelfId);
                 SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, bookAdapter, bookOperations);
                 searchResultDialog.show();
             }

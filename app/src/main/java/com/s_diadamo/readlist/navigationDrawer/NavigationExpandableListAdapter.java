@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfAddDialog;
 
 import java.util.ArrayList;
@@ -21,17 +22,16 @@ import java.util.ArrayList;
 public class NavigationExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
 
     private Context context;
-    private ArrayList<String> shelfNames;
+    private ArrayList<Shelf> shelves;
 
-
-    public NavigationExpandableListAdapter(Context context, ArrayList<String> shelfNames) {
+    public NavigationExpandableListAdapter(Context context, ArrayList<Shelf> shelves) {
         super();
         this.context = context;
-        this.shelfNames = shelfNames;
+        this.shelves = shelves;
     }
 
-    public void addShelf(String shelfName) {
-        shelfNames.add(shelfName);
+    public void addShelf(Shelf shelf) {
+        shelves.add(shelf);
         this.notifyDataSetInvalidated();
         this.notifyDataSetChanged();
     }
@@ -43,7 +43,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return shelfNames.size();
+        return shelves.size();
     }
 
     @Override
@@ -53,7 +53,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public Object getChild(int groupPosition, int childPosition) {
-        return shelfNames.get(childPosition);
+        return shelves.get(childPosition).getName();
     }
 
     @Override
@@ -63,7 +63,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
 
     @Override
     public long getChildId(int groupPosition, int childPosition) {
-        return 0;
+        return shelves.get(childPosition).getId();
     }
 
     @Override
@@ -82,7 +82,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         final NavigationShelfParentHolder navShelfParentHolder;
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(R.layout.row_navigation_shelves_header, null);
+            row = inflater.inflate(R.layout.row_navigation_shelves_header, parent, false);
             navShelfParentHolder = new NavigationShelfParentHolder();
             navShelfParentHolder.icon = (ImageView) row.findViewById(R.id.nav_element_image);
             navShelfParentHolder.label = (TextView) row.findViewById(R.id.nav_element_label);
@@ -112,7 +112,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
             }
         });
 
-        //TODO: Set this icon!
+        //TODO: Set icon
         // navShelfParentHolder.icon.setImageResource(R.drawable.ic_book);
         return row;
     }
@@ -127,15 +127,17 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         NavigationShelfChildHolder navShelfChildHolder;
         if (row == null || row.getTag() == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(R.layout.row_navigation_element, null);
+            row = inflater.inflate(R.layout.row_sub_shelf, parent, false);
             navShelfChildHolder = new NavigationShelfChildHolder();
-            navShelfChildHolder.icon = (ImageView) row.findViewById(R.id.nav_element_image);
-            navShelfChildHolder.label = (TextView) row.findViewById(R.id.nav_element_label);
+            navShelfChildHolder.icon = (ImageView) row.findViewById(R.id.sub_shelf_image);
+            navShelfChildHolder.label = (TextView) row.findViewById(R.id.sub_shelf_label);
         } else {
             navShelfChildHolder = (NavigationShelfChildHolder) row.getTag();
         }
-        navShelfChildHolder.label.setText(shelfNames.get(childPosition));
-        navShelfChildHolder.icon.setImageResource(R.drawable.ic_book);
+        navShelfChildHolder.label.setText(shelves.get(childPosition).getName());
+
+        // TODO: Set icon
+        //navShelfChildHolder.icon.setImageResource(R.drawable.ic_book);
         return row;
     }
 

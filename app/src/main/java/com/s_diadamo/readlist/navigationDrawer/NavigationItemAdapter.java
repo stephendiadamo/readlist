@@ -5,8 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
@@ -17,9 +20,6 @@ public class NavigationItemAdapter extends BaseAdapter {
     private Context context;
 
     int[] icons = {
-            R.drawable.ic_book,
-            R.drawable.ic_book,
-            R.drawable.ic_book,
             R.drawable.ic_book
     };
 
@@ -58,8 +58,9 @@ public class NavigationItemAdapter extends BaseAdapter {
             }
             ShelfOperations shelfOperations = new ShelfOperations(row.getContext());
             NavigationExpandableListAdapter adapter = new NavigationExpandableListAdapter(row.getContext(),
-                    shelfOperations.getAllShelfNames());
+                    shelfOperations.getAllShelves());
             navItemShelfHolder.shelves.setAdapter(adapter);
+            navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener());
         } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {
@@ -72,10 +73,31 @@ public class NavigationItemAdapter extends BaseAdapter {
                 navItemHolder = (NavigationItemHolder) row.getTag();
             }
             navItemHolder.label.setText(navigationElementLabels[position]);
-            navItemHolder.icon.setImageResource(icons[position]);
+            navItemHolder.icon.setImageResource(icons[0]);
         }
         return row;
     }
+
+
+    private ExpandableListView.OnChildClickListener makeChildClickListener() {
+        ExpandableListView.OnChildClickListener listener = new ExpandableListView.OnChildClickListener(){
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+
+                //TODO
+
+                // Get the selected shelf
+                // Create a BookFragment and pass the ID in the bundle
+                // Display book fragment
+
+
+
+                return true;
+            }
+        };
+        return listener;
+    }
+
 
     static class NavigationItemHolder {
         ImageView icon;

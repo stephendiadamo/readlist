@@ -28,11 +28,13 @@ public class BookMenuActions {
     View view;
     BookOperations bookOperations;
     BookAdapter bookAdapter;
+    int shelfId;
 
-    public BookMenuActions(View view, BookOperations bookOperations, BookAdapter bookAdapter) {
+    public BookMenuActions(View view, BookOperations bookOperations, BookAdapter bookAdapter, int shelfId) {
         this.view = view;
         this.bookOperations = bookOperations;
         this.bookAdapter = bookAdapter;
+        this.shelfId = shelfId;
     }
 
     public void editNumberOfPages(final Book book) {
@@ -63,7 +65,7 @@ public class BookMenuActions {
     }
 
     public void manuallyAddBook() {
-        BookManuallyAddBookDialog bookManuallyAddBookDialog = new BookManuallyAddBookDialog(view.getContext(), bookAdapter, bookOperations);
+        BookManuallyAddBookDialog bookManuallyAddBookDialog = new BookManuallyAddBookDialog(view.getContext(), bookAdapter, bookOperations, shelfId);
         bookManuallyAddBookDialog.show();
     }
 
@@ -78,7 +80,7 @@ public class BookMenuActions {
             public void onClick(View v) {
                 String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
                 String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
-                Search search = new Search(view.getContext(), bookAdapter, bookOperations);
+                Search search = new Search(view.getContext(), bookAdapter, bookOperations, shelfId);
                 search.searchWithAuthorAndTitle(bookAuthor, bookTitle);
                 searchBookDialog.dismiss();
             }

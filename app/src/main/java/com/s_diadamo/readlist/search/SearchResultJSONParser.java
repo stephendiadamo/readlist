@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class SearchResultJSONParser {
 
-    public static ArrayList<Book> getBooksFromJSONResponse(String response) {
+    public static ArrayList<Book> getBooksFromJSONResponse(String response, int shelfId) {
         ArrayList<Book> books = new ArrayList<Book>();
         try {
             JsonParser jsonParser = new JsonFactory().createParser(response);
@@ -28,6 +28,7 @@ public class SearchResultJSONParser {
                             jsonParser.nextToken();
                             Book book = new Book();
                             book.setDateAdded(Book.getCurrentDate());
+                            book.setShelfId(shelfId);
                             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                                 attributeName = jsonParser.getCurrentName();
                                 if (attributeName.equals("title")) {

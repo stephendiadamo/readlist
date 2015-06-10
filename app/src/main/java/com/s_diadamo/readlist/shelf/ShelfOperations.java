@@ -10,9 +10,6 @@ import com.s_diadamo.readlist.DatabaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by s-diadamo on 15-05-27.
- */
 public class ShelfOperations {
     private String[] SHELF_TABLE_COLUMNS = {
             DatabaseHelper.KEY_ID,
@@ -42,11 +39,8 @@ public class ShelfOperations {
     public Shelf getShelf(long id) {
         db = dbHelper.getReadableDatabase();
         Cursor cursor = db.query(DatabaseHelper.TABLE_SHELVES,
-                new String[]{
-                        DatabaseHelper.KEY_ID,
-                        DatabaseHelper.SHELF_NAME,
-                        DatabaseHelper.SHELF_COLOR
-                }, DatabaseHelper.KEY_ID + "=?", new String[]{String.valueOf(id)},
+                SHELF_TABLE_COLUMNS,
+                DatabaseHelper.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
 
         if (cursor != null) {
@@ -59,9 +53,9 @@ public class ShelfOperations {
         return null;
     }
 
-    public List<Shelf> getAllShelves() {
+    public ArrayList<Shelf> getAllShelves() {
         db = dbHelper.getReadableDatabase();
-        List<Shelf> shelves = new ArrayList<Shelf>();
+        ArrayList<Shelf> shelves = new ArrayList<Shelf>();
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;
 
         Cursor cursor = db.rawQuery(selectQuery, null);

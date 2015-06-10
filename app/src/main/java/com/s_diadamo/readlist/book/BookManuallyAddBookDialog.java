@@ -17,7 +17,7 @@ import java.util.Calendar;
  * Created by s-diadamo on 15-06-04.
  */
 public class BookManuallyAddBookDialog extends AlertDialog {
-    public BookManuallyAddBookDialog(Context context, final BookAdapter bookAdapter, final BookOperations bookOperations) {
+    public BookManuallyAddBookDialog(Context context, final BookAdapter bookAdapter, final BookOperations bookOperations, final int shelfId) {
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
@@ -42,7 +42,7 @@ public class BookManuallyAddBookDialog extends AlertDialog {
                     Toast.makeText(content.getContext(), "Please fill all information", Toast.LENGTH_LONG).show();
                 } else {
                     Calendar calendar = Calendar.getInstance();
-                    Book book = new Book(bookTitle, bookAuthor, 0, Book.getCurrentDate(), Integer.parseInt(pages), 0, "", 0, "", "");
+                    Book book = new Book(bookTitle, bookAuthor, shelfId, Book.getCurrentDate(), Integer.parseInt(pages), 0, "", 0, "", "");
                     bookAdapter.add(book);
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.addBook(book);

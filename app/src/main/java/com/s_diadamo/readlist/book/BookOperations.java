@@ -36,7 +36,7 @@ public class BookOperations {
 
         values.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
         values.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
-        values.put(DatabaseHelper.BOOK_SHELF, book.getShelf());
+        values.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
@@ -64,6 +64,7 @@ public class BookOperations {
             db.close();
             return book;
         }
+
         db.close();
         return null;
     }
@@ -80,6 +81,26 @@ public class BookOperations {
                 books.add(book);
             } while (cursor.moveToNext());
         }
+
+        cursor.close();
+        db.close();
+        return books;
+    }
+
+    public ArrayList<Book> getAllBooksInShelf(int id) {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Book> books = new ArrayList<Book>();
+        Cursor cursor = db.query(DatabaseHelper.TABLE_BOOKS,
+                BOOK_TABLE_COLUMNS
+                , DatabaseHelper.BOOK_SHELF + "=?", new String[]{String.valueOf(id)},
+                null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Book book = parseBook(cursor);
+                books.add(book);
+            } while (cursor.moveToNext());
+        }
+
         cursor.close();
         db.close();
         return books;
@@ -100,7 +121,7 @@ public class BookOperations {
 
         values.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
         values.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
-        values.put(DatabaseHelper.BOOK_SHELF, book.getShelf());
+        values.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());

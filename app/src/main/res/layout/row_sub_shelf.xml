@@ -10,22 +10,22 @@
         android:layout_height="50dp">
 
         <ImageView
-            android:id="@+id/nav_element_image"
+            android:id="@+id/sub_shelf_image"
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_marginLeft="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="1dp"
-            android:src="@drawable/ic_book" />
+            android:contentDescription="@string/shelf_name" />
     </LinearLayout>
 
     <TextView
-        android:id="@+id/nav_element_label"
+        android:id="@+id/sub_shelf_label"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="6dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
         android:layout_toEndOf="@+id/image_container"
         android:layout_toRightOf="@+id/image_container"
         android:gravity="start|center_vertical"
