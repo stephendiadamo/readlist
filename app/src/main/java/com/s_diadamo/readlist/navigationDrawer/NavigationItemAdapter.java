@@ -1,21 +1,25 @@
 package com.s_diadamo.readlist.navigationDrawer;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.book.BookFragment;
+import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 public class NavigationItemAdapter extends BaseAdapter {
-
     String[] navigationElementLabels;
     private Context context;
 
@@ -60,7 +64,8 @@ public class NavigationItemAdapter extends BaseAdapter {
             NavigationExpandableListAdapter adapter = new NavigationExpandableListAdapter(row.getContext(),
                     shelfOperations.getAllShelves());
             navItemShelfHolder.shelves.setAdapter(adapter);
-            navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener());
+            navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(adapter));
+
         } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {
@@ -78,20 +83,23 @@ public class NavigationItemAdapter extends BaseAdapter {
         return row;
     }
 
-
-    private ExpandableListView.OnChildClickListener makeChildClickListener() {
-        ExpandableListView.OnChildClickListener listener = new ExpandableListView.OnChildClickListener(){
+    private ExpandableListView.OnChildClickListener makeChildClickListener(final NavigationExpandableListAdapter adapter) {
+        ExpandableListView.OnChildClickListener listener = new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-
-                //TODO
-
-                // Get the selected shelf
-                // Create a BookFragment and pass the ID in the bundle
-                // Display book fragment
-
-
-
+                long shelfId = adapter.getChildId(0, childPosition);
+                //TODO: Clean this up...
+                Fragment bookFragment = new BookFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(Shelf.SHELF_ID, String.valueOf(shelfId));
+                bookFragment.setArguments(bundle);
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, bookFragment)
+                        .commit();
+                DrawerLayout mDrawerLayout;
+                mDrawerLayout = (DrawerLayout) ((AppCompatActivity) context).findViewById(R.id.drawer_layout);
+                mDrawerLayout.closeDrawers();
                 return true;
             }
         };

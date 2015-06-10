@@ -111,7 +111,6 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
                 return true;
             }
         });
-
         //TODO: Set icon
         // navShelfParentHolder.icon.setImageResource(R.drawable.ic_book);
         return row;
@@ -135,7 +134,6 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
             navShelfChildHolder = (NavigationShelfChildHolder) row.getTag();
         }
         navShelfChildHolder.label.setText(shelves.get(childPosition).getName());
-
         // TODO: Set icon
         //navShelfChildHolder.icon.setImageResource(R.drawable.ic_book);
         return row;

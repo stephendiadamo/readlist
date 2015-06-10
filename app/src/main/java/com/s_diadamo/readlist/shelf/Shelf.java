@@ -1,12 +1,22 @@
 package com.s_diadamo.readlist.shelf;
 
+import android.content.Context;
+
+import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.book.BookOperations;
+
+import java.util.ArrayList;
+
 public class Shelf {
 
     public static final String DEFAULT_COLOR = "#111";
+    public static final String SHELF_ID = "SHELF_ID";
+    public static final int DEFAULT_SHELF_ID = 1;
 
     int id;
-    String name;
-    String colour;
+    private String name;
+    private String colour;
+    private ArrayList<Book> books;
 
     public Shelf() {
     }
@@ -44,5 +54,24 @@ public class Shelf {
 
     public void setColour(String color) {
         this.colour = color;
+    }
+
+    public ArrayList<Book> getBooks() {
+        return this.books;
+    }
+
+    public void setBooks(ArrayList<Book> books) {
+        this.books = books;
+    }
+
+    public ArrayList<Book> fetchBooks(Context context) {
+        BookOperations bookOperations = new BookOperations(context);
+        ArrayList<Book> books;
+        if (id == DEFAULT_SHELF_ID) {
+            books = bookOperations.getAllBooks();
+        } else {
+            books = bookOperations.getAllBooksInShelf(this.id);
+        }
+        return books;
     }
 }

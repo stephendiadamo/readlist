@@ -43,7 +43,7 @@ public class ShelfOperations {
                 DatabaseHelper.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
 
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             Shelf shelf = parseShelf(cursor);
             db.close();

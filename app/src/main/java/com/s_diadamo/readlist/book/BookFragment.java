@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,6 +22,8 @@ import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
+import com.s_diadamo.readlist.shelf.Shelf;
+import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 import java.util.ArrayList;
 
@@ -43,17 +47,22 @@ public class BookFragment extends Fragment {
         bookOperations = new BookOperations(container.getContext());
 
         Bundle args = getArguments();
-        String bookShelf = "";
+        String stringShelfId = "";
         if (args != null) {
-            bookShelf = args.getString("SHELF_ID");
+            stringShelfId = args.getString(Shelf.SHELF_ID);
         }
 
-        if (!bookShelf.isEmpty()) {
-            shelfId = Integer.parseInt(bookShelf);
+        if (!stringShelfId.isEmpty()) {
+            shelfId = Integer.parseInt(stringShelfId);
         } else {
-            shelfId = 0;
+            shelfId = Shelf.DEFAULT_SHELF_ID;
         }
-        userBooks = bookOperations.getAllBooksInShelf(shelfId);
+        Shelf shelf = new ShelfOperations(rootView.getContext()).getShelf(shelfId);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(shelf.getName());
+        }
+        userBooks = shelf.fetchBooks(rootView.getContext());
 
         bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, userBooks);
         bookListView.setAdapter(bookAdapter);
