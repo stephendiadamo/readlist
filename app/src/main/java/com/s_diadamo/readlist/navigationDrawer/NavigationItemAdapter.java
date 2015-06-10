@@ -74,7 +74,6 @@ public class NavigationItemAdapter extends BaseAdapter {
             navItemHolder.label.setText(navigationElementLabels[position]);
             navItemHolder.icon.setImageResource(icons[position]);
         }
-
         return row;
     }
 
