@@ -5,9 +5,6 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
-/**
- * Created by s-diadamo on 15-06-09.
- */
 public class NavigationExpandableListView extends ExpandableListView {
     private boolean expanded = true;
 

@@ -36,8 +36,6 @@ public class NavigationDrawerFragment extends Fragment {
     private ListView mDrawerListView;
     private View mFragmentContainerView;
 
-    private NavigationItemAdapter navigationItemAdapter;
-
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -82,10 +80,11 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        navigationItemAdapter = new NavigationItemAdapter(getActivity());
+        NavigationItemAdapter navigationItemAdapter = new NavigationItemAdapter(getActivity());
 
         mDrawerListView.setAdapter(navigationItemAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 
