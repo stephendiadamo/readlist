@@ -35,6 +35,7 @@ public class BookFragment extends Fragment {
     BookOperations bookOperations;
     BookAdapter bookAdapter;
     int shelfId;
+    Shelf shelf;
 
     @Nullable
     @Override
@@ -46,23 +47,8 @@ public class BookFragment extends Fragment {
         bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
-        Bundle args = getArguments();
-        String stringShelfId = "";
-        if (args != null) {
-            stringShelfId = args.getString(Shelf.SHELF_ID);
-        }
-
-        if (!stringShelfId.isEmpty()) {
-            shelfId = Integer.parseInt(stringShelfId);
-        } else {
-            shelfId = Shelf.DEFAULT_SHELF_ID;
-        }
-        Shelf shelf = new ShelfOperations(rootView.getContext()).getShelf(shelfId);
-        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle(shelf.getName());
-        }
-        userBooks = shelf.fetchBooks(rootView.getContext());
+        setUpShelf();
+        userBooks = getBooks();
 
         bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, userBooks);
         bookListView.setAdapter(bookAdapter);
@@ -78,7 +64,31 @@ public class BookFragment extends Fragment {
 
         bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelfId);
 
+        ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(shelf.getName());
+        }
+        
         return rootView;
+    }
+
+    private void setUpShelf() {
+        Bundle args = getArguments();
+        String stringShelfId = "";
+        if (args != null) {
+            stringShelfId = args.getString(Shelf.SHELF_ID);
+        }
+        if (!stringShelfId.isEmpty()) {
+            shelfId = Integer.parseInt(stringShelfId);
+        } else {
+            shelfId = Shelf.DEFAULT_SHELF_ID;
+
+        }
+        shelf = new ShelfOperations(rootView.getContext()).getShelf(shelfId);
+    }
+
+    private ArrayList<Book> getBooks() {
+        return shelf.fetchBooks(rootView.getContext());
     }
 
     @Override

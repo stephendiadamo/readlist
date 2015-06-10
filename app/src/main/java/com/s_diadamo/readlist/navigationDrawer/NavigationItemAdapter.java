@@ -50,8 +50,7 @@ public class NavigationItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-
-        if (position == 1) {
+        if (position == 0) {
             NavigationShelfItemHolder navItemShelfHolder = new NavigationShelfItemHolder();
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
@@ -65,7 +64,6 @@ public class NavigationItemAdapter extends BaseAdapter {
                     shelfOperations.getAllShelves());
             navItemShelfHolder.shelves.setAdapter(adapter);
             navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(adapter));
-
         } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {

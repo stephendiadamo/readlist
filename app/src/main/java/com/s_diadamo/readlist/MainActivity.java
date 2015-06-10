@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private CharSequence mTitle;
     public static ImageLoader imageLoader;
 
     @Override
@@ -34,7 +33,6 @@ public class MainActivity extends AppCompatActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -46,7 +44,6 @@ public class MainActivity extends AppCompatActivity
         if (!prefs.getBoolean(CREATED_SHELF, false)) {
             Shelf defaultShelf = new Shelf(Shelf.DEFAULT_SHELF_ID, "All Books", Shelf.DEFAULT_COLOR);
             (new ShelfOperations(this)).addShelf(defaultShelf);
-
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(CREATED_SHELF, true);
             editor.apply();
@@ -68,11 +65,9 @@ public class MainActivity extends AppCompatActivity
                 objFragment = new BookFragment();
                 break;
             case 1:
-                break;
-            case 2:
                 objFragment = new GoalsFragment();
                 break;
-            case 3:
+            case 2:
                 objFragment = new StatisticsFragment();
                 break;
         }
