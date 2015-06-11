@@ -41,6 +41,7 @@
     <string name="scan_book">Scan Book</string>
     <string name="by_colon">By:</string>
     <string name="date_added">Date added:</string>
+    <string name="delete_shelf">Delete Shelf</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>

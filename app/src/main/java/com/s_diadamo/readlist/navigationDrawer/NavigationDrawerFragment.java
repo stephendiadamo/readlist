@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.shelf.Shelf;
 
 public class NavigationDrawerFragment extends Fragment {
 
@@ -38,6 +38,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private NavigationItemAdapter navigationItemAdapter;
 
     public NavigationDrawerFragment() {
     }
@@ -77,12 +78,16 @@ public class NavigationDrawerFragment extends Fragment {
             }
         });
 
-        NavigationItemAdapter navigationItemAdapter = new NavigationItemAdapter(getActivity());
+        navigationItemAdapter = new NavigationItemAdapter(getActivity());
 
         mDrawerListView.setAdapter(navigationItemAdapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         return mDrawerListView;
+    }
+
+    public void deleteItemFromExpandableList(Shelf shelf) {
+        navigationItemAdapter.deleteItemFromExpandableList(shelf);
     }
 
     public boolean isDrawerOpen() {

@@ -11,7 +11,6 @@ import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.shelf.Shelf;
@@ -28,6 +27,19 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         super();
         this.context = context;
         this.shelves = shelves;
+    }
+
+    public void deleteShelf(Shelf shelf) {
+        int i = 0;
+        for (Shelf s : shelves) {
+            if (s.getId() == shelf.getId()) {
+                shelves.remove(i);
+                this.notifyDataSetInvalidated();
+                this.notifyDataSetChanged();
+                return;
+            }
+            i++;
+        }
     }
 
     public void addShelf(Shelf shelf) {

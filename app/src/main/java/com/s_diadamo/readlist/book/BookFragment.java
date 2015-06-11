@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
@@ -68,7 +69,7 @@ public class BookFragment extends Fragment {
         if (ab != null) {
             ab.setTitle(shelf.getName());
         }
-        
+
         return rootView;
     }
 
@@ -118,7 +119,6 @@ public class BookFragment extends Fragment {
                 bookMenuActions.setCurrentPage(userBooks.get(info.position));
                 return true;
             case R.id.mark_complete:
-                // TODO: rip this out
                 b = userBooks.get(info.position);
                 b.setComplete(true);
                 bookAdapter.notifyDataSetChanged();
@@ -130,7 +130,6 @@ public class BookFragment extends Fragment {
                 bookMenuActions.editNumberOfPages(userBooks.get(info.position));
                 return true;
             case R.id.delete_book:
-                // TODO: rip this out
                 b = userBooks.remove(info.position);
                 bookAdapter.notifyDataSetChanged();
                 bookOperations.deleteBook(b);
@@ -158,6 +157,14 @@ public class BookFragment extends Fragment {
         } else if (id == R.id.add_book_scan) {
             launchScanner();
             return true;
+        } else if (id == R.id.delete_shelf) {
+            if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
+                bookMenuActions.deleteShelf(shelf);
+                ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
+                        findFragmentById(R.id.navigation_drawer)).deleteItemFromExpandableList(shelf);
+            } else {
+                Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

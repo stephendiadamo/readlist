@@ -22,6 +22,7 @@ import com.s_diadamo.readlist.shelf.ShelfOperations;
 public class NavigationItemAdapter extends BaseAdapter {
     String[] navigationElementLabels;
     private Context context;
+    private NavigationExpandableListAdapter expandableListAdapter;
 
     int[] icons = {
             R.drawable.ic_book
@@ -60,10 +61,10 @@ public class NavigationItemAdapter extends BaseAdapter {
                 navItemShelfHolder = (NavigationShelfItemHolder) row.getTag();
             }
             ShelfOperations shelfOperations = new ShelfOperations(row.getContext());
-            NavigationExpandableListAdapter adapter = new NavigationExpandableListAdapter(row.getContext(),
+            expandableListAdapter = new NavigationExpandableListAdapter(row.getContext(),
                     shelfOperations.getAllShelves());
-            navItemShelfHolder.shelves.setAdapter(adapter);
-            navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(adapter));
+            navItemShelfHolder.shelves.setAdapter(expandableListAdapter);
+            navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(expandableListAdapter));
         } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {
@@ -104,6 +105,9 @@ public class NavigationItemAdapter extends BaseAdapter {
         return listener;
     }
 
+    public void deleteItemFromExpandableList(Shelf shelf) {
+        this.expandableListAdapter.deleteShelf(shelf);
+    }
 
     static class NavigationItemHolder {
         ImageView icon;

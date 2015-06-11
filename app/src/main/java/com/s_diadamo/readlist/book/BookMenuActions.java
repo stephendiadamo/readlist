@@ -1,27 +1,18 @@
 package com.s_diadamo.readlist.book;
 
+
+import android.app.AlertDialog;
 import android.app.Dialog;
-import android.net.Uri;
+
+import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.NumberPicker;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.search.Search;
-import com.s_diadamo.readlist.search.SearchResultDialog;
-import com.s_diadamo.readlist.search.SearchResultJSONParser;
-
-import java.util.ArrayList;
-import java.util.Calendar;
+import com.s_diadamo.readlist.shelf.Shelf;
+import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 public class BookMenuActions {
 
@@ -86,5 +77,30 @@ public class BookMenuActions {
             }
         });
         searchBookDialog.show();
+    }
+
+    public void deleteShelf(final Shelf shelf) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+
+        builder.setTitle("Delete Shelf");
+        builder.setMessage("Delete " + shelf.getName() + "?");
+
+        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                new ShelfOperations(view.getContext()).deleteShelf(shelf);
+
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s_diadamo.readlist.DatabaseHelper;
+import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.book.BookOperations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +21,11 @@ public class ShelfOperations {
 
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
+    private Context context;
 
     public ShelfOperations(Context context) {
         dbHelper = new DatabaseHelper(context);
+        this.context = context;
     }
 
     public Shelf addShelf(Shelf shelf) {
@@ -108,6 +112,12 @@ public class ShelfOperations {
     }
 
     public void deleteShelf(Shelf shelf) {
+        ArrayList<Book> books = getShelf(shelf.getId()).fetchBooks(context);
+        BookOperations bookOperations = new BookOperations(context);
+        for (Book book : books) {
+            book.setShelfId(Shelf.DEFAULT_SHELF_ID);
+            bookOperations.updateBook(book);
+        }
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_SHELVES, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(shelf.getId())});
