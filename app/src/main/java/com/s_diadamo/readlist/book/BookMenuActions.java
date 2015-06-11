@@ -103,4 +103,9 @@ public class BookMenuActions {
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    public void editShelf(Book book) {
+        //todo: Make custom dialog 
+
+    }
 }
