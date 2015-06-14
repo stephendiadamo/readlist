@@ -8,11 +8,16 @@ import android.content.DialogInterface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class BookMenuActions {
 
@@ -104,8 +109,44 @@ public class BookMenuActions {
         alert.show();
     }
 
-    public void editShelf(Book book) {
-        //todo: Make custom dialog 
+    public void editShelf(final Book book) {
+        final Dialog setShelfDialog = new Dialog(view.getContext());
+        setShelfDialog.setContentView(R.layout.dialog_set_book_shelf);
+        setShelfDialog.setTitle("Edit Shelf");
 
+        final ShelfOperations shelfOperations = new ShelfOperations(view.getContext());
+        final Spinner shelfSpinner = (Spinner) setShelfDialog.findViewById(R.id.set_shelf_shelf_spinner);
+        final ArrayList<Shelf> shelves = shelfOperations.getAllShelves();
+
+        ShelfSpinnerAdapter adapter = new ShelfSpinnerAdapter(setShelfDialog.getContext(),
+                android.R.layout.simple_spinner_dropdown_item, shelves);
+        shelfSpinner.setAdapter(adapter);
+
+        int shelfIndex = 0;
+        for (Shelf s : shelves) {
+            if (s.getId() == book.getShelfId()) {
+                break;
+            }
+            shelfIndex++;
+        }
+        shelfSpinner.setSelection(shelfIndex);
+
+        Button setShelf = (Button) setShelfDialog.findViewById(R.id.set_shelf_done);
+
+        final int currentShelfId = book.getShelfId();
+        setShelf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selectedShelfPosition = shelfSpinner.getSelectedItemPosition();
+                book.setShelfId(shelves.get(selectedShelfPosition).getId());
+                if (book.getShelfId() != currentShelfId && currentShelfId != Shelf.DEFAULT_SHELF_ID) {
+                    bookAdapter.remove(book);
+                }
+                bookOperations.updateBook(book);
+                setShelfDialog.dismiss();
+            }
+        });
+
+        setShelfDialog.show();
     }
 }

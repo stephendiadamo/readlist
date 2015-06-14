@@ -74,4 +74,9 @@ public class Shelf {
         }
         return books;
     }
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }
