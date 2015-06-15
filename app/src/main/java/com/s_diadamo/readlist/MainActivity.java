@@ -92,4 +92,13 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
+            mNavigationDrawerFragment.closeDrawer();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

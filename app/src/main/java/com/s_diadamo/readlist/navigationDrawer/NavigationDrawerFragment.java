@@ -178,6 +178,10 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(mFragmentContainerView);
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
