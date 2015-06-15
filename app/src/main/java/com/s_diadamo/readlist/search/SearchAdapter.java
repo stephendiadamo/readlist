@@ -42,7 +42,6 @@ public class SearchAdapter extends ArrayAdapter<Book> {
             resultHolder.resultBookCover = (ImageView) row.findViewById(R.id.search_book_cover);
             resultHolder.resultBookTitle = (TextView) row.findViewById(R.id.search_book_title);
             resultHolder.resultBookAuthor = (TextView) row.findViewById(R.id.search_book_author);
-            resultHolder.resultBookPages = (TextView) row.findViewById(R.id.search_book_num_pages);
 
             row.setTag(resultHolder);
         } else {
@@ -57,7 +56,6 @@ public class SearchAdapter extends ArrayAdapter<Book> {
 
         resultHolder.resultBookTitle.setText(result.getTitle());
         resultHolder.resultBookAuthor.setText(result.getAuthor());
-        resultHolder.resultBookPages.setText(String.valueOf(result.getNumPages()));
 
         return row;
     }
@@ -66,7 +64,6 @@ public class SearchAdapter extends ArrayAdapter<Book> {
         ImageView resultBookCover;
         TextView resultBookTitle;
         TextView resultBookAuthor;
-        TextView resultBookPages;
     }
 
 }
