@@ -28,7 +28,9 @@
         android:layout_marginStart="12dp"
         android:layout_toEndOf="@+id/image_container"
         android:layout_toRightOf="@+id/image_container"
+        android:ellipsize="end"
         android:gravity="start|center_vertical"
+        android:singleLine="true"
         android:text="Testing"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
