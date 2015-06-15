@@ -158,6 +158,11 @@ public class BookFragment extends Fragment {
         } else if (id == R.id.add_book_scan) {
             launchScanner();
             return true;
+        } else if (id == R.id.edit_shelf) {
+            bookMenuActions.editShelfInfo(shelf);
+            ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
+                    findFragmentById(R.id.navigation_drawer)).notifyChanges();
+            return true;
         } else if (id == R.id.delete_shelf) {
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
                 bookMenuActions.deleteShelf(shelf);
@@ -166,6 +171,7 @@ public class BookFragment extends Fragment {
             } else {
                 Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
             }
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

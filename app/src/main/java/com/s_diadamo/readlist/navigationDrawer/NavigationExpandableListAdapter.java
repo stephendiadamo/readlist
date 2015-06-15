@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.navigationDrawer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,8 +35,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         for (Shelf s : shelves) {
             if (s.getId() == shelf.getId()) {
                 shelves.remove(i);
-                this.notifyDataSetInvalidated();
-                this.notifyDataSetChanged();
+                notifyChanges();
                 return;
             }
             i++;
@@ -44,6 +44,10 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
 
     public void addShelf(Shelf shelf) {
         shelves.add(shelf);
+        notifyChanges();
+    }
+
+    public void notifyChanges() {
         this.notifyDataSetInvalidated();
         this.notifyDataSetChanged();
     }
@@ -145,9 +149,10 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         } else {
             navShelfChildHolder = (NavigationShelfChildHolder) row.getTag();
         }
-        navShelfChildHolder.label.setText(shelves.get(childPosition).getName());
-        // TODO: Set icon
-        //navShelfChildHolder.icon.setImageResource(R.drawable.ic_book);
+
+        Shelf shelf = shelves.get(childPosition);
+        navShelfChildHolder.label.setText(shelf.getName());
+        navShelfChildHolder.icon.setBackground(new ColorDrawable(shelf.getColour()));
         return row;
     }
 

@@ -7,7 +7,7 @@
         android:id="@+id/mark_complete"
         android:title="@string/mark_complete" />
     <item
-        android:id="@+id/edit_shelf"
+        android:id="@+id/set_book_shelf"
         android:title="@string/edit_shelf" />
     <item
         android:id="@+id/edit_num_pages"

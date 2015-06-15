@@ -9,25 +9,25 @@ import java.util.ArrayList;
 
 public class Shelf {
 
-    public static final String DEFAULT_COLOR = "#111";
+    public static final int DEFAULT_COLOR = android.R.color.holo_red_dark;
     public static final String SHELF_ID = "SHELF_ID";
     public static final int DEFAULT_SHELF_ID = 1;
 
     int id;
     private String name;
-    private String colour;
+    private int colour;
     private ArrayList<Book> books;
 
     public Shelf() {
     }
 
-    public Shelf(int id, String name, String color) {
+    public Shelf(int id, String name, int color) {
         this.id = id;
         this.name = name;
         this.colour = color;
     }
 
-    public Shelf(String name, String color) {
+    public Shelf(String name, int color) {
         this.name = name;
         this.colour = color;
     }
@@ -48,11 +48,11 @@ public class Shelf {
         this.name = name;
     }
 
-    public String getColour() {
+    public int getColour() {
         return this.colour;
     }
 
-    public void setColour(String color) {
+    public void setColour(int color) {
         this.colour = color;
     }
 

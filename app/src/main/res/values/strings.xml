@@ -15,7 +15,7 @@
 
 
     <string name="navigation_drawer_shelves">Shelves</string>
-    <string name="shelf_name">Shelf Name:</string>
+    <string name="shelf_name">Shelf Name</string>
     <string name="add">Add</string>
     <string name="add_shelf">Add Shelf</string>
     <string name="book_cover_image">Book Cover Image</string>
@@ -43,6 +43,7 @@
     <string name="date_added">Date added:</string>
     <string name="delete_shelf">Delete Shelf</string>
     <string name="edit_shelf">Edit Shelf</string>
+    <string name="set_book_shelf">Set Book Shelf</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>

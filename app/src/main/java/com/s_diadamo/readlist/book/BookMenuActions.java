@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
+import com.s_diadamo.readlist.shelf.ShelfEditInfoDialog;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;
 
@@ -84,6 +85,11 @@ public class BookMenuActions {
         searchBookDialog.show();
     }
 
+    public void editShelfInfo(final Shelf shelf) {
+        ShelfEditInfoDialog editShelfDialog = new ShelfEditInfoDialog(view.getContext(), shelf);
+        editShelfDialog.show();
+    }
+
     public void deleteShelf(final Shelf shelf) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 
@@ -93,7 +99,6 @@ public class BookMenuActions {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 new ShelfOperations(view.getContext()).deleteShelf(shelf);
-
                 dialog.dismiss();
             }
         });

@@ -90,6 +90,10 @@ public class NavigationDrawerFragment extends Fragment {
         navigationItemAdapter.deleteItemFromExpandableList(shelf);
     }
 
+    public void notifyChanges() {
+        navigationItemAdapter.notifyChanges();
+    }
+
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }

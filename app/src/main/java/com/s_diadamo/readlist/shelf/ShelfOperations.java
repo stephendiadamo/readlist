@@ -128,7 +128,7 @@ public class ShelfOperations {
         Shelf shelf = new Shelf(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getString(1),
-                cursor.getString(2));
+                Integer.parseInt(cursor.getString(2)));
         return shelf;
     }
 }

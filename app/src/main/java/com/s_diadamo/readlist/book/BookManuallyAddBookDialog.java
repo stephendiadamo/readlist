@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,15 +14,13 @@ import com.s_diadamo.readlist.R;
 
 import java.util.Calendar;
 
-/**
- * Created by s-diadamo on 15-06-04.
- */
 public class BookManuallyAddBookDialog extends AlertDialog {
     public BookManuallyAddBookDialog(Context context, final BookAdapter bookAdapter, final BookOperations bookOperations, final int shelfId) {
         super(context);
 
-        LayoutInflater layoutInflater = LayoutInflater.from(context);
-        final View content = layoutInflater.inflate(R.layout.dialog_manually_add_book, null);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        ViewGroup parent = (ViewGroup) findViewById(android.R.id.content);
+        final View content = inflater.inflate(R.layout.dialog_manually_add_book, parent, false);
 
         setTitle("Add New Book");
 

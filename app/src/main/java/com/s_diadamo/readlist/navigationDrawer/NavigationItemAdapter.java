@@ -109,6 +109,10 @@ public class NavigationItemAdapter extends BaseAdapter {
         this.expandableListAdapter.deleteShelf(shelf);
     }
 
+    public void notifyChanges() {
+        this.expandableListAdapter.notifyChanges();
+    }
+
     static class NavigationItemHolder {
         ImageView icon;
         TextView label;

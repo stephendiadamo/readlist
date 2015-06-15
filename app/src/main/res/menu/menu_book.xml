@@ -17,6 +17,9 @@
             android:id="@+id/add_book_scan"
             android:title="@string/scan_book" />
         <item
+            android:id="@+id/edit_shelf"
+            android:title="@string/edit_shelf" />
+        <item
             android:id="@+id/delete_shelf"
             android:title="@string/delete_shelf" />
     </item>
