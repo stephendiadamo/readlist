@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.book;
 
+import android.graphics.drawable.ColorDrawable;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -13,7 +15,7 @@ public class Book {
     String dateAdded;
     int numPages;
     int currentPage = 0;
-    String tileColor;
+    int colour;
     Boolean complete = false;
     String completionDate = "";
     String coverPictureUrl = "";
@@ -21,7 +23,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -29,20 +31,45 @@ public class Book {
         this.dateAdded = dateAdded;
         this.numPages = numPages;
         this.currentPage = currentPage;
-        this.tileColor = tileColor;
+        this.colour = colour;
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
     }
 
-    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, String tileColor, int complete, String completionDate, String coverPictureUrl) {
+    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl) {
         this.title = title;
         this.author = author;
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
         this.currentPage = currentPage;
-        this.tileColor = tileColor;
+        this.colour = colour;
+        this.complete = (complete == 1);
+        this.completionDate = completionDate;
+        this.coverPictureUrl = coverPictureUrl;
+    }
+
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.shelfId = shelfId;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
+        this.complete = (complete == 1);
+        this.completionDate = completionDate;
+        this.coverPictureUrl = coverPictureUrl;
+    }
+
+    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
+        this.title = title;
+        this.author = author;
+        this.shelfId = shelfId;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
@@ -104,12 +131,12 @@ public class Book {
         this.currentPage = currentPage;
     }
 
-    public String getTileColor() {
-        return tileColor;
+    public int getColour() {
+        return colour;
     }
 
-    public void setTileColor(String tileColor) {
-        this.tileColor = tileColor;
+    public void setColour(int colour) {
+        this.colour = colour;
     }
 
     public Boolean getComplete() {
@@ -141,5 +168,9 @@ public class Book {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.CANADA);
         return simpleDateFormat.format(cal.getTime());
+    }
+
+    public ColorDrawable getColorAsDrawalbe() {
+        return new ColorDrawable(this.colour);
     }
 }

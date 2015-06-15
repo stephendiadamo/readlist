@@ -35,7 +35,7 @@ public class BookFragment extends Fragment {
     BookMenuActions bookMenuActions;
     BookOperations bookOperations;
     BookAdapter bookAdapter;
-    int shelfId;
+
     Shelf shelf;
 
     @Nullable
@@ -63,7 +63,7 @@ public class BookFragment extends Fragment {
             }
         });
 
-        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelfId);
+        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelf);
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -76,6 +76,7 @@ public class BookFragment extends Fragment {
     private void setUpShelf() {
         Bundle args = getArguments();
         String stringShelfId = "";
+        int shelfId;
         if (args != null) {
             stringShelfId = args.getString(Shelf.SHELF_ID);
         }
@@ -192,7 +193,7 @@ public class BookFragment extends Fragment {
         if (result != null) {
             String bookISBN = result.getContents();
             if (bookISBN != null && !bookISBN.isEmpty()) {
-                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations, shelfId);
+                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations, shelf);
                 search.searchWithISBN(bookISBN);
             }
         } else {

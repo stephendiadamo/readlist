@@ -9,12 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.s_diadamo.readlist.DownloadImageTask;
 import com.s_diadamo.readlist.MainActivity;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.lazylist.ImageLoader;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -69,6 +65,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         } else {
             bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
         }
+
+        row.setBackground(book.getColorAsDrawalbe());
 
         return row;
     }

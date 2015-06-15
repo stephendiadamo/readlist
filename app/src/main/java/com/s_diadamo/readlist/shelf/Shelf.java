@@ -65,13 +65,14 @@ public class Shelf {
     }
 
     public ArrayList<Book> fetchBooks(Context context) {
-        BookOperations bookOperations = new BookOperations(context);
+        ShelfOperations shelfOperations = new ShelfOperations(context);
         ArrayList<Book> books;
         if (id == DEFAULT_SHELF_ID) {
-            books = bookOperations.getAllBooks();
+            books = shelfOperations.getAllBooksWithShelf();
         } else {
-            books = bookOperations.getAllBooksInShelf(this.id);
+            books = shelfOperations.getBooksWithShelf(this.id);
         }
+
         return books;
     }
 

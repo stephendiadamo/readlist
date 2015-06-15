@@ -73,30 +73,54 @@ public class ShelfOperations {
         return shelves;
     }
 
-    public ArrayList<String> getAllShelfNames() {
+    public ArrayList<Book> getAllBooksWithShelf() {
         db = dbHelper.getReadableDatabase();
-        ArrayList<String> shelfNames = new ArrayList<String>();
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;
+        ArrayList<Book> books = new ArrayList<Book>();
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s",
+                DatabaseHelper.TABLE_SHELVES,
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.BOOK_SHELF);
 
-        Cursor cursor = db.rawQuery(selectQuery, null);
+        Cursor cursor = db.rawQuery(query, null);
+
         if (cursor.moveToFirst()) {
             do {
                 Shelf shelf = parseShelf(cursor);
-                shelfNames.add(shelf.getName());
+                Book book = parseBookAfterJoin(cursor);
+                book.setColour(shelf.getColour());
+                books.add(book);
             } while (cursor.moveToNext());
         }
         db.close();
-        return shelfNames;
+        return books;
     }
 
-    public int getShelvesCount() {
+    public ArrayList<Book> getBooksWithShelf(long id) {
         db = dbHelper.getReadableDatabase();
-        String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_SHELVES;
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
+        ArrayList<Book> books = new ArrayList<Book>();
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=%s",
+                DatabaseHelper.TABLE_SHELVES,
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.BOOK_SHELF,
+                DatabaseHelper.BOOK_SHELF,
+                String.valueOf(id));
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Shelf shelf = parseShelf(cursor);
+                Book book = parseBookAfterJoin(cursor);
+                book.setColour(shelf.getColour());
+                books.add(book);
+            } while (cursor.moveToNext());
+        }
         db.close();
-        return cursor.getCount();
+        return books;
     }
+
 
     public int updateShelf(Shelf shelf) {
         db = dbHelper.getWritableDatabase();
@@ -131,4 +155,20 @@ public class ShelfOperations {
                 Integer.parseInt(cursor.getString(2)));
         return shelf;
     }
+
+    private Book parseBookAfterJoin(Cursor cursor) {
+        Book book = new Book(
+                Integer.parseInt(cursor.getString(3)),
+                cursor.getString(4),
+                cursor.getString(5),
+                Integer.parseInt(cursor.getString(6)),
+                cursor.getString(7),
+                Integer.parseInt(cursor.getString(8)),
+                Integer.parseInt(cursor.getString(9)),
+                Integer.parseInt(cursor.getString(10)),
+                cursor.getString(11),
+                cursor.getString(12));
+        return book;
+    }
+
 }

@@ -28,7 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_DATE_ADDED = "date_added";
     public static final String BOOK_NUM_PAGES = "num_pages";
     public static final String BOOK_CURRENT_PAGE = "current_page";
-    public static final String BOOK_TILE_COLOR = "tile_color";
     public static final String BOOK_COMPLETE = "complete";
     public static final String BOOK_COMPLETION_DATE = "completion_date";
     public static final String BOOK_COVER_PICTURE_URL = "cover_picture_url";
@@ -51,7 +50,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BOOK_DATE_ADDED + " TEXT, " +
             BOOK_NUM_PAGES + " INTEGER, " +
             BOOK_CURRENT_PAGE + " INTEGER, " +
-            BOOK_TILE_COLOR + " TEXT, " +
             BOOK_COMPLETE + " INTEGER, " +
             BOOK_COMPLETION_DATE + " TEXT, " +
             BOOK_COVER_PICTURE_URL + " TEXT" +

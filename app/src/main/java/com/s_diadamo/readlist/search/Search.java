@@ -15,6 +15,7 @@ import com.s_diadamo.readlist.API;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookAdapter;
 import com.s_diadamo.readlist.book.BookOperations;
+import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.util.ArrayList;
 
@@ -25,14 +26,14 @@ public class Search {
     public BookAdapter bookAdapter;
     public BookOperations bookOperations;
     public String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
-    private int shelfId;
+    private Shelf shelf;
     private String API_KEY = API.getGoogleBooksApiKey();
 
-    public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations, int shelfId) {
+    public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations, Shelf shelf) {
         this.context = context;
         this.bookAdapter = bookAdapter;
         this.bookOperations = bookOperations;
-        this.shelfId = shelfId;
+        this.shelf = shelf;
     }
 
     public void searchWithAuthorAndTitle(String author, String title) {
@@ -71,7 +72,7 @@ public class Search {
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelfId);
+                ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelf);
                 SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, bookAdapter, bookOperations);
                 searchResultDialog.show();
             }

@@ -18,7 +18,6 @@ public class BookOperations {
             DatabaseHelper.BOOK_DATE_ADDED,
             DatabaseHelper.BOOK_NUM_PAGES,
             DatabaseHelper.BOOK_CURRENT_PAGE,
-            DatabaseHelper.BOOK_TILE_COLOR,
             DatabaseHelper.BOOK_COMPLETE,
             DatabaseHelper.BOOK_COMPLETION_DATE,
             DatabaseHelper.BOOK_COVER_PICTURE_URL
@@ -40,7 +39,6 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
-        values.put(DatabaseHelper.BOOK_TILE_COLOR, book.getTileColor());
         values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
@@ -87,25 +85,6 @@ public class BookOperations {
         return books;
     }
 
-    public ArrayList<Book> getAllBooksInShelf(int id) {
-        db = dbHelper.getReadableDatabase();
-        ArrayList<Book> books = new ArrayList<Book>();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_BOOKS,
-                BOOK_TABLE_COLUMNS
-                , DatabaseHelper.BOOK_SHELF + "=?", new String[]{String.valueOf(id)},
-                null, null, null, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Book book = parseBook(cursor);
-                books.add(book);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return books;
-    }
-
     public int getBooksCount() {
         db = dbHelper.getReadableDatabase();
         String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKS;
@@ -125,7 +104,6 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
-        values.put(DatabaseHelper.BOOK_TILE_COLOR, book.getTileColor());
         values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
@@ -152,10 +130,9 @@ public class BookOperations {
                 cursor.getString(4),
                 Integer.parseInt(cursor.getString(5)),
                 Integer.parseInt(cursor.getString(6)),
-                cursor.getString(7),
-                Integer.parseInt(cursor.getString(8)),
-                cursor.getString(9),
-                cursor.getString(10));
+                Integer.parseInt(cursor.getString(7)),
+                cursor.getString(8),
+                cursor.getString(9));
         return book;
     }
 }

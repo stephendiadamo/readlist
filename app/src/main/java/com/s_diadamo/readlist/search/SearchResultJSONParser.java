@@ -4,13 +4,14 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
 import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 public class SearchResultJSONParser {
 
-    public static ArrayList<Book> getBooksFromJSONResponse(String response, int shelfId) {
+    public static ArrayList<Book> getBooksFromJSONResponse(String response, Shelf shelf) {
         ArrayList<Book> books = new ArrayList<Book>();
         try {
             JsonParser jsonParser = new JsonFactory().createParser(response);
@@ -28,7 +29,8 @@ public class SearchResultJSONParser {
                             jsonParser.nextToken();
                             Book book = new Book();
                             book.setDateAdded(Book.getCurrentDate());
-                            book.setShelfId(shelfId);
+                            book.setShelfId(shelf.getId());
+                            book.setColour(shelf.getColour());
                             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                                 attributeName = jsonParser.getCurrentName();
                                 if (attributeName.equals("title")) {
