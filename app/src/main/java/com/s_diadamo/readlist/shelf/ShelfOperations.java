@@ -50,6 +50,7 @@ public class ShelfOperations {
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
             shelf = parseShelf(cursor);
+            cursor.close();
         }
 
         db.close();
@@ -67,7 +68,9 @@ public class ShelfOperations {
                 Shelf shelf = parseShelf(cursor);
                 shelves.add(shelf);
             } while (cursor.moveToNext());
+            cursor.close();
         }
+
         db.close();
         return shelves;
     }
@@ -90,7 +93,9 @@ public class ShelfOperations {
                 book.setColour(shelf.getColour());
                 books.add(book);
             } while (cursor.moveToNext());
+            cursor.close();
         }
+
         db.close();
         return books;
     }
@@ -115,7 +120,9 @@ public class ShelfOperations {
                 book.setColour(shelf.getColour());
                 books.add(book);
             } while (cursor.moveToNext());
+            cursor.close();
         }
+
         db.close();
         return books;
     }
@@ -149,22 +156,22 @@ public class ShelfOperations {
 
     private Shelf parseShelf(Cursor cursor) {
         Shelf shelf = new Shelf(
-                Integer.parseInt(cursor.getString(0)),
+                cursor.getInt(0),
                 cursor.getString(1),
-                Integer.parseInt(cursor.getString(2)));
+                cursor.getInt(2));
         return shelf;
     }
 
     private Book parseBookAfterJoin(Cursor cursor) {
         Book book = new Book(
-                Integer.parseInt(cursor.getString(3)),
+                cursor.getInt(3),
                 cursor.getString(4),
                 cursor.getString(5),
-                Integer.parseInt(cursor.getString(6)),
+                cursor.getInt(6),
                 cursor.getString(7),
-                Integer.parseInt(cursor.getString(8)),
-                Integer.parseInt(cursor.getString(9)),
-                Integer.parseInt(cursor.getString(10)),
+                cursor.getInt(8),
+                cursor.getInt(9),
+                cursor.getInt(10),
                 cursor.getString(11),
                 cursor.getString(12));
         return book;

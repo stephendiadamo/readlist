@@ -123,14 +123,14 @@ public class BookOperations {
 
     private Book parseBook(Cursor cursor) {
         Book book = new Book(
-                Integer.parseInt(cursor.getString(0)),
+                cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2),
-                Integer.parseInt(cursor.getString(3)),
+                cursor.getInt(3),
                 cursor.getString(4),
-                Integer.parseInt(cursor.getString(5)),
-                Integer.parseInt(cursor.getString(6)),
-                Integer.parseInt(cursor.getString(7)),
+                cursor.getInt(5),
+                cursor.getInt(6),
+                cursor.getInt(7),
                 cursor.getString(8),
                 cursor.getString(9));
         return book;
