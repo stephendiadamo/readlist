@@ -16,7 +16,7 @@ import com.s_diadamo.readlist.lazylist.ImageLoader;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
-import com.s_diadamo.readlist.statistics.StatisticsFragment;
+import com.s_diadamo.readlist.updates.StatisticsFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {

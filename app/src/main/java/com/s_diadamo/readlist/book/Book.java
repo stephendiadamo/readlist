@@ -164,6 +164,7 @@ public class Book {
         this.coverPictureUrl = coverPictureUrl;
     }
 
+    //TODO Move this to a util
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.CANADA);

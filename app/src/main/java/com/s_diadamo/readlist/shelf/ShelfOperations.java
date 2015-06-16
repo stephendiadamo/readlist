@@ -28,16 +28,15 @@ public class ShelfOperations {
         this.context = context;
     }
 
-    public Shelf addShelf(Shelf shelf) {
+    public void addShelf(Shelf shelf) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
-        long shelfID = db.insert(DatabaseHelper.TABLE_SHELVES, null, values);
+        db.insert(DatabaseHelper.TABLE_SHELVES, null, values);
         db.close();
-        return getShelf(shelfID);
     }
 
     public Shelf getShelf(long id) {
@@ -47,14 +46,14 @@ public class ShelfOperations {
                 DatabaseHelper.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
 
+        Shelf shelf = null;
         if (cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
-            Shelf shelf = parseShelf(cursor);
-            db.close();
-            return shelf;
+            shelf = parseShelf(cursor);
         }
+
         db.close();
-        return null;
+        return shelf;
     }
 
     public ArrayList<Shelf> getAllShelves() {
