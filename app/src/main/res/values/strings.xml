@@ -51,6 +51,7 @@
     <string name="pages_read">Pages Read</string>
     <string name="books_completed">Books Completed</string>
     <string name="reading_this_month">Reading This Month</string>
+    <string name="number_of_books">Number of Books</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>

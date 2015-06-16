@@ -87,11 +87,34 @@ public class BookOperations {
 
     public int getBooksCount() {
         db = dbHelper.getReadableDatabase();
-        String countQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKS;
-        Cursor cursor = db.rawQuery(countQuery, null);
+        int books = 0;
+        String query = String.format("SELECT COUNT(%s) FROM %s",
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.TABLE_BOOKS);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            books = cursor.getInt(0);
+        }
         cursor.close();
         db.close();
-        return cursor.getCount();
+        return books;
+    }
+
+
+    public int getNumberOfBooksRead() {
+        db = dbHelper.getReadableDatabase();
+        int booksRead = 0;
+        String query = String.format("SELECT COUNT(%s) FROM %s WHERE %s=1",
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.BOOK_COMPLETE);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            booksRead = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return booksRead;
     }
 
     public int updateBook(Book book) {
@@ -135,4 +158,5 @@ public class BookOperations {
                 cursor.getString(9));
         return book;
     }
+
 }

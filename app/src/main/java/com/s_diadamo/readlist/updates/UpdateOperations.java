@@ -39,24 +39,6 @@ public class UpdateOperations {
         db.close();
     }
 
-    public Update getUpdate(long id) {
-        db = dbHelper.getReadableDatabase();
-        Cursor cursor = db.query(DatabaseHelper.TABLE_UPDATES,
-                UPDATE_TABLE_COLUMNS,
-                DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(id)},
-                null, null, null, null);
-
-        Update update = null;
-        if (cursor != null) {
-            cursor.moveToFirst();
-            update = parseUpdate(cursor);
-        }
-
-        db.close();
-        return update;
-    }
-
     public ArrayList<Update> getAllUpdates() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Update> updates = new ArrayList<Update>();
@@ -69,16 +51,34 @@ public class UpdateOperations {
                 updates.add(update);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         return updates;
     }
 
+    public int getAllTimePagesRead() {
+        db = dbHelper.getReadableDatabase();
+        int pages = 0;
+        String query = String.format("SELECT SUM(%s) FROM %s",
+                DatabaseHelper.UPDATE_PAGES,
+                DatabaseHelper.TABLE_UPDATES);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            pages = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return pages;
+    }
+
+
     private Update parseUpdate(Cursor cursor) {
         Update update = new Update(
                 Integer.parseInt(cursor.getString(0)),
-                Integer.parseInt(cursor.getString(1)),
+                cursor.getInt(1),
                 cursor.getString(2),
-                Integer.parseInt(cursor.getString(3))
+                cursor.getInt(3)
         );
         return update;
     }
