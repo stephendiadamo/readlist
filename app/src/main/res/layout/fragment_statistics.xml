@@ -1,12 +1,225 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.s_diadamo.readlist.statistics.StatisticsFragment">
+    android:orientation="vertical"
+    tools:context="com.s_diadamo.readlist.updates.StatisticsFragment">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/navigation_drawer_statistics" />
+        style="@style/UpdateHeader"
+        android:text="@string/average_weekly_reading" />
 
-</FrameLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/updates" />
+
+        <TextView
+            android:id="@+id/updates_weekly_updates"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/pages_read" />
+
+        <TextView
+            android:id="@+id/updates_weekly_pages_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+
+    <TextView
+        style="@style/UpdateHeader"
+        android:text="@string/reading_this_month" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/updates" />
+
+        <TextView
+            android:id="@+id/updates_monthly_updates"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/pages_read" />
+
+        <TextView
+            android:id="@+id/updates_monthly_pages_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/books_completed" />
+
+        <TextView
+            android:id="@+id/updates_monthly_books_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+
+    <TextView
+        style="@style/UpdateHeader"
+        android:text="@string/reading_this_year" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/updates" />
+
+        <TextView
+            android:id="@+id/updates_yearly_updates"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/pages_read" />
+
+        <TextView
+            android:id="@+id/updates_yearly_pages_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/books_completed" />
+
+        <TextView
+            android:id="@+id/updates_yearly_books_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+
+    <TextView
+        style="@style/UpdateHeader"
+        android:text="@string/all_time" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/updates" />
+
+        <TextView
+            android:id="@+id/updates_all_time_updates"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="10" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/pages_read" />
+
+        <TextView
+            android:id="@+id/updates_all_time_pages_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="9000000" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            style="@style/UpdateElement"
+            android:layout_weight="0.8"
+            android:text="@string/books_completed" />
+
+        <TextView
+            android:id="@+id/updates_all_time_books_read"
+            style="@style/UpdateElement"
+            android:layout_weight="0.2"
+            android:text="1000" />
+    </LinearLayout>
+
+</LinearLayout>

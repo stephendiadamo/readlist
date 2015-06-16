@@ -44,6 +44,13 @@
     <string name="delete_shelf">Delete Shelf</string>
     <string name="edit_shelf">Edit Shelf</string>
     <string name="set_book_shelf">Set Book Shelf</string>
+    <string name="average_weekly_reading">Average Weekly Reading</string>
+    <string name="reading_this_year">Reading This Year</string>
+    <string name="all_time">All Time</string>
+    <string name="updates">Updates</string>
+    <string name="pages_read">Pages Read</string>
+    <string name="books_completed">Books Completed</string>
+    <string name="reading_this_month">Reading This Month</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>
