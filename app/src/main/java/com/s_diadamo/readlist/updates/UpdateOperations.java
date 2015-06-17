@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteStatement;
 
 import com.s_diadamo.readlist.DatabaseHelper;
 import com.s_diadamo.readlist.Utils;
@@ -219,6 +218,4 @@ public class UpdateOperations {
         );
         return update;
     }
-
-
 }

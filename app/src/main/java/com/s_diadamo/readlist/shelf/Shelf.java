@@ -3,7 +3,6 @@ package com.s_diadamo.readlist.shelf;
 import android.content.Context;
 
 import com.s_diadamo.readlist.book.Book;
-import com.s_diadamo.readlist.book.BookOperations;
 
 import java.util.ArrayList;
 
@@ -16,7 +15,6 @@ public class Shelf {
     int id;
     private String name;
     private int colour;
-    private ArrayList<Book> books;
 
     public Shelf() {
     }
@@ -54,14 +52,6 @@ public class Shelf {
 
     public void setColour(int color) {
         this.colour = color;
-    }
-
-    public ArrayList<Book> getBooks() {
-        return this.books;
-    }
-
-    public void setBooks(ArrayList<Book> books) {
-        this.books = books;
     }
 
     public ArrayList<Book> fetchBooks(Context context) {

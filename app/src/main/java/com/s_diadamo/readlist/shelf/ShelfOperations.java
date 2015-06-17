@@ -10,7 +10,6 @@ import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ShelfOperations {
     private String[] SHELF_TABLE_COLUMNS = {
