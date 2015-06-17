@@ -6,17 +6,19 @@
 
     <LinearLayout
         android:id="@+id/image_container"
-        android:layout_width="25dp"
-        android:layout_height="50dp">
+        android:layout_width="27dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/black"
+        android:gravity="center">
 
         <ImageView
             android:id="@+id/sub_shelf_image"
-            android:layout_width="match_parent"
+            android:layout_width="25dp"
             android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="1dp"
+            android:background="@android:color/white"
             android:contentDescription="@string/shelf_name" />
     </LinearLayout>
 

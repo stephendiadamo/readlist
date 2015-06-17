@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class Shelf {
 
-    public static final int DEFAULT_COLOR = android.R.color.holo_red_dark;
+    public static final int DEFAULT_COLOR = android.R.color.transparent;
     public static final String SHELF_ID = "SHELF_ID";
     public static final int DEFAULT_SHELF_ID = 1;
 
