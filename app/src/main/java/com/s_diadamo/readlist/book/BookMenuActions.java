@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 
 import android.content.DialogInterface;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -85,8 +86,8 @@ public class BookMenuActions {
         searchBookDialog.show();
     }
 
-    public void editShelfInfo(final Shelf shelf) {
-        ShelfEditInfoDialog editShelfDialog = new ShelfEditInfoDialog(view.getContext(), shelf);
+    public void editShelfInfo(final Shelf shelf, ActionBar actionBar) {
+        ShelfEditInfoDialog editShelfDialog = new ShelfEditInfoDialog(view.getContext(), shelf, actionBar);
         editShelfDialog.show();
     }
 

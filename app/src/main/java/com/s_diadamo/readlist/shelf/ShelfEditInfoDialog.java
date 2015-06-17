@@ -19,7 +19,7 @@ import com.s_diadamo.readlist.R;
 
 public class ShelfEditInfoDialog extends AlertDialog {
 
-    public ShelfEditInfoDialog(final Context context, final Shelf shelf) {
+    public ShelfEditInfoDialog(final Context context, final Shelf shelf, final ActionBar actionBar) {
         super(context);
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -47,7 +47,7 @@ public class ShelfEditInfoDialog extends AlertDialog {
                 shelf.setName(shelfEditText.getText().toString());
                 ShelfOperations operations = new ShelfOperations(context);
                 operations.updateShelf(shelf);
-                //TODO: Update app title to new shelf name
+                actionBar.setTitle(shelf.getName());
                 dismiss();
             }
         });

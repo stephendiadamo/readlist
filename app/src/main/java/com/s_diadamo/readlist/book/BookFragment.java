@@ -160,7 +160,7 @@ public class BookFragment extends Fragment {
             launchScanner();
             return true;
         } else if (id == R.id.edit_shelf) {
-            bookMenuActions.editShelfInfo(shelf);
+            bookMenuActions.editShelfInfo(shelf, ((AppCompatActivity) getActivity()).getSupportActionBar());
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).notifyChanges();
             return true;
