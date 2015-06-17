@@ -6,25 +6,22 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s_diadamo.readlist.DatabaseHelper;
+import com.s_diadamo.readlist.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class UpdateOperations {
 
-    private String[] UPDATE_TABLE_COLUMNS = {
-            DatabaseHelper.KEY_ID,
-            DatabaseHelper.UPDATE_BOOK_ID,
-            DatabaseHelper.UPDATE_DATE,
-            DatabaseHelper.UPDATE_PAGES
-    };
 
     private DatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private Context context;
 
     public UpdateOperations(Context context) {
         dbHelper = new DatabaseHelper(context);
-        this.context = context;
     }
 
     public void addUpdate(Update update) {
@@ -45,13 +42,13 @@ public class UpdateOperations {
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_UPDATES;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             do {
                 Update update = parseUpdate(cursor);
                 updates.add(update);
             } while (cursor.moveToNext());
+            cursor.close();
         }
-        cursor.close();
         db.close();
         return updates;
     }
@@ -64,14 +61,78 @@ public class UpdateOperations {
                 DatabaseHelper.TABLE_UPDATES);
 
         Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             pages = cursor.getInt(0);
+            cursor.close();
         }
-        cursor.close();
         db.close();
         return pages;
     }
 
+    public int getNumberOfUpdates() {
+        db = dbHelper.getReadableDatabase();
+        int numUpdates = 0;
+        String query = String.format("SELECT COUNT(*) FROM %s",
+                DatabaseHelper.TABLE_UPDATES);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            numUpdates = cursor.getInt(0);
+            cursor.close();
+        }
+        db.close();
+        return numUpdates;
+    }
+
+    public int getNumberOfUpdatesThisMonth() {
+        int numUpdates = 0;
+        db = dbHelper.getReadableDatabase();
+        try {
+            String stringDate = Utils.getCurrentDate();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+            Date date = simpleDateFormat.parse(stringDate);
+            String month = (String) android.text.format.DateFormat.format("MM", date);
+            String year = (String) android.text.format.DateFormat.format("yyyy", date);
+            String query = String.format("SELECT COUNT(*) FROM %s WHERE %s BETWEEN '%s-%s-%s 00:00:00' AND '%s-%s-%s 23:59:59'",
+                    DatabaseHelper.TABLE_UPDATES,
+                    DatabaseHelper.UPDATE_DATE,
+                    year,
+                    month,
+                    "01",
+                    year,
+                    month,
+                    "31");
+            Cursor cursor = db.rawQuery(query, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                numUpdates = cursor.getInt(0);
+                cursor.close();
+            }
+            db.close();
+        } catch (ParseException e) {
+        }
+
+        return numUpdates;
+    }
+
+    public int getNumberOfPagesReadThisMonth() {
+        return 0;
+    }
+
+    public int getNumberOfUpdatesThisYear() {
+        return 0;
+    }
+
+    public int getNumberOfPagesThisYear() {
+        return 0;
+    }
+
+    public int getAverageWeeklyUpdates() {
+        return 0;
+    }
+
+    public int getAverageWeeklyPages() {
+        return 0;
+    }
 
     private Update parseUpdate(Cursor cursor) {
         Update update = new Update(

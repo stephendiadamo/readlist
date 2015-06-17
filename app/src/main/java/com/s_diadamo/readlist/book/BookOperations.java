@@ -100,7 +100,6 @@ public class BookOperations {
         return books;
     }
 
-
     public int getNumberOfBooksRead() {
         db = dbHelper.getReadableDatabase();
         int booksRead = 0;
@@ -115,6 +114,17 @@ public class BookOperations {
         cursor.close();
         db.close();
         return booksRead;
+    }
+
+    public int getNumberOfBooksReadThisMonth() {
+        db = dbHelper.getReadableDatabase();
+        int booksRead = 0;
+
+        return booksRead;
+    }
+
+    public int getNumberOfBooksReadThisYear() {
+        return 0;
     }
 
     public int updateBook(Book book) {
@@ -158,5 +168,4 @@ public class BookOperations {
                 cursor.getString(9));
         return book;
     }
-
 }

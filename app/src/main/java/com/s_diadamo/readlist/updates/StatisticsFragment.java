@@ -19,8 +19,6 @@ public class StatisticsFragment extends Fragment {
     View rootView;
     BookOperations bookOperations;
     UpdateOperations updateOperations;
-    ArrayList<Update> updates;
-    ArrayList<Book> books;
 
     @Nullable
     @Override
@@ -32,18 +30,15 @@ public class StatisticsFragment extends Fragment {
         bookOperations = new BookOperations(container.getContext());
         updateOperations = new UpdateOperations(container.getContext());
 
-        //TODO: Will this kill RAM?
-        updates = updateOperations.getAllUpdates();
-
         populateData();
 
         return rootView;
     }
 
     private void populateData() {
-//        setAverageWeeklyData();
-//        setMontlyData();
-//        setYearlyData();
+        setAverageWeeklyData();
+        setMonthlyData();
+        setYearlyData();
         setAllTimeData();
     }
 
@@ -51,17 +46,29 @@ public class StatisticsFragment extends Fragment {
         TextView yearlyUpdates = (TextView) rootView.findViewById(R.id.updates_yearly_updates);
         TextView yearlyPages = (TextView) rootView.findViewById(R.id.updates_yearly_pages_read);
         TextView yearlyBooks = (TextView) rootView.findViewById(R.id.updates_yearly_books_read);
+
+        yearlyUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdatesThisYear()));
+        yearlyPages.setText(String.valueOf(updateOperations.getNumberOfPagesThisYear()));
+        yearlyBooks.setText(String.valueOf(bookOperations.getNumberOfBooksReadThisYear()));
     }
 
-    private void setMontlyData() {
+    private void setMonthlyData() {
         TextView monthlyUpdates = (TextView) rootView.findViewById(R.id.updates_monthly_updates);
         TextView monthlyPages = (TextView) rootView.findViewById(R.id.updates_monthly_pages_read);
         TextView monthlyBooks = (TextView) rootView.findViewById(R.id.updates_monthly_books_read);
+
+        monthlyUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdatesThisMonth()));
+        monthlyPages.setText(String.valueOf(updateOperations.getNumberOfPagesReadThisMonth()));
+        monthlyBooks.setText(String.valueOf(bookOperations.getNumberOfBooksReadThisMonth()));
+
     }
 
     private void setAverageWeeklyData() {
         TextView averageWeeklyUpdates = (TextView) rootView.findViewById(R.id.updates_weekly_updates);
         TextView averageWeeklyPages = (TextView) rootView.findViewById(R.id.updates_weekly_pages_read);
+
+        averageWeeklyUpdates.setText(String.valueOf(updateOperations.getAverageWeeklyUpdates()));
+        averageWeeklyPages.setText(String.valueOf(updateOperations.getAverageWeeklyPages()));
     }
 
     private void setAllTimeData() {
@@ -70,7 +77,7 @@ public class StatisticsFragment extends Fragment {
         TextView allTimeBooks = (TextView) rootView.findViewById(R.id.updates_all_time_books);
         TextView allTimeBooksRead = (TextView) rootView.findViewById(R.id.updates_all_time_books_read);
 
-        allTimeUpdates.setText(String.valueOf(updates.size()));
+        allTimeUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdates()));
         allTimePages.setText(String.valueOf(updateOperations.getAllTimePagesRead()));
         allTimeBooks.setText(String.valueOf(bookOperations.getBooksCount()));
         allTimeBooksRead.setText(String.valueOf(bookOperations.getNumberOfBooksRead()));
