@@ -25,6 +25,8 @@ import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.updates.Update;
+import com.s_diadamo.readlist.updates.UpdateOperations;
 
 import java.util.ArrayList;
 
@@ -121,9 +123,7 @@ public class BookFragment extends Fragment {
                 return true;
             case R.id.mark_complete:
                 book = userBooks.get(info.position);
-                book.setComplete(true);
-                bookAdapter.notifyDataSetChanged();
-                bookOperations.updateBook(book);
+                completeBook(book);
                 return true;
             case R.id.edit_shelf:
                 bookMenuActions.editShelf(userBooks.get(info.position));
@@ -139,6 +139,18 @@ public class BookFragment extends Fragment {
         }
 
         return super.onContextItemSelected(item);
+    }
+    
+    private void completeBook(Book book) {
+        int remainingPages = book.getNumPages() - book.getCurrentPage();
+        new UpdateOperations(rootView.getContext()).
+                addUpdate(new Update(book.getId(), remainingPages));
+
+        book.setComplete(true);
+        book.setCurrentPage(book.getNumPages());
+
+        bookAdapter.notifyDataSetChanged();
+        bookOperations.updateBook(book);
     }
 
     @Override

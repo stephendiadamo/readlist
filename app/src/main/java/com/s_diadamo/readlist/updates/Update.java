@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.updates;
 
+import com.s_diadamo.readlist.Utils;
+
 public class Update {
 
     private int id;
@@ -20,6 +22,12 @@ public class Update {
     public Update(int bookId, String date, int pages) {
         this.bookId = bookId;
         this.date = date;
+        this.pages = pages;
+    }
+
+    public Update(int bookId, int pages) {
+        this.bookId = bookId;
+        this.date = Utils.getCurrentDate();
         this.pages = pages;
     }
 
