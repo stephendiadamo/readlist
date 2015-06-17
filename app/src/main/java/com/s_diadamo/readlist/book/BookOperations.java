@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s_diadamo.readlist.DatabaseHelper;
+import com.s_diadamo.readlist.Utils;
 
 import java.util.ArrayList;
 
@@ -116,14 +117,44 @@ public class BookOperations {
         return booksRead;
     }
 
-    public int getNumberOfBooksReadThisMonth() {
+    public int getNumberOfBooksReadBetweenDates(String start, String end) {
+        int numBooksRead = 0;
         db = dbHelper.getReadableDatabase();
-        int booksRead = 0;
+        String query = String.format("SELECT COUNT(*) FROM %s WHERE (%s BETWEEN '%s' AND '%s') AND %s=1",
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.BOOK_DATE_ADDED,
+                start,
+                end,
+                DatabaseHelper.BOOK_COMPLETE);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            numBooksRead = cursor.getInt(0);
+            cursor.close();
+        }
 
-        return booksRead;
+        db.close();
+        return numBooksRead;
+    }
+
+    public int getNumberOfBooksReadThisMonth() {
+        String month = Utils.getCurrentMonth();
+        String year = Utils.getCurrentYear();
+        if (!month.isEmpty() && !year.isEmpty()) {
+            String start = String.format("%s-%s-01 00:00:00", year, month);
+            String end = String.format("%s-%s-31 23:59:59", year, month);
+            return getNumberOfBooksReadBetweenDates(start, end);
+        }
+        return 0;
+
     }
 
     public int getNumberOfBooksReadThisYear() {
+        String year = Utils.getCurrentYear();
+        if (!year.isEmpty()) {
+            String start = String.format("%s-01-01 00:00:00", year);
+            String end = String.format("%s-12-31 23:59:59", year);
+            return getNumberOfBooksReadBetweenDates(start, end);
+        }
         return 0;
     }
 

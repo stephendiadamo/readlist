@@ -4,15 +4,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.s_diadamo.readlist.DatabaseHelper;
 import com.s_diadamo.readlist.Utils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 public class UpdateOperations {
 
@@ -55,18 +52,18 @@ public class UpdateOperations {
 
     public int getAllTimePagesRead() {
         db = dbHelper.getReadableDatabase();
-        int pages = 0;
+        int numPages = 0;
         String query = String.format("SELECT SUM(%s) FROM %s",
                 DatabaseHelper.UPDATE_PAGES,
                 DatabaseHelper.TABLE_UPDATES);
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
-            pages = cursor.getInt(0);
+            numPages = cursor.getInt(0);
             cursor.close();
         }
         db.close();
-        return pages;
+        return numPages;
     }
 
     public int getNumberOfUpdates() {
@@ -80,58 +77,137 @@ public class UpdateOperations {
             numUpdates = cursor.getInt(0);
             cursor.close();
         }
+
         db.close();
         return numUpdates;
     }
 
-    public int getNumberOfUpdatesThisMonth() {
+    public int getNumberOfUpdatesBetweenDates(String start, String end) {
         int numUpdates = 0;
         db = dbHelper.getReadableDatabase();
-        try {
-            String stringDate = Utils.getCurrentDate();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
-            Date date = simpleDateFormat.parse(stringDate);
-            String month = (String) android.text.format.DateFormat.format("MM", date);
-            String year = (String) android.text.format.DateFormat.format("yyyy", date);
-            String query = String.format("SELECT COUNT(*) FROM %s WHERE %s BETWEEN '%s-%s-%s 00:00:00' AND '%s-%s-%s 23:59:59'",
-                    DatabaseHelper.TABLE_UPDATES,
-                    DatabaseHelper.UPDATE_DATE,
-                    year,
-                    month,
-                    "01",
-                    year,
-                    month,
-                    "31");
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                numUpdates = cursor.getInt(0);
-                cursor.close();
-            }
-            db.close();
-        } catch (ParseException e) {
+        String query = String.format("SELECT COUNT(*) FROM %s WHERE %s BETWEEN '%s' AND '%s'",
+                DatabaseHelper.TABLE_UPDATES,
+                DatabaseHelper.UPDATE_DATE,
+                start,
+                end);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            numUpdates = cursor.getInt(0);
+            cursor.close();
         }
 
+        db.close();
         return numUpdates;
     }
 
+    public int getNumberOfPagesReadBetweenDates(String start, String end) {
+        int numPagesRead = 0;
+        db = dbHelper.getReadableDatabase();
+        String query = String.format("SELECT SUM(%s) FROM %s WHERE %s BETWEEN '%s' AND '%s'",
+                DatabaseHelper.UPDATE_PAGES,
+                DatabaseHelper.TABLE_UPDATES,
+                DatabaseHelper.UPDATE_DATE,
+                start,
+                end);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            numPagesRead = cursor.getInt(0);
+            cursor.close();
+        }
+
+        db.close();
+        return numPagesRead;
+    }
+
+    public int getNumberOfUpdatesThisMonth() {
+        String month = Utils.getCurrentMonth();
+        String year = Utils.getCurrentYear();
+        if (!month.isEmpty() && !year.isEmpty()) {
+            String start = String.format("%s-%s-01 00:00:00", year, month);
+            String end = String.format("%s-%s-31 23:59:59", year, month);
+            return getNumberOfUpdatesBetweenDates(start, end);
+        }
+        return 0;
+    }
+
     public int getNumberOfPagesReadThisMonth() {
+        String month = Utils.getCurrentMonth();
+        String year = Utils.getCurrentYear();
+        if (!month.isEmpty() && !year.isEmpty()) {
+            String start = String.format("%s-%s-01 00:00:00", year, month);
+            String end = String.format("%s-%s-31 23:59:59", year, month);
+            return getNumberOfPagesReadBetweenDates(start, end);
+        }
         return 0;
     }
 
     public int getNumberOfUpdatesThisYear() {
+        String year = Utils.getCurrentYear();
+        if (!year.isEmpty()) {
+            String start = String.format("%s-01-01 00:00:00", year);
+            String end = String.format("%s-12-31 23:59:59", year);
+            return getNumberOfUpdatesBetweenDates(start, end);
+        }
         return 0;
     }
 
     public int getNumberOfPagesThisYear() {
+        String year = Utils.getCurrentYear();
+        if (!year.isEmpty()) {
+            String start = String.format("%s-01-01 00:00:00", year);
+            String end = String.format("%s-12-31 23:59:59", year);
+            return getNumberOfPagesReadBetweenDates(start, end);
+        }
+        return 0;
+    }
+
+    public int calculateAverageWithQuery(Cursor cursor) {
+        int updatesInWeek = 0;
+        int numWeeks = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                updatesInWeek += cursor.getInt(1);
+                numWeeks++;
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        if (numWeeks != 0) {
+            return updatesInWeek / numWeeks;
+        }
         return 0;
     }
 
     public int getAverageWeeklyUpdates() {
-        return 0;
+        db = dbHelper.getReadableDatabase();
+        String query = String.format(
+                "SELECT strftime('%%Y-%%W', %s), count(*) FROM %s " +
+                        "WHERE %s BETWEEN '2000-01-01 00:00:00' AND '2200-01-01 00:00:00' " +
+                        "GROUP BY strftime('%%Y-%%W', %s);",
+                DatabaseHelper.UPDATE_DATE,
+                DatabaseHelper.TABLE_UPDATES,
+                DatabaseHelper.UPDATE_DATE,
+                DatabaseHelper.UPDATE_DATE);
+
+        Cursor cursor = db.rawQuery(query, null);
+        return calculateAverageWithQuery(cursor);
     }
 
     public int getAverageWeeklyPages() {
-        return 0;
+        db = dbHelper.getReadableDatabase();
+
+
+        String query = String.format(
+                "SELECT strftime('%%Y-%%W', %s), sum(%s) FROM %s " +
+                        "WHERE %s BETWEEN '2000-01-01 00:00:00' AND '2200-01-01 00:00:00' " +
+                        "GROUP BY strftime('%%Y-%%W', %s);",
+                DatabaseHelper.UPDATE_DATE,
+                DatabaseHelper.UPDATE_PAGES,
+                DatabaseHelper.TABLE_UPDATES,
+                DatabaseHelper.UPDATE_DATE,
+                DatabaseHelper.UPDATE_DATE);
+
+        Cursor cursor = db.rawQuery(query, null);
+        return calculateAverageWithQuery(cursor);
     }
 
     private Update parseUpdate(Cursor cursor) {

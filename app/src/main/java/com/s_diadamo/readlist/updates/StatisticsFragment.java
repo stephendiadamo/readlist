@@ -36,6 +36,7 @@ public class StatisticsFragment extends Fragment {
     }
 
     private void populateData() {
+        //TODO: Wrap this in a loading animation
         setAverageWeeklyData();
         setMonthlyData();
         setYearlyData();
