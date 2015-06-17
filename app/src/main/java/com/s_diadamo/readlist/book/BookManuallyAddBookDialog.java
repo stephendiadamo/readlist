@@ -11,17 +11,16 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
-
-import java.util.Calendar;
 
 public class BookManuallyAddBookDialog extends AlertDialog {
     public BookManuallyAddBookDialog(Context context, final BookAdapter bookAdapter, final BookOperations bookOperations, final Shelf shelf) {
         super(context);
 
         LayoutInflater inflater = LayoutInflater.from(context);
-        ViewGroup parent = (ViewGroup) findViewById(android.R.id.content);
-        final View content = inflater.inflate(R.layout.dialog_manually_add_book, parent, false);
+
+        final View content = inflater.inflate(R.layout.dialog_manually_add_book, null, false);
 
         setTitle("Add New Book");
 
@@ -43,7 +42,7 @@ public class BookManuallyAddBookDialog extends AlertDialog {
                 } else {
                     pages = pages.isEmpty() ? "0" : pages;
                     bookAuthor = bookAuthor.isEmpty() ? "" : bookAuthor;
-                    Book book = new Book(bookTitle, bookAuthor, shelf.getId(), Book.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", "");
+                    Book book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", "");
                     bookAdapter.add(book);
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.addBook(book);

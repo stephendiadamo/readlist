@@ -2,8 +2,11 @@ package com.s_diadamo.readlist.book;
 
 import android.graphics.drawable.ColorDrawable;
 
+import com.s_diadamo.readlist.Utils;
+
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class Book {
@@ -108,7 +111,20 @@ public class Book {
     }
 
     public String getDateAdded() {
-        return dateAdded;
+        return this.dateAdded;
+    }
+
+    public String getCleanDateAdded() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+        String cleanFormat = "MMMM dd, yyyy";
+        try {
+            Date d = simpleDateFormat.parse(dateAdded);
+            simpleDateFormat.applyPattern(cleanFormat);
+            return simpleDateFormat.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public void setDateAdded(String dateAdded) {
@@ -145,7 +161,7 @@ public class Book {
 
     public void setComplete(Boolean complete) {
         this.complete = complete;
-        this.setCompletionDate(getCurrentDate());
+        this.setCompletionDate(Utils.getCurrentDate());
     }
 
     public String getCompletionDate() {
@@ -162,13 +178,6 @@ public class Book {
 
     public void setCoverPictureUrl(String coverPictureUrl) {
         this.coverPictureUrl = coverPictureUrl;
-    }
-
-    //TODO Move this to a util
-    public static String getCurrentDate() {
-        Calendar cal = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.CANADA);
-        return simpleDateFormat.format(cal.getTime());
     }
 
     public ColorDrawable getColorAsDrawalbe() {

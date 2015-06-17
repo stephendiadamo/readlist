@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.updates.Update;
 import com.s_diadamo.readlist.updates.UpdateOperations;
 
@@ -51,7 +52,7 @@ public class BookUpdatePageDialog extends AlertDialog {
                 bookOperations.updateBook(book);
                 bookAdapter.notifyDataSetChanged();
 
-                Update update = new Update(book.getId(), Book.getCurrentDate(), pagePicker.getValue());
+                Update update = new Update(book.getId(), Utils.getCurrentDate(), pagePicker.getValue());
                 new UpdateOperations(context).addUpdate(update);
 
                 dismiss();

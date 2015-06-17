@@ -57,7 +57,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
         bookHolder.pages.setText(String.valueOf(book.getNumPages()));
-        bookHolder.dateAdded.setText(book.getDateAdded());
+        bookHolder.dateAdded.setText(book.getCleanDateAdded());
 
         if (book.numPages != 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());

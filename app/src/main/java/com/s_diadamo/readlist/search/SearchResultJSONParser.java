@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.search;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
+import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.shelf.Shelf;
 
@@ -28,7 +29,7 @@ public class SearchResultJSONParser {
                         if (attributeName.equals("volumeInfo")) {
                             jsonParser.nextToken();
                             Book book = new Book();
-                            book.setDateAdded(Book.getCurrentDate());
+                            book.setDateAdded(Utils.getCurrentDate());
                             book.setShelfId(shelf.getId());
                             book.setColour(shelf.getColour());
                             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
