@@ -5,36 +5,22 @@
     android:clickable="true"
     android:padding="16dp">
 
-    <TextView
-        android:id="@+id/title_label"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/book_title"
-        android:textColor="#000"
-        android:textSize="18sp" />
-
     <EditText
         android:id="@+id/book_search_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title_label"
+        android:hint="@string/book_title"
+        android:inputType="text"
         android:textColor="#000"
         android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/author_label"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/book_search_title"
-        android:text="@string/book_Author"
-        android:textColor="#000"
-        android:textSize="18sp" />
 
     <EditText
         android:id="@+id/book_search_author"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/author_label"
+        android:layout_below="@+id/book_search_title"
+        android:hint="@string/book_author"
+        android:inputType="text"
         android:textColor="#000"
         android:textSize="16sp" />
 

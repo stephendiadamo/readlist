@@ -12,7 +12,7 @@ import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.updates.Update;
 import com.s_diadamo.readlist.updates.UpdateOperations;
 
-public class BookUpdatePageDialog extends AlertDialog {
+class BookUpdatePageDialog extends AlertDialog {
     public BookUpdatePageDialog(final Context context, final Book book, final BookAdapter bookAdapter, final BookOperations bookOperations) {
         super(context);
 

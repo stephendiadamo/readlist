@@ -13,9 +13,7 @@ import java.net.URL;
  * Created by s-diadamo on 15-05-28.
  */
 public class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-
-
-    ImageView imageView;
+    final ImageView imageView;
 
     public DownloadImageTask(ImageView imageView) {
         this.imageView = imageView;

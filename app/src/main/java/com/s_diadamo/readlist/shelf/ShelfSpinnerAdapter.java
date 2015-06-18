@@ -12,9 +12,9 @@ import java.util.ArrayList;
 
 
 public class ShelfSpinnerAdapter extends ArrayAdapter<Shelf> {
-    private Context context;
-    private int layoutResourceID;
-    private ArrayList<Shelf> shelves;
+    private final Context context;
+    private final int layoutResourceID;
+    private final ArrayList<Shelf> shelves;
 
 
     public ShelfSpinnerAdapter(Context context, int layoutResourceID, ArrayList<Shelf> shelves) {

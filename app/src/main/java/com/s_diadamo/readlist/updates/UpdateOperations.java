@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class UpdateOperations {
 
 
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     public UpdateOperations(Context context) {
@@ -81,7 +81,7 @@ public class UpdateOperations {
         return numUpdates;
     }
 
-    public int getNumberOfUpdatesBetweenDates(String start, String end) {
+    private int getNumberOfUpdatesBetweenDates(String start, String end) {
         int numUpdates = 0;
         db = dbHelper.getReadableDatabase();
         String query = String.format("SELECT COUNT(*) FROM %s WHERE %s BETWEEN '%s' AND '%s'",
@@ -99,7 +99,7 @@ public class UpdateOperations {
         return numUpdates;
     }
 
-    public int getNumberOfPagesReadBetweenDates(String start, String end) {
+    private int getNumberOfPagesReadBetweenDates(String start, String end) {
         int numPagesRead = 0;
         db = dbHelper.getReadableDatabase();
         String query = String.format("SELECT SUM(%s) FROM %s WHERE %s BETWEEN '%s' AND '%s'",
@@ -160,7 +160,7 @@ public class UpdateOperations {
         return 0;
     }
 
-    public int calculateAverageWithQuery(Cursor cursor) {
+    private int calculateAverageWithQuery(Cursor cursor) {
         int updatesInWeek = 0;
         int numWeeks = 0;
         if (cursor != null && cursor.moveToFirst()) {
@@ -210,12 +210,11 @@ public class UpdateOperations {
     }
 
     private Update parseUpdate(Cursor cursor) {
-        Update update = new Update(
+        return new Update(
                 Integer.parseInt(cursor.getString(0)),
                 cursor.getInt(1),
                 cursor.getString(2),
                 cursor.getInt(3)
         );
-        return update;
     }
 }

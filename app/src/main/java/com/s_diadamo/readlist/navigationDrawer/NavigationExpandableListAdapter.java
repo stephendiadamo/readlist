@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 public class NavigationExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
 
-    private Context context;
-    private ArrayList<Shelf> shelves;
+    private final Context context;
+    private final ArrayList<Shelf> shelves;
 
     public NavigationExpandableListAdapter(Context context, ArrayList<Shelf> shelves) {
         super();

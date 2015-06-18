@@ -13,7 +13,7 @@ import com.s_diadamo.readlist.book.BookOperations;
 
 import java.util.ArrayList;
 
-public class SearchResultDialog extends AlertDialog {
+class SearchResultDialog extends AlertDialog {
 
     public SearchResultDialog(Context context, final ArrayList<Book> books, final BookAdapter bookAdapter, final BookOperations bookOperations) {
         super(context);

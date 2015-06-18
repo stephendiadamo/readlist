@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/edit_book_title"
+        style="@style/EditBookTextView"
+        android:hint="@string/book_title" />
+
+    <EditText
+        android:id="@+id/edit_book_author"
+        style="@style/EditBookTextView"
+        android:hint="@string/book_author" />
+
+    <EditText
+        android:id="@+id/edit_book_number_of_pages"
+        style="@style/EditBookTextView"
+        android:hint="@string/pages"
+        android:inputType="number" />
+
+    <Spinner
+        android:id="@+id/edit_book_shelf_spinner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

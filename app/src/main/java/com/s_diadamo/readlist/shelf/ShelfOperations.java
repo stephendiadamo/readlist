@@ -12,15 +12,15 @@ import com.s_diadamo.readlist.book.BookOperations;
 import java.util.ArrayList;
 
 public class ShelfOperations {
-    private String[] SHELF_TABLE_COLUMNS = {
+    private final String[] SHELF_TABLE_COLUMNS = {
             DatabaseHelper.KEY_ID,
             DatabaseHelper.SHELF_NAME,
             DatabaseHelper.SHELF_COLOR
     };
 
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private Context context;
+    private final Context context;
 
     public ShelfOperations(Context context) {
         dbHelper = new DatabaseHelper(context);
@@ -127,17 +127,16 @@ public class ShelfOperations {
     }
 
 
-    public int updateShelf(Shelf shelf) {
+    public void updateShelf(Shelf shelf) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
-        int updateInt = db.update(DatabaseHelper.TABLE_SHELVES, values, DatabaseHelper.KEY_ID + "=?",
+        db.update(DatabaseHelper.TABLE_SHELVES, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(shelf.getId())});
         db.close();
-        return updateInt;
     }
 
     public void deleteShelf(Shelf shelf) {
@@ -154,15 +153,14 @@ public class ShelfOperations {
     }
 
     private Shelf parseShelf(Cursor cursor) {
-        Shelf shelf = new Shelf(
+        return new Shelf(
                 cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getInt(2));
-        return shelf;
     }
 
     private Book parseBookAfterJoin(Cursor cursor) {
-        Book book = new Book(
+        return new Book(
                 cursor.getInt(3),
                 cursor.getString(4),
                 cursor.getString(5),
@@ -173,7 +171,6 @@ public class ShelfOperations {
                 cursor.getInt(10),
                 cursor.getString(11),
                 cursor.getString(12));
-        return book;
     }
 
 }

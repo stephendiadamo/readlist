@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class BookAdapter extends ArrayAdapter<Book> {
 
-    private Context context;
-    private int layoutResourceID;
-    private ArrayList<Book> books;
+    private final Context context;
+    private final int layoutResourceID;
+    private final ArrayList<Book> books;
 
     public BookAdapter(Context context, int layoutResourceID, ArrayList<Book> books) {
         super(context, layoutResourceID, books);
@@ -59,7 +59,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         bookHolder.pages.setText(String.valueOf(book.getNumPages()));
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
 
-        if (book.numPages != 0) {
+        if (book.getNumPages() != 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
             bookHolder.percentageComplete.setText(String.valueOf(complete) + "%");
         } else {

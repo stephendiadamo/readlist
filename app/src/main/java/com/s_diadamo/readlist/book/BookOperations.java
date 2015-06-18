@@ -11,7 +11,7 @@ import com.s_diadamo.readlist.Utils;
 import java.util.ArrayList;
 
 public class BookOperations {
-    private String[] BOOK_TABLE_COLUMNS = {
+    private final String[] BOOK_TABLE_COLUMNS = {
             DatabaseHelper.KEY_ID,
             DatabaseHelper.BOOK_TITLE,
             DatabaseHelper.BOOK_AUTHOR,
@@ -23,14 +23,14 @@ public class BookOperations {
             DatabaseHelper.BOOK_COMPLETION_DATE,
             DatabaseHelper.BOOK_COVER_PICTURE_URL
     };
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     public BookOperations(Context context) {
         dbHelper = new DatabaseHelper(context);
     }
 
-    public Book addBook(Book book) {
+    public void addBook(Book book) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -44,9 +44,8 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
-        long bookID = db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
+        db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
         db.close();
-        return getBook(bookID);
     }
 
     public Book getBook(long id) {
@@ -117,7 +116,7 @@ public class BookOperations {
         return booksRead;
     }
 
-    public int getNumberOfBooksReadBetweenDates(String start, String end) {
+    private int getNumberOfBooksReadBetweenDates(String start, String end) {
         int numBooksRead = 0;
         db = dbHelper.getReadableDatabase();
         String query = String.format("SELECT COUNT(*) FROM %s WHERE (%s BETWEEN '%s' AND '%s') AND %s=1",
@@ -158,7 +157,7 @@ public class BookOperations {
         return 0;
     }
 
-    public int updateBook(Book book) {
+    public void updateBook(Book book) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -172,10 +171,9 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
-        int updateInt = db.update(DatabaseHelper.TABLE_BOOKS, values, DatabaseHelper.KEY_ID + "=?",
+        db.update(DatabaseHelper.TABLE_BOOKS, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
         db.close();
-        return updateInt;
     }
 
     public void deleteBook(Book book) {
@@ -186,7 +184,7 @@ public class BookOperations {
     }
 
     private Book parseBook(Cursor cursor) {
-        Book book = new Book(
+        return new Book(
                 cursor.getInt(0),
                 cursor.getString(1),
                 cursor.getString(2),
@@ -197,6 +195,5 @@ public class BookOperations {
                 cursor.getInt(7),
                 cursor.getString(8),
                 cursor.getString(9));
-        return book;
     }
 }

@@ -14,7 +14,7 @@ import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 
-public class BookManuallyAddBookDialog extends AlertDialog {
+class BookManuallyAddBookDialog extends AlertDialog {
     public BookManuallyAddBookDialog(Context context, final BookAdapter bookAdapter, final BookOperations bookOperations, final Shelf shelf) {
         super(context);
 

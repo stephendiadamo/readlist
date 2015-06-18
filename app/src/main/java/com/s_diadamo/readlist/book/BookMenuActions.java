@@ -9,52 +9,25 @@ import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfEditInfoDialog;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
-import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+class BookMenuActions {
 
-public class BookMenuActions {
-
-    View view;
-    BookOperations bookOperations;
-    BookAdapter bookAdapter;
-    Shelf shelf;
+    private final View view;
+    private final BookOperations bookOperations;
+    private final BookAdapter bookAdapter;
+    private final Shelf shelf;
 
     public BookMenuActions(View view, BookOperations bookOperations, BookAdapter bookAdapter, Shelf shelf) {
         this.view = view;
         this.bookOperations = bookOperations;
         this.bookAdapter = bookAdapter;
         this.shelf = shelf;
-    }
-
-    public void editNumberOfPages(final Book book) {
-        final Dialog editNumberOfPagesDialog = new Dialog(view.getContext());
-        editNumberOfPagesDialog.setContentView(R.layout.dialog_edit_book_pages);
-        editNumberOfPagesDialog.setTitle("Edit Book Pages");
-
-        final Button updatePagesButton = (Button) editNumberOfPagesDialog.findViewById(R.id.update_page_button);
-        updatePagesButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newNumberOfPages = ((EditText) editNumberOfPagesDialog.findViewById(R.id.update_page_num_value)).getText().toString();
-                if (!newNumberOfPages.isEmpty()) {
-                    int pages = Integer.parseInt(newNumberOfPages);
-                    book.setNumPages(pages);
-                    bookOperations.updateBook(book);
-                    bookAdapter.notifyDataSetChanged();
-                }
-                editNumberOfPagesDialog.dismiss();
-            }
-        });
-        editNumberOfPagesDialog.show();
     }
 
     public void setCurrentPage(final Book book) {
@@ -113,46 +86,5 @@ public class BookMenuActions {
 
         AlertDialog alert = builder.create();
         alert.show();
-    }
-
-    public void editShelf(final Book book) {
-        final Dialog setShelfDialog = new Dialog(view.getContext());
-        setShelfDialog.setContentView(R.layout.dialog_set_book_shelf);
-        setShelfDialog.setTitle("Edit Shelf");
-
-        final ShelfOperations shelfOperations = new ShelfOperations(view.getContext());
-        final Spinner shelfSpinner = (Spinner) setShelfDialog.findViewById(R.id.set_shelf_shelf_spinner);
-        final ArrayList<Shelf> shelves = shelfOperations.getAllShelves();
-
-        ShelfSpinnerAdapter adapter = new ShelfSpinnerAdapter(setShelfDialog.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, shelves);
-        shelfSpinner.setAdapter(adapter);
-
-        int shelfIndex = 0;
-        for (Shelf s : shelves) {
-            if (s.getId() == book.getShelfId()) {
-                break;
-            }
-            shelfIndex++;
-        }
-        shelfSpinner.setSelection(shelfIndex);
-
-        Button setShelf = (Button) setShelfDialog.findViewById(R.id.set_shelf_done);
-
-        final int currentShelfId = book.getShelfId();
-        setShelf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int selectedShelfPosition = shelfSpinner.getSelectedItemPosition();
-                book.setShelfId(shelves.get(selectedShelfPosition).getId());
-                if (book.getShelfId() != currentShelfId && currentShelfId != Shelf.DEFAULT_SHELF_ID) {
-                    bookAdapter.remove(book);
-                }
-                bookOperations.updateBook(book);
-                setShelfDialog.dismiss();
-            }
-        });
-
-        setShelfDialog.show();
     }
 }

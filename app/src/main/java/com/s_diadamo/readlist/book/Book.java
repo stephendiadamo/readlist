@@ -11,17 +11,17 @@ import java.util.Locale;
 
 public class Book {
 
-    int id;
-    String title;
-    String author;
-    int shelfId = 0;
-    String dateAdded;
-    int numPages;
-    int currentPage = 0;
-    int colour;
-    Boolean complete = false;
-    String completionDate = "";
-    String coverPictureUrl = "";
+    private int id;
+    private String title;
+    private String author;
+    private int shelfId = 0;
+    private String dateAdded;
+    private int numPages;
+    private int currentPage = 0;
+    private int colour;
+    private Boolean complete = false;
+    private String completionDate = "";
+    private String coverPictureUrl = "";
 
     public Book() {
     }

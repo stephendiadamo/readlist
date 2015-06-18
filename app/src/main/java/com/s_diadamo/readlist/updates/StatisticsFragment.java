@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 
 public class StatisticsFragment extends Fragment {
-    View rootView;
-    BookOperations bookOperations;
-    UpdateOperations updateOperations;
+    private View rootView;
+    private BookOperations bookOperations;
+    private UpdateOperations updateOperations;
 
     @Nullable
     @Override

@@ -19,12 +19,12 @@ import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
-public class NavigationItemAdapter extends BaseAdapter {
-    String[] navigationElementLabels;
-    private Context context;
+class NavigationItemAdapter extends BaseAdapter {
+    private final String[] navigationElementLabels;
+    private final Context context;
     private NavigationExpandableListAdapter expandableListAdapter;
 
-    int[] icons = {
+    private final int[] icons = {
             R.drawable.ic_shelf,
             R.drawable.ic_check,
             R.drawable.ic_stats
@@ -92,13 +92,13 @@ public class NavigationItemAdapter extends BaseAdapter {
         return row;
     }
 
-    public int getDpFromPixel(float pixels) {
+    private int getDpFromPixel(float pixels) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pixels * scale + 0.5f);
     }
 
     private ExpandableListView.OnChildClickListener makeChildClickListener(final NavigationExpandableListAdapter adapter) {
-        ExpandableListView.OnChildClickListener listener = new ExpandableListView.OnChildClickListener() {
+        return new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 long shelfId = adapter.getChildId(0, childPosition);
@@ -117,7 +117,6 @@ public class NavigationItemAdapter extends BaseAdapter {
                 return true;
             }
         };
-        return listener;
     }
 
     public void deleteItemFromExpandableList(Shelf shelf) {

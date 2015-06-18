@@ -12,7 +12,7 @@ public class Shelf {
     public static final String SHELF_ID = "SHELF_ID";
     public static final int DEFAULT_SHELF_ID = 1;
 
-    int id;
+    private int id;
     private String name;
     private int colour;
 

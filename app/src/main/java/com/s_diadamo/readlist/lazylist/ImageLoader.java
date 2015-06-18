@@ -25,18 +25,18 @@ import com.s_diadamo.readlist.R;
 
 public class ImageLoader {
 
-    MemoryCache memoryCache = new MemoryCache();
-    FileCache fileCache;
-    private Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
-    ExecutorService executorService;
-    Handler handler = new Handler();//handler to display images in UI thread
+    private final MemoryCache memoryCache = new MemoryCache();
+    private final FileCache fileCache;
+    private final Map<ImageView, String> imageViews = Collections.synchronizedMap(new WeakHashMap<ImageView, String>());
+    private final ExecutorService executorService;
+    private final Handler handler = new Handler();//handler to display images in UI thread
 
     public ImageLoader(Context context) {
         fileCache = new FileCache(context);
         executorService = Executors.newFixedThreadPool(5);
     }
 
-    final int stub_id = R.drawable.sample_cover;
+    private final int stub_id = R.drawable.sample_cover;
 
     public void DisplayImage(String url, ImageView imageView) {
         imageViews.put(imageView, url);
@@ -123,8 +123,8 @@ public class ImageLoader {
 
     //Task for the queue
     private class PhotoToLoad {
-        public String url;
-        public ImageView imageView;
+        public final String url;
+        public final ImageView imageView;
 
         public PhotoToLoad(String u, ImageView i) {
             url = u;
@@ -133,7 +133,7 @@ public class ImageLoader {
     }
 
     class PhotosLoader implements Runnable {
-        PhotoToLoad photoToLoad;
+        final PhotoToLoad photoToLoad;
 
         PhotosLoader(PhotoToLoad photoToLoad) {
             this.photoToLoad = photoToLoad;
@@ -156,17 +156,14 @@ public class ImageLoader {
         }
     }
 
-    boolean imageViewReused(PhotoToLoad photoToLoad) {
+    private boolean imageViewReused(PhotoToLoad photoToLoad) {
         String tag = imageViews.get(photoToLoad.imageView);
-        if (tag == null || !tag.equals(photoToLoad.url))
-            return true;
-        return false;
+        return (tag == null || !tag.equals(photoToLoad.url));
     }
 
-    //Used to display bitmap in the UI thread
     class BitmapDisplayer implements Runnable {
-        Bitmap bitmap;
-        PhotoToLoad photoToLoad;
+        final Bitmap bitmap;
+        final PhotoToLoad photoToLoad;
 
         public BitmapDisplayer(Bitmap b, PhotoToLoad p) {
             bitmap = b;

@@ -11,7 +11,7 @@ import android.util.Log;
 public class MemoryCache {
 
     private static final String TAG = "MemoryCache";
-    private Map<String, Bitmap> cache=Collections.synchronizedMap(
+    private final Map<String, Bitmap> cache=Collections.synchronizedMap(
             new LinkedHashMap<String, Bitmap>(10,1.5f,true));//Last argument true for LRU ordering
     private long size=0;//current allocated size
     private long limit=1000000;//max memory in bytes

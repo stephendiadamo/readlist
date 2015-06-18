@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:baselineAligned="false"
     android:orientation="horizontal"
     android:padding="1dp">
 
@@ -34,7 +35,6 @@
             android:alpha=".6"
             android:background="#222"
             android:gravity="center"
-            android:text="5%"
             android:textColor="#fff"
             android:textSize="14sp" />
     </FrameLayout>
@@ -54,7 +54,6 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Title"
             android:textSize="16sp" />
 
         <TextView
@@ -64,7 +63,6 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Author"
             android:textSize="14sp" />
 
 
@@ -93,7 +91,6 @@
                     android:id="@+id/book_current_page"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="100"
                     android:textSize="12sp" />
 
                 <TextView
@@ -101,14 +98,13 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
-                    android:text="of"
+                    android:text="@string/of"
                     android:textSize="12sp" />
 
                 <TextView
                     android:id="@+id/book_pages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="200"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -130,7 +126,6 @@
                     android:id="@+id/book_date_added"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="December, 26 2015"
                     android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>

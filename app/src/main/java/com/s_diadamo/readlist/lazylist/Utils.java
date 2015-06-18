@@ -3,7 +3,7 @@ package com.s_diadamo.readlist.lazylist;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class Utils {
+class Utils {
     public static void CopyStream(InputStream is, OutputStream os)
     {
         final int buffer_size=1024;

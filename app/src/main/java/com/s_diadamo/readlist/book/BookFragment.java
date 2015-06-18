@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
@@ -31,14 +32,13 @@ import com.s_diadamo.readlist.updates.UpdateOperations;
 import java.util.ArrayList;
 
 public class BookFragment extends Fragment {
-    View rootView;
-    ListView bookListView;
-    ArrayList<Book> userBooks;
-    BookMenuActions bookMenuActions;
-    BookOperations bookOperations;
-    BookAdapter bookAdapter;
-
-    Shelf shelf;
+    private View rootView;
+    private ListView bookListView;
+    private ArrayList<Book> userBooks;
+    private BookMenuActions bookMenuActions;
+    private BookOperations bookOperations;
+    private BookAdapter bookAdapter;
+    private Shelf shelf;
 
     @Nullable
     @Override
@@ -123,25 +123,30 @@ public class BookFragment extends Fragment {
                 return true;
             case R.id.mark_complete:
                 book = userBooks.get(info.position);
-                completeBook(book);
+                addRemainingPagesAndCompleteBook(book);
                 return true;
-            case R.id.edit_shelf:
-                bookMenuActions.editShelf(userBooks.get(info.position));
-                return true;
-            case R.id.edit_num_pages:
-                bookMenuActions.editNumberOfPages(userBooks.get(info.position));
-                return true;
-            case R.id.delete_book:
-                book = userBooks.remove(info.position);
-                bookAdapter.notifyDataSetChanged();
-                bookOperations.deleteBook(book);
+            case R.id.edit_book:
+                launchEditBookFragment(userBooks.get(info.position));
                 return true;
         }
 
         return super.onContextItemSelected(item);
     }
 
-    private void completeBook(Book book) {
+    private void launchEditBookFragment(Book book) {
+        Fragment fragment = new BookEditFragment();
+        Bundle bundle = new Bundle();
+        String bookId = String.valueOf(book.getId());
+        bundle.putString("BOOK_ID", bookId);
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+    private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
         new UpdateOperations(rootView.getContext()).
                 addUpdate(new Update(book.getId(), remainingPages));
@@ -209,11 +214,7 @@ public class BookFragment extends Fragment {
                 search.searchWithISBN(bookISBN);
             }
         } else {
-            showToast("Scan failed");
+            Toast.makeText(rootView.getContext(), "Scan Failed", Toast.LENGTH_LONG).show();
         }
-    }
-
-    public void showToast(String message) {
-        Toast.makeText(rootView.getContext(), message, Toast.LENGTH_LONG).show();
     }
 }

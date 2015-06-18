@@ -10,7 +10,7 @@ import com.s_diadamo.readlist.shelf.Shelf;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class SearchResultJSONParser {
+class SearchResultJSONParser {
 
     public static ArrayList<Book> getBooksFromJSONResponse(String response, Shelf shelf) {
         ArrayList<Book> books = new ArrayList<Book>();

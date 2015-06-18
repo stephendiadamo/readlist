@@ -30,7 +30,6 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Title"
             android:textSize="18sp" />
 
         <TextView
@@ -41,7 +40,6 @@
             android:ellipsize="end"
             android:paddingTop="3dp"
             android:singleLine="true"
-            android:text="Author"
             android:textSize="16sp" />
     </LinearLayout>
 </LinearLayout>

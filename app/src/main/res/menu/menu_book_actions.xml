@@ -7,12 +7,6 @@
         android:id="@+id/mark_complete"
         android:title="@string/mark_complete" />
     <item
-        android:id="@+id/set_book_shelf"
-        android:title="@string/edit_shelf" />
-    <item
-        android:id="@+id/edit_num_pages"
-        android:title="@string/edit_num_pages" />
-    <item
-        android:id="@+id/delete_book"
-        android:title="@string/delete_book" />
+        android:id="@+id/edit_book"
+        android:title="@string/edit_book" />
 </menu>

@@ -22,12 +22,12 @@ import java.util.ArrayList;
 
 public class Search {
 
-    public Context context;
-    public BookAdapter bookAdapter;
-    public BookOperations bookOperations;
-    public String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
-    private Shelf shelf;
-    private String API_KEY = API.getGoogleBooksApiKey();
+    private final Context context;
+    private final BookAdapter bookAdapter;
+    private final BookOperations bookOperations;
+    private final String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
+    private final Shelf shelf;
+    private final String API_KEY = API.getGoogleBooksApiKey();
 
     public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations, Shelf shelf) {
         this.context = context;

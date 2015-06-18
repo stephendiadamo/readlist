@@ -23,8 +23,7 @@
         <TextView
             android:id="@+id/updates_weekly_updates"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -41,8 +40,7 @@
         <TextView
             android:id="@+id/updates_weekly_pages_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
 
@@ -64,8 +62,7 @@
         <TextView
             android:id="@+id/updates_monthly_updates"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -82,8 +79,7 @@
         <TextView
             android:id="@+id/updates_monthly_pages_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -100,8 +96,7 @@
         <TextView
             android:id="@+id/updates_monthly_books_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
 
@@ -123,8 +118,7 @@
         <TextView
             android:id="@+id/updates_yearly_updates"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -141,8 +135,7 @@
         <TextView
             android:id="@+id/updates_yearly_pages_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -159,8 +152,7 @@
         <TextView
             android:id="@+id/updates_yearly_books_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
 
@@ -182,8 +174,7 @@
         <TextView
             android:id="@+id/updates_all_time_updates"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="10" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -200,8 +191,7 @@
         <TextView
             android:id="@+id/updates_all_time_pages_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="9000000" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -218,8 +208,7 @@
         <TextView
             android:id="@+id/updates_all_time_books"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="1000" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
     <LinearLayout
@@ -236,8 +225,7 @@
         <TextView
             android:id="@+id/updates_all_time_books_read"
             style="@style/UpdateElement"
-            android:layout_weight="0.3"
-            android:text="1000" />
+            android:layout_weight="0.3" />
     </LinearLayout>
 
 </LinearLayout>

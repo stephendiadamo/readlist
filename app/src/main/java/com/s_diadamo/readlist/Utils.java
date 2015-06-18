@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class Utils {
 
-    public static String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();

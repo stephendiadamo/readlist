@@ -33,7 +33,6 @@
         android:ellipsize="end"
         android:gravity="start|center_vertical"
         android:singleLine="true"
-        android:text="Testing"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/black" />
 </RelativeLayout>

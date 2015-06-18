@@ -16,16 +16,14 @@ import com.s_diadamo.readlist.lazylist.ImageLoader;
 
 import java.util.ArrayList;
 
-public class SearchAdapter extends ArrayAdapter<Book> {
+class SearchAdapter extends ArrayAdapter<Book> {
 
-    private Context context;
-    private int layoutResourceID;
-    private ArrayList<Book> results;
-    private LayoutInflater layoutInflater;
+    private final int layoutResourceID;
+    private final ArrayList<Book> results;
+    private final LayoutInflater layoutInflater;
 
     public SearchAdapter(Context context, int layoutResourceID, ArrayList<Book> results) {
         super(context, layoutResourceID, results);
-        this.context = context;
         this.layoutResourceID = layoutResourceID;
         this.results = results;
         this.layoutInflater = LayoutInflater.from(context);
