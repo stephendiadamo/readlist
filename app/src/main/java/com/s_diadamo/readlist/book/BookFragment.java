@@ -140,7 +140,7 @@ public class BookFragment extends Fragment {
 
         return super.onContextItemSelected(item);
     }
-    
+
     private void completeBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
         new UpdateOperations(rootView.getContext()).

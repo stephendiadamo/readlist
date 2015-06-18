@@ -25,7 +25,9 @@ public class NavigationItemAdapter extends BaseAdapter {
     private NavigationExpandableListAdapter expandableListAdapter;
 
     int[] icons = {
-            R.drawable.ic_book
+            R.drawable.ic_shelf,
+            R.drawable.ic_check,
+            R.drawable.ic_stats
     };
 
     public NavigationItemAdapter(Context context) {
@@ -65,6 +67,14 @@ public class NavigationItemAdapter extends BaseAdapter {
                     shelfOperations.getAllShelves());
             navItemShelfHolder.shelves.setAdapter(expandableListAdapter);
             navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(expandableListAdapter));
+            navItemShelfHolder.shelves.expandGroup(0);
+            int shiftLeft = navItemShelfHolder.shelves.getRight() + getDpFromPixel(100);
+            int shiftRight = navItemShelfHolder.shelves.getWidth();
+            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                navItemShelfHolder.shelves.setIndicatorBounds(shiftLeft, shiftRight);
+            } else {
+                navItemShelfHolder.shelves.setIndicatorBoundsRelative(shiftLeft, shiftRight);
+            }
         } else {
             NavigationItemHolder navItemHolder;
             if (row == null || row.getTag() == null) {
@@ -77,9 +87,14 @@ public class NavigationItemAdapter extends BaseAdapter {
                 navItemHolder = (NavigationItemHolder) row.getTag();
             }
             navItemHolder.label.setText(navigationElementLabels[position]);
-            navItemHolder.icon.setImageResource(icons[0]);
+            navItemHolder.icon.setImageResource(icons[position]);
         }
         return row;
+    }
+
+    public int getDpFromPixel(float pixels) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (pixels * scale + 0.5f);
     }
 
     private ExpandableListView.OnChildClickListener makeChildClickListener(final NavigationExpandableListAdapter adapter) {
