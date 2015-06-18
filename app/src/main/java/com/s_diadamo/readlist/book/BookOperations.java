@@ -69,7 +69,7 @@ public class BookOperations {
 
     public ArrayList<Book> getAllBooks() {
         db = dbHelper.getReadableDatabase();
-        ArrayList<Book> books = new ArrayList<Book>();
+        ArrayList<Book> books = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKS;
 
         Cursor cursor = db.rawQuery(selectQuery, null);

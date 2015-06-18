@@ -19,7 +19,7 @@ public class Utils {
     public static String getCurrentYear() {
         String stringDate = Utils.getCurrentDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
-        Date date = null;
+        Date date;
         try {
             date = simpleDateFormat.parse(stringDate);
         } catch (ParseException e) {
@@ -31,7 +31,7 @@ public class Utils {
     public static String getCurrentMonth() {
         String stringDate = Utils.getCurrentDate();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
-        Date date = null;
+        Date date;
         try {
             date = simpleDateFormat.parse(stringDate);
         } catch (ParseException e) {

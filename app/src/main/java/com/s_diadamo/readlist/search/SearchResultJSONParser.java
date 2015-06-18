@@ -13,7 +13,7 @@ import java.util.ArrayList;
 class SearchResultJSONParser {
 
     public static ArrayList<Book> getBooksFromJSONResponse(String response, Shelf shelf) {
-        ArrayList<Book> books = new ArrayList<Book>();
+        ArrayList<Book> books = new ArrayList<>();
         try {
             JsonParser jsonParser = new JsonFactory().createParser(response);
             jsonParser.nextToken();
@@ -34,29 +34,34 @@ class SearchResultJSONParser {
                             book.setColour(shelf.getColour());
                             while (jsonParser.nextToken() != JsonToken.END_OBJECT) {
                                 attributeName = jsonParser.getCurrentName();
-                                if (attributeName.equals("title")) {
-                                    jsonParser.nextToken();
-                                    book.setTitle(jsonParser.getText());
-                                } else if (attributeName.equals("authors")) {
-                                    jsonParser.nextToken();
-                                    StringBuilder stringBuilder = new StringBuilder();
-                                    while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
-                                        stringBuilder.append(jsonParser.getText());
-                                        stringBuilder.append(", ");
-                                    }
-                                    String authors = stringBuilder.toString();
-                                    if (!authors.isEmpty()) {
-                                        book.setAuthor(authors.substring(0, authors.length() - 2));
-                                    }
-                                } else if (attributeName.equals("pageCount")) {
-                                    jsonParser.nextToken();
-                                    book.setNumPages(Integer.parseInt(jsonParser.getText()));
-                                } else if (attributeName.equals("imageLinks")) {
-                                    jsonParser.nextToken();
-                                    jsonParser.nextToken();
-                                    jsonParser.nextToken();
-                                    book.setCoverPictureUrl(jsonParser.getText());
-                                    jsonParser.nextToken();
+                                switch (attributeName) {
+                                    case "title":
+                                        jsonParser.nextToken();
+                                        book.setTitle(jsonParser.getText());
+                                        break;
+                                    case "authors":
+                                        jsonParser.nextToken();
+                                        StringBuilder stringBuilder = new StringBuilder();
+                                        while (jsonParser.nextToken() != JsonToken.END_ARRAY) {
+                                            stringBuilder.append(jsonParser.getText());
+                                            stringBuilder.append(", ");
+                                        }
+                                        String authors = stringBuilder.toString();
+                                        if (!authors.isEmpty()) {
+                                            book.setAuthor(authors.substring(0, authors.length() - 2));
+                                        }
+                                        break;
+                                    case "pageCount":
+                                        jsonParser.nextToken();
+                                        book.setNumPages(Integer.parseInt(jsonParser.getText()));
+                                        break;
+                                    case "imageLinks":
+                                        jsonParser.nextToken();
+                                        jsonParser.nextToken();
+                                        jsonParser.nextToken();
+                                        book.setCoverPictureUrl(jsonParser.getText());
+                                        jsonParser.nextToken();
+                                        break;
                                 }
                             }
                             books.add(book);

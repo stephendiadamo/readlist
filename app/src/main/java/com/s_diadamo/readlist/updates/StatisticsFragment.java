@@ -9,10 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
-
-import java.util.ArrayList;
 
 
 public class StatisticsFragment extends Fragment {

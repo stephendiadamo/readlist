@@ -34,7 +34,7 @@ public class UpdateOperations {
 
     public ArrayList<Update> getAllUpdates() {
         db = dbHelper.getReadableDatabase();
-        ArrayList<Update> updates = new ArrayList<Update>();
+        ArrayList<Update> updates = new ArrayList<>();
         String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_UPDATES;
 
         Cursor cursor = db.rawQuery(selectQuery, null);
