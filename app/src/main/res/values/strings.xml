@@ -23,7 +23,7 @@
     <string name="pages">Pages</string>
     <string name="page_colon">Page:</string>
     <string name="scan_book">Scan Book</string>
-    <string name="date_added">Date added:</string>
+    <string name="date_added">Added:</string>
     <string name="delete_shelf">Delete Shelf</string>
     <string name="edit_shelf">Edit Shelf</string>
     <string name="average_weekly_reading">Average Weekly Reading</string>
@@ -40,6 +40,8 @@
     <string name="nav_element_image">Navigation Drawer Element Icon</string>
     <string name="hide_completed_books">Hide Completed Books</string>
     <string name="filter">Filter</string>
+    <string name="percentage">Completion Percentage</string>
+    <string name="completed">Completed:</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>

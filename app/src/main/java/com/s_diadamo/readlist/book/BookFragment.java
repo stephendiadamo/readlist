@@ -2,6 +2,9 @@ package com.s_diadamo.readlist.book;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -158,7 +161,7 @@ public class BookFragment extends Fragment {
         new UpdateOperations(rootView.getContext()).
                 addUpdate(new Update(book.getId(), remainingPages));
 
-        book.setComplete(true);
+        book.markComplete();
         book.setCurrentPage(book.getNumPages());
 
         bookAdapter.notifyDataSetChanged();
@@ -247,4 +250,6 @@ public class BookFragment extends Fragment {
             Toast.makeText(rootView.getContext(), "Scan Failed", Toast.LENGTH_LONG).show();
         }
     }
+
+
 }

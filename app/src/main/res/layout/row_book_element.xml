@@ -4,48 +4,49 @@
     android:layout_height="wrap_content"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:padding="1dp">
+    android:padding="2dp">
 
     <FrameLayout
         android:layout_width="60dp"
         android:layout_height="80dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp">
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp">
 
         <ImageView
             android:id="@+id/book_cover"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
             android:contentDescription="@string/book_cover_image"
+            android:scaleType="fitXY"
             android:src="@drawable/sample_cover" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_gravity="bottom"
+            android:alpha="0.6"
+            android:background="#222"
+            android:contentDescription="@string/percentage" />
 
         <TextView
             android:id="@+id/book_percentage_complete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginRight="10dp"
-            android:alpha=".6"
-            android:background="#222"
             android:gravity="center"
             android:textColor="#fff"
             android:textSize="14sp" />
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/book_info_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:layout_weight="0.7"
         android:orientation="vertical"
-        android:paddingTop="8dp">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/book_title"
@@ -54,7 +55,8 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/book_author"
@@ -63,18 +65,47 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="italic" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:orientation="horizontal"
             android:paddingTop="3dp">
 
             <LinearLayout
+                android:id="@+id/book_complete_container"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.4"
+                android:gravity="start"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="3dp"
+                    android:layout_marginRight="3dp"
+                    android:text="@string/completed"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/book_complete_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/book_page_detail_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
                 android:layout_weight="0.4"
                 android:gravity="start"
                 android:orientation="horizontal">
@@ -111,7 +142,8 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6"
+                android:layout_marginTop="5dp"
+                android:layout_weight="0.30"
                 android:gravity="start">
 
                 <TextView

@@ -2,11 +2,13 @@ package com.s_diadamo.readlist.book;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.MainActivity;
@@ -55,6 +57,9 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.pages = (TextView) row.findViewById(R.id.book_pages);
             bookHolder.percentageComplete = (TextView) row.findViewById(R.id.book_percentage_complete);
             bookHolder.dateAdded = (TextView) row.findViewById(R.id.book_date_added);
+            bookHolder.infoContainer = (LinearLayout) row.findViewById(R.id.book_info_container);
+            bookHolder.pageInfoContainer = (LinearLayout) row.findViewById(R.id.book_page_detail_container);
+            bookHolder.completeInfoContainer = (LinearLayout) row.findViewById(R.id.book_complete_container);
 
             row.setTag(bookHolder);
         } else {
@@ -66,8 +71,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
-        bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
-        bookHolder.pages.setText(String.valueOf(book.getNumPages()));
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
 
         if (book.getNumPages() != 0) {
@@ -77,8 +80,16 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
         }
 
-        row.setBackground(book.getColorAsDrawalbe());
+        if (book.getComplete()) {
+            bookHolder.pageInfoContainer.setVisibility(View.GONE);
+            bookHolder.completeInfoContainer.setVisibility(View.VISIBLE);
+            ((TextView) row.findViewById(R.id.book_complete_date)).setText(book.getCleanCompletionDate());
+        } else {
+            bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
+            bookHolder.pages.setText(String.valueOf(book.getNumPages()));
+        }
 
+        bookHolder.infoContainer.setBackground(book.getColorAsDrawalbe());
         return row;
     }
 
@@ -90,5 +101,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView pages;
         TextView percentageComplete;
         TextView dateAdded;
+        LinearLayout infoContainer;
+        LinearLayout pageInfoContainer;
+        LinearLayout completeInfoContainer;
     }
 }
