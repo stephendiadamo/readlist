@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfEditInfoDialog;
@@ -64,7 +65,7 @@ class BookMenuActions {
         editShelfDialog.show();
     }
 
-    public void deleteShelf(final Shelf shelf) {
+    public void deleteShelf(final Shelf shelf, final NavigationDrawerFragment shelfDrawer) {
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 
         builder.setTitle("Delete Shelf");
@@ -73,6 +74,7 @@ class BookMenuActions {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 new ShelfOperations(view.getContext()).deleteShelf(shelf);
+                shelfDrawer.deleteItemFromExpandableList(shelf);
                 dialog.dismiss();
             }
         });

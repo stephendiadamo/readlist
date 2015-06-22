@@ -207,9 +207,8 @@ public class BookFragment extends Fragment {
             return true;
         } else if (id == R.id.delete_shelf) {
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
-                bookMenuActions.deleteShelf(shelf);
-                ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
-                        findFragmentById(R.id.navigation_drawer)).deleteItemFromExpandableList(shelf);
+                bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
+                        findFragmentById(R.id.navigation_drawer)));
             } else {
                 Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
             }
