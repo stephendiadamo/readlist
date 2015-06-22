@@ -77,11 +77,12 @@ public class ShelfOperations {
     public ArrayList<Book> getAllBooksWithShelf() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Book> books = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s",
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s ORDER BY %s",
                 DatabaseHelper.TABLE_SHELVES,
                 DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.KEY_ID,
-                DatabaseHelper.BOOK_SHELF);
+                DatabaseHelper.BOOK_SHELF,
+                DatabaseHelper.BOOK_COMPLETE);
 
         Cursor cursor = db.rawQuery(query, null);
 
@@ -102,13 +103,14 @@ public class ShelfOperations {
     public ArrayList<Book> getBooksWithShelf(long id) {
         db = dbHelper.getReadableDatabase();
         ArrayList<Book> books = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=%s",
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=%s ORDER BY %s",
                 DatabaseHelper.TABLE_SHELVES,
                 DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.BOOK_SHELF,
                 DatabaseHelper.BOOK_SHELF,
-                String.valueOf(id));
+                String.valueOf(id),
+                DatabaseHelper.BOOK_COMPLETE);
 
         Cursor cursor = db.rawQuery(query, null);
 
