@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.book;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -31,6 +34,7 @@ public class BookEditFragment extends Fragment {
     private EditText bookPages;
     private Spinner shelfSpinner;
     private ArrayList<Shelf> shelves;
+    private Button deleteBook;
 
     @Nullable
     @Override
@@ -47,6 +51,7 @@ public class BookEditFragment extends Fragment {
         bookAuthor = (EditText) rootView.findViewById(R.id.edit_book_author);
         bookPages = (EditText) rootView.findViewById(R.id.edit_book_number_of_pages);
         shelfSpinner = (Spinner) rootView.findViewById(R.id.edit_book_shelf_spinner);
+        deleteBook = (Button) rootView.findViewById(R.id.edit_book_delete);
 
         bookTitle.setText(book.getTitle());
         bookAuthor.setText(book.getAuthor());
@@ -66,6 +71,23 @@ public class BookEditFragment extends Fragment {
             shelfIndex++;
         }
         shelfSpinner.setSelection(shelfIndex);
+
+        deleteBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(rootView.getContext())
+                        .setMessage("Delete \"" + book.getTitle() + "\"?")
+                        .setCancelable(true)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                bookOperations.deleteBook(book);
+                                launchBookFragment();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+            }
+        });
 
         return rootView;
     }
