@@ -110,6 +110,11 @@ public class BookFragment extends Fragment {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.menu_book_actions, menu);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        if (userBooks.get(info.position).getComplete()) {
+            menu.findItem(R.id.set_current_page).setTitle("Reread");
+        }
     }
 
     @Override
@@ -126,13 +131,19 @@ public class BookFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Book book;
+        Book book = userBooks.get(info.position);
+
         switch (item.getItemId()) {
             case R.id.set_current_page:
-                bookMenuActions.setCurrentPage(userBooks.get(info.position));
+                if (book.getComplete()) {
+                    book.reread();
+                    bookAdapter.notifyDataSetChanged();
+                    bookOperations.updateBook(book);
+                } else {
+                    bookMenuActions.setCurrentPage(book);
+                }
                 return true;
             case R.id.mark_complete:
-                book = userBooks.get(info.position);
                 addRemainingPagesAndCompleteBook(book);
                 return true;
             case R.id.edit_book:

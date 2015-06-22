@@ -85,6 +85,8 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.completeInfoContainer.setVisibility(View.VISIBLE);
             ((TextView) row.findViewById(R.id.book_complete_date)).setText(book.getCleanCompletionDate());
         } else {
+            bookHolder.pageInfoContainer.setVisibility(View.VISIBLE);
+            bookHolder.completeInfoContainer.setVisibility(View.GONE);
             bookHolder.currentPage.setText(String.valueOf(book.getCurrentPage()));
             bookHolder.pages.setText(String.valueOf(book.getNumPages()));
         }

@@ -168,7 +168,7 @@ public class Book {
         this.setCompletionDate(Utils.getCurrentDate());
     }
 
-    public String getCompletionDate(){
+    public String getCompletionDate() {
         return this.completionDate;
     }
 
@@ -198,5 +198,11 @@ public class Book {
 
     public ColorDrawable getColorAsDrawalbe() {
         return new ColorDrawable(this.colour);
+    }
+
+    public void reread() {
+        this.completionDate = "";
+        this.currentPage = 0;
+        this.complete = false;
     }
 }

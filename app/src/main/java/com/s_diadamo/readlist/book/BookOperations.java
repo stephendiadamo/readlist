@@ -67,24 +67,6 @@ public class BookOperations {
         return null;
     }
 
-    public ArrayList<Book> getAllBooks() {
-        db = dbHelper.getReadableDatabase();
-        ArrayList<Book> books = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_BOOKS;
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Book book = parseBook(cursor);
-                books.add(book);
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-        return books;
-    }
-
     public int getBooksCount() {
         db = dbHelper.getReadableDatabase();
         int books = 0;
