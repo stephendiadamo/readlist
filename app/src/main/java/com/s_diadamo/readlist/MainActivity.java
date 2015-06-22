@@ -93,7 +93,12 @@ public class MainActivity extends AppCompatActivity
         if (mNavigationDrawerFragment.isDrawerOpen()) {
             mNavigationDrawerFragment.closeDrawer();
         } else {
-            super.onBackPressed();
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count == 0) {
+                super.onBackPressed();
+            } else {
+                getFragmentManager().popBackStack();
+            }
         }
     }
 }

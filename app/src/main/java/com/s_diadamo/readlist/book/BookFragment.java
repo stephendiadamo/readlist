@@ -163,6 +163,7 @@ public class BookFragment extends Fragment {
 
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
+                .addToBackStack("EDIT_BOOK")
                 .replace(R.id.container, fragment)
                 .commit();
     }
@@ -260,6 +261,4 @@ public class BookFragment extends Fragment {
             Toast.makeText(rootView.getContext(), "Scan Failed", Toast.LENGTH_LONG).show();
         }
     }
-
-
 }
