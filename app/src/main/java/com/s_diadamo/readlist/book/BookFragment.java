@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -39,6 +41,10 @@ public class BookFragment extends Fragment {
     private BookOperations bookOperations;
     private BookAdapter bookAdapter;
     private Shelf shelf;
+    private MenuItem hideCompletedBooks;
+    SharedPreferences prefs;
+
+    private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
 
     @Nullable
     @Override
@@ -66,6 +72,7 @@ public class BookFragment extends Fragment {
         });
 
         bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelf);
+
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -161,12 +168,15 @@ public class BookFragment extends Fragment {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        hideCompletedBooks = menu.findItem(R.id.hide_completed_books);
+        hideCompletedBooks.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
+        updateVisibleBooks();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
-
         if (id == R.id.add_book) {
             bookMenuActions.searchBook();
             return true;
@@ -190,9 +200,29 @@ public class BookFragment extends Fragment {
                 Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
             }
             return true;
+        } else if (id == R.id.hide_completed_books) {
+            toggleHideCompletedBooks();
+            updateVisibleBooks();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void toggleHideCompletedBooks() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(HIDE_COMPLETED_BOOKS, !hideCompletedBooks.isChecked());
+        editor.apply();
+        hideCompletedBooks.setChecked(!hideCompletedBooks.isChecked());
+    }
+
+    private void updateVisibleBooks() {
+        if (hideCompletedBooks.isChecked()) {
+            bookAdapter.hideCompletedBooks();
+        } else {
+            userBooks = getBooks();
+            bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
+            bookListView.setAdapter(bookAdapter);
+        }
     }
 
     private void launchScanner() {

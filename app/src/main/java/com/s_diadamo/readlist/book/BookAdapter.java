@@ -27,6 +27,17 @@ public class BookAdapter extends ArrayAdapter<Book> {
         this.books = books;
     }
 
+    public void hideCompletedBooks() {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getComplete()) {
+                books.remove(i);
+                i--;
+            }
+        }
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;

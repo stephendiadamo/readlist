@@ -38,6 +38,7 @@
     <string name="of">of</string>
     <string name="navigation_drawer_goals">Goals</string>
     <string name="nav_element_image">Navigation Drawer Element Icon</string>
+    <string name="hide_completed_books">Hide Completed Books</string>
     <string name="filter">Filter</string>
 
     <string-array name="navigation_element_names">
