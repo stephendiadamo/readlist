@@ -92,7 +92,7 @@ public class Book {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = title.trim();
     }
 
     public String getAuthor() {
@@ -100,7 +100,7 @@ public class Book {
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = author.trim();
     }
 
     public int getShelfId() {
