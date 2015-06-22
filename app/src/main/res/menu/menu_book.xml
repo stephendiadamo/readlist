@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
-        android:id="@+id/add_book"
         android:icon="@drawable/ic_plus_white"
         android:orderInCategory="100"
-        android:title="@string/add_book"
-        app:showAsAction="ifRoom" />
-    <item
-        android:id="@+id/add_filter"
-        android:icon="@drawable/ic_filter_white"
-        android:orderInCategory="90"
-        android:title="@string/filter"
-        app:showAsAction="ifRoom" />
-
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/add_book_scan"
+                android:title="@string/scan_book" />
+            <item
+                android:id="@+id/add_book_search"
+                android:title="@string/add_book_search" />
+            <item
+                android:id="@+id/add_book_manually"
+                android:title="@string/add_book_manually" />
+        </menu>
+    </item>
     <item
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:title="">
-        <item
-            android:id="@+id/add_book_manually"
-            android:title="@string/add_book_manually" />
-        <item
-            android:id="@+id/add_book_scan"
-            android:title="@string/scan_book" />
         <item
             android:id="@+id/edit_shelf"
             android:title="@string/edit_shelf" />
@@ -33,5 +32,6 @@
             android:id="@+id/hide_completed_books"
             android:checkable="true"
             android:title="@string/hide_completed_books" />
+
     </item>
 </menu>

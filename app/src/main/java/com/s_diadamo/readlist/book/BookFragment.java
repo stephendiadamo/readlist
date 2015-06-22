@@ -191,7 +191,7 @@ public class BookFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
-        if (id == R.id.add_book) {
+        if (id == R.id.add_book_search) {
             bookMenuActions.searchBook();
             return true;
         } else if (id == R.id.add_book_manually) {

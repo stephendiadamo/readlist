@@ -12,7 +12,7 @@
     <string name="book_title">Book Title</string>
     <string name="book_Author">Book Author:</string>
     <string name="search">Search</string>
-    <string name="add_book_manually">Manual Add</string>
+    <string name="add_book_manually">Manually Add</string>
     <string name="update_page">Update Page</string>
     <string name="mark_complete">Mark Complete</string>
     <string name="delete_book">Delete Book</string>
@@ -42,6 +42,7 @@
     <string name="filter">Filter</string>
     <string name="percentage">Completion Percentage</string>
     <string name="completed">Completed:</string>
+    <string name="add_book_search">Search</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>
