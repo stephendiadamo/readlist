@@ -1,10 +1,12 @@
 package com.s_diadamo.readlist;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(CREATED_SHELF, true);
             editor.apply();
         }
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
     }
 
     @Override
