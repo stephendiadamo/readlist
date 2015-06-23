@@ -1,9 +1,17 @@
 package com.s_diadamo.readlist.updates;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -22,18 +30,58 @@ public class StatisticsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
 
-        setHasOptionsMenu(false);
+        setHasOptionsMenu(true);
 
         bookOperations = new BookOperations(container.getContext());
         updateOperations = new UpdateOperations(container.getContext());
 
+        ProgressDialog progressDialog = new ProgressDialog(rootView.getContext());
+        progressDialog.setMessage("Crunching the numbers.");
         populateData();
+        progressDialog.dismiss();
+
+        ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(getResources().getString(R.string.statistics));
+        }
 
         return rootView;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_statistics, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        long id = item.getItemId();
+        if (id == R.id.reset_stats) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+            builder.setMessage("Are you sure you want to reset your statistics? " +
+                    "This cannot be undone.");
+            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    updateOperations.resetStatistics();
+                    populateData();
+                }
+            });
+
+            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void populateData() {
-        //TODO: Wrap this in a loading animation
         setAverageWeeklyData();
         setMonthlyData();
         setYearlyData();

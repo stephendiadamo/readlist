@@ -43,6 +43,8 @@
     <string name="percentage">Completion Percentage</string>
     <string name="completed">Completed:</string>
     <string name="add_book_search">Search</string>
+    <string name="statistics">Statistics</string>
+    <string name="reset_statistics">Reset statistics</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>

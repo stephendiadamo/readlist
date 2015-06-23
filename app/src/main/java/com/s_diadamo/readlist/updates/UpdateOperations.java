@@ -193,8 +193,6 @@ public class UpdateOperations {
 
     public int getAverageWeeklyPages() {
         db = dbHelper.getReadableDatabase();
-
-
         String query = String.format(
                 "SELECT strftime('%%Y-%%W', %s), sum(%s) FROM %s " +
                         "WHERE %s BETWEEN '2000-01-01 00:00:00' AND '2200-01-01 00:00:00' " +
@@ -216,5 +214,10 @@ public class UpdateOperations {
                 cursor.getString(2),
                 cursor.getInt(3)
         );
+    }
+
+    public void resetStatistics() {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_UPDATES, null, null);
     }
 }
