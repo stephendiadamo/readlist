@@ -19,8 +19,8 @@ class SearchResultDialog extends AlertDialog {
         super(context);
 
         if (books.isEmpty()) {
-            setTitle("No result found");
-            setMessage("Please try again.");
+            setTitle("No results found");
+            setMessage("Please try again with different search parameters.");
         } else {
             setTitle("Search Results");
             ListView bookListView = new ListView(context);
