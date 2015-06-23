@@ -1,8 +1,12 @@
 package com.s_diadamo.readlist.search;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -69,17 +73,27 @@ public class Search {
 
     private void performSearchAndShowResults(String url) {
         RequestQueue queue = Volley.newRequestQueue(context);
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Searching...");
+        progressDialog.show();
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelf);
                 SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, bookAdapter, bookOperations);
+                progressDialog.dismiss();
                 searchResultDialog.show();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Toast.makeText(context, "Failed!", Toast.LENGTH_LONG).show();
+                progressDialog.dismiss();
+                Toast toast = Toast.makeText(context, "Search failed. Check internet connection and try again.", Toast.LENGTH_LONG);
+                TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+                if (textView != null) {
+                    textView.setGravity(Gravity.CENTER);
+                }
+                toast.show();
             }
         });
         queue.add(stringRequest);
