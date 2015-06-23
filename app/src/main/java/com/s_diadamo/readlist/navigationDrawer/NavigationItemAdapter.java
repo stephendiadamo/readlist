@@ -102,7 +102,6 @@ class NavigationItemAdapter extends BaseAdapter {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 long shelfId = adapter.getChildId(0, childPosition);
-                //TODO: Clean this up...
                 Fragment bookFragment = new BookFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(Shelf.SHELF_ID, String.valueOf(shelfId));

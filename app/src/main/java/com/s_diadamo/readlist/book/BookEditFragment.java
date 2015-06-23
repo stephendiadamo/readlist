@@ -54,6 +54,7 @@ public class BookEditFragment extends Fragment {
         deleteBook = (Button) rootView.findViewById(R.id.edit_book_delete);
 
         bookTitle.setText(book.getTitle());
+        bookTitle.requestFocus();
         bookAuthor.setText(book.getAuthor());
         bookPages.setText(String.valueOf(book.getNumPages()));
 

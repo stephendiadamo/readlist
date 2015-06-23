@@ -105,79 +105,11 @@ public class BookFragment extends Fragment {
         return shelf.fetchBooks(rootView.getContext());
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu_book_actions, menu);
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        if (userBooks.get(info.position).getComplete()) {
-            menu.findItem(R.id.set_current_page).setTitle("Reread");
-        }
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
         inflater.inflate(R.menu.menu_book, menu);
-    }
-
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        l.showContextMenuForChild(v);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Book book = userBooks.get(info.position);
-
-        switch (item.getItemId()) {
-            case R.id.set_current_page:
-                if (book.getComplete()) {
-                    book.reread();
-                    bookAdapter.notifyDataSetChanged();
-                    bookOperations.updateBook(book);
-                } else {
-                    bookMenuActions.setCurrentPage(book);
-                }
-                return true;
-            case R.id.mark_complete:
-                addRemainingPagesAndCompleteBook(book);
-                return true;
-            case R.id.edit_book:
-                launchEditBookFragment(userBooks.get(info.position));
-                return true;
-        }
-
-        return super.onContextItemSelected(item);
-    }
-
-    private void launchEditBookFragment(Book book) {
-        Fragment fragment = new BookEditFragment();
-        Bundle bundle = new Bundle();
-        String bookId = String.valueOf(book.getId());
-        bundle.putString("BOOK_ID", bookId);
-        fragment.setArguments(bundle);
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .addToBackStack("EDIT_BOOK")
-                .replace(R.id.container, fragment)
-                .commit();
-    }
-
-    private void addRemainingPagesAndCompleteBook(Book book) {
-        int remainingPages = book.getNumPages() - book.getCurrentPage();
-        new UpdateOperations(rootView.getContext()).
-                addUpdate(new Update(book.getId(), remainingPages));
-
-        book.markComplete();
-        book.setCurrentPage(book.getNumPages());
-
-        bookAdapter.notifyDataSetChanged();
-        bookOperations.updateBook(book);
     }
 
     @Override
@@ -220,6 +152,74 @@ public class BookFragment extends Fragment {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_book_actions, menu);
+
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        if (userBooks.get(info.position).getComplete()) {
+            menu.findItem(R.id.set_current_page).setTitle("Reread");
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Book book = userBooks.get(info.position);
+
+        switch (item.getItemId()) {
+            case R.id.set_current_page:
+                if (book.getComplete()) {
+                    book.reread();
+                    bookAdapter.notifyDataSetChanged();
+                    bookOperations.updateBook(book);
+                } else {
+                    bookMenuActions.setCurrentPage(book);
+                }
+                return true;
+            case R.id.mark_complete:
+                addRemainingPagesAndCompleteBook(book);
+                return true;
+            case R.id.edit_book:
+                launchEditBookFragment(userBooks.get(info.position));
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        l.showContextMenuForChild(v);
+    }
+
+    private void launchEditBookFragment(Book book) {
+        Fragment fragment = new BookEditFragment();
+        Bundle bundle = new Bundle();
+        String bookId = String.valueOf(book.getId());
+        bundle.putString("BOOK_ID", bookId);
+        fragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .addToBackStack("EDIT_BOOK")
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+    private void addRemainingPagesAndCompleteBook(Book book) {
+        int remainingPages = book.getNumPages() - book.getCurrentPage();
+        new UpdateOperations(rootView.getContext()).
+                addUpdate(new Update(book.getId(), remainingPages));
+
+        book.markComplete();
+        book.setCurrentPage(book.getNumPages());
+
+        bookAdapter.notifyDataSetChanged();
+        bookOperations.updateBook(book);
     }
 
     private void toggleHideCompletedBooks() {
