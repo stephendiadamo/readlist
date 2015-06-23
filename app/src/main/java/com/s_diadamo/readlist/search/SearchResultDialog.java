@@ -18,22 +18,27 @@ class SearchResultDialog extends AlertDialog {
     public SearchResultDialog(Context context, final ArrayList<Book> books, final BookAdapter bookAdapter, final BookOperations bookOperations) {
         super(context);
 
-        setTitle("Search Results");
-        ListView bookListView = new ListView(context);
+        if (books.isEmpty()) {
+            setTitle("No result found");
+            setMessage("Please try again.");
+        } else {
+            setTitle("Search Results");
+            ListView bookListView = new ListView(context);
 
-        SearchAdapter searchAdapter = new SearchAdapter(context, R.layout.row_search_result, books);
+            SearchAdapter searchAdapter = new SearchAdapter(context, R.layout.row_search_result, books);
 
-        bookListView.setAdapter(searchAdapter);
-        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Book book = books.get(position);
-                bookAdapter.add(book);
-                bookAdapter.notifyDataSetChanged();
-                bookOperations.addBook(book);
-                dismiss();
-            }
-        });
-        this.setView(bookListView);
+            bookListView.setAdapter(searchAdapter);
+            bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Book book = books.get(position);
+                    bookAdapter.add(book);
+                    bookAdapter.notifyDataSetChanged();
+                    bookOperations.addBook(book);
+                    dismiss();
+                }
+            });
+            this.setView(bookListView);
+        }
     }
 }
