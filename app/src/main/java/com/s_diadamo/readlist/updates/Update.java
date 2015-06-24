@@ -9,9 +9,6 @@ public class Update {
     private String date;
     private int pages;
 
-    public Update() {
-    }
-
     public Update(int id, int bookId, String date, int pages) {
         this.id = id;
         this.bookId = bookId;

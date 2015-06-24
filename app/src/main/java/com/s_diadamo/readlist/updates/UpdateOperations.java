@@ -12,7 +12,6 @@ import java.util.ArrayList;
 
 public class UpdateOperations {
 
-
     private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -209,7 +208,7 @@ public class UpdateOperations {
 
     private Update parseUpdate(Cursor cursor) {
         return new Update(
-                Integer.parseInt(cursor.getString(0)),
+                cursor.getInt(0),
                 cursor.getInt(1),
                 cursor.getString(2),
                 cursor.getInt(3)
