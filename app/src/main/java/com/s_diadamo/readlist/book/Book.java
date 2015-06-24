@@ -22,7 +22,6 @@ public class Book {
     private Boolean complete = false;
     private String completionDate = "";
     private String coverPictureUrl = "";
-    private static final String BOOK_DATE_FORMAT = "dd-MM-yyyy";
 
     public Book() {
     }
@@ -119,7 +118,7 @@ public class Book {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
         try {
             Date d = simpleDateFormat.parse(dateAdded);
-            simpleDateFormat.applyPattern(BOOK_DATE_FORMAT);
+            simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
             return simpleDateFormat.format(d);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -176,7 +175,7 @@ public class Book {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
         try {
             Date d = simpleDateFormat.parse(completionDate);
-            simpleDateFormat.applyPattern(BOOK_DATE_FORMAT);
+            simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
             return simpleDateFormat.format(d);
         } catch (ParseException e) {
             e.printStackTrace();

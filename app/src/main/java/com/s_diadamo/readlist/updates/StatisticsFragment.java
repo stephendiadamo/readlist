@@ -77,6 +77,7 @@ public class StatisticsFragment extends Fragment {
 
             AlertDialog alert = builder.create();
             alert.show();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

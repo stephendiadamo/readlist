@@ -46,7 +46,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
         BookHolder bookHolder;
 
         if (row == null) {
-            LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+            LayoutInflater inflater = LayoutInflater.from(context);
             row = inflater.inflate(layoutResourceID, parent, false);
 
             bookHolder = new BookHolder();
