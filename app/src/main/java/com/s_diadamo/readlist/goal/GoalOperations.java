@@ -1,0 +1,123 @@
+package com.s_diadamo.readlist.goal;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.s_diadamo.readlist.DatabaseHelper;
+
+import java.util.ArrayList;
+
+public class GoalOperations {
+
+    private final DatabaseHelper dbHelper;
+    private SQLiteDatabase db;
+
+    public GoalOperations(Context context) {
+        dbHelper = new DatabaseHelper(context);
+    }
+
+    public void addGoal(Goal goal) {
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DatabaseHelper.GOAL_TYPE, goal.getType());
+        values.put(DatabaseHelper.GOAL_AMOUNT, goal.getAmount());
+        values.put(DatabaseHelper.GOAL_DEADLINE, goal.getDeadline());
+        values.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
+
+        db.insert(DatabaseHelper.TABLE_GOALS, null, values);
+        db.close();
+    }
+
+    public ArrayList<Goal> getGoals() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Goal> goals = new ArrayList<>();
+        String query = "SELECT * FROM " + DatabaseHelper.TABLE_GOALS;
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Goal goal = parseGoal(cursor);
+                goals.add(goal);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return goals;
+    }
+
+    public ArrayList<Goal> getBookGoals() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Goal> goals = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=%s",
+                DatabaseHelper.TABLE_GOALS,
+                DatabaseHelper.GOAL_TYPE,
+                Goal.BOOK_GOAL
+        );
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Goal goal = parseGoal(cursor);
+                goals.add(goal);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return goals;
+    }
+
+    public ArrayList<Goal> getPageGoals() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Goal> goals = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=%s",
+                DatabaseHelper.TABLE_GOALS,
+                DatabaseHelper.GOAL_TYPE,
+                Goal.PAGE_GOAL
+        );
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Goal goal = parseGoal(cursor);
+                goals.add(goal);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return goals;
+    }
+
+    public void updateGoal(Goal goal) {
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DatabaseHelper.GOAL_TYPE, goal.getType());
+        values.put(DatabaseHelper.GOAL_AMOUNT, goal.getAmount());
+        values.put(DatabaseHelper.GOAL_DEADLINE, goal.getDeadline());
+        values.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
+
+        db.update(DatabaseHelper.TABLE_GOALS, values, DatabaseHelper.KEY_ID + "=?",
+                new String[]{String.valueOf(goal.getId())});
+        db.close();
+    }
+
+    public void deleteGoal(Goal goal) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_GOALS, DatabaseHelper.KEY_ID + "=?",
+                new String[]{String.valueOf(goal.getId())});
+        db.close();
+    }
+
+    private Goal parseGoal(Cursor cursor) {
+        return new Goal(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getInt(2),
+                cursor.getString(3),
+                cursor.getInt(4)
+        );
+    }
+}

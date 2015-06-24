@@ -12,6 +12,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_BOOKS = "books";
     public static final String TABLE_SHELVES = "shelves";
     public static final String TABLE_UPDATES = "updates";
+    public static final String TABLE_GOALS = "goals";
 
     // Common columns
     public static final String KEY_ID = "id";
@@ -35,6 +36,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String UPDATE_BOOK_ID = "book_id";
     public static final String UPDATE_DATE = "date";
     public static final String UPDATE_PAGES = "pages";
+
+    // Goals table columns
+    public static final String GOAL_TYPE = "type";
+    public static final String GOAL_AMOUNT = "amount";
+    public static final String GOAL_DEADLINE = "deadline";
+    public static final String GOAL_IS_COMPLETE = "complete";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
@@ -65,6 +72,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             UPDATE_PAGES + " INTEGER" +
             ")";
 
+    private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            GOAL_TYPE + " TEXT, " +
+            GOAL_AMOUNT + " INTEGER, " +
+            GOAL_DEADLINE + " TEXT, " +
+            GOAL_IS_COMPLETE + " INTEGER" +
+            ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -74,6 +89,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOKS_TABLE);
         db.execSQL(CREATE_SHELVES_TABLE);
         db.execSQL(CREATE_UPDATES_TABLE);
+        db.execSQL(CREATE_GOALS_TABLE);
     }
 
     @Override
@@ -81,6 +97,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHELVES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_UPDATES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GOALS);
         onCreate(db);
     }
 
