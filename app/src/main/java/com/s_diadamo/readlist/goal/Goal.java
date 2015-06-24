@@ -1,43 +1,56 @@
 package com.s_diadamo.readlist.goal;
 
+import com.s_diadamo.readlist.Utils;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class Goal {
 
     private int id;
-    private String type;
+    private int type;
     private int amount;
-    private String deadline;
+    private String startDate;
+    private String endDate;
     private boolean isComplete;
-    public static final String BOOK_GOAL = "book_goal";
-    public static final String PAGE_GOAL = "page_goal";
+    public static final int BOOK_GOAL = 0;
+    public static final int PAGE_GOAL = 1;
+    private static final int END_DATE = 0;
+    private static final int START_DATE = 1;
 
-    public Goal(int id, String type, int amount, String deadline, int isComplete) {
+    public Goal(int id, int type, int amount, String startDate, String endDate, int isComplete) {
         this.id = id;
         this.type = type;
         this.amount = amount;
-        this.deadline = deadline;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.isComplete = (isComplete == 1);
     }
 
-    public Goal(String type, int amount, String deadline, int isComplete) {
+    public Goal(int type, int amount, String startDate, String endDate, int isComplete) {
         this.type = type;
         this.amount = amount;
-        this.deadline = deadline;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.isComplete = (isComplete == 1);
     }
 
-    public Goal(String type, int amount, String deadline) {
+    public Goal(int type, int amount, String startDate, String endDate) {
         this.type = type;
         this.amount = amount;
-        this.deadline = deadline;
+        this.startDate = startDate;
+        this.endDate = endDate;
         this.isComplete = false;
     }
 
-    public Goal newBookGoal(int amount, String deadline) {
-        return new Goal(BOOK_GOAL, amount, deadline);
+    public Goal newBookGoal(int amount, String startDate, String endDate) {
+        return new Goal(BOOK_GOAL, amount, startDate, endDate);
     }
 
-    public Goal newPageGoal(int amount, String deadline) {
-        return new Goal(PAGE_GOAL, amount, deadline);
+    public Goal newPageGoal(int amount, String startDate, String endDate) {
+        return new Goal(PAGE_GOAL, amount, startDate, endDate);
     }
 
     public int getId() {
@@ -48,28 +61,20 @@ public class Goal {
         this.id = id;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public int getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public String getDeadline() {
-        return deadline;
-    }
-
-    public void setDeadline(String deadline) {
-        this.deadline = deadline;
+    public String getEndDate() {
+        return endDate;
     }
 
     public boolean isComplete() {
@@ -82,6 +87,35 @@ public class Goal {
 
     public void markIncomplete() {
         isComplete = false;
+    }
+
+    public int getProgress(){
+        return 0;
+    }
+
+    public String getCleanEndDate() {
+        return getCleanDate(END_DATE);
+    }
+
+    public String getCleanStartDate() {
+        return getCleanDate(START_DATE);
+    }
+
+    private String getCleanDate(int type) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+        try {
+            Date d;
+            if (type == END_DATE) {
+                d = simpleDateFormat.parse(endDate);
+            } else {
+                d = simpleDateFormat.parse(startDate);
+            }
+            simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
+            return simpleDateFormat.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

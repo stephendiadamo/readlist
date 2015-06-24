@@ -1,5 +1,10 @@
 package com.s_diadamo.readlist;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -9,6 +14,7 @@ import java.util.Locale;
 public class Utils {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+    public static final String CLEAN_DATE_FORMAT = "dd-MM-yyyy";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
@@ -38,5 +44,23 @@ public class Utils {
             return "";
         }
         return (String) android.text.format.DateFormat.format("MM", date);
+    }
+
+    public static void setDynamicHeight(ListView mListView) {
+        ListAdapter mListAdapter = mListView.getAdapter();
+        if (mListAdapter == null) {
+            return;
+        }
+        int height = 0;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(mListView.getWidth(), View.MeasureSpec.UNSPECIFIED);
+        for (int i = 0; i < mListAdapter.getCount(); i++) {
+            View listItem = mListAdapter.getView(i, null, mListView);
+            listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            height += listItem.getMeasuredHeight();
+        }
+        ViewGroup.LayoutParams params = mListView.getLayoutParams();
+        params.height = height + (mListView.getDividerHeight() * (mListAdapter.getCount() - 1));
+        mListView.setLayoutParams(params);
+        mListView.requestLayout();
     }
 }

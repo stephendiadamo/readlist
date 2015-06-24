@@ -40,7 +40,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Goals table columns
     public static final String GOAL_TYPE = "type";
     public static final String GOAL_AMOUNT = "amount";
-    public static final String GOAL_DEADLINE = "deadline";
+    public static final String GOAL_START_DATE = "start_date";
+    public static final String GOAL_END_DATE = "end_date";
     public static final String GOAL_IS_COMPLETE = "complete";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
@@ -73,10 +74,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
+            "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            GOAL_TYPE + " TEXT, " +
+            GOAL_TYPE + " INTEGER, " +
             GOAL_AMOUNT + " INTEGER, " +
-            GOAL_DEADLINE + " TEXT, " +
+            GOAL_START_DATE + " TEXT, " +
+            GOAL_END_DATE + " TEXT, " +
             GOAL_IS_COMPLETE + " INTEGER" +
             ")";
 

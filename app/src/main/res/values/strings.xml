@@ -45,6 +45,13 @@
     <string name="add_book_search">Search</string>
     <string name="statistics">Statistics</string>
     <string name="reset_statistics">Reset statistics</string>
+    <string name="goals">Goals</string>
+    <string name="page_goals">Page  Goals</string>
+    <string name="book_goals">Book Goals</string>
+    <string name="goal_icon">Goal Icon</string>
+    <string name="deadline">Deadline:</string>
+    <string name="progress">Progress:</string>
+    <string name="started">Started:</string>
 
     <string-array name="navigation_element_names">
         <item>Shelves</item>
