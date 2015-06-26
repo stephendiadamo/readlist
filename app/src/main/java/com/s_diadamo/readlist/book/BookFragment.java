@@ -1,10 +1,9 @@
 package com.s_diadamo.readlist.book;
 
+import android.support.v4.app.LoaderManager;
 import android.content.Intent;
+import android.support.v4.content.Loader;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -30,20 +29,20 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
-import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.shelf.ShelfLoader;
 import com.s_diadamo.readlist.updates.Update;
 import com.s_diadamo.readlist.updates.UpdateOperations;
 
 import java.util.ArrayList;
 
-public class BookFragment extends Fragment {
+public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private View rootView;
     private ListView bookListView;
     private ArrayList<Book> userBooks;
-    private BookMenuActions bookMenuActions;
     private BookOperations bookOperations;
     private BookAdapter bookAdapter;
     private Shelf shelf;
+    private int shelfId;
     private MenuItem hideCompletedBooks;
     SharedPreferences prefs;
 
@@ -59,11 +58,11 @@ public class BookFragment extends Fragment {
         bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         bookOperations = new BookOperations(container.getContext());
 
-        setUpShelf();
-        userBooks = getBooks();
+        setShelfId();
 
-        bookAdapter = new BookAdapter(container.getContext(), R.layout.row_book_element, userBooks);
-        bookListView.setAdapter(bookAdapter);
+        getLoaderManager().initLoader(BookLoader.ID, null, this);
+        getLoaderManager().initLoader(ShelfLoader.ID, null, this);
+
         registerForContextMenu(bookListView);
         bookListView.setLongClickable(false);
 
@@ -74,21 +73,12 @@ public class BookFragment extends Fragment {
             }
         });
 
-        bookMenuActions = new BookMenuActions(rootView, bookOperations, bookAdapter, shelf);
-
-
-        ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (ab != null) {
-            ab.setTitle(shelf.getName());
-        }
-
         return rootView;
     }
 
-    private void setUpShelf() {
+    private void setShelfId() {
         Bundle args = getArguments();
         String stringShelfId = "";
-        int shelfId;
         if (args != null) {
             stringShelfId = args.getString(Shelf.SHELF_ID);
         }
@@ -96,15 +86,8 @@ public class BookFragment extends Fragment {
             shelfId = Integer.parseInt(stringShelfId);
         } else {
             shelfId = Shelf.DEFAULT_SHELF_ID;
-
         }
-        shelf = new ShelfOperations(rootView.getContext()).getShelf(shelfId);
     }
-
-    private ArrayList<Book> getBooks() {
-        return shelf.fetchBooks(rootView.getContext());
-    }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -124,6 +107,8 @@ public class BookFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
+        BookMenuActions bookMenuActions = (new BookMenuActions(rootView, bookOperations, bookAdapter, shelf));
+
         if (id == R.id.add_book_search) {
             bookMenuActions.searchBook();
             return true;
@@ -178,7 +163,7 @@ public class BookFragment extends Fragment {
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.updateBook(book);
                 } else {
-                    bookMenuActions.setCurrentPage(book);
+                    (new BookMenuActions(rootView, bookOperations, bookAdapter, shelf)).setCurrentPage(book);
                 }
                 return true;
             case R.id.mark_complete:
@@ -233,9 +218,7 @@ public class BookFragment extends Fragment {
         if (hideCompletedBooks.isChecked()) {
             bookAdapter.hideCompletedBooks();
         } else {
-            userBooks = getBooks();
-            bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
-            bookListView.setAdapter(bookAdapter);
+            getLoaderManager().initLoader(0, null, this);
         }
     }
 
@@ -260,5 +243,40 @@ public class BookFragment extends Fragment {
         } else {
             Toast.makeText(rootView.getContext(), "Scan Failed", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public Loader onCreateLoader(int id, Bundle args) {
+        switch (id) {
+            case BookLoader.ID:
+                return new BookLoader(rootView.getContext(), shelfId);
+            case ShelfLoader.ID:
+                return new ShelfLoader(rootView.getContext(), shelfId);
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public void onLoadFinished(Loader loader, Object data) {
+        int id = loader.getId();
+        switch (id) {
+            case BookLoader.ID:
+                userBooks = (ArrayList<Book>) data;
+                bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
+                bookListView.setAdapter(bookAdapter);
+                break;
+            case ShelfLoader.ID:
+                shelf = (Shelf) data;
+                ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+                if (ab != null) {
+                    ab.setTitle(shelf.getName());
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader loader) {
     }
 }

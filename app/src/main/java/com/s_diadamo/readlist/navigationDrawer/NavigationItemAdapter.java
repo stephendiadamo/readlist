@@ -25,6 +25,7 @@ class NavigationItemAdapter extends BaseAdapter {
     private NavigationExpandableListAdapter expandableListAdapter;
 
     private final int[] icons = {
+            R.drawable.ic_book,
             R.drawable.ic_shelf,
             R.drawable.ic_check,
             R.drawable.ic_stats
@@ -53,7 +54,7 @@ class NavigationItemAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        if (position == 0) {
+        if (position == 1) {
             NavigationShelfItemHolder navItemShelfHolder = new NavigationShelfItemHolder();
             if (row == null || row.getTag() == null) {
                 LayoutInflater inflater = LayoutInflater.from(context);
@@ -64,7 +65,7 @@ class NavigationItemAdapter extends BaseAdapter {
             }
             ShelfOperations shelfOperations = new ShelfOperations(row.getContext());
             expandableListAdapter = new NavigationExpandableListAdapter(row.getContext(),
-                    shelfOperations.getAllShelves());
+                    shelfOperations.getNonDefaultShelves());
             navItemShelfHolder.shelves.setAdapter(expandableListAdapter);
             navItemShelfHolder.shelves.setOnChildClickListener(makeChildClickListener(expandableListAdapter));
             navItemShelfHolder.shelves.expandGroup(0);

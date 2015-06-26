@@ -11,15 +11,20 @@
         android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="8dp"
-        android:background="@android:color/black"
         android:gravity="center">
 
-        <ImageView
-            android:id="@+id/sub_shelf_image"
-            android:layout_width="25dp"
-            android:layout_height="30dp"
-            android:background="@android:color/white"
-            android:contentDescription="@string/shelf_name" />
+        <LinearLayout
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/border">
+
+            <ImageView
+                android:id="@+id/sub_shelf_image"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:background="@android:color/white"
+                android:contentDescription="@string/shelf_name" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView

@@ -54,6 +54,7 @@
     <string name="started">Started:</string>
 
     <string-array name="navigation_element_names">
+        <item>All Books</item>
         <item>Shelves</item>
         <item>Goals</item>
         <item>Statistics</item>

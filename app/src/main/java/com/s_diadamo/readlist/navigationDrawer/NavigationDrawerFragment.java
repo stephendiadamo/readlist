@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.navigationDrawer;
 
 import android.app.Activity;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v4.app.Fragment;
@@ -39,6 +40,9 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private NavigationItemAdapter navigationItemAdapter;
+
+    private Runnable pendingRunnable;
+    private Handler handler = new Handler();
 
     public NavigationDrawerFragment() {
     }
@@ -117,11 +121,16 @@ public class NavigationDrawerFragment extends Fragment {
         ) {
             @Override
             public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
                 if (!isAdded()) {
                     return;
                 }
+
                 getActivity().supportInvalidateOptionsMenu();
+
+                if (pendingRunnable != null) {
+                    handler.post(pendingRunnable);
+                    pendingRunnable = null;
+                }
             }
 
             @Override
@@ -132,8 +141,6 @@ public class NavigationDrawerFragment extends Fragment {
                 }
 
                 if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
                     mUserLearnedDrawer = true;
                     SharedPreferences sp = PreferenceManager
                             .getDefaultSharedPreferences(getActivity());
@@ -157,16 +164,28 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int position) {
+    private void selectItem(final int position) {
         mCurrentSelectedPosition = position;
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
         }
+
+        if (mCallbacks != null) {
+            pendingRunnable = new Runnable() {
+                @Override
+                public void run() {
+                    mCallbacks.onNavigationDrawerItemSelected(position);
+                }
+            };
+        }
+
+        if (!isDrawerOpen() && pendingRunnable != null) {
+            handler.post(pendingRunnable);
+            pendingRunnable = null;
+        }
+
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
-        }
-        if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
         }
     }
 
@@ -230,7 +249,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     public interface NavigationDrawerCallbacks {
-
         void onNavigationDrawerItemSelected(int position);
     }
 }

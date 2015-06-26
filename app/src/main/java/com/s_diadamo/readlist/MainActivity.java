@@ -69,9 +69,12 @@ public class MainActivity extends AppCompatActivity
                 objFragment = new BookFragment();
                 break;
             case 1:
-                objFragment = new GoalsFragment();
+                objFragment = new BookFragment();
                 break;
             case 2:
+                objFragment = new GoalsFragment();
+                break;
+            case 3:
                 objFragment = new StatisticsFragment();
                 break;
         }

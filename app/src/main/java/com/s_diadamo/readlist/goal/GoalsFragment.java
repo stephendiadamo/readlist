@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.goal;
 
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,10 +18,11 @@ import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.book.BookLoader;
 
 import java.util.ArrayList;
 
-public class GoalsFragment extends Fragment {
+public class GoalsFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Goal>> {
     private View rootView;
     private GoalOperations goalOperations;
     private GoalAdapter pageGoalAdapter;
@@ -30,24 +33,9 @@ public class GoalsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_goals, container, false);
 
+        getLoaderManager().initLoader(GoalLoader.ID, null, this);
         setHasOptionsMenu(true);
-
         goalOperations = new GoalOperations(rootView.getContext());
-
-        ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
-        ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
-
-        ArrayList<Goal> pageGoals = goalOperations.getPageGoals();
-        ArrayList<Goal> bookGoals = goalOperations.getBookGoals();
-
-        pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
-        bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
-
-        pageListView.setAdapter(pageGoalAdapter);
-        bookListView.setAdapter(bookGoalAdapter);
-
-        Utils.setDynamicHeight(pageListView);
-        Utils.setDynamicHeight(bookListView);
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -74,5 +62,40 @@ public class GoalsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public Loader<ArrayList<Goal>> onCreateLoader(int id, Bundle args) {
+        return new GoalLoader(rootView.getContext());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<ArrayList<Goal>> loader, ArrayList<Goal> data) {
+
+        ArrayList<Goal> bookGoals = new ArrayList<>();
+        ArrayList<Goal> pageGoals = new ArrayList<>();
+
+        for (Goal goal : data) {
+            if (goal.getType() == Goal.BOOK_GOAL) {
+                bookGoals.add(goal);
+            } else {
+                pageGoals.add(goal);
+            }
+        }
+        pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
+        bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
+
+        ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
+        ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
+
+        pageListView.setAdapter(pageGoalAdapter);
+        bookListView.setAdapter(bookGoalAdapter);
+
+        Utils.setDynamicHeight(pageListView);
+        Utils.setDynamicHeight(bookListView);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<ArrayList<Goal>> loader) {
+
+    }
 }
 

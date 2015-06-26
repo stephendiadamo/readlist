@@ -74,6 +74,27 @@ public class ShelfOperations {
         return shelves;
     }
 
+    public ArrayList<Shelf> getNonDefaultShelves() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Shelf> shelves = new ArrayList<>();
+        String selectQuery = String.format("SELECT * FROM %s WHERE %s!=%s",
+                DatabaseHelper.TABLE_SHELVES,
+                DatabaseHelper.KEY_ID,
+                Shelf.DEFAULT_SHELF_ID);
+
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Shelf shelf = parseShelf(cursor);
+                shelves.add(shelf);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        db.close();
+        return shelves;
+    }
+
     public ArrayList<Book> getAllBooksWithShelf() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Book> books = new ArrayList<>();
@@ -174,5 +195,6 @@ public class ShelfOperations {
                 cursor.getString(11),
                 cursor.getString(12));
     }
+
 
 }
