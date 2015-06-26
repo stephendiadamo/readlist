@@ -58,7 +58,7 @@ public class GoalAdapter extends ArrayAdapter<Goal> {
 
         goalHolder.goalStartDate.setText(goal.getCleanStartDate());
         goalHolder.goalEndDate.setText(goal.getCleanEndDate());
-        goalHolder.goalProgressMade.setText(String.valueOf(goal.getProgress()));
+        goalHolder.goalProgressMade.setText(String.valueOf(goal.getProgress(context)));
         goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()));
 
         return row;

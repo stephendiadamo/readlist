@@ -98,7 +98,7 @@ public class UpdateOperations {
         return numUpdates;
     }
 
-    private int getNumberOfPagesReadBetweenDates(String start, String end) {
+    public int getNumberOfPagesReadBetweenDates(String start, String end) {
         int numPagesRead = 0;
         db = dbHelper.getReadableDatabase();
         String query = String.format("SELECT SUM(%s) FROM %s WHERE %s BETWEEN '%s' AND '%s'",

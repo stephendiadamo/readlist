@@ -1,6 +1,10 @@
 package com.s_diadamo.readlist.goal;
 
+import android.content.Context;
+
 import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.book.BookOperations;
+import com.s_diadamo.readlist.updates.UpdateOperations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -89,8 +93,18 @@ public class Goal {
         isComplete = false;
     }
 
-    public int getProgress(){
-        return 0;
+    public int getProgress(Context context) {
+        int progress;
+        if (type == PAGE_GOAL) {
+            progress = (new UpdateOperations(context)).getNumberOfPagesReadBetweenDates(startDate, endDate);
+        } else {
+            progress = (new BookOperations(context)).getNumberOfBooksReadBetweenDates(startDate, endDate);
+        }
+        if (progress >= amount && !isComplete) {
+            markComplete();
+            (new GoalOperations(context)).updateGoal(this);
+        }
+        return progress;
     }
 
     public String getCleanEndDate() {

@@ -54,10 +54,10 @@ public class GoalOperations {
     }
 
     public ArrayList<Goal> getPageGoals() {
-      return getGoalsByType(Goal.PAGE_GOAL);
+        return getGoalsByType(Goal.PAGE_GOAL);
     }
 
-    private ArrayList<Goal> getGoalsByType(int type){
+    private ArrayList<Goal> getGoalsByType(int type) {
         db = dbHelper.getReadableDatabase();
         ArrayList<Goal> goals = new ArrayList<>();
 

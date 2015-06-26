@@ -80,22 +80,31 @@ public class GoalsFragment extends Fragment implements LoaderManager.LoaderCallb
                 pageGoals.add(goal);
             }
         }
+
         pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
         bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
 
-        ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
-        ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
+        if (pageGoals.isEmpty()) {
+            rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
+        } else {
+            ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
+            pageListView.setClickable(false);
+            pageListView.setAdapter(pageGoalAdapter);
+            Utils.setDynamicHeight(pageListView);
+        }
 
-        pageListView.setAdapter(pageGoalAdapter);
-        bookListView.setAdapter(bookGoalAdapter);
-
-        Utils.setDynamicHeight(pageListView);
-        Utils.setDynamicHeight(bookListView);
+        if (bookGoals.isEmpty()) {
+            rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
+        } else {
+            ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
+            bookListView.setClickable(false);
+            bookListView.setAdapter(bookGoalAdapter);
+            Utils.setDynamicHeight(bookListView);
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<ArrayList<Goal>> loader) {
-
     }
 }
 

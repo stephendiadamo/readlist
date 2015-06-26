@@ -98,7 +98,7 @@ public class BookOperations {
         return booksRead;
     }
 
-    private int getNumberOfBooksReadBetweenDates(String start, String end) {
+    public int getNumberOfBooksReadBetweenDates(String start, String end) {
         int numBooksRead = 0;
         db = dbHelper.getReadableDatabase();
         String query = String.format("SELECT COUNT(*) FROM %s WHERE (%s BETWEEN '%s' AND '%s') AND %s=1",
