@@ -17,6 +17,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.Utils;
@@ -73,6 +74,7 @@ public class GoalAddFragment extends Fragment {
                         calendar.set(Calendar.YEAR, year);
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        fixDate(whichDate);
                         setStartDateString(Utils.parseDate(calendar.getTime()), whichDate);
                         dateView.setText(Utils.cleanDate(calendar.getTime()));
                     }
@@ -84,6 +86,23 @@ public class GoalAddFragment extends Fragment {
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         };
+    }
+
+    private void fixDate(int which) {
+        switch (which) {
+            case 0:
+                calendar.clear(Calendar.HOUR_OF_DAY);
+                calendar.clear(Calendar.MINUTE);
+                calendar.clear(Calendar.SECOND);
+                calendar.clear(Calendar.MILLISECOND);
+                break;
+            case 1:
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                calendar.set(Calendar.MINUTE, 59);
+                calendar.set(Calendar.SECOND, 59);
+                calendar.set(Calendar.MILLISECOND, 999);
+                break;
+        }
     }
 
     @Override
@@ -109,10 +128,15 @@ public class GoalAddFragment extends Fragment {
     private void addGoal() {
         Spinner goalType = (Spinner) rootView.findViewById(R.id.add_goal_type_spinner);
         EditText goalAmount = ((EditText) rootView.findViewById(R.id.add_goal_amount));
-        int amount = Integer.parseInt(goalAmount.getText().toString());
-        int goalTypeIndex = goalType.getSelectedItemPosition();
-        Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
-        (new GoalOperations(rootView.getContext())).addGoal(goal);
+
+        if (!startDate.isEmpty() && !endDate.isEmpty() && goalAmount.getText() != null) {
+            int amount = Integer.parseInt(goalAmount.getText().toString());
+            int goalTypeIndex = goalType.getSelectedItemPosition();
+            Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
+            (new GoalOperations(rootView.getContext())).addGoal(goal);
+        } else {
+            Toast.makeText(rootView.getContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void backToGoals() {
