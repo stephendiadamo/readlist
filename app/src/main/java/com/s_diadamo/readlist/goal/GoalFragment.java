@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.goal;
 
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,7 @@ import com.s_diadamo.readlist.book.BookLoader;
 
 import java.util.ArrayList;
 
-public class GoalsFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Goal>> {
+public class GoalFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Goal>> {
     private View rootView;
     private GoalOperations goalOperations;
     private GoalAdapter pageGoalAdapter;
@@ -55,11 +56,20 @@ public class GoalsFragment extends Fragment implements LoaderManager.LoaderCallb
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
         if (id == R.id.add_goal) {
-            Toast.makeText(rootView.getContext(), "Add Goal", Toast.LENGTH_SHORT).show();
+            launchAddGoalFragment();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void launchAddGoalFragment() {
+        Fragment fragment = new GoalAddFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .addToBackStack("GOALS")
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     @Override

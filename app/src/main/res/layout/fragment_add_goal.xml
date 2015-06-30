@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Spinner
+            android:id="@+id/add_goal_type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawSelectorOnTop="true"
+            android:entries="@array/goal_types"
+            android:padding="3dp" />
+
+        <EditText
+            android:id="@+id/add_goal_amount"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:hint="@string/goal_amount"
+            android:inputType="number"
+            android:padding="3dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/add_goal_start_date_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.4"
+            android:padding="8dp"
+            android:text="@string/start_date"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/add_goal_start_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:padding="5dp"
+            android:text="@string/start_date"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <Button
+            android:id="@+id/add_goal_end_date_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.4"
+            android:padding="8dp"
+            android:text="@string/end_date"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/add_goal_end_date"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_weight="0.5"
+            android:padding="5dp"
+            android:text="@string/end_date"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

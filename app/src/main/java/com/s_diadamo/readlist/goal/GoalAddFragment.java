@@ -1,0 +1,131 @@
+package com.s_diadamo.readlist.goal;
+
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.Utils;
+
+import java.util.Calendar;
+
+
+public class GoalAddFragment extends Fragment {
+
+    private View rootView;
+    private TextView startDateTextView;
+    private TextView endDateTextView;
+    private String startDate;
+    private String endDate;
+    private Calendar calendar = Calendar.getInstance();
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_add_goal, container, false);
+
+        setHasOptionsMenu(true);
+
+        Button startDateButton = (Button) rootView.findViewById(R.id.add_goal_start_date_button);
+        Button endDateButton = (Button) rootView.findViewById(R.id.add_goal_end_date_button);
+
+        startDateTextView = (TextView) rootView.findViewById(R.id.add_goal_start_date);
+        endDateTextView = (TextView) rootView.findViewById(R.id.add_goal_end_date);
+
+        startDateButton.setOnClickListener(setDateCalendarOnClick(startDateTextView, 0));
+        endDateButton.setOnClickListener(setDateCalendarOnClick(endDateTextView, 1));
+
+        return rootView;
+    }
+
+    private void setStartDateString(String date, int whichDate) {
+        switch (whichDate) {
+            case 0:
+                startDate = date;
+                break;
+            case 1:
+                endDate = date;
+                break;
+        }
+
+    }
+
+    private View.OnClickListener setDateCalendarOnClick(final TextView dateView, final int whichDate) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        calendar.set(Calendar.YEAR, year);
+                        calendar.set(Calendar.MONTH, monthOfYear);
+                        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        setStartDateString(Utils.parseDate(calendar.getTime()), whichDate);
+                        dateView.setText(Utils.cleanDate(calendar.getTime()));
+                    }
+                };
+
+                new DatePickerDialog(rootView.getContext(), dateSetListener,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        };
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_general_add, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        long id = item.getItemId();
+
+        if (id == R.id.add) {
+            addGoal();
+            backToGoals();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void addGoal() {
+        Spinner goalType = (Spinner) rootView.findViewById(R.id.add_goal_type_spinner);
+        EditText goalAmount = ((EditText) rootView.findViewById(R.id.add_goal_amount));
+        int amount = Integer.parseInt(goalAmount.getText().toString());
+        int goalTypeIndex = goalType.getSelectedItemPosition();
+        Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
+        (new GoalOperations(rootView.getContext())).addGoal(goal);
+    }
+
+    private void backToGoals() {
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isAcceptingText() && getActivity().getCurrentFocus() != null) {
+            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+
+        Fragment fragment = new GoalFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+}

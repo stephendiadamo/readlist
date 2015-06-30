@@ -46,6 +46,17 @@ public class Utils {
         return (String) android.text.format.DateFormat.format("MM", date);
     }
 
+    public static String parseDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+        return simpleDateFormat.format(date);
+    }
+
+    public static String cleanDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.CLEAN_DATE_FORMAT, Locale.CANADA);
+        return simpleDateFormat.format(date);
+    }
+
+
     public static void setDynamicHeight(ListView mListView) {
         ListAdapter mListAdapter = mListView.getAdapter();
         if (mListAdapter == null) {

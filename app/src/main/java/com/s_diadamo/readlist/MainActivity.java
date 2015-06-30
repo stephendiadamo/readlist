@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
 import com.s_diadamo.readlist.book.BookFragment;
-import com.s_diadamo.readlist.goal.GoalsFragment;
+import com.s_diadamo.readlist.goal.GoalFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
                 objFragment = new BookFragment();
                 break;
             case 2:
-                objFragment = new GoalsFragment();
+                objFragment = new GoalFragment();
                 break;
             case 3:
                 objFragment = new StatisticsFragment();

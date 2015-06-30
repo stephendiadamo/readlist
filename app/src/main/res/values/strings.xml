@@ -46,18 +46,28 @@
     <string name="statistics">Statistics</string>
     <string name="reset_statistics">Reset statistics</string>
     <string name="goals">Goals</string>
-    <string name="page_goals">Page  Goals</string>
+    <string name="page_goals">Page Goals</string>
     <string name="book_goals">Book Goals</string>
+    <string name="page_goal">Page Goal</string>
+    <string name="book_goal">Book Goal</string>
     <string name="goal_icon">Goal Icon</string>
     <string name="deadline">Deadline:</string>
     <string name="progress">Progress:</string>
     <string name="started">Started:</string>
+    <string name="goal_amount">Goal Amount</string>
+    <string name="start_date">Start Date</string>
+    <string name="end_date">End Date</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
         <item>Shelves</item>
         <item>Goals</item>
         <item>Statistics</item>
+    </string-array>
+
+    <string-array name="goal_types">
+        <item>Book Goal</item>
+        <item>Page Goal</item>
     </string-array>
 
 </resources>

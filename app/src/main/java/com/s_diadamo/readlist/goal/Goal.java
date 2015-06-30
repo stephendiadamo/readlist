@@ -49,14 +49,6 @@ public class Goal {
         this.isComplete = false;
     }
 
-    public Goal newBookGoal(int amount, String startDate, String endDate) {
-        return new Goal(BOOK_GOAL, amount, startDate, endDate);
-    }
-
-    public Goal newPageGoal(int amount, String startDate, String endDate) {
-        return new Goal(PAGE_GOAL, amount, startDate, endDate);
-    }
-
     public int getId() {
         return id;
     }
