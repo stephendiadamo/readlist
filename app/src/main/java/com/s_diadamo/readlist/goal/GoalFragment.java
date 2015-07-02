@@ -8,26 +8,26 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.Utils;
-import com.s_diadamo.readlist.book.BookLoader;
 
 import java.util.ArrayList;
 
 public class GoalFragment extends Fragment implements LoaderManager.LoaderCallbacks<ArrayList<Goal>> {
     private View rootView;
     private GoalOperations goalOperations;
-    private GoalAdapter pageGoalAdapter;
-    private GoalAdapter bookGoalAdapter;
+    private GoalAdapter selectedListViewAdapter;
 
     @Nullable
     @Override
@@ -63,6 +63,35 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_goal_actions, menu);
+        try {
+            ListView selectedListView = (ListView) v;
+            selectedListViewAdapter = (GoalAdapter) selectedListView.getAdapter();
+        } catch (ClassCastException e) {
+        }
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.delete_goal:
+                if (selectedListViewAdapter != null) {
+                    Goal g = selectedListViewAdapter.getItem(info.position);
+                    goalOperations.deleteGoal(g);
+                    selectedListViewAdapter.remove(g);
+                }
+                return true;
+        }
+
+        return super.onContextItemSelected(item);
+    }
+
+
     private void launchAddGoalFragment() {
         Fragment fragment = new GoalAddFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
@@ -79,7 +108,6 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoadFinished(Loader<ArrayList<Goal>> loader, ArrayList<Goal> data) {
-
         ArrayList<Goal> bookGoals = new ArrayList<>();
         ArrayList<Goal> pageGoals = new ArrayList<>();
 
@@ -91,15 +119,24 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
-        bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
+        GoalAdapter pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
+        GoalAdapter bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
 
         if (pageGoals.isEmpty()) {
             rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
         } else {
             ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
-            pageListView.setClickable(false);
             pageListView.setAdapter(pageGoalAdapter);
+            registerForContextMenu(pageListView);
+            pageListView.setLongClickable(false);
+
+            pageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    getActivity().openContextMenu(view);
+                }
+            });
+
             Utils.setDynamicHeight(pageListView);
         }
 
@@ -107,8 +144,17 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
         } else {
             ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
-            bookListView.setClickable(false);
             bookListView.setAdapter(bookGoalAdapter);
+            registerForContextMenu(bookListView);
+            bookListView.setLongClickable(false);
+
+            bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    getActivity().openContextMenu(view);
+                }
+            });
+
             Utils.setDynamicHeight(bookListView);
         }
     }
