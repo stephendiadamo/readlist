@@ -3,27 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
+    android:padding="5dp"
     android:weightSum="1">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_weight="0.15"
         android:padding="5dp">
 
         <ImageView
             android:id="@+id/goal_icon"
-            android:layout_width="30dp"
+            android:layout_width="35dp"
             android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
             android:contentDescription="@string/goal_icon"
-            android:src="@drawable/ic_pages" />
+            android:src="@drawable/ic_book" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.80"
+        android:layout_weight="0.85"
         android:orientation="vertical">
 
         <LinearLayout
@@ -48,8 +51,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp"
                 android:text="@string/deadline" />
 
             <TextView
@@ -108,7 +111,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/completed" />
+                android:text="@string/completed"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/goal_completed_amount"

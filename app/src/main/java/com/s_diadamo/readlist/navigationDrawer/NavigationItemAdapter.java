@@ -123,6 +123,10 @@ class NavigationItemAdapter extends BaseAdapter {
         this.expandableListAdapter.deleteShelf(shelf);
     }
 
+    public void updateItemFromExpandableList(Shelf shelf) {
+        this.expandableListAdapter.updateShelf(shelf);
+    }
+
     public void notifyChanges() {
         this.expandableListAdapter.notifyChanges();
     }

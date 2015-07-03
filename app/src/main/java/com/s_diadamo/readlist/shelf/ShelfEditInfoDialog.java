@@ -12,10 +12,14 @@ import android.widget.ImageView;
 
 import com.s_diadamo.readlist.ColourPickerDialog;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.book.BookAdapter;
+import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
+
 
 public class ShelfEditInfoDialog extends AlertDialog {
 
-    public ShelfEditInfoDialog(final Context context, final Shelf shelf, final ActionBar actionBar) {
+    public ShelfEditInfoDialog(final Context context, final Shelf shelf, final ActionBar actionBar, final BookAdapter adapter, final NavigationDrawerFragment navDrawer) {
         super(context);
 
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -44,6 +48,14 @@ public class ShelfEditInfoDialog extends AlertDialog {
                 ShelfOperations operations = new ShelfOperations(context);
                 operations.updateShelf(shelf);
                 actionBar.setTitle(shelf.getName());
+
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    adapter.getItem(i).setColour(shelf.getColour());
+                }
+
+                adapter.notifyDataSetChanged();
+                navDrawer.updateShelfFromExpandableList(shelf);
+
                 dismiss();
             }
         });

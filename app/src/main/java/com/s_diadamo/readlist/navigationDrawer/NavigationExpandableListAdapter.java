@@ -42,6 +42,18 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         }
     }
 
+    public void updateShelf(Shelf shelf) {
+        int i = 0;
+        for (Shelf s : shelves) {
+            if (s.getId() == shelf.getId()) {
+                s.setColour(shelf.getColour());
+                s.setName(shelf.getName());
+            }
+            i++;
+        }
+        notifyChanges();
+    }
+
     public void addShelf(Shelf shelf) {
         shelves.add(shelf);
         notifyChanges();

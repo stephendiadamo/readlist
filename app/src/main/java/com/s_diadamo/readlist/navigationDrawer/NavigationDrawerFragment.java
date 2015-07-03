@@ -92,6 +92,10 @@ public class NavigationDrawerFragment extends Fragment {
         navigationItemAdapter.deleteItemFromExpandableList(shelf);
     }
 
+    public void updateShelfFromExpandableList(Shelf shelf) {
+        navigationItemAdapter.updateItemFromExpandableList(shelf);
+    }
+
     public void notifyChanges() {
         navigationItemAdapter.notifyChanges();
     }

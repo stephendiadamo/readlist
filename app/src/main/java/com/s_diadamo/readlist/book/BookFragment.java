@@ -126,9 +126,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             launchScanner();
             return true;
         } else if (id == R.id.edit_shelf) {
-            bookMenuActions.editShelfInfo(shelf, ((AppCompatActivity) getActivity()).getSupportActionBar());
-            ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
-                    findFragmentById(R.id.navigation_drawer)).notifyChanges();
+            bookMenuActions.editShelfInfo(shelf, ((AppCompatActivity) getActivity()).getSupportActionBar(), ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
+                    findFragmentById(R.id.navigation_drawer)));
+
             return true;
         } else if (id == R.id.delete_shelf) {
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
