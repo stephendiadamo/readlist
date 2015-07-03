@@ -34,7 +34,6 @@ public class BookEditFragment extends Fragment {
     private EditText bookPages;
     private Spinner shelfSpinner;
     private ArrayList<Shelf> shelves;
-    private Button deleteBook;
 
     @Nullable
     @Override
@@ -51,7 +50,6 @@ public class BookEditFragment extends Fragment {
         bookAuthor = (EditText) rootView.findViewById(R.id.edit_book_author);
         bookPages = (EditText) rootView.findViewById(R.id.edit_book_number_of_pages);
         shelfSpinner = (Spinner) rootView.findViewById(R.id.edit_book_shelf_spinner);
-        deleteBook = (Button) rootView.findViewById(R.id.edit_book_delete);
 
         bookTitle.setText(book.getTitle());
         bookTitle.requestFocus();
@@ -72,23 +70,6 @@ public class BookEditFragment extends Fragment {
             shelfIndex++;
         }
         shelfSpinner.setSelection(shelfIndex);
-
-        deleteBook.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new AlertDialog.Builder(rootView.getContext())
-                        .setMessage("Delete \"" + book.getTitle() + "\"?")
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                bookOperations.deleteBook(book);
-                                launchBookFragment();
-                            }
-                        })
-                        .setNegativeButton("No", null)
-                        .show();
-            }
-        });
 
         return rootView;
     }

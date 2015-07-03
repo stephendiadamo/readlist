@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.book;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -102,6 +104,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         hideCompletedBooks = menu.findItem(R.id.hide_completed_books);
         hideCompletedBooks.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
         updateVisibleBooks();
+
+        if (shelfId == Shelf.DEFAULT_SHELF_ID) {
+            menu.findItem(R.id.edit_shelf).setVisible(false);
+            menu.findItem(R.id.delete_shelf).setVisible(false);
+        }
     }
 
     @Override
@@ -172,9 +179,28 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             case R.id.edit_book:
                 launchEditBookFragment(userBooks.get(info.position));
                 return true;
+            case R.id.delete_book:
+                deleteBook(userBooks.get(info.position));
+                return true;
         }
 
         return super.onContextItemSelected(item);
+    }
+
+    private void deleteBook(final Book book) {
+        new AlertDialog.Builder(rootView.getContext())
+                .setMessage("Delete \"" + book.getTitle() + "\"?")
+                .setCancelable(true)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        bookOperations.deleteBook(book);
+                        userBooks.remove(book);
+                        bookAdapter.notifyDataSetChanged();
+                        bookAdapter.notifyDataSetInvalidated();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     public void onListItemClick(ListView l, View v, int position, long id) {

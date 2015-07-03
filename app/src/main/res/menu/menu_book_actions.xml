@@ -9,4 +9,7 @@
     <item
         android:id="@+id/edit_book"
         android:title="@string/edit_book" />
+    <item
+        android:id="@+id/delete_book"
+        android:title="@string/delete_book" />
 </menu>

@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,8 +32,8 @@ class BookManuallyAddBookDialog extends AlertDialog {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String bookTitle = bookTitleEditText.getText().toString();
-                String bookAuthor = bookAuthorEditText.getText().toString();
+                String bookTitle = bookTitleEditText.getText().toString().trim();
+                String bookAuthor = bookAuthorEditText.getText().toString().trim();
                 String pages = bookPagesEditText.getText().toString();
 
                 if (bookTitle.isEmpty()) {
