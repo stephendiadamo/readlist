@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.goal;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -28,6 +30,15 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     private View rootView;
     private GoalOperations goalOperations;
     private GoalAdapter selectedListViewAdapter;
+    private MenuItem hideCompletedGoals;
+    private SharedPreferences prefs;
+    private GoalAdapter bookGoalAdapter;
+    private GoalAdapter pageGoalAdapter;
+    private ListView bookListView;
+    private ListView pageListView;
+
+
+    private static final String HIDE_COMPLETED_GOALS = "HIDE_COMPLETED_GOALS";
 
     @Nullable
     @Override
@@ -53,11 +64,22 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        hideCompletedGoals = menu.findItem(R.id.hide_completed_goals);
+        hideCompletedGoals.setChecked(prefs.getBoolean(HIDE_COMPLETED_GOALS, false));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
         if (id == R.id.add_goal) {
             launchAddGoalFragment();
             return true;
+        } else if (id == R.id.hide_completed_goals) {
+            toggleHideCompletedGoals();
+            updateVisibleGoals();
         }
 
         return super.onOptionsItemSelected(item);
@@ -119,13 +141,14 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        GoalAdapter pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
-        GoalAdapter bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
+        pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
+        bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
 
         if (pageGoals.isEmpty()) {
             rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
         } else {
-            ListView pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
+            rootView.findViewById(R.id.page_goals_header).setVisibility(View.VISIBLE);
+            pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
             pageListView.setAdapter(pageGoalAdapter);
             registerForContextMenu(pageListView);
             pageListView.setLongClickable(false);
@@ -143,7 +166,8 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         if (bookGoals.isEmpty()) {
             rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
         } else {
-            ListView bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
+            rootView.findViewById(R.id.book_goals_header).setVisibility(View.VISIBLE);
+            bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
             bookListView.setAdapter(bookGoalAdapter);
             registerForContextMenu(bookListView);
             bookListView.setLongClickable(false);
@@ -157,10 +181,46 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
 
             Utils.setDynamicHeight(bookListView);
         }
+        if (hideCompletedGoals.isChecked()) {
+            updateVisibleGoals();
+        }
     }
 
     @Override
     public void onLoaderReset(Loader<ArrayList<Goal>> loader) {
+    }
+
+    private void toggleHideCompletedGoals() {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(HIDE_COMPLETED_GOALS, !hideCompletedGoals.isChecked());
+        editor.apply();
+        hideCompletedGoals.setChecked(!hideCompletedGoals.isChecked());
+    }
+
+    private void updateVisibleGoals() {
+        if (hideCompletedGoals.isChecked()) {
+            pageGoalAdapter.hideCompletedGoals();
+            bookGoalAdapter.hideCompletedGoals();
+
+            if (pageGoalAdapter.isEmpty()) {
+                rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
+            } else {
+                rootView.findViewById(R.id.page_goals_header).setVisibility(View.VISIBLE);
+            }
+            if (bookGoalAdapter.isEmpty()) {
+                rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
+            } else {
+                rootView.findViewById(R.id.book_goals_header).setVisibility(View.VISIBLE);
+            }
+
+            if (pageListView != null)
+                Utils.setDynamicHeight(pageListView);
+            if (bookListView != null)
+                Utils.setDynamicHeight(bookListView);
+
+        } else {
+            getLoaderManager().initLoader(GoalLoader.ID, null, this);
+        }
     }
 }
 

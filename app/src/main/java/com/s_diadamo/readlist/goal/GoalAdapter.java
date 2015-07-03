@@ -44,6 +44,7 @@ public class GoalAdapter extends ArrayAdapter<Goal> {
             goalHolder.goalProgressMade = (TextView) row.findViewById(R.id.goal_progress_made);
             goalHolder.goalAmount = (TextView) row.findViewById(R.id.goal_amount);
 
+
             row.setTag(goalHolder);
         } else {
             goalHolder = (GoalHolder) row.getTag();
@@ -58,10 +59,39 @@ public class GoalAdapter extends ArrayAdapter<Goal> {
 
         goalHolder.goalStartDate.setText(goal.getCleanStartDate());
         goalHolder.goalEndDate.setText(goal.getCleanEndDate());
-        goalHolder.goalProgressMade.setText(String.valueOf(goal.getProgress(context)));
-        goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()));
+
+        int progress = goal.getProgress(context);
+        if (goal.isComplete()) {
+            row.findViewById(R.id.goal_progress_container).setVisibility(View.GONE);
+            row.findViewById(R.id.goal_complete_container).setVisibility(View.VISIBLE);
+            goalHolder.completedAmount = (TextView) row.findViewById(R.id.goal_completed_amount);
+            goalHolder.completedType = (TextView) row.findViewById(R.id.goal_completed_type);
+            goalHolder.completedAmount.setText(String.valueOf(goal.getAmount()));
+            if (goal.getAmount() > 1) {
+                goalHolder.completedType.setText(goal.getType() == Goal.BOOK_GOAL ? "books" : "pages");
+            } else {
+                goalHolder.completedType.setText(goal.getType() == Goal.BOOK_GOAL ? "book" : "page");
+            }
+
+        } else {
+            row.findViewById(R.id.goal_progress_container).setVisibility(View.VISIBLE);
+            row.findViewById(R.id.goal_complete_container).setVisibility(View.GONE);
+            goalHolder.goalProgressMade.setText(String.valueOf(progress));
+            goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()));
+        }
 
         return row;
+    }
+
+    public void hideCompletedGoals() {
+        for (int i = 0; i < goals.size(); i++) {
+            if (goals.get(i).isComplete()) {
+                goals.remove(i);
+                i--;
+            }
+        }
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
     }
 
     static class GoalHolder {
@@ -70,5 +100,7 @@ public class GoalAdapter extends ArrayAdapter<Goal> {
         TextView goalEndDate;
         TextView goalProgressMade;
         TextView goalAmount;
+        TextView completedAmount;
+        TextView completedType;
     }
 }

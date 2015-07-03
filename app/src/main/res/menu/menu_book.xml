@@ -32,6 +32,5 @@
             android:id="@+id/hide_completed_books"
             android:checkable="true"
             android:title="@string/hide_completed_books" />
-
     </item>
 </menu>

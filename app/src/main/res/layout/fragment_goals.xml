@@ -10,9 +10,7 @@
 
         <TextView
             android:id="@+id/page_goals_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
+            style="@style/UpdateHeader"
             android:text="@string/page_goals" />
 
         <ListView
@@ -22,9 +20,7 @@
 
         <TextView
             android:id="@+id/book_goals_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
+            style="@style/UpdateHeader"
             android:text="@string/book_goals" />
 
         <ListView

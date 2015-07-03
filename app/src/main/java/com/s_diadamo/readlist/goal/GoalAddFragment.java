@@ -1,7 +1,6 @@
 package com.s_diadamo.readlist.goal;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,8 +28,8 @@ public class GoalAddFragment extends Fragment {
     private View rootView;
     private TextView startDateTextView;
     private TextView endDateTextView;
-    private String startDate;
-    private String endDate;
+    private String startDate = "";
+    private String endDate = "";
     private Calendar calendar = Calendar.getInstance();
 
     @Override
@@ -118,7 +116,6 @@ public class GoalAddFragment extends Fragment {
 
         if (id == R.id.add) {
             addGoal();
-            backToGoals();
             return true;
         }
 
@@ -127,23 +124,22 @@ public class GoalAddFragment extends Fragment {
 
     private void addGoal() {
         Spinner goalType = (Spinner) rootView.findViewById(R.id.add_goal_type_spinner);
-        EditText goalAmount = ((EditText) rootView.findViewById(R.id.add_goal_amount));
+        EditText goalAmountEditText = ((EditText) rootView.findViewById(R.id.add_goal_amount));
+        String goalAmount = goalAmountEditText.getText().toString();
 
-        if (!startDate.isEmpty() && !endDate.isEmpty() && goalAmount.getText() != null) {
-            int amount = Integer.parseInt(goalAmount.getText().toString());
+        if (!startDate.isEmpty() && !endDate.isEmpty() && !goalAmount.isEmpty()) {
+            int amount = Integer.parseInt(goalAmount);
             int goalTypeIndex = goalType.getSelectedItemPosition();
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
             (new GoalOperations(rootView.getContext())).addGoal(goal);
+            backToGoals();
         } else {
             Toast.makeText(rootView.getContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show();
         }
     }
 
     private void backToGoals() {
-        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isAcceptingText() && getActivity().getCurrentFocus() != null) {
-            imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
-        }
+        Utils.hideKeyBoard(getActivity());
 
         Fragment fragment = new GoalFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

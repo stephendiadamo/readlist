@@ -7,4 +7,14 @@
         android:orderInCategory="100"
         android:title=""
         app:showAsAction="always" />
+
+    <item
+        android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:title="">
+
+        <item
+            android:id="@+id/hide_completed_goals"
+            android:checkable="true"
+            android:title="@string/hide_completed_goals" />
+    </item>
 </menu>

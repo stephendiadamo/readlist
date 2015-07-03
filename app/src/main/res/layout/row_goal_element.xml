@@ -22,8 +22,8 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.80"
         android:layout_marginTop="5dp"
+        android:layout_weight="0.80"
         android:orientation="vertical">
 
         <LinearLayout
@@ -46,10 +46,10 @@
                 android:text="12-12-2002" />
 
             <TextView
-                android:layout_marginStart="20dp"
-                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:text="@string/deadline" />
 
             <TextView
@@ -62,6 +62,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/goal_progress_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -94,9 +95,36 @@
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
                 android:text="250" />
-
-
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/goal_complete_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/completed" />
+
+            <TextView
+                android:id="@+id/goal_completed_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp" />
+
+            <TextView
+                android:id="@+id/goal_completed_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
