@@ -154,7 +154,7 @@ public class Book {
         this.colour = colour;
     }
 
-    public Boolean getComplete() {
+    public Boolean isComplete() {
         return complete;
     }
 

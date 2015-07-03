@@ -8,8 +8,6 @@ import android.database.sqlite.SQLiteDatabase;
 import com.s_diadamo.readlist.DatabaseHelper;
 import com.s_diadamo.readlist.Utils;
 
-import java.util.ArrayList;
-
 public class BookOperations {
     private final String[] BOOK_TABLE_COLUMNS = {
             DatabaseHelper.KEY_ID,
@@ -40,7 +38,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
-        values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
+        values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
@@ -149,7 +147,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         values.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
         values.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
-        values.put(DatabaseHelper.BOOK_COMPLETE, book.getComplete());
+        values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 

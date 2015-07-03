@@ -44,7 +44,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private Shelf shelf;
     private int shelfId;
     private MenuItem hideCompletedBooks;
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
 
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
 
@@ -146,7 +146,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         inflater.inflate(R.menu.menu_book_actions, menu);
 
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        if (userBooks.get(info.position).getComplete()) {
+        if (userBooks.get(info.position).isComplete()) {
             menu.findItem(R.id.set_current_page).setTitle("Reread");
         }
     }
@@ -158,7 +158,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
         switch (item.getItemId()) {
             case R.id.set_current_page:
-                if (book.getComplete()) {
+                if (book.isComplete()) {
                     book.reread();
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.updateBook(book);
@@ -218,7 +218,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (hideCompletedBooks.isChecked()) {
             bookAdapter.hideCompletedBooks();
         } else {
-            getLoaderManager().initLoader(0, null, this);
+            getLoaderManager().initLoader(BookLoader.ID, null, this);
         }
     }
 

@@ -1,8 +1,6 @@
 package com.s_diadamo.readlist.book;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +29,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
 
     public void hideCompletedBooks() {
         for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getComplete()) {
+            if (books.get(i).isComplete()) {
                 books.remove(i);
                 i--;
             }
@@ -80,7 +78,7 @@ public class BookAdapter extends ArrayAdapter<Book> {
             bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
         }
 
-        if (book.getComplete()) {
+        if (book.isComplete()) {
             bookHolder.pageInfoContainer.setVisibility(View.GONE);
             bookHolder.completeInfoContainer.setVisibility(View.VISIBLE);
             ((TextView) row.findViewById(R.id.book_complete_date)).setText(book.getCleanCompletionDate());
