@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import com.s_diadamo.readlist.R;
 import java.util.ArrayList;
 
 public class BookAdapter extends ArrayAdapter<Book> {
+
+    private final static String STORAGE_FILE_START = "/storage";
 
     private final Context context;
     private final int layoutResourceID;
@@ -65,7 +69,15 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
         Book book = books.get(position);
         if (!book.getCoverPictureUrl().isEmpty()) {
-            MainActivity.imageLoader.DisplayImage(book.getCoverPictureUrl(), bookHolder.bookCover);
+            String bookCoverUri = book.getCoverPictureUrl();
+            if (bookCoverUri.startsWith(STORAGE_FILE_START)) {
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inSampleSize = 8;
+                final Bitmap bitmap = BitmapFactory.decodeFile(bookCoverUri, options);
+                bookHolder.bookCover.setImageBitmap(bitmap);
+            } else {
+                MainActivity.imageLoader.DisplayImage(book.getCoverPictureUrl(), bookHolder.bookCover);
+            }
         }
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());

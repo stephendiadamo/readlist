@@ -59,6 +59,7 @@
     <string name="end_date">End Date</string>
     <string name="complete">Complete</string>
     <string name="hide_completed_goals">Hide Completed Goals</string>
+    <string name="cover_photo_capture">Cover Photo Capture</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

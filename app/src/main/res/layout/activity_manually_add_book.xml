@@ -7,34 +7,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:baselineAligned="false"
-        android:weightSum="1.0">
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
 
-            <ImageView
-                android:id="@+id/manual_add_cover_photo"
-                android:layout_width="80dp"
-                android:layout_height="130dp"
-                android:layout_margin="5dp"
-                android:src="@drawable/sample_cover" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/manual_add_book_background"
+                    android:layout_width="100dp"
+                    android:layout_height="130dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/sample_cover" />
+
+                <ImageView
+                    android:id="@+id/manual_add_cover_photo"
+                    android:layout_width="30dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginTop="50dp"
+                    android:src="@drawable/ic_camera_white" />
+            </FrameLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".7"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <EditText
                 android:id="@+id/manual_add_title"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
                 android:hint="@string/book_title"
                 android:padding="10dp" />
 
@@ -42,7 +58,6 @@
                 android:id="@+id/manual_add_author"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
                 android:hint="@string/book_author"
                 android:padding="10dp" />
 
@@ -50,24 +65,10 @@
                 android:id="@+id/manual_add_pages"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
                 android:hint="@string/pages"
                 android:inputType="number"
                 android:padding="10dp" />
         </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/manual_add_add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/add" />
-    </LinearLayout>
-
 
 </LinearLayout>

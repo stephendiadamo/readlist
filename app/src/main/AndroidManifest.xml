@@ -27,5 +27,9 @@
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
+
+        <activity
+            android:name=".book.BookManualAddActivity"
+            android:label="@string/cover_photo_capture" />
     </application>
 </manifest>
