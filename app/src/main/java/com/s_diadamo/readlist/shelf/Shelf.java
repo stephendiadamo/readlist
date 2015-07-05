@@ -16,8 +16,6 @@ public class Shelf {
     private String name;
     private int colour;
 
-    public Shelf() {
-    }
 
     public Shelf(int id, String name, int color) {
         this.id = id;

@@ -42,7 +42,7 @@ public class NavigationDrawerFragment extends Fragment {
     private NavigationItemAdapter navigationItemAdapter;
 
     private Runnable pendingRunnable;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
 
     public NavigationDrawerFragment() {
     }
@@ -94,10 +94,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void updateShelfFromExpandableList(Shelf shelf) {
         navigationItemAdapter.updateItemFromExpandableList(shelf);
-    }
-
-    public void notifyChanges() {
-        navigationItemAdapter.notifyChanges();
     }
 
     public boolean isDrawerOpen() {
@@ -236,10 +232,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
     private void showGlobalContextActionBar() {

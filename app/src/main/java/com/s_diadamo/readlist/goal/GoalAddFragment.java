@@ -26,11 +26,9 @@ import java.util.Calendar;
 public class GoalAddFragment extends Fragment {
 
     private View rootView;
-    private TextView startDateTextView;
-    private TextView endDateTextView;
     private String startDate = "";
     private String endDate = "";
-    private Calendar calendar = Calendar.getInstance();
+    private final Calendar calendar = Calendar.getInstance();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,8 +39,8 @@ public class GoalAddFragment extends Fragment {
         Button startDateButton = (Button) rootView.findViewById(R.id.add_goal_start_date_button);
         Button endDateButton = (Button) rootView.findViewById(R.id.add_goal_end_date_button);
 
-        startDateTextView = (TextView) rootView.findViewById(R.id.add_goal_start_date);
-        endDateTextView = (TextView) rootView.findViewById(R.id.add_goal_end_date);
+        TextView startDateTextView = (TextView) rootView.findViewById(R.id.add_goal_start_date);
+        TextView endDateTextView = (TextView) rootView.findViewById(R.id.add_goal_end_date);
 
         startDateButton.setOnClickListener(setDateCalendarOnClick(startDateTextView, 0));
         endDateButton.setOnClickListener(setDateCalendarOnClick(endDateTextView, 1));

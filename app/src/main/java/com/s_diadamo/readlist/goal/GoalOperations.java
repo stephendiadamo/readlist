@@ -9,7 +9,7 @@ import com.s_diadamo.readlist.DatabaseHelper;
 
 import java.util.ArrayList;
 
-public class GoalOperations {
+class GoalOperations {
 
     private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -37,36 +37,6 @@ public class GoalOperations {
         db = dbHelper.getReadableDatabase();
         ArrayList<Goal> goals = new ArrayList<>();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_GOALS;
-
-        Cursor cursor = db.rawQuery(query, null);
-        if (cursor.moveToFirst()) {
-            do {
-                Goal goal = parseGoal(cursor);
-                goals.add(goal);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return goals;
-    }
-
-    public ArrayList<Goal> getBookGoals() {
-        return getGoalsByType(Goal.BOOK_GOAL);
-    }
-
-    public ArrayList<Goal> getPageGoals() {
-        return getGoalsByType(Goal.PAGE_GOAL);
-    }
-
-    private ArrayList<Goal> getGoalsByType(int type) {
-        db = dbHelper.getReadableDatabase();
-        ArrayList<Goal> goals = new ArrayList<>();
-
-        String query = String.format("SELECT * FROM %s WHERE %s=%s",
-                DatabaseHelper.TABLE_GOALS,
-                DatabaseHelper.GOAL_TYPE,
-                String.valueOf(type)
-        );
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {

@@ -103,11 +103,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GOALS);
         onCreate(db);
     }
-
-    public void closeDB() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        if (db != null && db.isOpen()) {
-            db.close();
-        }
-    }
 }

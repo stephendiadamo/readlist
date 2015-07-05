@@ -146,20 +146,12 @@ public class Book {
         this.currentPage = currentPage;
     }
 
-    public int getColour() {
-        return colour;
-    }
-
     public void setColour(int colour) {
         this.colour = colour;
     }
 
     public Boolean isComplete() {
         return complete;
-    }
-
-    public void setComplete(Boolean complete) {
-        this.complete = complete;
     }
 
     public void markComplete() {
@@ -183,7 +175,7 @@ public class Book {
         return "";
     }
 
-    public void setCompletionDate(String completionDate) {
+    private void setCompletionDate(String completionDate) {
         this.completionDate = completionDate;
     }
 

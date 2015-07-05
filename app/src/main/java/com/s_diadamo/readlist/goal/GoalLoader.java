@@ -5,7 +5,7 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import java.util.ArrayList;
 
-public class GoalLoader extends AsyncTaskLoader<ArrayList<Goal>> {
+class GoalLoader extends AsyncTaskLoader<ArrayList<Goal>> {
 
     public static final int ID = 2;
     private final Context context;

@@ -11,13 +11,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Goal {
+class Goal {
 
     private int id;
-    private int type;
-    private int amount;
-    private String startDate;
-    private String endDate;
+    private final int type;
+    private final int amount;
+    private final String startDate;
+    private final String endDate;
     private boolean isComplete;
     public static final int BOOK_GOAL = 0;
     public static final int PAGE_GOAL = 1;
@@ -26,14 +26,6 @@ public class Goal {
 
     public Goal(int id, int type, int amount, String startDate, String endDate, int isComplete) {
         this.id = id;
-        this.type = type;
-        this.amount = amount;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.isComplete = (isComplete == 1);
-    }
-
-    public Goal(int type, int amount, String startDate, String endDate, int isComplete) {
         this.type = type;
         this.amount = amount;
         this.startDate = startDate;
@@ -77,12 +69,8 @@ public class Goal {
         return isComplete;
     }
 
-    public void markComplete() {
+    private void markComplete() {
         isComplete = true;
-    }
-
-    public void markIncomplete() {
-        isComplete = false;
     }
 
     public int getProgress(Context context) {

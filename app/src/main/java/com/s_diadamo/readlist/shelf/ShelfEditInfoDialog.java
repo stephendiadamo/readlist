@@ -12,7 +12,6 @@ import android.widget.ImageView;
 
 import com.s_diadamo.readlist.ColourPickerDialog;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookAdapter;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 

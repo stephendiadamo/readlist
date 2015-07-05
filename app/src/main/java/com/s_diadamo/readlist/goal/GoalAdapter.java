@@ -12,9 +12,8 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.R;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class GoalAdapter extends ArrayAdapter<Goal> {
+class GoalAdapter extends ArrayAdapter<Goal> {
 
     private final Context context;
     private final int layoutResourceID;

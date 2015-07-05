@@ -28,10 +28,6 @@ public class Update {
         this.pages = pages;
     }
 
-    public int getId() {
-        return id;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -40,24 +36,12 @@ public class Update {
         return bookId;
     }
 
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
     public String getDate() {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public int getPages() {
         return pages;
-    }
-
-    public void setPages(int pages) {
-        this.pages = pages;
     }
 
 }

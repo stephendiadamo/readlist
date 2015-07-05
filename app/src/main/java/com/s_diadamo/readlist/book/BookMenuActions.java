@@ -18,8 +18,6 @@ import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfEditInfoDialog;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
-import java.util.ArrayList;
-
 class BookMenuActions {
 
     private final View view;

@@ -23,7 +23,6 @@ import java.util.ArrayList;
 
 public class BookEditFragment extends Fragment {
 
-    private View rootView;
     private Book book;
     private BookOperations bookOperations;
     private EditText bookTitle;
@@ -35,7 +34,7 @@ public class BookEditFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_edit_book, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_edit_book, container, false);
 
         setHasOptionsMenu(true);
 

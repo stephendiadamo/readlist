@@ -32,23 +32,6 @@ public class UpdateOperations {
         db.close();
     }
 
-    public ArrayList<Update> getAllUpdates() {
-        db = dbHelper.getReadableDatabase();
-        ArrayList<Update> updates = new ArrayList<>();
-        String selectQuery = "SELECT * FROM " + DatabaseHelper.TABLE_UPDATES;
-
-        Cursor cursor = db.rawQuery(selectQuery, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                Update update = parseUpdate(cursor);
-                updates.add(update);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-        db.close();
-        return updates;
-    }
-
     public int getAllTimePagesRead() {
         db = dbHelper.getReadableDatabase();
         int numPages = 0;
