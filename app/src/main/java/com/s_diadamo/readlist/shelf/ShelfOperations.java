@@ -34,7 +34,8 @@ public class ShelfOperations {
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
-        db.insert(DatabaseHelper.TABLE_SHELVES, null, values);
+        long id = db.insert(DatabaseHelper.TABLE_SHELVES, null, values);
+        shelf.setId((int) id);
         db.close();
     }
 

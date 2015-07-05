@@ -27,7 +27,8 @@ public class UpdateOperations {
         values.put(DatabaseHelper.UPDATE_DATE, update.getDate());
         values.put(DatabaseHelper.UPDATE_PAGES, update.getPages());
 
-        db.insert(DatabaseHelper.TABLE_UPDATES, null, values);
+        long id = db.insert(DatabaseHelper.TABLE_UPDATES, null, values);
+        update.setId((int) id);
         db.close();
     }
 

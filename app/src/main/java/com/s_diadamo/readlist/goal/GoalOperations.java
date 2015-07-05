@@ -28,7 +28,8 @@ public class GoalOperations {
         values.put(DatabaseHelper.GOAL_END_DATE, goal.getEndDate());
         values.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
 
-        db.insert(DatabaseHelper.TABLE_GOALS, null, values);
+        long id = db.insert(DatabaseHelper.TABLE_GOALS, null, values);
+        goal.setId((int) id);
         db.close();
     }
 

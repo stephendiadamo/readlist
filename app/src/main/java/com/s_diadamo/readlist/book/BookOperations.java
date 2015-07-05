@@ -42,7 +42,8 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
 
-        db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
+        long id = db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
+        book.setId((int) id);
         db.close();
     }
 
