@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;
@@ -84,7 +85,7 @@ public class BookEditFragment extends Fragment {
 
         if (id == R.id.edit_book_done) {
             updateBookValues();
-            launchBookFragment();
+            Utils.launchBookFragment(getActivity().getSupportFragmentManager());
             return true;
         }
 
@@ -98,13 +99,5 @@ public class BookEditFragment extends Fragment {
         int selectedShelfPosition = shelfSpinner.getSelectedItemPosition();
         book.setShelfId(shelves.get(selectedShelfPosition).getId());
         bookOperations.updateBook(book);
-    }
-
-    private void launchBookFragment() {
-        Fragment fragment = new BookFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .commit();
     }
 }

@@ -15,7 +15,6 @@ import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
-import com.s_diadamo.readlist.shelf.ShelfEditInfoDialog;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 class BookMenuActions {
@@ -60,11 +59,6 @@ class BookMenuActions {
             }
         });
         searchBookDialog.show();
-    }
-
-    public void editShelfInfo(final Shelf shelf, ActionBar actionBar, NavigationDrawerFragment navDrawer) {
-        ShelfEditInfoDialog editShelfDialog = new ShelfEditInfoDialog(view.getContext(), shelf, actionBar, bookAdapter, navDrawer);
-        editShelfDialog.show();
     }
 
     public void deleteShelf(final Shelf shelf, final NavigationDrawerFragment shelfDrawer) {

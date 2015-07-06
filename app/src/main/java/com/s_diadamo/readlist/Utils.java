@@ -2,11 +2,15 @@ package com.s_diadamo.readlist;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+
+import com.s_diadamo.readlist.book.BookFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,5 +87,12 @@ public class Utils {
         if (imm.isAcceptingText() && activity.getCurrentFocus() != null) {
             imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
+    }
+
+    public static void launchBookFragment(FragmentManager fragmentManager){
+        Fragment fragment = new BookFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
     }
 }

@@ -96,6 +96,10 @@ public class NavigationDrawerFragment extends Fragment {
         navigationItemAdapter.updateItemFromExpandableList(shelf);
     }
 
+    public void addShelf(Shelf shelf) {
+        navigationItemAdapter.addShelf(shelf);
+    }
+
     public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }

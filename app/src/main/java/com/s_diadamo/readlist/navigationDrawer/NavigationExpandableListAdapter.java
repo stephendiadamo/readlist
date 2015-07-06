@@ -1,8 +1,13 @@
 package com.s_diadamo.readlist.navigationDrawer;
 
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +20,7 @@ import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.shelf.Shelf;
-import com.s_diadamo.readlist.shelf.ShelfAddDialog;
+import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 
 import java.util.ArrayList;
 
@@ -130,8 +135,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
                         break;
                     case MotionEvent.ACTION_UP:
                         v.getParent().requestDisallowInterceptTouchEvent(false);
-                        ShelfAddDialog shelfAddDialog = new ShelfAddDialog(getMe().context, getMe());
-                        shelfAddDialog.show();
+                        launchAddShelfFragment();
                         navShelfParentHolder.addShelf.setBackgroundColor(Color.TRANSPARENT);
                         break;
                 }
@@ -143,8 +147,17 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         return row;
     }
 
-    private NavigationExpandableListAdapter getMe() {
-        return this;
+    private void launchAddShelfFragment() {
+        try {
+            AppCompatActivity activity = (AppCompatActivity) context;
+            FragmentManager fragmentManager = activity.getSupportFragmentManager();
+            Fragment fragment = new ShelfAddEditFragment();
+            fragmentManager.beginTransaction()
+                    .addToBackStack("MAIN_ACTIVITY")
+                    .replace(R.id.container, fragment)
+                    .commit();
+        } catch (ClassCastException e) {
+        }
     }
 
     @Override

@@ -127,8 +127,8 @@ class NavigationItemAdapter extends BaseAdapter {
         this.expandableListAdapter.updateShelf(shelf);
     }
 
-    public void notifyChanges() {
-        this.expandableListAdapter.notifyChanges();
+    public void addShelf(Shelf shelf) {
+        this.expandableListAdapter.addShelf(shelf);
     }
 
     static class NavigationItemHolder {

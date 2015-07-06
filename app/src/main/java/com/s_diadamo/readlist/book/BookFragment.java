@@ -31,6 +31,7 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
+import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 import com.s_diadamo.readlist.shelf.ShelfLoader;
 import com.s_diadamo.readlist.updates.Update;
 import com.s_diadamo.readlist.updates.UpdateOperations;
@@ -49,6 +50,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private SharedPreferences prefs;
 
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
+    private static final String EDIT_BOOK = "EDIT_BOOK";
+    private static final String BOOK_ID = "BOOK_ID";
 
     @Nullable
     @Override
@@ -126,9 +129,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             launchScanner();
             return true;
         } else if (id == R.id.edit_shelf) {
-            bookMenuActions.editShelfInfo(shelf, ((AppCompatActivity) getActivity()).getSupportActionBar(), ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
-                    findFragmentById(R.id.navigation_drawer)));
-
+            launchEditShelfFragment();
             return true;
         } else if (id == R.id.delete_shelf) {
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
@@ -208,18 +209,33 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void launchEditBookFragment(Book book) {
-        Fragment fragment = new BookEditFragment();
         Bundle bundle = new Bundle();
         String bookId = String.valueOf(book.getId());
-        bundle.putString("BOOK_ID", bookId);
-        fragment.setArguments(bundle);
+        bundle.putString(BOOK_ID, bookId);
 
+        Fragment fragment = new BookEditFragment();
+        fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .addToBackStack("EDIT_BOOK")
+                .addToBackStack(EDIT_BOOK)
                 .replace(R.id.container, fragment)
                 .commit();
     }
+
+    private void launchEditShelfFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
+        bundle.putString(ShelfAddEditFragment.EDIT_MODE, "yes");
+
+        Fragment fragment = new ShelfAddEditFragment();
+        fragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .addToBackStack(EDIT_BOOK)
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
 
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
