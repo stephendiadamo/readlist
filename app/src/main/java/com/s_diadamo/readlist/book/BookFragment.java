@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
@@ -134,7 +135,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (id == R.id.delete_shelf) {
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
                 bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
-                        findFragmentById(R.id.navigation_drawer)));
+                        findFragmentById(R.id.navigation_drawer)), getActivity().getSupportFragmentManager());
             } else {
                 Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
             }
