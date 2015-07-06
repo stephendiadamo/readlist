@@ -2,7 +2,7 @@ package com.s_diadamo.readlist.book;
 
 import android.graphics.drawable.ColorDrawable;
 
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

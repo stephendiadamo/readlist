@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.s_diadamo.readlist.DatabaseHelper;
+import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
 

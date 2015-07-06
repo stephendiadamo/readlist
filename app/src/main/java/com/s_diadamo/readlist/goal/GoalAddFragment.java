@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 
 import java.util.Calendar;
 

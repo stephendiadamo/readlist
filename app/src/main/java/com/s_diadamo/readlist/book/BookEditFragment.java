@@ -3,7 +3,6 @@ package com.s_diadamo.readlist.book;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;

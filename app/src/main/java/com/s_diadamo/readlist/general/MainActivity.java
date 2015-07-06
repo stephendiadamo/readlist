@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.general;
 
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
+import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;

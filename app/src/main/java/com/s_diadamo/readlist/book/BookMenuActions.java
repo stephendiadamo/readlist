@@ -7,13 +7,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;

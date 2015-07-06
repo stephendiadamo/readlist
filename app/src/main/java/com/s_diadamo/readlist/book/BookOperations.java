@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.s_diadamo.readlist.DatabaseHelper;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.database.DatabaseHelper;
+import com.s_diadamo.readlist.general.Utils;
 
 public class BookOperations {
     private final String[] BOOK_TABLE_COLUMNS = {
@@ -125,7 +125,6 @@ public class BookOperations {
             return getNumberOfBooksReadBetweenDates(start, end);
         }
         return 0;
-
     }
 
     public int getNumberOfBooksReadThisYear() {

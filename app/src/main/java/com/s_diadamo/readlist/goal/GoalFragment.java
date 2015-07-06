@@ -21,7 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 

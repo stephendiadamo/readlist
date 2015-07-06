@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
-import com.s_diadamo.readlist.updates.Update;
-import com.s_diadamo.readlist.updates.UpdateOperations;
+import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.updates.PageUpdate;
+import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 class BookUpdatePageDialog extends AlertDialog {
     public BookUpdatePageDialog(final Context context, final Book book, final BookAdapter bookAdapter, final BookOperations bookOperations) {
@@ -19,7 +19,7 @@ class BookUpdatePageDialog extends AlertDialog {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View content = layoutInflater.inflate(R.layout.dialog_set_book_current_page, null);
 
-        setTitle("Update Page");
+        setTitle("PageUpdate Page");
 
         final NumberPicker pagePicker = (NumberPicker) content.findViewById(R.id.set_page_picker);
         pagePicker.setMinValue(0);
@@ -52,8 +52,8 @@ class BookUpdatePageDialog extends AlertDialog {
                 bookOperations.updateBook(book);
                 bookAdapter.notifyDataSetChanged();
 
-                Update update = new Update(book.getId(), Utils.getCurrentDate(), pagePicker.getValue());
-                new UpdateOperations(context).addUpdate(update);
+                PageUpdate pageUpdate = new PageUpdate(book.getId(), Utils.getCurrentDate(), pagePicker.getValue());
+                new PageUpdateOperations(context).addPageUpdate(pageUpdate);
 
                 dismiss();
             }

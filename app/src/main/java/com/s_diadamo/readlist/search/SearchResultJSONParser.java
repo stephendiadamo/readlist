@@ -3,7 +3,7 @@ package com.s_diadamo.readlist.search;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.shelf.Shelf;
 

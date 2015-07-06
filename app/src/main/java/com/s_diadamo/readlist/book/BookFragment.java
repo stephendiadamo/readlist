@@ -27,15 +27,16 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 import com.s_diadamo.readlist.shelf.ShelfLoader;
-import com.s_diadamo.readlist.updates.Update;
-import com.s_diadamo.readlist.updates.UpdateOperations;
+import com.s_diadamo.readlist.updates.BookUpdate;
+import com.s_diadamo.readlist.updates.BookUpdateOperations;
+import com.s_diadamo.readlist.updates.PageUpdate;
+import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 import java.util.ArrayList;
 
@@ -240,14 +241,16 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
-        new UpdateOperations(rootView.getContext()).
-                addUpdate(new Update(book.getId(), remainingPages));
+        new PageUpdateOperations(rootView.getContext()).
+                addPageUpdate(new PageUpdate(book.getId(), remainingPages));
 
         book.markComplete();
         book.setCurrentPage(book.getNumPages());
 
         bookAdapter.notifyDataSetChanged();
         bookOperations.updateBook(book);
+
+        (new BookUpdateOperations(rootView.getContext())).addBookUpdate(new BookUpdate(book.getId()));
     }
 
     private void toggleHideCompletedBooks() {

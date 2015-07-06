@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.general;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 
 import java.text.ParseException;

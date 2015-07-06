@@ -23,7 +23,8 @@ import com.s_diadamo.readlist.book.BookOperations;
 public class StatisticsFragment extends Fragment {
     private View rootView;
     private BookOperations bookOperations;
-    private UpdateOperations updateOperations;
+    private BookUpdateOperations bookUpdateOperations;
+    private PageUpdateOperations pageUpdateOperations;
 
     @Nullable
     @Override
@@ -33,7 +34,8 @@ public class StatisticsFragment extends Fragment {
         setHasOptionsMenu(true);
 
         bookOperations = new BookOperations(container.getContext());
-        updateOperations = new UpdateOperations(container.getContext());
+        bookUpdateOperations = new BookUpdateOperations(container.getContext());
+        pageUpdateOperations = new PageUpdateOperations(container.getContext());
 
         ProgressDialog progressDialog = new ProgressDialog(rootView.getContext());
         progressDialog.setMessage("Crunching the numbers.");
@@ -63,7 +65,8 @@ public class StatisticsFragment extends Fragment {
                     "This cannot be undone.");
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    updateOperations.resetStatistics();
+                    pageUpdateOperations.resetStatistics();
+                    bookUpdateOperations.resetStatistics();
                     populateData();
                 }
             });
@@ -94,9 +97,9 @@ public class StatisticsFragment extends Fragment {
         TextView yearlyPages = (TextView) rootView.findViewById(R.id.updates_yearly_pages_read);
         TextView yearlyBooks = (TextView) rootView.findViewById(R.id.updates_yearly_books_read);
 
-        yearlyUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdatesThisYear()));
-        yearlyPages.setText(String.valueOf(updateOperations.getNumberOfPagesThisYear()));
-        yearlyBooks.setText(String.valueOf(bookOperations.getNumberOfBooksReadThisYear()));
+        yearlyUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdatesThisYear()));
+        yearlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesThisYear()));
+        yearlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisYear()));
     }
 
     private void setMonthlyData() {
@@ -104,9 +107,9 @@ public class StatisticsFragment extends Fragment {
         TextView monthlyPages = (TextView) rootView.findViewById(R.id.updates_monthly_pages_read);
         TextView monthlyBooks = (TextView) rootView.findViewById(R.id.updates_monthly_books_read);
 
-        monthlyUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdatesThisMonth()));
-        monthlyPages.setText(String.valueOf(updateOperations.getNumberOfPagesReadThisMonth()));
-        monthlyBooks.setText(String.valueOf(bookOperations.getNumberOfBooksReadThisMonth()));
+        monthlyUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdatesThisMonth()));
+        monthlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesReadThisMonth()));
+        monthlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisMonth()));
 
     }
 
@@ -114,8 +117,8 @@ public class StatisticsFragment extends Fragment {
         TextView averageWeeklyUpdates = (TextView) rootView.findViewById(R.id.updates_weekly_updates);
         TextView averageWeeklyPages = (TextView) rootView.findViewById(R.id.updates_weekly_pages_read);
 
-        averageWeeklyUpdates.setText(String.valueOf(updateOperations.getAverageWeeklyUpdates()));
-        averageWeeklyPages.setText(String.valueOf(updateOperations.getAverageWeeklyPages()));
+        averageWeeklyUpdates.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPageUpdates()));
+        averageWeeklyPages.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPages()));
     }
 
     private void setAllTimeData() {
@@ -124,10 +127,10 @@ public class StatisticsFragment extends Fragment {
         TextView allTimeBooks = (TextView) rootView.findViewById(R.id.updates_all_time_books);
         TextView allTimeBooksRead = (TextView) rootView.findViewById(R.id.updates_all_time_books_read);
 
-        allTimeUpdates.setText(String.valueOf(updateOperations.getNumberOfUpdates()));
-        allTimePages.setText(String.valueOf(updateOperations.getAllTimePagesRead()));
+        allTimeUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdates()));
+        allTimePages.setText(String.valueOf(pageUpdateOperations.getAllTimePagesRead()));
         allTimeBooks.setText(String.valueOf(bookOperations.getBooksCount()));
-        allTimeBooksRead.setText(String.valueOf(bookOperations.getNumberOfBooksRead()));
+        allTimeBooksRead.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksRead()));
     }
 
 }

@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist;
+package com.s_diadamo.readlist.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +11,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // Tables
     public static final String TABLE_BOOKS = "books";
     public static final String TABLE_SHELVES = "shelves";
-    public static final String TABLE_UPDATES = "updates";
+    public static final String TABLE_PAGE_UPDATES = "page_updates";
+    public static final String TABLE_BOOK_UPDATES = "book_updates";
     public static final String TABLE_GOALS = "goals";
 
     // Common columns
@@ -32,10 +33,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SHELF_NAME = "name";
     public static final String SHELF_COLOR = "color";
 
-    // Updates table columns
-    public static final String UPDATE_BOOK_ID = "book_id";
-    public static final String UPDATE_DATE = "date";
-    public static final String UPDATE_PAGES = "pages";
+    // Page Updates table columns
+    public static final String PAGE_UPDATE_BOOK_ID = "book_id";
+    public static final String PAGE_UPDATE_DATE = "date";
+    public static final String PAGE_UPDATE_PAGES = "pages";
+
+    // Book Updates table colums
+    public static final String BOOK_UPDATE_BOOK_ID = "book_id";
+    public static final String BOOK_UPDATE_DATE = "date";
 
     // Goals table columns
     public static final String GOAL_TYPE = "type";
@@ -65,12 +70,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             SHELF_COLOR + " TEXT" +
             ")";
 
-    private static final String CREATE_UPDATES_TABLE = "CREATE TABLE " + TABLE_UPDATES +
+    private static final String CREATE_PAGE_UPDATES_TABLE = "CREATE TABLE " + TABLE_PAGE_UPDATES +
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            UPDATE_BOOK_ID + " INTEGER, " +
-            UPDATE_DATE + " TEXT, " +
-            UPDATE_PAGES + " INTEGER" +
+            PAGE_UPDATE_BOOK_ID + " INTEGER, " +
+            PAGE_UPDATE_DATE + " TEXT, " +
+            PAGE_UPDATE_PAGES + " INTEGER" +
+            ")";
+
+    private static final String CREATE_BOOK_UPDATES_TABLE = "CREATE TABLE " + TABLE_BOOK_UPDATES +
+            "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            BOOK_UPDATE_BOOK_ID + " INTEGER, " +
+            BOOK_UPDATE_DATE + " TEXT" +
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
@@ -91,7 +103,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_BOOKS_TABLE);
         db.execSQL(CREATE_SHELVES_TABLE);
-        db.execSQL(CREATE_UPDATES_TABLE);
+        db.execSQL(CREATE_PAGE_UPDATES_TABLE);
+        db.execSQL(CREATE_BOOK_UPDATES_TABLE);
         db.execSQL(CREATE_GOALS_TABLE);
     }
 
@@ -99,7 +112,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOKS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SHELVES);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_UPDATES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PAGE_UPDATES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BOOK_UPDATES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GOALS);
         onCreate(db);
     }

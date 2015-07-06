@@ -2,9 +2,9 @@ package com.s_diadamo.readlist.goal;
 
 import android.content.Context;
 
-import com.s_diadamo.readlist.Utils;
-import com.s_diadamo.readlist.book.BookOperations;
-import com.s_diadamo.readlist.updates.UpdateOperations;
+import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.updates.BookUpdateOperations;
+import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -76,9 +76,9 @@ class Goal {
     public int getProgress(Context context) {
         int progress;
         if (type == PAGE_GOAL) {
-            progress = (new UpdateOperations(context)).getNumberOfPagesReadBetweenDates(startDate, endDate);
+            progress = (new PageUpdateOperations(context)).getNumberOfPagesReadBetweenDates(startDate, endDate);
         } else {
-            progress = (new BookOperations(context)).getNumberOfBooksReadBetweenDates(startDate, endDate);
+            progress = (new BookUpdateOperations(context)).getNumberOfBooksReadBetweenDates(startDate, endDate);
         }
         if (progress >= amount && !isComplete) {
             markComplete();

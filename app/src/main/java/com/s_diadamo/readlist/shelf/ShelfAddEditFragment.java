@@ -15,9 +15,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.s_diadamo.readlist.MainActivity;
+import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.Utils;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 
 public class ShelfAddEditFragment extends Fragment {

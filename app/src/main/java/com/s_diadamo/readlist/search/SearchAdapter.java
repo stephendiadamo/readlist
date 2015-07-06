@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.s_diadamo.readlist.MainActivity;
+import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
 
