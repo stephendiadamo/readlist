@@ -28,6 +28,7 @@ public class ShelfAddEditFragment extends Fragment {
     private ShelfOperations shelfOperations;
     private EditText shelfEditText;
     private boolean isEditMode = false;
+    private int selectedColourId;
 
     @Nullable
     @Override
@@ -50,7 +51,7 @@ public class ShelfAddEditFragment extends Fragment {
                 (ImageView) rootView.findViewById(R.id.color_pallet_dark_orange),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_red),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_blue),
-                (ImageView) rootView.findViewById(R.id.color_pallet_dark_gray),
+                (ImageView) rootView.findViewById(R.id.color_pallet_white),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_green),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_orange)
         };
@@ -69,14 +70,22 @@ public class ShelfAddEditFragment extends Fragment {
                 }
 
                 v.setLayoutParams(selectedParams);
+                int colourId;
+                if (v.getId() != R.id.color_pallet_white) {
+                    colourId = ((ColorDrawable) v.getBackground()).getColor();
+                } else {
+                    colourId = Shelf.DEFAULT_COLOR;
+                }
 
-                int colourId = ((ColorDrawable) v.getBackground()).getColor();
                 shelf.setColour(colourId);
             }
         });
 
         for (ImageView colour : colours) {
             colour.setOnClickListener(listener);
+            if (((ColorDrawable) colour.getBackground()).getColor() == shelf.getColour()) {
+                colour.setLayoutParams(selectedParams);
+            }
         }
 
         if (isEditMode) {
@@ -87,7 +96,7 @@ public class ShelfAddEditFragment extends Fragment {
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
-            if (isEditMode){
+            if (isEditMode) {
                 ab.setTitle(shelf.getName());
             } else {
                 ab.setTitle("Add Shelf");

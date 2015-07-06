@@ -83,12 +83,12 @@
             android:background="@android:color/holo_blue_light" />
 
         <ImageView
-            android:id="@+id/color_pallet_dark_gray"
+            android:id="@+id/color_pallet_white"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
             android:layout_weight="0.20"
-            android:background="@android:color/darker_gray" />
+            android:background="@android:color/white" />
 
         <ImageView
             android:id="@+id/color_pallet_light_green"
