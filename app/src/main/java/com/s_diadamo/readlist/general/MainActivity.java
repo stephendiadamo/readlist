@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, objFragment)
                 .commit();
