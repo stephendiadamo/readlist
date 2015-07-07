@@ -4,6 +4,7 @@ package com.s_diadamo.readlist.search;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,16 +27,14 @@ import java.util.ArrayList;
 public class Search {
 
     private final Context context;
-    private final BookAdapter bookAdapter;
-    private final BookOperations bookOperations;
     private final String fields = "kind,items/volumeInfo(title,authors,pageCount,imageLinks/smallThumbnail)";
     private final Shelf shelf;
+    private final FragmentManager manager;
     private final String API_KEY = API.getGoogleBooksApiKey();
 
-    public Search(Context context, BookAdapter bookAdapter, BookOperations bookOperations, Shelf shelf) {
+    public Search(Context context, FragmentManager manager, Shelf shelf){
         this.context = context;
-        this.bookAdapter = bookAdapter;
-        this.bookOperations = bookOperations;
+        this.manager = manager;
         this.shelf = shelf;
     }
 
@@ -79,7 +78,7 @@ public class Search {
             @Override
             public void onResponse(String response) {
                 ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelf);
-                SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, bookAdapter, bookOperations);
+                SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, manager);
                 progressDialog.dismiss();
                 searchResultDialog.show();
             }

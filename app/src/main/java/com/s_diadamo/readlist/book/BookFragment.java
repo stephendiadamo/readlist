@@ -119,10 +119,10 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
-        BookMenuActions bookMenuActions = (new BookMenuActions(rootView, bookOperations, bookAdapter, shelf));
+        BookMenuActions bookMenuActions = new BookMenuActions(rootView.getContext(), bookOperations, bookAdapter, shelf);
 
         if (id == R.id.add_book_search) {
-            bookMenuActions.searchBook();
+            bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
             return true;
         } else if (id == R.id.add_book_manually) {
             bookMenuActions.manuallyAddBook();
@@ -173,7 +173,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.updateBook(book);
                 } else {
-                    (new BookMenuActions(rootView, bookOperations, bookAdapter, shelf)).setCurrentPage(book);
+                    (new BookMenuActions(rootView.getContext(), bookOperations, bookAdapter, shelf)).setCurrentPage(book);
                 }
                 return true;
             case R.id.mark_complete:
@@ -238,7 +238,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .commit();
     }
 
-
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
         new PageUpdateOperations(rootView.getContext()).
@@ -285,7 +284,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (result != null) {
             String bookISBN = result.getContents();
             if (bookISBN != null && !bookISBN.isEmpty()) {
-                Search search = new Search(rootView.getContext(), bookAdapter, bookOperations, shelf);
+                Search search = new Search(rootView.getContext(), getActivity().getSupportFragmentManager(), shelf);
                 search.searchWithISBN(bookISBN);
             }
         } else {

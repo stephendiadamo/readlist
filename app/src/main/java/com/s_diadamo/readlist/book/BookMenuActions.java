@@ -4,6 +4,7 @@ package com.s_diadamo.readlist.book;
 import android.app.AlertDialog;
 import android.app.Dialog;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -20,31 +21,31 @@ import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 class BookMenuActions {
 
-    private final View view;
+    private final Context context;
     private final BookOperations bookOperations;
     private final BookAdapter bookAdapter;
     private final Shelf shelf;
 
-    public BookMenuActions(View view, BookOperations bookOperations, BookAdapter bookAdapter, Shelf shelf) {
-        this.view = view;
+    public BookMenuActions(Context context, BookOperations bookOperations, BookAdapter bookAdapter, Shelf shelf) {
+        this.context = context;
         this.bookOperations = bookOperations;
         this.bookAdapter = bookAdapter;
         this.shelf = shelf;
     }
 
     public void setCurrentPage(final Book book) {
-        BookUpdatePageDialog bookUpdatePageDialog = new BookUpdatePageDialog(view.getContext(), book, bookAdapter, bookOperations);
+        BookUpdatePageDialog bookUpdatePageDialog = new BookUpdatePageDialog(context, book, bookAdapter, bookOperations);
         bookUpdatePageDialog.show();
     }
 
     public void manuallyAddBook() {
-        Intent intent = new Intent(view.getContext(), BookManualAddActivity.class);
+        Intent intent = new Intent(context, BookManualAddActivity.class);
         intent.putExtra(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
-        view.getContext().startActivity(intent);
+        context.startActivity(intent);
     }
 
-    public void searchBook() {
-        final Dialog searchBookDialog = new Dialog(view.getContext());
+    public void searchBook(final FragmentManager manager) {
+        final Dialog searchBookDialog = new Dialog(context);
         searchBookDialog.setContentView(R.layout.dialog_search_book);
         searchBookDialog.setTitle("Search");
 
@@ -54,7 +55,7 @@ class BookMenuActions {
             public void onClick(View v) {
                 String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
                 String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
-                Search search = new Search(view.getContext(), bookAdapter, bookOperations, shelf);
+                Search search = new Search(context, manager, shelf);
                 search.searchWithAuthorAndTitle(bookAuthor, bookTitle);
                 searchBookDialog.dismiss();
             }
@@ -63,14 +64,14 @@ class BookMenuActions {
     }
 
     public void deleteShelf(final Shelf shelf, final NavigationDrawerFragment shelfDrawer, final FragmentManager manager) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle("Delete Shelf");
         builder.setMessage("Delete " + shelf.getName() + "?");
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                new ShelfOperations(view.getContext()).deleteShelf(shelf);
+                new ShelfOperations(context).deleteShelf(shelf);
                 shelfDrawer.deleteItemFromExpandableList(shelf);
                 Utils.launchBookFragment(manager);
                 dialog.dismiss();

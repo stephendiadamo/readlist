@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,7 +17,7 @@ import com.s_diadamo.readlist.R;
 
 import java.util.ArrayList;
 
-public class BookAdapter extends ArrayAdapter<Book> {
+public class BookAdapter extends BaseAdapter {
 
     private final static String STORAGE_FILE_START = "/storage";
 
@@ -25,7 +26,6 @@ public class BookAdapter extends ArrayAdapter<Book> {
     private final ArrayList<Book> books;
 
     public BookAdapter(Context context, int layoutResourceID, ArrayList<Book> books) {
-        super(context, layoutResourceID, books);
         this.context = context;
         this.layoutResourceID = layoutResourceID;
         this.books = books;
@@ -40,6 +40,27 @@ public class BookAdapter extends ArrayAdapter<Book> {
         }
         notifyDataSetChanged();
         notifyDataSetInvalidated();
+    }
+
+    public void addBook(Book book) {
+        books.add(book);
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
+    }
+
+    @Override
+    public int getCount() {
+        return books.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return books.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return books.get(position).getId();
     }
 
     @Override
