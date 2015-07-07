@@ -50,6 +50,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private int shelfId;
     private MenuItem hideCompletedBooks;
     private SharedPreferences prefs;
+    private boolean loading = true;
 
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String EDIT_BOOK = "EDIT_BOOK";
@@ -108,7 +109,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         hideCompletedBooks = menu.findItem(R.id.hide_completed_books);
         hideCompletedBooks.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
-        updateVisibleBooks();
 
         if (shelfId == Shelf.DEFAULT_SHELF_ID) {
             menu.findItem(R.id.edit_shelf).setVisible(false);
@@ -261,10 +261,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void updateVisibleBooks() {
-        if (hideCompletedBooks.isChecked()) {
+        if (hideCompletedBooks.isChecked() && !loading) {
             bookAdapter.hideCompletedBooks();
-        } else {
-            getLoaderManager().initLoader(BookLoader.ID, null, this);
+        } else if (shelf != null && !loading) {
+            userBooks = shelf.fetchBooks(rootView.getContext());
+            bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
+            bookListView.setAdapter(bookAdapter);
         }
     }
 
@@ -311,6 +313,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 userBooks = (ArrayList<Book>) data;
                 bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
                 bookListView.setAdapter(bookAdapter);
+                loading = false;
+                updateVisibleBooks();
                 break;
             case ShelfLoader.ID:
                 shelf = (Shelf) data;

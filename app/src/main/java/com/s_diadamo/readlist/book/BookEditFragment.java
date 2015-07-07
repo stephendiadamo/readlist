@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 
 public class BookEditFragment extends Fragment {
-
     private Book book;
     private BookOperations bookOperations;
     private EditText bookTitle;
@@ -84,6 +83,7 @@ public class BookEditFragment extends Fragment {
 
         if (id == R.id.edit_book_done) {
             updateBookValues();
+            Utils.hideKeyBoard(getActivity());
             Utils.launchBookFragment(getActivity().getSupportFragmentManager());
             return true;
         }

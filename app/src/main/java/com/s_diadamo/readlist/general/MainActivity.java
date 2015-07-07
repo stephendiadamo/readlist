@@ -23,7 +23,6 @@ import com.s_diadamo.readlist.updates.StatisticsFragment;
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
@@ -36,7 +35,6 @@ public class MainActivity extends AppCompatActivity
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
-        // Set up the drawer.
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
