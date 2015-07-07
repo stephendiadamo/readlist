@@ -152,6 +152,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        menu.clear();
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.menu_book_actions, menu);
 

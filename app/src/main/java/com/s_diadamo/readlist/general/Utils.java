@@ -90,7 +90,10 @@ public class Utils {
         }
     }
 
-    public static void launchBookFragment(FragmentManager fragmentManager){
+    public static void launchBookFragment(FragmentManager fragmentManager) {
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
         Fragment fragment = new BookFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)

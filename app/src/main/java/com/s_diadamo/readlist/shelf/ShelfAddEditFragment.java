@@ -4,6 +4,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
@@ -169,6 +171,14 @@ public class ShelfAddEditFragment extends Fragment {
         }
 
         Utils.hideKeyBoard(getActivity());
-        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+
+        Fragment bookFragment = new BookFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
+        bookFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, bookFragment)
+                .commit();
     }
 }
