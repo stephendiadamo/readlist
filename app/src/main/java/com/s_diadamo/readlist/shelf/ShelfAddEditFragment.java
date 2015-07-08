@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.general.MainActivity;
@@ -26,6 +27,7 @@ public class ShelfAddEditFragment extends Fragment {
 
     public static final String EDIT_MODE = "EDIT_MODE";
 
+    private View rootView;
     private Shelf shelf;
     private ShelfOperations shelfOperations;
     private EditText shelfEditText;
@@ -35,7 +37,7 @@ public class ShelfAddEditFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_edit_shelf, container, false);
+        rootView = inflater.inflate(R.layout.fragment_add_edit_shelf, container, false);
 
         shelfOperations = new ShelfOperations(rootView.getContext());
 
@@ -157,7 +159,14 @@ public class ShelfAddEditFragment extends Fragment {
     }
 
     private void addShelf() {
-        shelf.setName(shelfEditText.getText().toString());
+        String shelfName = shelfEditText.getText().toString();
+
+        if (shelfName.isEmpty()) {
+            Toast.makeText(rootView.getContext(), "Please enter a shelf name.", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        shelf.setName(shelfName);
         if (isEditMode) {
             shelfOperations.updateShelf(shelf);
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
@@ -177,6 +186,11 @@ public class ShelfAddEditFragment extends Fragment {
         bundle.putString(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
         bookFragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, bookFragment)
                 .commit();

@@ -132,15 +132,17 @@ public class GoalAddFragment extends Fragment {
             (new GoalOperations(rootView.getContext())).addGoal(goal);
             backToGoals();
         } else {
-            Toast.makeText(rootView.getContext(), "Please fill out all fields.", Toast.LENGTH_LONG).show();
+            Toast.makeText(rootView.getContext(), "Please fill out all fields", Toast.LENGTH_LONG).show();
         }
     }
 
     private void backToGoals() {
         Utils.hideKeyBoard(getActivity());
-
         Fragment fragment = new GoalFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
