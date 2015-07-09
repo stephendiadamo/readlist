@@ -8,8 +8,8 @@ android {
         applicationId "com.s_diadamo.readlist"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 102
-        versionName "1.0.2"
+        versionCode 103
+        versionName "1.0.3"
     }
     buildTypes {
         release {
@@ -25,6 +25,9 @@ android {
 
 repositories {
     jcenter()
+    maven {
+        url "https://jitpack.io"
+    }
 }
 
 dependencies {
@@ -38,4 +41,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
     compile 'com.google.zxing:core:3.2.0'
+    compile 'com.github.QuadFlask:colorpicker:[0.0.9]'
 }

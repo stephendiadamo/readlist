@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.shelf;
 
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,10 +15,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.flask.colorpicker.ColorPickerView;
+import com.flask.colorpicker.OnColorSelectedListener;
+import com.flask.colorpicker.builder.ColorPickerClickListener;
+import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
@@ -33,6 +41,8 @@ public class ShelfAddEditFragment extends Fragment {
     private EditText shelfEditText;
     private boolean isEditMode = false;
     private int currentSelectedColour;
+    private ColorDrawable userSelectedColour;
+    private int colourPos;
 
     @Nullable
     @Override
@@ -57,7 +67,8 @@ public class ShelfAddEditFragment extends Fragment {
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_blue),
                 (ImageView) rootView.findViewById(R.id.color_pallet_white),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_green),
-                (ImageView) rootView.findViewById(R.id.color_pallet_light_orange)
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_orange),
+                (ImageView) rootView.findViewById(R.id.edit_shelf_more_colour_sample)
         };
 
         final ImageView selectors[] = {
@@ -70,15 +81,26 @@ public class ShelfAddEditFragment extends Fragment {
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_blue_selected),
                 (ImageView) rootView.findViewById(R.id.color_pallet_white_selected),
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_green_selected),
-                (ImageView) rootView.findViewById(R.id.color_pallet_light_orange_selected)
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_orange_selected),
+                (ImageView) rootView.findViewById(R.id.edit_shelf_custom_colour_selected)
         };
+
+        colourPos = colours.length - 1;
+
+        final ImageView customColour = colours[colourPos];
+        final ImageView customColourCheck = selectors[colourPos];
+        final FrameLayout customColourWrapper = (FrameLayout) rootView.findViewById(R.id.edit_shelf_colour_selector_wrapper);
 
         View.OnClickListener listener = (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectors[currentSelectedColour].setVisibility(View.GONE);
-                currentSelectedColour = colourToSelectorMap(v.getId());
-                selectors[currentSelectedColour].setVisibility(View.VISIBLE);
+                int mappedPosition = colourToSelectorMap(v.getId());
+
+                if (mappedPosition > -1) {
+                    currentSelectedColour = mappedPosition;
+                    selectors[currentSelectedColour].setVisibility(View.VISIBLE);
+                }
 
                 int colourId;
                 if (v.getId() != R.id.color_pallet_white) {
@@ -91,17 +113,62 @@ public class ShelfAddEditFragment extends Fragment {
         });
 
         int i = 0;
+        boolean didSetColour = false;
         for (ImageView colour : colours) {
             colour.setOnClickListener(listener);
-            if (((ColorDrawable) colour.getBackground()).getColor() == shelf.getColour()) {
+            if (!didSetColour && ((ColorDrawable) colour.getBackground()).getColor() == shelf.getColour()) {
                 selectors[i].setVisibility(View.VISIBLE);
+                didSetColour = true;
+                currentSelectedColour = i;
             }
             i++;
         }
 
-        if (isEditMode) {
-            shelfEditText.setText(shelf.getName());
+        if (!didSetColour && isEditMode) {
+            customColourCheck.setVisibility(View.VISIBLE);
+            customColourWrapper.setVisibility(View.VISIBLE);
+            customColour.setVisibility(View.VISIBLE);
+            customColour.setBackground(new ColorDrawable(shelf.getColour()));
+            currentSelectedColour = colourPos;
         }
+
+        Button moreColours = (Button) rootView.findViewById(R.id.edit_shelf_more_colours);
+        moreColours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ColorPickerDialogBuilder
+                        .with(rootView.getContext())
+                        .setTitle("More Colours")
+                        .wheelType(ColorPickerView.WHEEL_TYPE.FLOWER)
+                        .initialColor(Color.BLUE)
+                        .density(12)
+                        .setOnColorSelectedListener(new OnColorSelectedListener() {
+                            @Override
+                            public void onColorSelected(int selectedColour) {
+                                userSelectedColour = new ColorDrawable(selectedColour);
+                            }
+                        })
+                        .setPositiveButton("Done", new ColorPickerClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] allColors) {
+                                shelf.setColour(userSelectedColour.getColor());
+                                selectors[currentSelectedColour].setVisibility(View.GONE);
+                                customColourCheck.setVisibility(View.VISIBLE);
+                                customColourWrapper.setVisibility(View.VISIBLE);
+                                customColour.setVisibility(View.VISIBLE);
+                                customColour.setBackground(userSelectedColour);
+                                currentSelectedColour = colourPos;
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .build()
+                        .show();
+            }
+        });
 
         ((MainActivity) getActivity()).closeDrawer();
 
@@ -109,6 +176,7 @@ public class ShelfAddEditFragment extends Fragment {
         if (ab != null) {
             if (isEditMode) {
                 ab.setTitle(shelf.getName());
+                shelfEditText.setText(shelf.getName());
             } else {
                 ab.setTitle("Add Shelf");
             }
@@ -225,8 +293,10 @@ public class ShelfAddEditFragment extends Fragment {
                 return 8;
             case R.id.color_pallet_light_orange:
                 return 9;
+            case R.id.edit_shelf_more_colour_sample:
+                return 10;
             default:
-                return 7;
+                return -1;
         }
     }
 }

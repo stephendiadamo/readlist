@@ -54,6 +54,7 @@
     <string name="delete_goal">Delete Goal</string>
     <string name="dark_red">Dark Red</string>
     <string name="dark_blue">Dark Blue</string>
+    <string name="more_colours">More Colours</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
