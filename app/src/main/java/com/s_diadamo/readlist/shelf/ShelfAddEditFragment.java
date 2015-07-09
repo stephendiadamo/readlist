@@ -32,7 +32,7 @@ public class ShelfAddEditFragment extends Fragment {
     private ShelfOperations shelfOperations;
     private EditText shelfEditText;
     private boolean isEditMode = false;
-    private int selectedColourId;
+    private int currentSelectedColour;
 
     @Nullable
     @Override
@@ -60,36 +60,43 @@ public class ShelfAddEditFragment extends Fragment {
                 (ImageView) rootView.findViewById(R.id.color_pallet_light_orange)
         };
 
-        final ViewGroup.LayoutParams defaultParams = colours[0].getLayoutParams();
-        final ViewGroup.LayoutParams selectedParams = colours[1].getLayoutParams();
-        selectedParams.width = selectedParams.width + 15;
-        selectedParams.height = selectedParams.height + 15;
-        colours[1].setLayoutParams(defaultParams);
+        final ImageView selectors[] = {
+                (ImageView) rootView.findViewById(R.id.color_pallet_dark_red_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_dark_blue_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_purple_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_dark_green_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_dark_orange_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_red_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_blue_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_white_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_green_selected),
+                (ImageView) rootView.findViewById(R.id.color_pallet_light_orange_selected)
+        };
 
         View.OnClickListener listener = (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for (ImageView colour : colours) {
-                    colour.setLayoutParams(defaultParams);
-                }
+                selectors[currentSelectedColour].setVisibility(View.GONE);
+                currentSelectedColour = colourToSelectorMap(v.getId());
+                selectors[currentSelectedColour].setVisibility(View.VISIBLE);
 
-                v.setLayoutParams(selectedParams);
                 int colourId;
                 if (v.getId() != R.id.color_pallet_white) {
                     colourId = ((ColorDrawable) v.getBackground()).getColor();
                 } else {
                     colourId = Shelf.DEFAULT_COLOR;
                 }
-
                 shelf.setColour(colourId);
             }
         });
 
+        int i = 0;
         for (ImageView colour : colours) {
             colour.setOnClickListener(listener);
             if (((ColorDrawable) colour.getBackground()).getColor() == shelf.getColour()) {
-                colour.setLayoutParams(selectedParams);
+                selectors[i].setVisibility(View.VISIBLE);
             }
+            i++;
         }
 
         if (isEditMode) {
@@ -194,5 +201,32 @@ public class ShelfAddEditFragment extends Fragment {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, bookFragment)
                 .commit();
+    }
+
+    private int colourToSelectorMap(int colourId) {
+        switch (colourId) {
+            case R.id.color_pallet_dark_red:
+                return 0;
+            case R.id.color_pallet_dark_blue:
+                return 1;
+            case R.id.color_pallet_purple:
+                return 2;
+            case R.id.color_pallet_dark_green:
+                return 3;
+            case R.id.color_pallet_dark_orange:
+                return 4;
+            case R.id.color_pallet_light_red:
+                return 5;
+            case R.id.color_pallet_light_blue:
+                return 6;
+            case R.id.color_pallet_white:
+                return 7;
+            case R.id.color_pallet_light_green:
+                return 8;
+            case R.id.color_pallet_light_orange:
+                return 9;
+            default:
+                return 7;
+        }
     }
 }

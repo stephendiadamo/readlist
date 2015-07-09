@@ -16,47 +16,97 @@
         android:padding="10dp"
         android:weightSum="1">
 
-        <ImageView
-            android:id="@+id/color_pallet_dark_red"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_red_dark"
-            android:contentDescription="@string/dark_red" />
 
-        <ImageView
-            android:id="@+id/color_pallet_dark_blue"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_blue_dark"
-            android:contentDescription="@string/dark_blue" />
+            android:layout_weight="0.20">
 
-        <ImageView
-            android:id="@+id/color_pallet_purple"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_purple" />
+            <ImageView
+                android:id="@+id/color_pallet_dark_red"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_red_dark"
+                android:contentDescription="@string/dark_red" />
 
-        <ImageView
-            android:id="@+id/color_pallet_dark_green"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_green_dark" />
+            <ImageView
+                android:id="@+id/color_pallet_dark_red_selected"
+                style="@style/ColourPalletSelected" />
 
-        <ImageView
-            android:id="@+id/color_pallet_dark_orange"
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_orange_dark" />
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_blue"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_blue_dark"
+                android:contentDescription="@string/dark_blue" />
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_blue_selected"
+                style="@style/ColourPalletSelected" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_purple"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_purple" />
+
+            <ImageView
+                android:id="@+id/color_pallet_purple_selected"
+                style="@style/ColourPalletSelected" />
+
+        </FrameLayout>
+
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_green"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_green_dark" />
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_green_selected"
+                style="@style/ColourPalletSelected" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_orange"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_orange_dark" />
+
+            <ImageView
+                android:id="@+id/color_pallet_dark_orange_selected"
+                style="@style/ColourPalletSelected" />
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -66,45 +116,92 @@
         android:padding="10dp"
         android:weightSum="1">
 
-        <ImageView
-            android:id="@+id/color_pallet_light_red"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_red_light" />
+            android:layout_weight="0.20">
 
-        <ImageView
-            android:id="@+id/color_pallet_light_blue"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_blue_light" />
+            <ImageView
+                android:id="@+id/color_pallet_light_red"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_red_light" />
 
-        <ImageView
-            android:id="@+id/color_pallet_white"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/white" />
+            <ImageView
+                android:id="@+id/color_pallet_light_red_selected"
+                style="@style/ColourPalletSelected" />
 
-        <ImageView
-            android:id="@+id/color_pallet_light_green"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_green_light" />
+        </FrameLayout>
 
-        <ImageView
-            android:id="@+id/color_pallet_light_orange"
+        <FrameLayout
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_margin="5dp"
-            android:layout_weight="0.20"
-            android:background="@android:color/holo_orange_light" />
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_light_blue"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_blue_light" />
+
+            <ImageView
+                android:id="@+id/color_pallet_light_blue_selected"
+                style="@style/ColourPalletSelected" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_white"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/color_pallet_white_selected"
+                style="@style/ColourPalletSelected" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_light_green"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_green_light" />
+
+            <ImageView
+                android:id="@+id/color_pallet_light_green_selected"
+                style="@style/ColourPalletSelected" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:layout_weight="0.20">
+
+            <ImageView
+                android:id="@+id/color_pallet_light_orange"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@android:color/holo_orange_light" />
+
+            <ImageView
+                android:id="@+id/color_pallet_light_orange_selected"
+                style="@style/ColourPalletSelected" />
+        </FrameLayout>
     </LinearLayout>
 
     <LinearLayout
