@@ -40,12 +40,14 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
 
         <EditText
             android:id="@+id/manual_add_title"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:hint="@string/book_title"
             android:padding="10dp" />
 
@@ -53,6 +55,7 @@
             android:id="@+id/manual_add_author"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:hint="@string/book_author"
             android:padding="10dp" />
 
@@ -60,6 +63,7 @@
             android:id="@+id/manual_add_pages"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:hint="@string/pages"
             android:inputType="number"
             android:padding="10dp" />
