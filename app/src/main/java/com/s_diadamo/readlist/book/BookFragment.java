@@ -209,7 +209,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.updateBook(book);
                 } else {
-                    (new BookMenuActions(context, bookOperations, bookAdapter, shelf)).setCurrentPage(book);
+                    new BookMenuActions(context, bookOperations, bookAdapter, shelf).setCurrentPage(book);
                 }
                 return true;
             case R.id.mark_complete:
@@ -285,8 +285,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
+        PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
         new PageUpdateOperations(context).
                 addPageUpdate(new PageUpdate(book.getId(), remainingPages));
+        if (Utils.checkUserIsLoggedIn(context)) {
+            new SyncData(context).syncPageUpdate(pageUpdate);
+        }
 
         book.markComplete();
         book.setCurrentPage(book.getNumPages());
@@ -294,7 +298,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         bookAdapter.notifyDataSetChanged();
         bookOperations.updateBook(book);
 
-        (new BookUpdateOperations(context)).addBookUpdate(new BookUpdate(book.getId()));
+        BookUpdate bookUpdate = new BookUpdate(book.getId());
+        new BookUpdateOperations(context).addBookUpdate(bookUpdate);
+        if (Utils.checkUserIsLoggedIn(context)) {
+            new SyncData(context).syncBookUpdate(bookUpdate);
+        }
     }
 
     private void toggleHideCompletedBooks() {

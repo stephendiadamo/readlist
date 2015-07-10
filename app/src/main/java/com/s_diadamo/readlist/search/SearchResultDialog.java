@@ -35,9 +35,9 @@ class SearchResultDialog extends AlertDialog {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Book book = books.get(position);
-                    (new BookOperations(context)).addBook(book);
+                    new BookOperations(context).addBook(book);
                     if (Utils.checkUserIsLoggedIn(context)) {
-                        (new SyncData(context)).syncBook(book);
+                        new SyncData(context).syncBook(book);
                     }
                     Toast.makeText(context, "Added book", Toast.LENGTH_SHORT).show();
                     Utils.launchBookFragment(manager);

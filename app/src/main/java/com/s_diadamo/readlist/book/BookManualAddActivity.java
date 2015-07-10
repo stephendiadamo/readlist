@@ -130,10 +130,10 @@ public class BookManualAddActivity extends AppCompatActivity {
             }
 
             if (Utils.checkUserIsLoggedIn(this)){
-                (new SyncData(this)).syncBook(book);
+                new SyncData(this).syncBook(book);
             }
 
-            (new BookOperations(this)).addBook(book);
+            new BookOperations(this).addBook(book);
             finish();
         }
     }
@@ -167,7 +167,7 @@ public class BookManualAddActivity extends AppCompatActivity {
             shelfId = Shelf.DEFAULT_SHELF_ID;
         }
 
-        shelf = (new ShelfOperations(this)).getShelf(shelfId);
+        shelf = new ShelfOperations(this).getShelf(shelfId);
     }
 
     private void captureImage() {

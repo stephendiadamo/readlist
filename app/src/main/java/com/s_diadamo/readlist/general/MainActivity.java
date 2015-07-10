@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         if (!prefs.getBoolean(CREATED_SHELF, false)) {
             Shelf defaultShelf = new Shelf(Shelf.DEFAULT_SHELF_ID, "All Books", Shelf.DEFAULT_COLOR);
-            (new ShelfOperations(this)).addShelf(defaultShelf);
+            new ShelfOperations(this).addShelf(defaultShelf);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(CREATED_SHELF, true);
             editor.apply();

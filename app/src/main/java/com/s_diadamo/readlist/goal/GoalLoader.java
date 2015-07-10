@@ -23,7 +23,7 @@ class GoalLoader extends AsyncTaskLoader<ArrayList<Goal>> {
 
     @Override
     public ArrayList<Goal> loadInBackground() {
-        return (new GoalOperations(context)).getGoals();
+        return new GoalOperations(context).getGoals();
     }
 
     @Override

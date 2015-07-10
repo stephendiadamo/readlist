@@ -28,6 +28,7 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 
@@ -251,7 +252,9 @@ public class ShelfAddEditFragment extends Fragment {
             shelfOperations.addShelf(shelf);
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).addShelf(shelf);
-
+            if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
+                new SyncData(rootView.getContext()).syncShelf(shelf);
+            }
         }
 
         Utils.hideKeyBoard(getActivity());

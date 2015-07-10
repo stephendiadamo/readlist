@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.Calendar;
@@ -129,7 +130,10 @@ public class GoalAddFragment extends Fragment {
             int amount = Integer.parseInt(goalAmount);
             int goalTypeIndex = goalType.getSelectedItemPosition();
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
-            (new GoalOperations(rootView.getContext())).addGoal(goal);
+            new GoalOperations(rootView.getContext()).addGoal(goal);
+            if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
+                new SyncData(rootView.getContext()).syncGoal(goal);
+            }
             backToGoals();
         } else {
             Toast.makeText(rootView.getContext(), "Please fill out all fields", Toast.LENGTH_LONG).show();

@@ -76,13 +76,13 @@ public class Goal {
     public int getProgress(Context context) {
         int progress;
         if (type == PAGE_GOAL) {
-            progress = (new PageUpdateOperations(context)).getNumberOfPagesReadBetweenDates(startDate, endDate);
+            progress = new PageUpdateOperations(context).getNumberOfPagesReadBetweenDates(startDate, endDate);
         } else {
-            progress = (new BookUpdateOperations(context)).getNumberOfBooksReadBetweenDates(startDate, endDate);
+            progress = new BookUpdateOperations(context).getNumberOfBooksReadBetweenDates(startDate, endDate);
         }
         if (progress >= amount && !isComplete) {
             markComplete();
-            (new GoalOperations(context)).updateGoal(this);
+            new GoalOperations(context).updateGoal(this);
         }
         return progress;
     }
