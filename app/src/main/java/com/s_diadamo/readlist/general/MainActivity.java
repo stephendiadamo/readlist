@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
+import com.parse.Parse;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
+
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this, API.PARSE_APP_KEY, API.PARSE_CLIENT_KEY);
     }
 
     @Override

@@ -23,6 +23,8 @@ public class Utils {
 
     public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String CLEAN_DATE_FORMAT = "dd-MM-yyyy";
+    public static final String USER_NAME = "USERNAME";
+    public static final String PASSWORD = "PASSWORD";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();

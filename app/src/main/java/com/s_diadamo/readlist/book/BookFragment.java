@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.LoginFragment;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
 import com.s_diadamo.readlist.search.Search;
@@ -51,9 +53,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private MenuItem hideCompletedBooks;
     private SharedPreferences prefs;
     private boolean loading = true;
+    private boolean userLoggedIn = false;
+    private Menu optionsMenu;
 
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String EDIT_BOOK = "EDIT_BOOK";
+    private static final String EDIT_SHELF = "EDIT_SHELF";
+    private static final String LOGIN = "LOGIN";
     private static final String BOOK_ID = "BOOK_ID";
 
     @Nullable
@@ -84,6 +90,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         return rootView;
     }
 
+    private void checkUserIsLoggedIn() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
+        String userName = prefs.getString(Utils.USER_NAME, "");
+        String password = prefs.getString(Utils.PASSWORD, "");
+        userLoggedIn = (userName != null && !userName.isEmpty() && password != null && !password.isEmpty());
+    }
+
     private void setShelfId() {
         Bundle args = getArguments();
         String stringShelfId = "";
@@ -101,6 +114,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_book, menu);
+        optionsMenu = menu;
     }
 
     @Override
@@ -113,6 +127,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (shelfId == Shelf.DEFAULT_SHELF_ID) {
             menu.findItem(R.id.edit_shelf).setVisible(false);
             menu.findItem(R.id.delete_shelf).setVisible(false);
+        }
+
+        checkUserIsLoggedIn();
+        if (userLoggedIn) {
+            menu.findItem(R.id.login).setTitle("Logout");
+        } else {
+            menu.findItem(R.id.login).setTitle("Login");
         }
     }
 
@@ -144,6 +165,20 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (id == R.id.hide_completed_books) {
             toggleHideCompletedBooks();
             updateVisibleBooks();
+        } else if (id == R.id.login) {
+            if (userLoggedIn) {
+                userLoggedIn = false;
+                optionsMenu.findItem(R.id.login).setTitle("Login");
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.remove(Utils.USER_NAME);
+                editor.remove(Utils.PASSWORD);
+                editor.apply();
+            } else {
+                launchLoginFragment();
+            }
+
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -234,7 +269,16 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         fragment.setArguments(bundle);
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .addToBackStack(EDIT_BOOK)
+                .addToBackStack(EDIT_SHELF)
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+    private void launchLoginFragment() {
+        Fragment fragment = new LoginFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .addToBackStack(LOGIN)
                 .replace(R.id.container, fragment)
                 .commit();
     }

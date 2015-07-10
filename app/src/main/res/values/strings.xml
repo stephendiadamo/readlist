@@ -55,6 +55,14 @@
     <string name="dark_red">Dark Red</string>
     <string name="dark_blue">Dark Blue</string>
     <string name="more_colours">More Colours</string>
+    <string name="login">Login</string>
+    <string name="user_name">User Name</string>
+    <string name="password">Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="repeat_password">Repeat Password</string>
+    <string name="remember_me">Remember me</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
