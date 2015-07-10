@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
 
+import java.util.ArrayList;
+
 public class BookUpdateOperations {
 
     private final DatabaseHelper dbHelper;
@@ -28,6 +30,22 @@ public class BookUpdateOperations {
         long id = db.insert(DatabaseHelper.TABLE_BOOK_UPDATES, null, values);
         bookUpdate.setId((int) id);
         db.close();
+    }
+
+    public ArrayList<BookUpdate> getAllBookUpdates() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<BookUpdate> bookUpdates = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s", DatabaseHelper.TABLE_BOOK_UPDATES);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                BookUpdate bookUpdate = parseBookUpdate(cursor);
+                bookUpdates.add(bookUpdate);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return bookUpdates;
     }
 
     public int getNumberOfBooksRead() {
@@ -87,5 +105,12 @@ public class BookUpdateOperations {
     public void resetStatistics() {
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_BOOK_UPDATES, null, null);
+    }
+
+    private BookUpdate parseBookUpdate(Cursor cursor) {
+        return new BookUpdate(
+                cursor.getInt(0),
+                cursor.getInt(1),
+                cursor.getString(2));
     }
 }

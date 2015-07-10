@@ -6,7 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.s_diadamo.readlist.database.DatabaseHelper;
-import com.s_diadamo.readlist.general.Utils;
+
+import java.util.ArrayList;
 
 public class BookOperations {
     private final String[] BOOK_TABLE_COLUMNS = {
@@ -77,6 +78,26 @@ public class BookOperations {
             books = cursor.getInt(0);
         }
         cursor.close();
+        db.close();
+        return books;
+    }
+
+    public ArrayList<Book> getAllBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        db = dbHelper.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s",
+                DatabaseHelper.TABLE_BOOKS);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Book book = parseBook(cursor);
+                books.add(book);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        cursor.close();
+
         db.close();
         return books;
     }

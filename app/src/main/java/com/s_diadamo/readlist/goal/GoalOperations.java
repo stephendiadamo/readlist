@@ -9,7 +9,7 @@ import com.s_diadamo.readlist.database.DatabaseHelper;
 
 import java.util.ArrayList;
 
-class GoalOperations {
+public class GoalOperations {
 
     private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -33,7 +33,7 @@ class GoalOperations {
         db.close();
     }
 
-    public ArrayList<Goal> getGoals() {
+    public ArrayList<Goal> getAllGoals() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Goal> goals = new ArrayList<>();
         String query = "SELECT * FROM " + DatabaseHelper.TABLE_GOALS;

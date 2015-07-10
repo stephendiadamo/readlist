@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
 
+import java.util.ArrayList;
+
 public class PageUpdateOperations {
 
     private final DatabaseHelper dbHelper;
@@ -28,6 +30,22 @@ public class PageUpdateOperations {
         long id = db.insert(DatabaseHelper.TABLE_PAGE_UPDATES, null, values);
         pageUpdate.setId((int) id);
         db.close();
+    }
+
+    public ArrayList<PageUpdate> getAllPageUpdates() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<PageUpdate> pageUpdates = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s", DatabaseHelper.TABLE_PAGE_UPDATES);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                PageUpdate pageUpdate = parsePageUpdate(cursor);
+                pageUpdates.add(pageUpdate);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return pageUpdates;
     }
 
     public int getAllTimePagesRead() {

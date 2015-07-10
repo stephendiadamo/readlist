@@ -110,15 +110,18 @@ public class MainActivity extends AppCompatActivity
                 getFragmentManager().popBackStack();
             }
         }
+        ActionBar ab = getSupportActionBar();
+        if (ab != null && !ab.isShowing()) {
+            ab.show();
+        }
     }
 
     @Override
-    public void onDestroy(){
-        if (Utils.checkRememberMe(this)){
+    public void onDestroy() {
+        if (Utils.checkRememberMe(this)) {
             Utils.logout(this);
-
-
         }
+        super.onDestroy();
     }
 
     public void closeDrawer() {
