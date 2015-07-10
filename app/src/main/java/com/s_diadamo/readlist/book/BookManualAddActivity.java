@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
@@ -127,6 +128,11 @@ public class BookManualAddActivity extends AppCompatActivity {
             } else {
                 book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", "");
             }
+
+            if (Utils.checkUserIsLoggedIn(this)){
+                (new SyncData(this)).syncBook(book);
+            }
+
             (new BookOperations(this)).addBook(book);
             finish();
         }

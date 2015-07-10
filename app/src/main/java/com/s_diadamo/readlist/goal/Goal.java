@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class Goal {
+public class Goal {
 
     private int id;
     private final int type;

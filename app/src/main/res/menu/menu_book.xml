@@ -33,6 +33,9 @@
             android:checkable="true"
             android:title="@string/hide_completed_books" />
         <item
+            android:id="@+id/sync_data"
+            android:title="@string/sync_data" />
+        <item
             android:id="@+id/login"
             android:title="@string/login" />
     </item>

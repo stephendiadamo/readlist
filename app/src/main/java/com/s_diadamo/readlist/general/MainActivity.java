@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
 import com.parse.Parse;
+import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
@@ -108,6 +109,15 @@ public class MainActivity extends AppCompatActivity
             } else {
                 getFragmentManager().popBackStack();
             }
+        }
+    }
+
+    @Override
+    public void onDestroy(){
+        if (Utils.checkRememberMe(this)){
+            Utils.logout(this);
+
+
         }
     }
 

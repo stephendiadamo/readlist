@@ -2,6 +2,8 @@ package com.s_diadamo.readlist.general;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 
@@ -25,6 +28,7 @@ public class Utils {
     public static final String CLEAN_DATE_FORMAT = "dd-MM-yyyy";
     public static final String USER_NAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
+    public final static String REMEMBER_ME = "REMEMBER_ME";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
@@ -66,7 +70,6 @@ public class Utils {
         return simpleDateFormat.format(date);
     }
 
-
     public static void setDynamicHeight(ListView mListView) {
         ListAdapter mListAdapter = mListView.getAdapter();
         if (mListAdapter == null) {
@@ -100,5 +103,27 @@ public class Utils {
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+    }
+
+    public static boolean checkUserIsLoggedIn(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = prefs.getString(Utils.USER_NAME, "");
+        String password = prefs.getString(Utils.PASSWORD, "");
+        return (userName != null && !userName.isEmpty() && password != null && !password.isEmpty());
+    }
+
+    public static boolean checkRememberMe(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String rememberMe = prefs.getString(Utils.REMEMBER_ME, "");
+        return (rememberMe != null && !rememberMe.isEmpty() &&rememberMe.equals("yes"));
+    }
+
+    public static void logout(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(Utils.USER_NAME);
+        editor.remove(Utils.PASSWORD);
+        editor.apply();
+        ParseUser.logOutInBackground();
     }
 }

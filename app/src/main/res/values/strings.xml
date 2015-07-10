@@ -63,6 +63,7 @@
     <string name="create_account">Create Account</string>
     <string name="repeat_password">Repeat Password</string>
     <string name="remember_me">Remember me</string>
+    <string name="sync_data">Sync data</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

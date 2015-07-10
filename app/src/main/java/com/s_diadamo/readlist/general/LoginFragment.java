@@ -112,9 +112,15 @@ public class LoginFragment extends Fragment {
                             progressDialog.dismiss();
                             if (parseUser != null) {
                                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
+                                rememberUser(emailAddress, password);
+                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                                SharedPreferences.Editor editor = prefs.edit();
                                 if (rememberMe.isChecked()) {
-                                    rememberUser(emailAddress, password);
+                                    editor.putString(Utils.REMEMBER_ME, "yes");
+                                } else {
+                                    editor.putString(Utils.REMEMBER_ME, "no");
                                 }
+                                editor.apply();
                                 Utils.launchBookFragment(getActivity().getSupportFragmentManager());
                             } else {
                                 Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
@@ -133,6 +139,13 @@ public class LoginFragment extends Fragment {
                 } else {
                     switchToLoginMode();
                 }
+            }
+        });
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchToForgotPasswordMode();
             }
         });
 
@@ -157,11 +170,14 @@ public class LoginFragment extends Fragment {
         rememberMe.setVisibility(View.VISIBLE);
     }
 
+    private void switchToForgotPasswordMode() {
+    }
+
     private void rememberUser(String emailAddress, String password) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(Utils.USER_NAME, emailAddress);
         editor.putString(Utils.PASSWORD, password);
-        editor.commit();
+        editor.apply();
     }
 }

@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.book;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
@@ -26,8 +27,10 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.LoginFragment;
+import com.s_diadamo.readlist.general.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
@@ -44,6 +47,7 @@ import java.util.ArrayList;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private View rootView;
+    private Context context;
     private ListView bookListView;
     private ArrayList<Book> userBooks;
     private BookOperations bookOperations;
@@ -66,6 +70,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_listview, container, false);
+        context = rootView.getContext();
 
         setHasOptionsMenu(true);
 
@@ -88,13 +93,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         });
 
         return rootView;
-    }
-
-    private void checkUserIsLoggedIn() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
-        String userName = prefs.getString(Utils.USER_NAME, "");
-        String password = prefs.getString(Utils.PASSWORD, "");
-        userLoggedIn = (userName != null && !userName.isEmpty() && password != null && !password.isEmpty());
     }
 
     private void setShelfId() {
@@ -129,7 +127,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             menu.findItem(R.id.delete_shelf).setVisible(false);
         }
 
-        checkUserIsLoggedIn();
+        userLoggedIn = Utils.checkUserIsLoggedIn(getActivity());
         if (userLoggedIn) {
             menu.findItem(R.id.login).setTitle("Logout");
         } else {
@@ -140,7 +138,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         long id = item.getItemId();
-        BookMenuActions bookMenuActions = new BookMenuActions(rootView.getContext(), bookOperations, bookAdapter, shelf);
+        BookMenuActions bookMenuActions = new BookMenuActions(context, bookOperations, bookAdapter, shelf);
 
         if (id == R.id.add_book_search) {
             bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
@@ -159,21 +157,23 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                         findFragmentById(R.id.navigation_drawer)), getActivity().getSupportFragmentManager());
             } else {
-                Toast.makeText(rootView.getContext(), "You cannot delete this shelf", Toast.LENGTH_LONG).show();
+                showToast("You cannot delete this shelf");
             }
             return true;
         } else if (id == R.id.hide_completed_books) {
             toggleHideCompletedBooks();
             updateVisibleBooks();
+        } else if (id == R.id.sync_data) {
+            if (!userLoggedIn) {
+                showToast("You must be logged in to sync data");
+            } else {
+                launchSyncData();
+            }
         } else if (id == R.id.login) {
             if (userLoggedIn) {
                 userLoggedIn = false;
                 optionsMenu.findItem(R.id.login).setTitle("Login");
-                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.remove(Utils.USER_NAME);
-                editor.remove(Utils.PASSWORD);
-                editor.apply();
+                Utils.logout(context);
             } else {
                 launchLoginFragment();
             }
@@ -209,7 +209,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                     bookAdapter.notifyDataSetChanged();
                     bookOperations.updateBook(book);
                 } else {
-                    (new BookMenuActions(rootView.getContext(), bookOperations, bookAdapter, shelf)).setCurrentPage(book);
+                    (new BookMenuActions(context, bookOperations, bookAdapter, shelf)).setCurrentPage(book);
                 }
                 return true;
             case R.id.mark_complete:
@@ -227,7 +227,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void deleteBook(final Book book) {
-        new AlertDialog.Builder(rootView.getContext())
+        new AlertDialog.Builder(context)
                 .setMessage("Delete \"" + book.getTitle() + "\"?")
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -285,7 +285,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
-        new PageUpdateOperations(rootView.getContext()).
+        new PageUpdateOperations(context).
                 addPageUpdate(new PageUpdate(book.getId(), remainingPages));
 
         book.markComplete();
@@ -294,7 +294,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         bookAdapter.notifyDataSetChanged();
         bookOperations.updateBook(book);
 
-        (new BookUpdateOperations(rootView.getContext())).addBookUpdate(new BookUpdate(book.getId()));
+        (new BookUpdateOperations(context)).addBookUpdate(new BookUpdate(book.getId()));
     }
 
     private void toggleHideCompletedBooks() {
@@ -308,8 +308,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (hideCompletedBooks.isChecked() && !loading) {
             bookAdapter.hideCompletedBooks();
         } else if (shelf != null && !loading) {
-            userBooks = shelf.fetchBooks(rootView.getContext());
-            bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
+            userBooks = shelf.fetchBooks(context);
+            bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks);
             bookListView.setAdapter(bookAdapter);
         }
     }
@@ -323,17 +323,25 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         integrator.initiateScan();
     }
 
+    private void launchSyncData() {
+        SyncData syncData = new SyncData(context);
+        int syncedDataElements = syncData.syncAllData();
+        if (syncedDataElements == -1) {
+            showToast("Sync failed, not logged in");
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             String bookISBN = result.getContents();
             if (bookISBN != null && !bookISBN.isEmpty()) {
-                Search search = new Search(rootView.getContext(), getActivity().getSupportFragmentManager(), shelf);
+                Search search = new Search(context, getActivity().getSupportFragmentManager(), shelf);
                 search.searchWithISBN(bookISBN);
             }
         } else {
-            Toast.makeText(rootView.getContext(), "Scan Failed", Toast.LENGTH_LONG).show();
+            showToast("Scan Failed");
         }
     }
 
@@ -341,9 +349,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
             case BookLoader.ID:
-                return new BookLoader(rootView.getContext(), shelfId);
+                return new BookLoader(context, shelfId);
             case ShelfLoader.ID:
-                return new ShelfLoader(rootView.getContext(), shelfId);
+                return new ShelfLoader(context, shelfId);
             default:
                 return null;
         }
@@ -355,7 +363,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (id) {
             case BookLoader.ID:
                 userBooks = (ArrayList<Book>) data;
-                bookAdapter = new BookAdapter(rootView.getContext(), R.layout.row_book_element, userBooks);
+                bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks);
                 bookListView.setAdapter(bookAdapter);
                 loading = false;
                 updateVisibleBooks();
@@ -372,5 +380,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader loader) {
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }
