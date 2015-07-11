@@ -23,6 +23,7 @@
         android:padding="5dp" />
 
     <TextView
+        android:id="@+id/login_password_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -61,7 +62,7 @@
         android:id="@+id/login_remember_me"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/remember_me"/>
+        android:text="@string/remember_me" />
 
     <Button
         android:id="@+id/login_login"

@@ -8,9 +8,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -20,33 +24,42 @@ import android.widget.Toast;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
 
 public class LoginFragment extends Fragment {
 
-    private View rootView;
-    private boolean createAccountMode = false;
+    private final int CREATE_ACCOUNT_MODE = 0;
+    private final int LOGIN_MODE = 1;
+    private final int FORGOT_PASSWORD_MODE = 2;
+
+    private int currentMode = LOGIN_MODE;
 
     private EditText emailAddressInput;
     private EditText passwordInput;
     private EditText passwordRepeatInput;
     private Button login;
     private TextView createAccount;
-    private TextView forgotPassword;
     private TextView repeatPasswordLabel;
+    private TextView forgotPassword;
+    private TextView passwordLabel;
     private CheckBox rememberMe;
     private Context context;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
         context = rootView.getContext();
+
+        setHasOptionsMenu(false);
+        toggleActionBar(false);
 
         emailAddressInput = (EditText) rootView.findViewById(R.id.login_email_address);
         passwordInput = (EditText) rootView.findViewById(R.id.login_password);
         passwordRepeatInput = (EditText) rootView.findViewById(R.id.login_password_repeat);
+        passwordLabel = (TextView) rootView.findViewById(R.id.login_password_label);
 
         login = (Button) rootView.findViewById(R.id.login_login);
         createAccount = (TextView) rootView.findViewById(R.id.login_create_account);
@@ -54,23 +67,34 @@ public class LoginFragment extends Fragment {
         repeatPasswordLabel = (TextView) rootView.findViewById(R.id.login_password_repeat_label);
         rememberMe = (CheckBox) rootView.findViewById(R.id.login_remember_me);
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final String emailAddress = emailAddressInput.getText().toString();
                 final String password = passwordInput.getText().toString();
-                if (emailAddress.isEmpty() || password.isEmpty()) {
+
+                if (currentMode != FORGOT_PASSWORD_MODE) {
+                    if (password.isEmpty()) {
+                        Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                }
+
+                if (emailAddress.isEmpty()) {
                     Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                if (password.length() < 4) {
-                    Toast.makeText(context, "Please use a longer password", Toast.LENGTH_LONG).show();
-                    return;
-                }
-
-                if (createAccountMode) {
+                if (currentMode == CREATE_ACCOUNT_MODE) {
                     String passwordRepeat = passwordRepeatInput.getText().toString();
+
+                    if (password.length() < 4) {
+                        Toast.makeText(context, "Please use a longer password", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     if (passwordRepeat.isEmpty()) {
                         Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
                         return;
@@ -98,10 +122,12 @@ public class LoginFragment extends Fragment {
                                 Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show();
                             } else if (e.getCode() == ParseException.ACCOUNT_ALREADY_LINKED) {
                                 Toast.makeText(context, "This email address has been used. Did you forget your password?", Toast.LENGTH_SHORT).show();
+                            } else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
+                                Toast.makeText(context, "The email address entered is invalid", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-                } else {
+                } else if (currentMode == LOGIN_MODE) {
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Logging in...");
                     progressDialog.show();
@@ -121,10 +147,32 @@ public class LoginFragment extends Fragment {
                                     editor.putString(Utils.REMEMBER_ME, "no");
                                 }
                                 editor.apply();
+                                toggleActionBar(true);
+                                Utils.hideKeyBoard(getActivity());
                                 Utils.launchBookFragment(getActivity().getSupportFragmentManager());
                             } else {
                                 Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
                             }
+                        }
+                    });
+                } else if (currentMode == FORGOT_PASSWORD_MODE) {
+                    final ProgressDialog progressDialog = new ProgressDialog(context);
+                    progressDialog.setMessage("Verifying...");
+                    progressDialog.show();
+                    ParseUser.requestPasswordResetInBackground(emailAddress, new RequestPasswordResetCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            progressDialog.dismiss();
+                            if (e == null) {
+                                Toast.makeText(context, "An email was sent to your account", Toast.LENGTH_LONG).show();
+                            } else {
+                                if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS || e.getCode() == ParseException.EMAIL_NOT_FOUND) {
+                                    Toast.makeText(context, "No user associated with this address", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            toggleActionBar(true);
+                            Utils.hideKeyBoard(getActivity());
+                            Utils.launchBookFragment(getActivity().getSupportFragmentManager());
                         }
                     });
                 }
@@ -134,7 +182,7 @@ public class LoginFragment extends Fragment {
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!createAccountMode) {
+                if (currentMode == LOGIN_MODE) {
                     switchToCreateMode();
                 } else {
                     switchToLoginMode();
@@ -153,24 +201,51 @@ public class LoginFragment extends Fragment {
     }
 
     private void switchToCreateMode() {
-        createAccountMode = true;
-        login.setText("Create Account");
-        createAccount.setText("Cancel");
+        currentMode = CREATE_ACCOUNT_MODE;
+
+        passwordLabel.setVisibility(View.VISIBLE);
+        passwordInput.setVisibility(View.VISIBLE);
+        rememberMe.setVisibility(View.GONE);
+
         repeatPasswordLabel.setVisibility(View.VISIBLE);
         passwordRepeatInput.setVisibility(View.VISIBLE);
-        rememberMe.setVisibility(View.GONE);
+
+        login.setText("Create Account");
+
+        createAccount.setText("Cancel");
+        forgotPassword.setVisibility(View.GONE);
     }
 
     private void switchToLoginMode() {
-        createAccountMode = false;
-        login.setText("Login");
-        createAccount.setText("Create Account");
+        currentMode = LOGIN_MODE;
+
+        passwordLabel.setVisibility(View.VISIBLE);
+        passwordInput.setVisibility(View.VISIBLE);
+        rememberMe.setVisibility(View.VISIBLE);
+
         repeatPasswordLabel.setVisibility(View.GONE);
         passwordRepeatInput.setVisibility(View.GONE);
-        rememberMe.setVisibility(View.VISIBLE);
+
+        login.setText("Login");
+
+        createAccount.setText("Create Account");
+        forgotPassword.setVisibility(View.VISIBLE);
     }
 
     private void switchToForgotPasswordMode() {
+        currentMode = FORGOT_PASSWORD_MODE;
+
+        passwordLabel.setVisibility(View.GONE);
+        passwordInput.setVisibility(View.GONE);
+        rememberMe.setVisibility(View.GONE);
+
+        repeatPasswordLabel.setVisibility(View.GONE);
+        passwordRepeatInput.setVisibility(View.GONE);
+
+        login.setText("Send Email");
+
+        createAccount.setText("Cancel");
+        forgotPassword.setVisibility(View.GONE);
     }
 
     private void rememberUser(String emailAddress, String password) {
@@ -179,5 +254,16 @@ public class LoginFragment extends Fragment {
         editor.putString(Utils.USER_NAME, emailAddress);
         editor.putString(Utils.PASSWORD, password);
         editor.apply();
+    }
+
+    private void toggleActionBar(boolean show) {
+        final ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (ab != null) {
+            if (show) {
+                ab.show();
+            } else {
+                ab.hide();
+            }
+        }
     }
 }
