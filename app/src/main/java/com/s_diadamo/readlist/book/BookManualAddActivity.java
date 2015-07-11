@@ -129,11 +129,12 @@ public class BookManualAddActivity extends AppCompatActivity {
                 book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", "");
             }
 
+            new BookOperations(this).addBook(book);
+
             if (Utils.checkUserIsLoggedIn(this)){
                 new SyncData(this).syncBook(book);
             }
 
-            new BookOperations(this).addBook(book);
             finish();
         }
     }

@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.book;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
@@ -332,11 +333,18 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void launchSyncData() {
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Syncing data...");
+        progressDialog.show();
+
         SyncData syncData = new SyncData(context);
-        int syncedDataElements = syncData.syncAllData();
-        if (syncedDataElements == -1) {
-            showToast("Sync failed, not logged in");
-        }
+        syncData.syncAllData();
+
+        getLoaderManager().initLoader(BookLoader.ID, null, this);
+        getLoaderManager().initLoader(ShelfLoader.ID, null, this);
+
+        progressDialog.dismiss();
+        Toast.makeText(context, "Sync complete", Toast.LENGTH_LONG).show();
     }
 
     @Override
