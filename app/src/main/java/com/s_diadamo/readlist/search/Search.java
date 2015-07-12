@@ -31,7 +31,6 @@ public class Search {
     private final Shelf shelf;
     private final FragmentManager manager;
     private final String API_KEY = API.getGoogleBooksApiKey();
-    private final int MAX_RESULTS = 20;
 
     public Search(Context context, FragmentManager manager, Shelf shelf) {
         this.context = context;
@@ -40,8 +39,8 @@ public class Search {
     }
 
     public void searchWithAuthorAndTitle(String author, String title) {
-
         String searchQuery;
+        int MAX_RESULTS = 20;
 
         if (!title.isEmpty() && !author.isEmpty()) {
             String inTitle = title.trim().replace(" ", "%20");
@@ -52,9 +51,9 @@ public class Search {
             searchQuery = inTitle + "+intitle:" + inTitle;
         } else {
             String inAuthor = author.trim().replace(" ", "%20");
-            searchQuery = inAuthor + "+inauthor:" + inAuthor ;
+            searchQuery = inAuthor + "+inauthor:" + inAuthor;
         }
-        
+
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority("www.googleapis.com")
