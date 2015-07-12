@@ -5,11 +5,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.parse.FindCallback;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.database.DatabaseHelper;
@@ -37,10 +35,12 @@ public class SyncData {
 
     Context context;
     String userName;
+    MultiProcessSpinner syncSpinner;
 
     public SyncData(Context context) {
         this.context = context;
         this.userName = getUserName();
+        this.syncSpinner = new MultiProcessSpinner(context, "Syncing data...", "Syncing complete");
     }
 
     public void syncAllData() {
@@ -52,11 +52,13 @@ public class SyncData {
     }
 
     private void syncAllBooks() {
+        syncSpinner.addThread();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
+                syncSpinner.endThread();
                 ArrayList<Book> booksOnDevice = new BookOperations(context).getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
                 for (ParseObject parseBook : parseBooks) {
@@ -115,24 +117,14 @@ public class SyncData {
         ParseObject.saveAllInBackground(booksToSend);
     }
 
-    private void copyBookValues(ParseObject parseBook, Book book) {
-        parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
-        parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
-        parseBook.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
-        parseBook.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
-        parseBook.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
-        parseBook.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
-        parseBook.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
-        parseBook.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
-        parseBook.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
-    }
-
     private void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
+        syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
+                syncSpinner.endThread();
                 ArrayList<Shelf> shelvesOnDevice = new ShelfOperations(context).getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
@@ -161,14 +153,44 @@ public class SyncData {
     }
 
     private void updateParseShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {
+        HashSet<Integer> parseShelfIds = new HashSet<>();
+        for (Shelf shelf : shelvesFromParse) {
+            parseShelfIds.add(shelf.getId());
+        }
+
+        ArrayList<ParseObject> shelvesToSend = new ArrayList<>();
+
+        for (final Shelf shelf : shelvesOnDevice) {
+            if (!parseShelfIds.contains(shelf.getId())) {
+                shelvesToSend.add(toParseShelf(shelf));
+            } else {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
+                query.whereEqualTo(Utils.USER_NAME, userName);
+                query.whereEqualTo(READLIST_ID, shelf.getId());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> shelfList, ParseException e) {
+                        if (shelfList.size() > 0) {
+                            ParseObject shelfToUpdate = shelfList.get(0);
+                            copyShelfValues(shelfToUpdate, shelf);
+                            shelfToUpdate.saveInBackground();
+                        }
+                    }
+                });
+            }
+        }
+
+        ParseObject.saveAllInBackground(shelvesToSend);
     }
 
     private void syncAllGoals() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
         query.whereEqualTo(Utils.USER_NAME, userName);
+        syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseGoals, ParseException e) {
+                syncSpinner.endThread();
                 ArrayList<Goal> goalsOnDevice = new GoalOperations(context).getAllGoals();
                 ArrayList<Goal> goalsFromParse = new ArrayList<>();
                 for (ParseObject parseGoal : parseGoals) {
@@ -197,14 +219,44 @@ public class SyncData {
     }
 
     private void updateParseGoals(ArrayList<Goal> goalsOnDevice, ArrayList<Goal> goalsFromParse) {
+        HashSet<Integer> parseGoalIds = new HashSet<>();
+        for (Goal goal : goalsFromParse) {
+            parseGoalIds.add(goal.getId());
+        }
+
+        ArrayList<ParseObject> goalsToSend = new ArrayList<>();
+
+        for (final Goal goal : goalsOnDevice) {
+            if (!parseGoalIds.contains(goal.getId())) {
+                goalsToSend.add(toParseGoal(goal));
+            } else {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
+                query.whereEqualTo(Utils.USER_NAME, userName);
+                query.whereEqualTo(READLIST_ID, goal.getId());
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> goalList, ParseException e) {
+                        if (goalList.size() > 0) {
+                            ParseObject goalToUpdate = goalList.get(0);
+                            copyGoalValues(goalToUpdate, goal);
+                            goalToUpdate.saveInBackground();
+                        }
+                    }
+                });
+            }
+        }
+
+        ParseObject.saveAllInBackground(goalsToSend);
     }
 
     private void syncAllBookUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
+        syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBookUpdates, ParseException e) {
+                syncSpinner.endThread();
                 ArrayList<BookUpdate> bookUpdatesOnDevice = new BookUpdateOperations(context).getAllBookUpdates();
                 ArrayList<BookUpdate> bookUpdatesFromParse = new ArrayList<>();
                 for (ParseObject parseBookUpdate : parseBookUpdates) {
@@ -233,15 +285,30 @@ public class SyncData {
     }
 
     private void updateParseBookUpdates(ArrayList<BookUpdate> bookUpdatesOnDevice, ArrayList<BookUpdate> bookUpdatesFromParse) {
+        HashSet<Integer> parseBookUpdateIds = new HashSet<>();
+        for (BookUpdate bookUpdate : bookUpdatesFromParse) {
+            parseBookUpdateIds.add(bookUpdate.getId());
+        }
 
+        ArrayList<ParseObject> bookUpdatesToSend = new ArrayList<>();
+
+        for (final BookUpdate bookUpdate : bookUpdatesOnDevice) {
+            if (!parseBookUpdateIds.contains(bookUpdate.getId())) {
+                bookUpdatesToSend.add(toParseBookUpdate(bookUpdate));
+            }
+        }
+
+        ParseObject.saveAllInBackground(bookUpdatesToSend);
     }
 
     private void syncAllPageUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
+        syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parsePageUpdates, ParseException e) {
+                syncSpinner.endThread();
                 ArrayList<PageUpdate> pageUpdatesOnDevice = new PageUpdateOperations(context).getAllPageUpdates();
                 ArrayList<PageUpdate> pageUpdatesFromParse = new ArrayList<>();
                 for (ParseObject parsePageUpdate : parsePageUpdates) {
@@ -270,63 +337,20 @@ public class SyncData {
     }
 
     private void updateParsePageUpdates(ArrayList<PageUpdate> pageUpdatesOnDevice, ArrayList<PageUpdate> pageUpdatesFromParse) {
-
-    }
-
-    private Book parseBookToBook(ParseObject parseBook) {
-        return new Book(
-                parseBook.getInt(READLIST_ID),
-                parseBook.getString(DatabaseHelper.BOOK_TITLE),
-                parseBook.getString(DatabaseHelper.BOOK_AUTHOR),
-                parseBook.getInt(DatabaseHelper.BOOK_SHELF),
-                parseBook.getString(DatabaseHelper.BOOK_DATE_ADDED),
-                parseBook.getInt(DatabaseHelper.BOOK_NUM_PAGES),
-                parseBook.getInt(DatabaseHelper.BOOK_CURRENT_PAGE),
-                parseBook.getInt(DatabaseHelper.BOOK_COMPLETE),
-                parseBook.getString(DatabaseHelper.BOOK_COMPLETION_DATE),
-                parseBook.getString(DatabaseHelper.BOOK_COVER_PICTURE_URL));
-    }
-
-
-    private Shelf parseShelfToShelf(ParseObject parseShelf) {
-        return new Shelf(
-                parseShelf.getInt(READLIST_ID),
-                parseShelf.getString(DatabaseHelper.SHELF_NAME),
-                parseShelf.getInt(DatabaseHelper.SHELF_COLOR));
-    }
-
-    private Goal parseGoalToGoal(ParseObject parseGoal) {
-        return new Goal(
-                parseGoal.getInt(READLIST_ID),
-                parseGoal.getInt(DatabaseHelper.GOAL_TYPE),
-                parseGoal.getInt(DatabaseHelper.GOAL_AMOUNT),
-                parseGoal.getString(DatabaseHelper.GOAL_START_DATE),
-                parseGoal.getString(DatabaseHelper.GOAL_END_DATE),
-                parseGoal.getInt(DatabaseHelper.GOAL_IS_COMPLETE));
-    }
-
-    private BookUpdate parseBookUpdateToBookUpdate(ParseObject parseBookUpdate) {
-        return new BookUpdate(
-                parseBookUpdate.getInt(READLIST_ID),
-                parseBookUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
-                parseBookUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE));
-    }
-
-    private PageUpdate parsePageUpdateToPageUpdate(ParseObject parsePageUpdate) {
-        return new PageUpdate(
-                parsePageUpdate.getInt(READLIST_ID),
-                parsePageUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
-                parsePageUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE),
-                parsePageUpdate.getInt(DatabaseHelper.PAGE_UPDATE_PAGES));
-    }
-
-    private String getUserName() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = prefs.getString(Utils.USER_NAME, "");
-        if (userName == null || userName.isEmpty()) {
-            return "";
+        HashSet<Integer> parsepageUpdateIds = new HashSet<>();
+        for (PageUpdate pageUpdate : pageUpdatesFromParse) {
+            parsepageUpdateIds.add(pageUpdate.getId());
         }
-        return userName;
+
+        ArrayList<ParseObject> pageUpdatesToSend = new ArrayList<>();
+
+        for (final PageUpdate pageUpdate : pageUpdatesOnDevice) {
+            if (!parsepageUpdateIds.contains(pageUpdate.getId())) {
+                pageUpdatesToSend.add(toParsePageUpdate(pageUpdate));
+            }
+        }
+
+        ParseObject.saveAllInBackground(pageUpdatesToSend);
     }
 
     public void syncBook(Book book) {
@@ -372,6 +396,18 @@ public class SyncData {
         return parseBook;
     }
 
+    private void copyBookValues(ParseObject parseBook, Book book) {
+        parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
+        parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
+        parseBook.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
+        parseBook.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
+        parseBook.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
+        parseBook.put(DatabaseHelper.BOOK_CURRENT_PAGE, book.getCurrentPage());
+        parseBook.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
+        parseBook.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
+        parseBook.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
+    }
+
     private ParseObject toParseShelf(Shelf shelf) {
         ParseObject parseShelf = new ParseObject(TYPE_SHELF);
 
@@ -381,6 +417,11 @@ public class SyncData {
         parseShelf.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
 
         return parseShelf;
+    }
+
+    private void copyShelfValues(ParseObject parseShelf, Shelf shelf) {
+        parseShelf.put(DatabaseHelper.SHELF_NAME, shelf.getName());
+        parseShelf.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
     }
 
     private ParseObject toParseGoal(Goal goal) {
@@ -395,6 +436,14 @@ public class SyncData {
         parseGoal.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
 
         return parseGoal;
+    }
+
+    private void copyGoalValues(ParseObject parseGoal, Goal goal) {
+        parseGoal.put(DatabaseHelper.GOAL_TYPE, goal.getType());
+        parseGoal.put(DatabaseHelper.GOAL_AMOUNT, goal.getAmount());
+        parseGoal.put(DatabaseHelper.GOAL_START_DATE, goal.getStartDate());
+        parseGoal.put(DatabaseHelper.GOAL_END_DATE, goal.getEndDate());
+        parseGoal.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
     }
 
     private ParseObject toParseBookUpdate(BookUpdate bookUpdate) {
@@ -418,5 +467,60 @@ public class SyncData {
         parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
 
         return parsePageUpdate;
+    }
+
+    private Book parseBookToBook(ParseObject parseBook) {
+        return new Book(
+                parseBook.getInt(READLIST_ID),
+                parseBook.getString(DatabaseHelper.BOOK_TITLE),
+                parseBook.getString(DatabaseHelper.BOOK_AUTHOR),
+                parseBook.getInt(DatabaseHelper.BOOK_SHELF),
+                parseBook.getString(DatabaseHelper.BOOK_DATE_ADDED),
+                parseBook.getInt(DatabaseHelper.BOOK_NUM_PAGES),
+                parseBook.getInt(DatabaseHelper.BOOK_CURRENT_PAGE),
+                parseBook.getInt(DatabaseHelper.BOOK_COMPLETE),
+                parseBook.getString(DatabaseHelper.BOOK_COMPLETION_DATE),
+                parseBook.getString(DatabaseHelper.BOOK_COVER_PICTURE_URL));
+    }
+
+    private Shelf parseShelfToShelf(ParseObject parseShelf) {
+        return new Shelf(
+                parseShelf.getInt(READLIST_ID),
+                parseShelf.getString(DatabaseHelper.SHELF_NAME),
+                parseShelf.getInt(DatabaseHelper.SHELF_COLOR));
+    }
+
+    private Goal parseGoalToGoal(ParseObject parseGoal) {
+        return new Goal(
+                parseGoal.getInt(READLIST_ID),
+                parseGoal.getInt(DatabaseHelper.GOAL_TYPE),
+                parseGoal.getInt(DatabaseHelper.GOAL_AMOUNT),
+                parseGoal.getString(DatabaseHelper.GOAL_START_DATE),
+                parseGoal.getString(DatabaseHelper.GOAL_END_DATE),
+                parseGoal.getInt(DatabaseHelper.GOAL_IS_COMPLETE));
+    }
+
+    private BookUpdate parseBookUpdateToBookUpdate(ParseObject parseBookUpdate) {
+        return new BookUpdate(
+                parseBookUpdate.getInt(READLIST_ID),
+                parseBookUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
+                parseBookUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE));
+    }
+
+    private PageUpdate parsePageUpdateToPageUpdate(ParseObject parsePageUpdate) {
+        return new PageUpdate(
+                parsePageUpdate.getInt(READLIST_ID),
+                parsePageUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
+                parsePageUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE),
+                parsePageUpdate.getInt(DatabaseHelper.PAGE_UPDATE_PAGES));
+    }
+
+    private String getUserName() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = prefs.getString(Utils.USER_NAME, "");
+        if (userName == null || userName.isEmpty()) {
+            return "";
+        }
+        return userName;
     }
 }

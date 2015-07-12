@@ -31,15 +31,30 @@ public class Search {
     private final Shelf shelf;
     private final FragmentManager manager;
     private final String API_KEY = API.getGoogleBooksApiKey();
+    private final int MAX_RESULTS = 20;
 
-    public Search(Context context, FragmentManager manager, Shelf shelf){
+    public Search(Context context, FragmentManager manager, Shelf shelf) {
         this.context = context;
         this.manager = manager;
         this.shelf = shelf;
     }
 
     public void searchWithAuthorAndTitle(String author, String title) {
-        String searchQuery = title.trim().replace(" ", "%20") + "+inauthor:" + author.trim().replace(" ", "%20");
+
+        String searchQuery;
+
+        if (!title.isEmpty() && !author.isEmpty()) {
+            String inTitle = title.trim().replace(" ", "%20");
+            String inAuthor = author.trim().replace(" ", "%20");
+            searchQuery = inTitle + "+intitle:" + inTitle + "+inauthor:" + inAuthor;
+        } else if (!title.isEmpty()) {
+            String inTitle = title.trim().replace(" ", "%20");
+            searchQuery = inTitle + "+intitle:" + inTitle;
+        } else {
+            String inAuthor = author.trim().replace(" ", "%20");
+            searchQuery = inAuthor + "+inauthor:" + inAuthor ;
+        }
+        
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("https")
                 .authority("www.googleapis.com")
@@ -47,7 +62,9 @@ public class Search {
                 .appendPath("v1")
                 .appendPath("volumes")
                 .encodedQuery("q=" + searchQuery)
-                .appendQueryParameter("key", API_KEY);
+                .appendQueryParameter("key", API_KEY)
+                .appendQueryParameter("maxResults", String.valueOf(MAX_RESULTS))
+                .appendQueryParameter("printType", "books");
 
         String url = builder.build().toString();
         url += "&fields=" + fields;

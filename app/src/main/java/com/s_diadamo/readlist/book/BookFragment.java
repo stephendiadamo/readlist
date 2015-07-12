@@ -333,18 +333,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void launchSyncData() {
-        final ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("Syncing data...");
-        progressDialog.show();
-
         SyncData syncData = new SyncData(context);
         syncData.syncAllData();
 
         getLoaderManager().initLoader(BookLoader.ID, null, this);
         getLoaderManager().initLoader(ShelfLoader.ID, null, this);
-
-        progressDialog.dismiss();
-        Toast.makeText(context, "Sync complete", Toast.LENGTH_LONG).show();
     }
 
     @Override
