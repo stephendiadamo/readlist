@@ -75,11 +75,8 @@ public class SyncBookData extends SyncData {
         ParseObject.saveAllInBackground(booksToSend);
     }
 
-    protected void updateParseBook(final Book book) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.whereEqualTo(READLIST_ID, book.getId());
-        query.findInBackground(new FindCallback<ParseObject>() {
+    public void updateParseBook(final Book book) {
+        queryForBook(book, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> bookList, ParseException e) {
                 if (bookList.size() > 0) {
@@ -135,4 +132,22 @@ public class SyncBookData extends SyncData {
         return parseBook;
     }
 
+    public void deleteParseBook(Book book) {
+        queryForBook(book, new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> bookList, ParseException e) {
+                if (bookList.size() > 0) {
+                    ParseObject bookToDelete = bookList.get(0);
+                    bookToDelete.deleteEventually();
+                }
+            }
+        });
+    }
+
+    private void queryForBook(Book book, FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.whereEqualTo(READLIST_ID, book.getId());
+        query.findInBackground(callback);
+    }
 }

@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.goal;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +23,7 @@ import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncGoalData;
 
 import java.util.ArrayList;
 
@@ -35,7 +37,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     private GoalAdapter pageGoalAdapter;
     private ListView bookListView;
     private ListView pageListView;
-
+    private Context context;
 
     private static final String HIDE_COMPLETED_GOALS = "HIDE_COMPLETED_GOALS";
 
@@ -43,10 +45,11 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_goals, container, false);
+        context = rootView.getContext();
 
         getLoaderManager().initLoader(GoalLoader.ID, null, this);
         setHasOptionsMenu(true);
-        goalOperations = new GoalOperations(rootView.getContext());
+        goalOperations = new GoalOperations(context);
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
@@ -103,6 +106,9 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             case R.id.delete_goal:
                 if (selectedListViewAdapter != null) {
                     Goal g = selectedListViewAdapter.getItem(info.position);
+                    if (Utils.checkUserIsLoggedIn(context)){
+                        new SyncGoalData(context).deleteGoal(g);
+                    }
                     goalOperations.deleteGoal(g);
                     selectedListViewAdapter.remove(g);
                 }
@@ -124,7 +130,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public Loader<ArrayList<Goal>> onCreateLoader(int id, Bundle args) {
-        return new GoalLoader(rootView.getContext());
+        return new GoalLoader(context);
     }
 
     @Override
@@ -140,8 +146,8 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        pageGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, pageGoals);
-        bookGoalAdapter = new GoalAdapter(rootView.getContext(), R.layout.row_goal_element, bookGoals);
+        pageGoalAdapter = new GoalAdapter(context, R.layout.row_goal_element, pageGoals);
+        bookGoalAdapter = new GoalAdapter(context, R.layout.row_goal_element, bookGoals);
 
         if (pageGoals.isEmpty()) {
             rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);

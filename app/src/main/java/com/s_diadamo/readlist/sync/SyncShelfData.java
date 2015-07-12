@@ -77,16 +77,26 @@ public class SyncShelfData extends SyncData {
     }
 
     public void updateParseShelf(final Shelf shelf) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.whereEqualTo(READLIST_ID, shelf.getId());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {
                 if (shelfList.size() > 0) {
                     ParseObject shelfToUpdate = shelfList.get(0);
                     copyShelfValues(shelfToUpdate, shelf);
                     shelfToUpdate.saveEventually();
+                }
+            }
+        });
+    }
+
+    public void deleteParseShelf(Shelf shelf) {
+        queryForShelf(shelf, new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> shelfList, ParseException e) {
+                if (shelfList.size() > 0) {
+                    ParseObject shelfToDelete = shelfList.get(0);
+                    shelfToDelete.deleteEventually();
+                    ;
                 }
             }
         });
@@ -113,5 +123,12 @@ public class SyncShelfData extends SyncData {
     private void copyShelfValues(ParseObject parseShelf, Shelf shelf) {
         parseShelf.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         parseShelf.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
+    }
+
+    private void queryForShelf(Shelf shelf, FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.whereEqualTo(READLIST_ID, shelf.getId());
+        query.findInBackground(callback);
     }
 }

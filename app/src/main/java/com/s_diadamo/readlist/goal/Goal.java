@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.goal;
 import android.content.Context;
 
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncGoalData;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
@@ -83,6 +84,9 @@ public class Goal {
         if (progress >= amount && !isComplete) {
             markComplete();
             new GoalOperations(context).updateGoal(this);
+            if (Utils.checkUserIsLoggedIn(context)) {
+                new SyncGoalData(context).updateParseGoal(this);
+            }
         }
         return progress;
     }

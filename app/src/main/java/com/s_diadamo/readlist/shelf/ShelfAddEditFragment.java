@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.shelf;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,15 +29,17 @@ import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.SyncData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
+import com.s_diadamo.readlist.sync.SyncShelfData;
 
 public class ShelfAddEditFragment extends Fragment {
 
     public static final String EDIT_MODE = "EDIT_MODE";
 
     private View rootView;
+    private Context context;
     private Shelf shelf;
     private ShelfOperations shelfOperations;
     private EditText shelfEditText;
@@ -49,6 +52,7 @@ public class ShelfAddEditFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_edit_shelf, container, false);
+        context = rootView.getContext();
 
         shelfOperations = new ShelfOperations(rootView.getContext());
 
@@ -248,12 +252,15 @@ public class ShelfAddEditFragment extends Fragment {
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).updateShelfFromExpandableList(shelf);
 
+            if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
+                new SyncShelfData(context).updateParseShelf(shelf);
+            }
         } else {
             shelfOperations.addShelf(shelf);
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).addShelf(shelf);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
-                new SyncData(rootView.getContext()).syncShelf(shelf);
+                new SyncData(context).addShelfToParse(shelf);
             }
         }
 

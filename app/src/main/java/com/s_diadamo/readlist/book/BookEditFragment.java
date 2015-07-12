@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.book;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.sync.SyncBookData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
@@ -29,11 +32,13 @@ public class BookEditFragment extends Fragment {
     private EditText bookPages;
     private Spinner shelfSpinner;
     private ArrayList<Shelf> shelves;
+    private Context context;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_edit_book, container, false);
+        context = rootView.getContext();
 
         setHasOptionsMenu(true);
 
@@ -65,10 +70,8 @@ public class BookEditFragment extends Fragment {
             shelfIndex++;
         }
         shelfSpinner.setSelection(shelfIndex);
-
         return rootView;
     }
-
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -98,5 +101,8 @@ public class BookEditFragment extends Fragment {
         int selectedShelfPosition = shelfSpinner.getSelectedItemPosition();
         book.setShelfId(shelves.get(selectedShelfPosition).getId());
         bookOperations.updateBook(book);
+        if (Utils.checkUserIsLoggedIn(context)) {
+            new SyncBookData(context).updateParseBook(book);
+        }
     }
 }

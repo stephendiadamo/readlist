@@ -18,6 +18,7 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.sync.SyncShelfData;
 
 class BookMenuActions {
 
@@ -71,6 +72,7 @@ class BookMenuActions {
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
+                new SyncShelfData(context).deleteParseShelf(shelf);
                 new ShelfOperations(context).deleteShelf(shelf);
                 shelfDrawer.deleteItemFromExpandableList(shelf);
                 Utils.launchBookFragment(manager);

@@ -75,16 +75,25 @@ public class SyncGoalData extends SyncData {
     }
 
     public void updateParseGoal(final Goal goal) {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.whereEqualTo(READLIST_ID, goal.getId());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
                 if (goalList.size() > 0) {
                     ParseObject goalToUpdate = goalList.get(0);
                     copyGoalValues(goalToUpdate, goal);
                     goalToUpdate.saveEventually();
+                }
+            }
+        });
+    }
+
+    public void deleteGoal(Goal goal) {
+        queryForGoal(goal, new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> goalList, ParseException e) {
+                if (goalList.size() > 0) {
+                    ParseObject goalToDelete = goalList.get(0);
+                    goalToDelete.deleteEventually();
                 }
             }
         });
@@ -120,5 +129,12 @@ public class SyncGoalData extends SyncData {
                 parseGoal.getString(DatabaseHelper.GOAL_START_DATE),
                 parseGoal.getString(DatabaseHelper.GOAL_END_DATE),
                 parseGoal.getInt(DatabaseHelper.GOAL_IS_COMPLETE));
+    }
+
+    private void queryForGoal(Goal goal, FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.whereEqualTo(READLIST_ID, goal.getId());
+        query.findInBackground(callback);
     }
 }

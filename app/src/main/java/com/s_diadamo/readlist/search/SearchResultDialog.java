@@ -10,9 +10,8 @@ import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
-import com.s_diadamo.readlist.book.BookAdapter;
 import com.s_diadamo.readlist.book.BookOperations;
-import com.s_diadamo.readlist.general.SyncData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
@@ -37,7 +36,7 @@ class SearchResultDialog extends AlertDialog {
                     Book book = books.get(position);
                     new BookOperations(context).addBook(book);
                     if (Utils.checkUserIsLoggedIn(context)) {
-                        new SyncData(context).syncBook(book);
+                        new SyncData(context).addBookToParse(book);
                     }
                     Toast.makeText(context, "Added book", Toast.LENGTH_SHORT).show();
                     Utils.launchBookFragment(manager);

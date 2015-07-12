@@ -1,7 +1,6 @@
 package com.s_diadamo.readlist.book;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
@@ -28,10 +27,10 @@ import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.LoginFragment;
-import com.s_diadamo.readlist.general.SyncData;
+import com.s_diadamo.readlist.sync.SyncBookData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
@@ -233,6 +232,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        new SyncBookData(context).deleteParseBook(book);
                         bookOperations.deleteBook(book);
                         userBooks.remove(book);
                         bookAdapter.notifyDataSetChanged();
@@ -290,7 +290,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         new PageUpdateOperations(context).
                 addPageUpdate(new PageUpdate(book.getId(), remainingPages));
         if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).syncPageUpdate(pageUpdate);
+            new SyncData(context).addPageUpdateToParse(pageUpdate);
         }
 
         book.markComplete();
@@ -302,7 +302,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         BookUpdate bookUpdate = new BookUpdate(book.getId());
         new BookUpdateOperations(context).addBookUpdate(bookUpdate);
         if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).syncBookUpdate(bookUpdate);
+            new SyncData(context).addBookUpdateToParse(bookUpdate);
         }
     }
 

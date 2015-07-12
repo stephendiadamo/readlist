@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.SyncData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
@@ -132,7 +132,7 @@ public class BookManualAddActivity extends AppCompatActivity {
             new BookOperations(this).addBook(book);
 
             if (Utils.checkUserIsLoggedIn(this)){
-                new SyncData(this).syncBook(book);
+                new SyncData(this).addBookToParse(book);
             }
 
             finish();

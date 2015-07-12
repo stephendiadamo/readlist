@@ -18,7 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.SyncData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.Calendar;
@@ -132,7 +132,7 @@ public class GoalAddFragment extends Fragment {
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
             new GoalOperations(rootView.getContext()).addGoal(goal);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
-                new SyncData(rootView.getContext()).syncGoal(goal);
+                new SyncData(rootView.getContext()).addGoalToParse(goal);
             }
             backToGoals();
         } else {
