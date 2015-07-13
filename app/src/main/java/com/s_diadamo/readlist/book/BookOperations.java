@@ -20,7 +20,8 @@ public class BookOperations {
             DatabaseHelper.BOOK_CURRENT_PAGE,
             DatabaseHelper.BOOK_COMPLETE,
             DatabaseHelper.BOOK_COMPLETION_DATE,
-            DatabaseHelper.BOOK_COVER_PICTURE_URL
+            DatabaseHelper.BOOK_COVER_PICTURE_URL,
+            DatabaseHelper.BOOK_IS_DELETED
     };
     private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -139,6 +140,7 @@ public class BookOperations {
                 cursor.getInt(6),
                 cursor.getInt(7),
                 cursor.getString(8),
-                cursor.getString(9));
+                cursor.getString(9),
+                cursor.getInt(10));
     }
 }

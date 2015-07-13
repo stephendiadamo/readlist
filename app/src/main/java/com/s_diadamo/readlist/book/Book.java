@@ -22,11 +22,12 @@ public class Book {
     private Boolean complete = false;
     private String completionDate = "";
     private String coverPictureUrl = "";
+    private Boolean isDeleted = false;
 
     public Book() {
     }
 
-    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl) {
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl, int isDeleted) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -38,6 +39,7 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+        this.isDeleted = (isDeleted == 1);
     }
 
     public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl) {
@@ -64,6 +66,20 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+    }
+
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, int isDeleted) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.shelfId = shelfId;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
+        this.complete = (complete == 1);
+        this.completionDate = completionDate;
+        this.coverPictureUrl = coverPictureUrl;
+        this.isDeleted = (isDeleted == 1);
     }
 
     public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
@@ -112,6 +128,14 @@ public class Book {
 
     public String getDateAdded() {
         return this.dateAdded;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public String getCleanDateAdded() {

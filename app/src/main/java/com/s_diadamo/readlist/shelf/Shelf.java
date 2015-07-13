@@ -15,14 +15,22 @@ public class Shelf {
     private int id;
     private String name;
     private int colour;
+    private boolean isDeleted = false;
 
-    public Shelf(){
+    public Shelf() {
     }
 
     public Shelf(int id, String name, int color) {
         this.id = id;
         this.name = name;
         this.colour = color;
+    }
+
+    public Shelf(int id, String name, int color, int isDeleted) {
+        this.id = id;
+        this.name = name;
+        this.colour = color;
+        this.isDeleted = (isDeleted == 1);
     }
 
     public Shelf(String name, int color) {
@@ -52,6 +60,14 @@ public class Shelf {
 
     public void setColour(int color) {
         this.colour = color;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public ArrayList<Book> fetchBooks(Context context) {

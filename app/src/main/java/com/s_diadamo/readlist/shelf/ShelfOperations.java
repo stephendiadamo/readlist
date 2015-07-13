@@ -15,7 +15,8 @@ public class ShelfOperations {
     private final String[] SHELF_TABLE_COLUMNS = {
             DatabaseHelper.KEY_ID,
             DatabaseHelper.SHELF_NAME,
-            DatabaseHelper.SHELF_COLOR
+            DatabaseHelper.SHELF_COLOR,
+            DatabaseHelper.SHELF_IS_DELETED
     };
 
     private final DatabaseHelper dbHelper;
@@ -150,7 +151,6 @@ public class ShelfOperations {
         return books;
     }
 
-
     public void updateShelf(Shelf shelf) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -180,21 +180,23 @@ public class ShelfOperations {
         return new Shelf(
                 cursor.getInt(0),
                 cursor.getString(1),
-                cursor.getInt(2));
+                cursor.getInt(2),
+                cursor.getInt(3));
     }
 
     private Book parseBookAfterJoin(Cursor cursor) {
         return new Book(
-                cursor.getInt(3),
-                cursor.getString(4),
+                cursor.getInt(4),
                 cursor.getString(5),
-                cursor.getInt(6),
-                cursor.getString(7),
-                cursor.getInt(8),
+                cursor.getString(6),
+                cursor.getInt(7),
+                cursor.getString(8),
                 cursor.getInt(9),
                 cursor.getInt(10),
-                cursor.getString(11),
-                cursor.getString(12));
+                cursor.getInt(11),
+                cursor.getString(12),
+                cursor.getString(13),
+                cursor.getInt(14));
     }
 
 
