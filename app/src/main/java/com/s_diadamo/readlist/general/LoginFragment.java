@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,10 +35,13 @@ public class LoginFragment extends Fragment {
 
     private int currentMode = LOGIN_MODE;
 
+    private EditText userNameInput;
     private EditText emailAddressInput;
     private EditText passwordInput;
     private EditText passwordRepeatInput;
     private Button login;
+    private TextView userNameLabel;
+    private TextView emailAddressLabel;
     private TextView createAccount;
     private TextView repeatPasswordLabel;
     private TextView forgotPassword;
@@ -56,7 +58,10 @@ public class LoginFragment extends Fragment {
         setHasOptionsMenu(false);
         toggleActionBar(false);
 
+        userNameInput = (EditText) rootView.findViewById(R.id.login_user_name);
+        userNameLabel = (TextView) rootView.findViewById(R.id.login_user_name_label);
         emailAddressInput = (EditText) rootView.findViewById(R.id.login_email_address);
+        emailAddressLabel = (TextView) rootView.findViewById(R.id.login_email_address_label);
         passwordInput = (EditText) rootView.findViewById(R.id.login_password);
         passwordRepeatInput = (EditText) rootView.findViewById(R.id.login_password_repeat);
         passwordLabel = (TextView) rootView.findViewById(R.id.login_password_label);
@@ -72,19 +77,14 @@ public class LoginFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String emailAddress = emailAddressInput.getText().toString();
+                final String userName = userNameInput.getText().toString();
                 final String password = passwordInput.getText().toString();
 
                 if (currentMode != FORGOT_PASSWORD_MODE) {
-                    if (password.isEmpty()) {
+                    if (userName.isEmpty() || password.isEmpty()) {
                         Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
                         return;
                     }
-                }
-
-                if (emailAddress.isEmpty()) {
-                    Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
-                    return;
                 }
 
                 if (currentMode == CREATE_ACCOUNT_MODE) {
@@ -106,9 +106,13 @@ public class LoginFragment extends Fragment {
                     }
 
                     ParseUser user = new ParseUser();
-                    user.setUsername(emailAddress);
-                    user.setEmail(emailAddress);
+                    user.setUsername(userName);
                     user.setPassword(password);
+
+                    String emailAddress = emailAddressInput.getText().toString();
+                    if (!emailAddress.isEmpty()) {
+                        user.setEmail(emailAddress);
+                    }
 
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Creating account...");
@@ -120,6 +124,7 @@ public class LoginFragment extends Fragment {
                             progressDialog.dismiss();
                             if (e == null) {
                                 Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show();
+                                switchToLoginMode();
                             } else if (e.getCode() == ParseException.ACCOUNT_ALREADY_LINKED) {
                                 Toast.makeText(context, "This email address has been used. Did you forget your password?", Toast.LENGTH_SHORT).show();
                             } else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
@@ -132,13 +137,13 @@ public class LoginFragment extends Fragment {
                     progressDialog.setMessage("Logging in...");
                     progressDialog.show();
 
-                    ParseUser.logInInBackground(emailAddress, password, new LogInCallback() {
+                    ParseUser.logInInBackground(userName, password, new LogInCallback() {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
                             progressDialog.dismiss();
                             if (parseUser != null) {
                                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
-                                rememberUser(emailAddress, password);
+                                rememberUser(userName, password);
                                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                                 SharedPreferences.Editor editor = prefs.edit();
                                 if (rememberMe.isChecked()) {
@@ -156,6 +161,12 @@ public class LoginFragment extends Fragment {
                         }
                     });
                 } else if (currentMode == FORGOT_PASSWORD_MODE) {
+                    final String emailAddress = emailAddressInput.getText().toString();
+                    if (emailAddress.isEmpty()) {
+                        Toast.makeText(context, "Please fill in your email address", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Verifying...");
                     progressDialog.show();
@@ -203,6 +214,12 @@ public class LoginFragment extends Fragment {
     private void switchToCreateMode() {
         currentMode = CREATE_ACCOUNT_MODE;
 
+        userNameInput.setVisibility(View.VISIBLE);
+        userNameLabel.setVisibility(View.VISIBLE);
+
+        emailAddressLabel.setVisibility(View.VISIBLE);
+        emailAddressInput.setVisibility(View.VISIBLE);
+
         passwordLabel.setVisibility(View.VISIBLE);
         passwordInput.setVisibility(View.VISIBLE);
         rememberMe.setVisibility(View.GONE);
@@ -218,6 +235,12 @@ public class LoginFragment extends Fragment {
 
     private void switchToLoginMode() {
         currentMode = LOGIN_MODE;
+
+        userNameInput.setVisibility(View.VISIBLE);
+        userNameLabel.setVisibility(View.VISIBLE);
+
+        emailAddressLabel.setVisibility(View.GONE);
+        emailAddressInput.setVisibility(View.GONE);
 
         passwordLabel.setVisibility(View.VISIBLE);
         passwordInput.setVisibility(View.VISIBLE);
@@ -235,6 +258,12 @@ public class LoginFragment extends Fragment {
     private void switchToForgotPasswordMode() {
         currentMode = FORGOT_PASSWORD_MODE;
 
+        userNameInput.setVisibility(View.GONE);
+        userNameLabel.setVisibility(View.GONE);
+
+        emailAddressLabel.setVisibility(View.VISIBLE);
+        emailAddressInput.setVisibility(View.VISIBLE);
+
         passwordLabel.setVisibility(View.GONE);
         passwordInput.setVisibility(View.GONE);
         rememberMe.setVisibility(View.GONE);
@@ -248,10 +277,10 @@ public class LoginFragment extends Fragment {
         forgotPassword.setVisibility(View.GONE);
     }
 
-    private void rememberUser(String emailAddress, String password) {
+    private void rememberUser(String userName, String password) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(Utils.USER_NAME, emailAddress);
+        editor.putString(Utils.USER_NAME, userName);
         editor.putString(Utils.PASSWORD, password);
         editor.apply();
     }

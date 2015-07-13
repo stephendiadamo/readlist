@@ -6,12 +6,32 @@
     android:orientation="vertical"
     android:padding="15dp">
 
+
     <TextView
+        android:id="@+id/login_user_name_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="@string/email_address"
+        android:text="@string/user_name"
         android:textSize="19sp" />
+
+    <EditText
+        android:id="@+id/login_user_name"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="15dp"
+        android:background="#ddd"
+        android:inputType="text"
+        android:padding="5dp" />
+
+    <TextView
+        android:id="@+id/login_email_address_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/email_address_optional"
+        android:textSize="19sp"
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/login_email_address"
@@ -20,7 +40,8 @@
         android:layout_marginBottom="15dp"
         android:background="#ddd"
         android:inputType="textEmailAddress"
-        android:padding="5dp" />
+        android:padding="5dp"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/login_password_label"

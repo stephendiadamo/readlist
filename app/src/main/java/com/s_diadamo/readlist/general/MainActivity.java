@@ -1,5 +1,7 @@
 package com.s_diadamo.readlist.general;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
@@ -12,7 +14,6 @@ import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
 import com.parse.Parse;
-import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
+    private static final String SHOWED_LOGIN_FEATURE_MESSAGE = "SHOWED_LOGIN_FEATURE_MESSAGE";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
 
@@ -48,6 +50,26 @@ public class MainActivity extends AppCompatActivity
             new ShelfOperations(this).addShelf(defaultShelf);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(CREATED_SHELF, true);
+            editor.apply();
+        }
+        if (!prefs.getBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, false)) {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+            alertDialog.setTitle("Introducing Cloud Syncing!");
+            alertDialog.setMessage("In this update, you will be able to backup all of your data " +
+                    "on the cloud. Be sure to create an account by clicking 'Login' " +
+                    "in the options menu to start syncing.\n\nThere have also been improvements to" +
+                    " book search to get more accurate results.\n\nKeep the " +
+                    "feedback coming and thank you for using Readlist!");
+            alertDialog.setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            alertDialog.create().show();
+
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, true);
             editor.apply();
         }
 

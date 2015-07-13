@@ -17,8 +17,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.s_diadamo.readlist.general.API;
 import com.s_diadamo.readlist.book.Book;
-import com.s_diadamo.readlist.book.BookAdapter;
-import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.util.ArrayList;

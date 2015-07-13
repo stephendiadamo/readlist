@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.sync;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
 
 import com.parse.ParseObject;
 import com.s_diadamo.readlist.book.Book;
@@ -29,11 +30,20 @@ public class SyncData {
     public SyncData(Context context) {
         this.context = context;
         this.userName = getUserName();
-        this.syncSpinner = new MultiProcessSpinner(context, "Syncing data...", "Syncing complete");
+        this.syncSpinner = MultiProcessSpinner.getInstance();
+        this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
     }
 
     public void syncAllData() {
         new SyncBookData(context).syncAllBooks();
+        new SyncShelfData(context).syncAllShelves();
+        new SyncGoalData(context).syncAllGoals();
+        new SyncBookUpdateData(context).syncAllBookUpdates();
+        new SyncPageUpdateData(context).syncAllPageUpdates();
+    }
+
+    public void syncAllData(AppCompatActivity activity) {
+        new SyncBookData(context).syncAllBooks(activity);
         new SyncShelfData(context).syncAllShelves();
         new SyncGoalData(context).syncAllGoals();
         new SyncBookUpdateData(context).syncAllBookUpdates();

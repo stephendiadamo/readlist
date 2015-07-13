@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.updates.PageUpdate;
@@ -57,6 +58,7 @@ class BookUpdatePageDialog extends AlertDialog {
                 new PageUpdateOperations(context).addPageUpdate(pageUpdate);
                 if (Utils.checkUserIsLoggedIn(context)) {
                     new SyncData(context).addPageUpdateToParse(pageUpdate);
+                    new SyncBookData(context).updateParseBook(book);
                 }
 
                 dismiss();

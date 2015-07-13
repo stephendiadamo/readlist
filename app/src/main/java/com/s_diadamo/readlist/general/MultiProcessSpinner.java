@@ -5,6 +5,8 @@ import android.content.Context;
 import android.widget.Toast;
 
 public class MultiProcessSpinner {
+
+    private static MultiProcessSpinner instance = null;
     private Context context;
     private int runningThreads;
     private ProgressDialog progressDialog;
@@ -12,12 +14,24 @@ public class MultiProcessSpinner {
     private String completeMessage;
     private boolean showedMessage;
 
-    public MultiProcessSpinner(Context context, String syncMessage, String completeMessage) {
-        this.context = context;
+    private MultiProcessSpinner() {
         this.runningThreads = 0;
-        this.syncMessage = syncMessage;
-        this.completeMessage = completeMessage;
         this.showedMessage = false;
+    }
+
+    public static MultiProcessSpinner getInstance() {
+        if (instance == null) {
+            instance = new MultiProcessSpinner();
+        }
+        return instance;
+    }
+
+    public void setInfo(Context context, String syncMessage, String completeMessage) {
+        if (instance != null) {
+            instance.context = context;
+            instance.syncMessage = syncMessage;
+            instance.completeMessage = completeMessage;
+        }
     }
 
     public void addThread() {
@@ -26,7 +40,6 @@ public class MultiProcessSpinner {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(syncMessage);
             progressDialog.show();
-            showedMessage = false;
         }
     }
 
@@ -35,7 +48,7 @@ public class MultiProcessSpinner {
         if (runningThreads == 0) {
             progressDialog.dismiss();
             if (!showedMessage) {
-                Toast.makeText(context, completeMessage, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, completeMessage, Toast.LENGTH_SHORT).show();
                 showedMessage = true;
             }
         }

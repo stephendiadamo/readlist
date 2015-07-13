@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.sync;
 
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -21,7 +22,7 @@ public class SyncBookData extends SyncData {
         super(context);
     }
 
-    protected void syncAllBooks() {
+    void syncAllBooks() {
         syncSpinner.addThread();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
@@ -41,7 +42,29 @@ public class SyncBookData extends SyncData {
         });
     }
 
-    protected void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
+    void syncAllBooks(final AppCompatActivity activity) {
+        syncSpinner.addThread();
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseBooks, ParseException e) {
+                syncSpinner.endThread();
+                ArrayList<Book> booksOnDevice = new BookOperations(context).getAllBooks();
+                ArrayList<Book> booksFromParse = new ArrayList<>();
+                for (ParseObject parseBook : parseBooks) {
+                    Book book = parseBookToBook(parseBook);
+                    booksFromParse.add(book);
+                }
+                updateDeviceBooks(booksOnDevice, booksFromParse);
+                updateParseBooks(booksOnDevice, booksFromParse);
+                activity.startActivity(activity.getIntent());
+                Utils.launchBookFragment(activity.getSupportFragmentManager());
+            }
+        });
+    }
+
+    private void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
         HashSet<Integer> deviceBookIds = new HashSet<>();
         for (Book book : booksOnDevice) {
             deviceBookIds.add(book.getId());

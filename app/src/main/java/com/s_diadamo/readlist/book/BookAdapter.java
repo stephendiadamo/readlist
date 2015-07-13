@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,7 +17,6 @@ import com.s_diadamo.readlist.R;
 import java.util.ArrayList;
 
 public class BookAdapter extends BaseAdapter {
-
     private final static String STORAGE_FILE_START = "/storage";
 
     private final Context context;

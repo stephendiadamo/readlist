@@ -15,7 +15,6 @@ import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.sync.SyncBookData;
-import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;

@@ -42,6 +42,8 @@ public class SyncShelfData extends SyncData {
         });
     }
 
+
+
     private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {
         HashSet<Integer> deviceShelfIds = new HashSet<>();
         for (Shelf shelf : shelvesOnDevice) {
@@ -96,7 +98,6 @@ public class SyncShelfData extends SyncData {
                 if (shelfList.size() > 0) {
                     ParseObject shelfToDelete = shelfList.get(0);
                     shelfToDelete.deleteEventually();
-                    ;
                 }
             }
         });

@@ -29,6 +29,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.LoginFragment;
+import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
@@ -46,7 +47,6 @@ import com.s_diadamo.readlist.updates.PageUpdateOperations;
 import java.util.ArrayList;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
-    private View rootView;
     private Context context;
     private ListView bookListView;
     private ArrayList<Book> userBooks;
@@ -65,11 +65,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String EDIT_SHELF = "EDIT_SHELF";
     private static final String LOGIN = "LOGIN";
     private static final String BOOK_ID = "BOOK_ID";
+    private static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_listview, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
         context = rootView.getContext();
 
         setHasOptionsMenu(true);
@@ -141,13 +142,21 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         BookMenuActions bookMenuActions = new BookMenuActions(context, bookOperations, bookAdapter, shelf);
 
         if (id == R.id.add_book_search) {
-            bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
+            if (Utils.isNetworkAvailable(getActivity())) {
+                bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
+            } else {
+                showToast(CHECK_INTERNET_MESSAGE);
+            }
             return true;
         } else if (id == R.id.add_book_manually) {
             bookMenuActions.manuallyAddBook();
             return true;
         } else if (id == R.id.add_book_scan) {
-            launchScanner();
+            if (Utils.isNetworkAvailable(getActivity())) {
+                launchScanner();
+            } else {
+                showToast(CHECK_INTERNET_MESSAGE);
+            }
             return true;
         } else if (id == R.id.edit_shelf) {
             launchEditShelfFragment();
@@ -167,6 +176,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (!userLoggedIn) {
                 showToast("You must be logged in to sync data");
             } else {
+                ((MainActivity) getActivity()).closeDrawer();
                 launchSyncData();
             }
         } else if (id == R.id.login) {
@@ -175,6 +185,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 optionsMenu.findItem(R.id.login).setTitle("Login");
                 Utils.logout(context);
             } else {
+
                 launchLoginFragment();
             }
 
@@ -333,11 +344,16 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void launchSyncData() {
-        SyncData syncData = new SyncData(context);
-        syncData.syncAllData();
+        if (Utils.isNetworkAvailable(getActivity())) {
+            SyncData syncData = new SyncData(context);
+            syncData.syncAllData((AppCompatActivity) getActivity());
+        } else {
+            showToast(CHECK_INTERNET_MESSAGE);
+        }
+    }
 
+    private void refreshBookList() {
         getLoaderManager().initLoader(BookLoader.ID, null, this);
-        getLoaderManager().initLoader(ShelfLoader.ID, null, this);
     }
 
     @Override
