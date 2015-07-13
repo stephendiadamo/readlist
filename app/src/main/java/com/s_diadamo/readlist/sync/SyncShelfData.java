@@ -2,13 +2,16 @@ package com.s_diadamo.readlist.sync;
 
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
@@ -42,6 +45,28 @@ public class SyncShelfData extends SyncData {
         });
     }
 
+
+    protected void syncAllShelves(final AppCompatActivity activity) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        syncSpinner.addThread();
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseShelves, ParseException e) {
+                syncSpinner.endThread();
+                ArrayList<Shelf> shelvesOnDevice = new ShelfOperations(context).getAllShelves();
+                ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
+                for (ParseObject parseShelf : parseShelves) {
+                    Shelf shelf = parseShelfToShelf(parseShelf);
+                    shelvesFromParse.add(shelf);
+                }
+                updateDeviceShelves(shelvesOnDevice, shelvesFromParse);
+                updateParseShelves(shelvesOnDevice, shelvesFromParse);
+                ((NavigationDrawerFragment) activity.getSupportFragmentManager().
+                        findFragmentById(R.id.navigation_drawer)).resetAdapter();
+            }
+        });
+    }
 
 
     private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {

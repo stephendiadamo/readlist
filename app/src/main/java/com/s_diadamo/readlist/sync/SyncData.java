@@ -44,7 +44,7 @@ public class SyncData {
 
     public void syncAllData(AppCompatActivity activity) {
         new SyncBookData(context).syncAllBooks(activity);
-        new SyncShelfData(context).syncAllShelves();
+        new SyncShelfData(context).syncAllShelves(activity);
         new SyncGoalData(context).syncAllGoals();
         new SyncBookUpdateData(context).syncAllBookUpdates();
         new SyncPageUpdateData(context).syncAllPageUpdates();

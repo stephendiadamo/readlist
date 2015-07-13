@@ -185,7 +185,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 optionsMenu.findItem(R.id.login).setTitle("Login");
                 Utils.logout(context);
             } else {
-
+                ((MainActivity) getActivity()).closeDrawer();
                 launchLoginFragment();
             }
 
@@ -299,7 +299,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         int remainingPages = book.getNumPages() - book.getCurrentPage();
         PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
         new PageUpdateOperations(context).
-                addPageUpdate(new PageUpdate(book.getId(), remainingPages));
+                addPageUpdate(pageUpdate);
         if (Utils.checkUserIsLoggedIn(context)) {
             new SyncData(context).addPageUpdateToParse(pageUpdate);
         }
@@ -314,6 +314,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         new BookUpdateOperations(context).addBookUpdate(bookUpdate);
         if (Utils.checkUserIsLoggedIn(context)) {
             new SyncData(context).addBookUpdateToParse(bookUpdate);
+            new SyncBookData(context).updateParseBook(book);
         }
     }
 

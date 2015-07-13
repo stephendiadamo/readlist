@@ -96,6 +96,12 @@ public class NavigationDrawerFragment extends Fragment {
         navigationItemAdapter.updateItemFromExpandableList(shelf);
     }
 
+    public void resetAdapter(){
+        navigationItemAdapter = new NavigationItemAdapter(getActivity());
+        mDrawerListView.setAdapter(navigationItemAdapter);
+        mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+    }
+
     public void addShelf(Shelf shelf) {
         navigationItemAdapter.addShelf(shelf);
     }
