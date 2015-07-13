@@ -75,9 +75,6 @@ public class MainActivity extends AppCompatActivity
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
-
-        Parse.enableLocalDatastore(this);
-        Parse.initialize(this, API.PARSE_APP_KEY, API.PARSE_CLIENT_KEY);
     }
 
     @Override
