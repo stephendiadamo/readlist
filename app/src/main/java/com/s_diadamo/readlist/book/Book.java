@@ -22,7 +22,7 @@ public class Book {
     private Boolean complete = false;
     private String completionDate = "";
     private String coverPictureUrl = "";
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
     public Book() {
     }
@@ -53,6 +53,7 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+        this.isDeleted = false;
     }
 
     public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
@@ -66,6 +67,7 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+        this.isDeleted = false;
     }
 
     public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, int isDeleted) {
@@ -92,6 +94,7 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+        this.isDeleted = false;
     }
 
     public int getId() {

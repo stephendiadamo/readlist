@@ -136,6 +136,7 @@ public class SyncBookData extends SyncData {
     }
 
     private void copyBookValues(ParseObject parseBook, Book book) {
+        parseBook.put(READLIST_ID, book.getId());
         parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
         parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
         parseBook.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());

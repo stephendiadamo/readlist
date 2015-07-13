@@ -29,6 +29,8 @@ public class GoalAddFragment extends Fragment {
     private View rootView;
     private String startDate = "";
     private String endDate = "";
+    private static final int START_DATE = 0;
+    private static final int END_DATE = 1;
     private final Calendar calendar = Calendar.getInstance();
 
     @Override
@@ -43,22 +45,10 @@ public class GoalAddFragment extends Fragment {
         TextView startDateTextView = (TextView) rootView.findViewById(R.id.add_goal_start_date);
         TextView endDateTextView = (TextView) rootView.findViewById(R.id.add_goal_end_date);
 
-        startDateButton.setOnClickListener(setDateCalendarOnClick(startDateTextView, 0));
-        endDateButton.setOnClickListener(setDateCalendarOnClick(endDateTextView, 1));
+        startDateButton.setOnClickListener(setDateCalendarOnClick(startDateTextView, START_DATE));
+        endDateButton.setOnClickListener(setDateCalendarOnClick(endDateTextView, END_DATE));
 
         return rootView;
-    }
-
-    private void setStartDateString(String date, int whichDate) {
-        switch (whichDate) {
-            case 0:
-                startDate = date;
-                break;
-            case 1:
-                endDate = date;
-                break;
-        }
-
     }
 
     private View.OnClickListener setDateCalendarOnClick(final TextView dateView, final int whichDate) {
@@ -72,7 +62,7 @@ public class GoalAddFragment extends Fragment {
                         calendar.set(Calendar.MONTH, monthOfYear);
                         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         fixDate(whichDate);
-                        setStartDateString(Utils.parseDate(calendar.getTime()), whichDate);
+                        setDateString(Utils.parseDate(calendar.getTime()), whichDate);
                         dateView.setText(Utils.cleanDate(calendar.getTime()));
                     }
                 };
@@ -83,6 +73,17 @@ public class GoalAddFragment extends Fragment {
                         calendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         };
+    }
+
+    private void setDateString(String date, int whichDate) {
+        switch (whichDate) {
+            case START_DATE:
+                startDate = date;
+                break;
+            case END_DATE:
+                endDate = date;
+                break;
+        }
     }
 
     private void fixDate(int which) {
@@ -151,5 +152,4 @@ public class GoalAddFragment extends Fragment {
                 .replace(R.id.container, fragment)
                 .commit();
     }
-
 }
