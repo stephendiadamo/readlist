@@ -18,8 +18,11 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncBookData extends SyncData {
+    private BookOperations bookOperations;
+
     public SyncBookData(Context context) {
         super(context);
+        bookOperations = new BookOperations(context);
     }
 
     void syncAllBooks() {
@@ -30,7 +33,7 @@ public class SyncBookData extends SyncData {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
                 syncSpinner.endThread();
-                ArrayList<Book> booksOnDevice = new BookOperations(context).getAllBooks();
+                ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
                 for (ParseObject parseBook : parseBooks) {
                     Book book = parseBookToBook(parseBook);
@@ -50,7 +53,7 @@ public class SyncBookData extends SyncData {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
                 syncSpinner.endThread();
-                ArrayList<Book> booksOnDevice = new BookOperations(context).getAllBooks();
+                ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
                 for (ParseObject parseBook : parseBooks) {
                     Book book = parseBookToBook(parseBook);
@@ -70,8 +73,6 @@ public class SyncBookData extends SyncData {
             deviceBookIds.add(book.getId());
         }
 
-        BookOperations bookOperations = new BookOperations(context);
-
         for (Book book : booksFromParse) {
             if (!deviceBookIds.contains(book.getId())) {
                 bookOperations.addBook(book);
@@ -89,9 +90,18 @@ public class SyncBookData extends SyncData {
 
         for (final Book book : booksOnDevice) {
             if (!parseBookIds.contains(book.getId())) {
-                booksToSend.add(toParseBook(book));
+                if (book.isDeleted()){
+                    bookOperations.deleteBook(book);
+                } else {
+                    booksToSend.add(toParseBook(book));
+                }
             } else {
-                updateParseBook(book);
+                if (book.isDeleted()) {
+                    deleteParseBook(book);
+                    bookOperations.deleteBook(book);
+                } else {
+                    updateParseBook(book);
+                }
             }
         }
 

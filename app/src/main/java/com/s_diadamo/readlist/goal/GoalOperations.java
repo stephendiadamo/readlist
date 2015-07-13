@@ -27,6 +27,7 @@ public class GoalOperations {
         values.put(DatabaseHelper.GOAL_START_DATE, goal.getStartDate());
         values.put(DatabaseHelper.GOAL_END_DATE, goal.getEndDate());
         values.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
+        values.put(DatabaseHelper.GOAL_IS_DELETED, goal.isDeleted());
 
         long id = db.insert(DatabaseHelper.TABLE_GOALS, null, values);
         goal.setId((int) id);
@@ -50,6 +51,25 @@ public class GoalOperations {
         return goals;
     }
 
+    public ArrayList<Goal> getAllValidGoals() {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<Goal> goals = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=0",
+                DatabaseHelper.TABLE_GOALS,
+                DatabaseHelper.GOAL_IS_DELETED);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Goal goal = parseGoal(cursor);
+                goals.add(goal);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return goals;
+    }
+
     public void updateGoal(Goal goal) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -59,6 +79,7 @@ public class GoalOperations {
         values.put(DatabaseHelper.GOAL_START_DATE, goal.getStartDate());
         values.put(DatabaseHelper.GOAL_END_DATE, goal.getEndDate());
         values.put(DatabaseHelper.GOAL_IS_COMPLETE, goal.isComplete());
+        values.put(DatabaseHelper.GOAL_IS_DELETED, goal.isDeleted());
 
         db.update(DatabaseHelper.TABLE_GOALS, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(goal.getId())});
@@ -79,7 +100,8 @@ public class GoalOperations {
                 cursor.getInt(2),
                 cursor.getString(3),
                 cursor.getString(4),
-                cursor.getInt(5)
+                cursor.getInt(5),
+                cursor.getInt(6)
         );
     }
 }

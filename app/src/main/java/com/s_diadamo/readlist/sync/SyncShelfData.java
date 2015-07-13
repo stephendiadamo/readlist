@@ -20,9 +20,11 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncShelfData extends SyncData {
+    private ShelfOperations shelfOperations;
 
     public SyncShelfData(Context context) {
         super(context);
+        shelfOperations = new ShelfOperations(context);
     }
 
     protected void syncAllShelves() {
@@ -33,7 +35,7 @@ public class SyncShelfData extends SyncData {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
                 syncSpinner.endThread();
-                ArrayList<Shelf> shelvesOnDevice = new ShelfOperations(context).getAllShelves();
+                ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
                     Shelf shelf = parseShelfToShelf(parseShelf);
@@ -54,7 +56,7 @@ public class SyncShelfData extends SyncData {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
                 syncSpinner.endThread();
-                ArrayList<Shelf> shelvesOnDevice = new ShelfOperations(context).getAllShelves();
+                ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
                     Shelf shelf = parseShelfToShelf(parseShelf);
@@ -75,8 +77,6 @@ public class SyncShelfData extends SyncData {
             deviceShelfIds.add(shelf.getId());
         }
 
-        ShelfOperations shelfOperations = new ShelfOperations(context);
-
         for (Shelf shelf : shelvesFromParse) {
             if (!deviceShelfIds.contains(shelf.getId())) {
                 shelfOperations.addShelf(shelf);
@@ -94,9 +94,18 @@ public class SyncShelfData extends SyncData {
 
         for (final Shelf shelf : shelvesOnDevice) {
             if (!parseShelfIds.contains(shelf.getId()) && shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
-                shelvesToSend.add(toParseShelf(shelf));
+                if (shelf.isDeleted()) {
+                    shelfOperations.deleteShelf(shelf);
+                } else {
+                    shelvesToSend.add(toParseShelf(shelf));
+                }
             } else {
-                updateParseShelf(shelf);
+                if (shelf.isDeleted()) {
+                    deleteParseShelf(shelf);
+                    shelfOperations.deleteShelf(shelf);
+                } else {
+                    updateParseShelf(shelf);
+                }
             }
         }
 

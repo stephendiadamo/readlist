@@ -243,8 +243,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .setCancelable(true)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        new SyncBookData(context).deleteParseBook(book);
-                        bookOperations.deleteBook(book);
+                        if (Utils.checkUserIsLoggedIn(context)) {
+                            new SyncBookData(context).deleteParseBook(book);
+                            bookOperations.deleteBook(book);
+                        } else {
+                            book.delete();
+                            bookOperations.updateBook(book);
+                        }
                         userBooks.remove(book);
                         bookAdapter.notifyDataSetChanged();
                         bookAdapter.notifyDataSetInvalidated();

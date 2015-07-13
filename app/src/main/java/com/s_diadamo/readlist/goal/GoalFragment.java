@@ -105,12 +105,16 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (item.getItemId()) {
             case R.id.delete_goal:
                 if (selectedListViewAdapter != null) {
-                    Goal g = selectedListViewAdapter.getItem(info.position);
+                    Goal goal = selectedListViewAdapter.getItem(info.position);
                     if (Utils.checkUserIsLoggedIn(context)){
-                        new SyncGoalData(context).deleteGoal(g);
+                        new SyncGoalData(context).deleteParseGoal(goal);
+                        goalOperations.deleteGoal(goal);
+                    } else {
+                        goal.delete();
+                        goalOperations.updateGoal(goal);
                     }
-                    goalOperations.deleteGoal(g);
-                    selectedListViewAdapter.remove(g);
+
+                    selectedListViewAdapter.remove(goal);
                 }
                 return true;
         }

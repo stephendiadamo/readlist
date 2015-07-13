@@ -79,10 +79,11 @@ public class ShelfOperations {
     public ArrayList<Shelf> getNonDefaultShelves() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Shelf> shelves = new ArrayList<>();
-        String selectQuery = String.format("SELECT * FROM %s WHERE %s!=%s",
+        String selectQuery = String.format("SELECT * FROM %s WHERE %s!=%s AND %s=0",
                 DatabaseHelper.TABLE_SHELVES,
                 DatabaseHelper.KEY_ID,
-                Shelf.DEFAULT_SHELF_ID);
+                Shelf.DEFAULT_SHELF_ID,
+                DatabaseHelper.SHELF_IS_DELETED);
 
         Cursor cursor = db.rawQuery(selectQuery, null);
         if (cursor.moveToFirst()) {
@@ -100,11 +101,12 @@ public class ShelfOperations {
     public ArrayList<Book> getAllBooksWithShelf() {
         db = dbHelper.getReadableDatabase();
         ArrayList<Book> books = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s ORDER BY %s",
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=0 ORDER BY %s",
                 DatabaseHelper.TABLE_SHELVES,
                 DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.BOOK_SHELF,
+                DatabaseHelper.BOOK_IS_DELETED,
                 DatabaseHelper.BOOK_COMPLETE);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -126,13 +128,14 @@ public class ShelfOperations {
     public ArrayList<Book> getBooksWithShelf(long id) {
         db = dbHelper.getReadableDatabase();
         ArrayList<Book> books = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=%s ORDER BY %s",
+        String query = String.format("SELECT * FROM %s s INNER JOIN %s b ON s.%s=b.%s WHERE b.%s=%s AND b.%s=0 ORDER BY %s",
                 DatabaseHelper.TABLE_SHELVES,
                 DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.BOOK_SHELF,
                 DatabaseHelper.BOOK_SHELF,
                 String.valueOf(id),
+                DatabaseHelper.BOOK_IS_DELETED,
                 DatabaseHelper.BOOK_COMPLETE);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -157,6 +160,7 @@ public class ShelfOperations {
 
         values.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         values.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
+        values.put(DatabaseHelper.SHELF_IS_DELETED, shelf.isDeleted());
 
         db.update(DatabaseHelper.TABLE_SHELVES, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(shelf.getId())});
@@ -198,6 +202,4 @@ public class ShelfOperations {
                 cursor.getString(13),
                 cursor.getInt(14));
     }
-
-
 }

@@ -12,11 +12,9 @@ public class MultiProcessSpinner {
     private ProgressDialog progressDialog;
     private String syncMessage;
     private String completeMessage;
-    private boolean showedMessage;
 
     private MultiProcessSpinner() {
         this.runningThreads = 0;
-        this.showedMessage = false;
     }
 
     public static MultiProcessSpinner getInstance() {
@@ -47,10 +45,7 @@ public class MultiProcessSpinner {
         runningThreads--;
         if (runningThreads == 0) {
             progressDialog.dismiss();
-            if (!showedMessage) {
-                Toast.makeText(context, completeMessage, Toast.LENGTH_SHORT).show();
-                showedMessage = true;
-            }
+            Toast.makeText(context, completeMessage, Toast.LENGTH_SHORT).show();
         }
     }
 }

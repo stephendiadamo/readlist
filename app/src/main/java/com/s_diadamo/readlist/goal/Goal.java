@@ -20,10 +20,22 @@ public class Goal {
     private final String startDate;
     private final String endDate;
     private boolean isComplete;
+    private boolean isDeleted = false;
     public static final int BOOK_GOAL = 0;
     public static final int PAGE_GOAL = 1;
     private static final int END_DATE = 0;
     private static final int START_DATE = 1;
+
+
+    public Goal(int id, int type, int amount, String startDate, String endDate, int isComplete, int isDeleted) {
+        this.id = id;
+        this.type = type;
+        this.amount = amount;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isComplete = (isComplete == 1);
+        this.isDeleted = (isDeleted == 1);
+    }
 
     public Goal(int id, int type, int amount, String startDate, String endDate, int isComplete) {
         this.id = id;
@@ -72,6 +84,14 @@ public class Goal {
 
     private void markComplete() {
         isComplete = true;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public int getProgress(Context context) {

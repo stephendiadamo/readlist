@@ -16,8 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncGoalData extends SyncData {
+    private GoalOperations goalOperations;
+
     public SyncGoalData(Context context) {
         super(context);
+        goalOperations = new GoalOperations(context);
     }
 
     protected void syncAllGoals() {
@@ -28,7 +31,7 @@ public class SyncGoalData extends SyncData {
             @Override
             public void done(List<ParseObject> parseGoals, ParseException e) {
                 syncSpinner.endThread();
-                ArrayList<Goal> goalsOnDevice = new GoalOperations(context).getAllGoals();
+                ArrayList<Goal> goalsOnDevice = goalOperations.getAllGoals();
                 ArrayList<Goal> goalsFromParse = new ArrayList<>();
                 for (ParseObject parseGoal : parseGoals) {
                     Goal goal = parseGoalToGoal(parseGoal);
@@ -45,8 +48,6 @@ public class SyncGoalData extends SyncData {
         for (Goal goal : goalsOnDevice) {
             deviceGoalIds.add(goal.getId());
         }
-
-        GoalOperations goalOperations = new GoalOperations(context);
 
         for (Goal goal : goalsFromParse) {
             if (!deviceGoalIds.contains(goal.getId())) {
@@ -65,9 +66,18 @@ public class SyncGoalData extends SyncData {
 
         for (final Goal goal : goalsOnDevice) {
             if (!parseGoalIds.contains(goal.getId())) {
-                goalsToSend.add(toParseGoal(goal));
+                if (goal.isDeleted()) {
+                    goalOperations.deleteGoal(goal);
+                } else {
+                    goalsToSend.add(toParseGoal(goal));
+                }
             } else {
-                updateParseGoal(goal);
+                if (goal.isDeleted()) {
+                    deleteParseGoal(goal);
+                    goalOperations.deleteGoal(goal);
+                } else {
+                    updateParseGoal(goal);
+                }
             }
         }
 
@@ -87,7 +97,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    public void deleteGoal(Goal goal) {
+    public void deleteParseGoal(Goal goal) {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {

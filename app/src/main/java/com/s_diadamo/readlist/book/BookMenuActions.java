@@ -72,8 +72,14 @@ class BookMenuActions {
 
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                new SyncShelfData(context).deleteParseShelf(shelf);
-                new ShelfOperations(context).deleteShelf(shelf);
+                if (Utils.checkUserIsLoggedIn(context)) {
+                    new SyncShelfData(context).deleteParseShelf(shelf);
+                    new ShelfOperations(context).deleteShelf(shelf);
+                } else {
+                    shelf.delete();
+                    new ShelfOperations(context).updateShelf(shelf);
+                }
+
                 shelfDrawer.deleteItemFromExpandableList(shelf);
                 Utils.launchBookFragment(manager);
                 dialog.dismiss();
