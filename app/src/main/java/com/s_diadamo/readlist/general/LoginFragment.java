@@ -176,14 +176,14 @@ public class LoginFragment extends Fragment {
                             progressDialog.dismiss();
                             if (e == null) {
                                 Toast.makeText(context, "An email was sent to your account", Toast.LENGTH_LONG).show();
+                                toggleActionBar(true);
+                                Utils.hideKeyBoard(getActivity());
+                                Utils.launchBookFragment(getActivity().getSupportFragmentManager());
                             } else {
                                 if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS || e.getCode() == ParseException.EMAIL_NOT_FOUND) {
                                     Toast.makeText(context, "No user associated with this address", Toast.LENGTH_LONG).show();
                                 }
                             }
-                            toggleActionBar(true);
-                            Utils.hideKeyBoard(getActivity());
-                            Utils.launchBookFragment(getActivity().getSupportFragmentManager());
                         }
                     });
                 }
@@ -218,6 +218,7 @@ public class LoginFragment extends Fragment {
         userNameLabel.setVisibility(View.VISIBLE);
 
         emailAddressLabel.setVisibility(View.VISIBLE);
+        emailAddressLabel.setText(R.string.email_address_optional);
         emailAddressInput.setVisibility(View.VISIBLE);
 
         passwordLabel.setVisibility(View.VISIBLE);
@@ -262,6 +263,7 @@ public class LoginFragment extends Fragment {
         userNameLabel.setVisibility(View.GONE);
 
         emailAddressLabel.setVisibility(View.VISIBLE);
+        emailAddressLabel.setText(R.string.email_address);
         emailAddressInput.setVisibility(View.VISIBLE);
 
         passwordLabel.setVisibility(View.GONE);

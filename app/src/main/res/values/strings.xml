@@ -63,6 +63,7 @@
     <string name="remember_me">Remember me</string>
     <string name="sync_data">Sync data</string>
     <string name="email_address_optional">Email Address (optional)</string>
+    <string name="email_address">Email Address</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

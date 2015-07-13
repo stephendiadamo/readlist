@@ -15,7 +15,7 @@ public class Shelf {
     private int id;
     private String name;
     private int colour;
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
     public Shelf() {
     }
@@ -24,6 +24,7 @@ public class Shelf {
         this.id = id;
         this.name = name;
         this.colour = color;
+        this.isDeleted = false;
     }
 
     public Shelf(int id, String name, int color, int isDeleted) {
@@ -36,6 +37,7 @@ public class Shelf {
     public Shelf(String name, int color) {
         this.name = name;
         this.colour = color;
+        this.isDeleted = false;
     }
 
     public int getId() {
