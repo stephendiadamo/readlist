@@ -105,6 +105,8 @@ public class BookAdapter extends BaseAdapter {
         if (book.getNumPages() != 0 && book.getCurrentPage() > 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
             bookHolder.percentageComplete.setText(String.valueOf(complete) + "%");
+            bookHolder.percentageComplete.setVisibility(View.VISIBLE);
+            row.findViewById(R.id.book_percentage_background).setVisibility(View.VISIBLE);
         } else {
             bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
             row.findViewById(R.id.book_percentage_background).setVisibility(View.INVISIBLE);
