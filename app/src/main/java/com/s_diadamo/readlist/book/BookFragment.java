@@ -331,7 +331,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void updateVisibleBooks() {
-        if (hideCompletedBooks.isChecked() && !loading) {
+        if (!loading && hideCompletedBooks != null && hideCompletedBooks.isChecked()) {
             bookAdapter.hideCompletedBooks();
         } else if (shelf != null && !loading) {
             userBooks = shelf.fetchBooks(context);

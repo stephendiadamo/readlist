@@ -102,7 +102,7 @@ public class BookAdapter extends BaseAdapter {
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
 
-        if (book.getNumPages() != 0 && book.getCurrentPage() > 0) {
+        if (book.getNumPages() != 0 && book.getCurrentPage() > 0 && !book.isComplete()) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
             bookHolder.percentageComplete.setText(String.valueOf(complete) + "%");
         } else {
