@@ -102,11 +102,12 @@ public class BookAdapter extends BaseAdapter {
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
 
-        if (book.getNumPages() != 0 && book.getCurrentPage() > 0 && !book.isComplete()) {
+        if (book.getNumPages() != 0 && book.getCurrentPage() > 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
             bookHolder.percentageComplete.setText(String.valueOf(complete) + "%");
         } else {
             bookHolder.percentageComplete.setVisibility(View.INVISIBLE);
+            row.findViewById(R.id.book_percentage_background).setVisibility(View.INVISIBLE);
         }
 
         if (book.isComplete()) {

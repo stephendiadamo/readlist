@@ -22,6 +22,7 @@
             android:src="@drawable/sample_cover" />
 
         <ImageView
+            android:id="@+id/book_percentage_background"
             android:layout_width="match_parent"
             android:layout_height="18dp"
             android:layout_gravity="bottom"
