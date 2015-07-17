@@ -3,54 +3,58 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:baselineAligned="false"
-    android:orientation="horizontal"
-    android:weightSum="1.0">
+    android:orientation="vertical"
+    android:padding="15dp">
+
+    <NumberPicker
+        android:id="@+id/set_page_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_weight="0.5"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
         android:baselineAligned="false"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/set_page_plus_twenty"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="5dp"
-            android:text="@string/plus_twenty" />
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/set_page_plus_fifty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:padding="10dp"
-            android:text="@string/plus_fifty" />
+            <Button
+                android:id="@+id/set_page_plus_twenty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="5dp"
+                android:text="@string/plus_twenty" />
+
+            <Button
+                android:id="@+id/set_page_plus_fifty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="25dp"
+                android:layout_marginStart="25dp"
+                android:padding="10dp"
+                android:text="@string/plus_fifty" />
+        </LinearLayout>
+
 
         <Button
             android:id="@+id/set_page_done"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="35dp"
+            android:layout_marginTop="30dp"
             android:padding="10dp"
             android:text="@string/done" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="0.5"
-        android:orientation="vertical">
 
-        <NumberPicker
-            android:id="@+id/set_page_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
 </LinearLayout>
