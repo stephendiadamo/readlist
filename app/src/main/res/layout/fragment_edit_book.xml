@@ -4,21 +4,37 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        style="@style/EditBookTextView"
+        android:text="@string/book_title" />
+
     <EditText
         android:id="@+id/edit_book_title"
-        style="@style/EditBookTextView"
+        style="@style/EditBookEditText"
         android:hint="@string/book_title" />
+
+    <TextView
+        style="@style/EditBookTextView"
+        android:text="@string/book_author" />
 
     <EditText
         android:id="@+id/edit_book_author"
-        style="@style/EditBookTextView"
+        style="@style/EditBookEditText"
         android:hint="@string/book_author" />
+
+    <TextView
+        style="@style/EditBookTextView"
+        android:text="@string/pages" />
 
     <EditText
         android:id="@+id/edit_book_number_of_pages"
-        style="@style/EditBookTextView"
+        style="@style/EditBookEditText"
         android:hint="@string/pages"
         android:inputType="number" />
+
+    <TextView
+        style="@style/EditBookTextView"
+        android:text="@string/shelf" />
 
     <Spinner
         android:id="@+id/edit_book_shelf_spinner"

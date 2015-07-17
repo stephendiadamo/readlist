@@ -56,9 +56,9 @@ public class BookEditFragment extends Fragment {
         bookPages.setText(String.valueOf(book.getNumPages()));
 
         ShelfOperations shelfOperations = new ShelfOperations(rootView.getContext());
-        shelves = shelfOperations.getAllShelves();
+        shelves = shelfOperations.getAllValidShelves();
         ShelfSpinnerAdapter adapter = new ShelfSpinnerAdapter(rootView.getContext(),
-                android.R.layout.simple_spinner_dropdown_item, shelves);
+                R.layout.row_sub_shelf, R.id.sub_shelf_label, shelves);
         shelfSpinner.setAdapter(adapter);
 
         int shelfIndex = 0;

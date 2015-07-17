@@ -22,7 +22,6 @@
                 android:id="@+id/sub_shelf_image"
                 android:layout_width="10dp"
                 android:layout_height="10dp"
-                android:background="@android:color/white"
                 android:contentDescription="@string/shelf_name" />
         </LinearLayout>
     </LinearLayout>
@@ -31,8 +30,9 @@
         android:id="@+id/sub_shelf_label"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-2dp"
         android:layout_toEndOf="@+id/image_container"
         android:layout_toRightOf="@+id/image_container"
         android:ellipsize="end"
