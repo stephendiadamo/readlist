@@ -65,6 +65,10 @@
     <string name="email_address_optional">Email Address (optional)</string>
     <string name="email_address">Email Address</string>
     <string name="shelf">Shelf</string>
+    <string name="book_goal">Book Goal</string>
+    <string name="page_goal">Page Goal</string>
+    <string name="goal_type">Goal Type</string>
+    <string name="dates">Dates</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

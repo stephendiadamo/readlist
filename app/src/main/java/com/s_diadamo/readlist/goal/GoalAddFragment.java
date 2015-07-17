@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -123,13 +124,13 @@ public class GoalAddFragment extends Fragment {
     }
 
     private void addGoal() {
-        Spinner goalType = (Spinner) rootView.findViewById(R.id.add_goal_type_spinner);
+        RadioGroup goalTypes = (RadioGroup) rootView.findViewById(R.id.add_goal_type);
         EditText goalAmountEditText = ((EditText) rootView.findViewById(R.id.add_goal_amount));
         String goalAmount = goalAmountEditText.getText().toString();
 
         if (!startDate.isEmpty() && !endDate.isEmpty() && !goalAmount.isEmpty()) {
             int amount = Integer.parseInt(goalAmount);
-            int goalTypeIndex = goalType.getSelectedItemPosition();
+            int goalTypeIndex = goalTypes.indexOfChild(rootView.findViewById(goalTypes.getCheckedRadioButtonId()));
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
             new GoalOperations(rootView.getContext()).addGoal(goal);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {

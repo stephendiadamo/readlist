@@ -2,35 +2,62 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="5dp">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="@string/goal_type"
+        android:textSize="18sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:orientation="horizontal"
-        android:weightSum="1">
+    <RadioGroup
+        android:id="@+id/add_goal_type"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:checkedButton="@+id/add_goal_type_book"
+        android:orientation="vertical"
+        android:padding="3dp">
 
-        <Spinner
-            android:id="@+id/add_goal_type_spinner"
-            android:layout_width="0dp"
+        <RadioButton
+            android:id="@+id/add_goal_type_book"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:drawSelectorOnTop="true"
-            android:entries="@array/goal_types"
-            android:padding="3dp" />
+            android:text="@string/book_goal" />
 
-        <EditText
-            android:id="@+id/add_goal_amount"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:hint="@string/goal_amount"
-            android:inputType="number"
-            android:padding="3dp"
-            android:textSize="18sp" />
+        <RadioButton
+            android:id="@+id/add_goal_type_page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/page_goal" />
+    </RadioGroup>
 
-    </LinearLayout>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:text="@string/goal_amount"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/add_goal_amount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:hint="@string/goal_amount"
+        android:inputType="number"
+        android:padding="5dp"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:padding="5dp"
+        android:text="@string/dates"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
