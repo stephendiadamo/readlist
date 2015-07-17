@@ -26,6 +26,7 @@ import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.sync.SyncData;
 
 public class LoginFragment extends Fragment {
 
@@ -164,8 +165,7 @@ public class LoginFragment extends Fragment {
                                 }
                                 editor.apply();
                                 toggleActionBar(true);
-                                Utils.hideKeyBoard(getActivity());
-                                Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+                                completeLogin();
                             } else {
                                 Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
                             }
@@ -220,6 +220,16 @@ public class LoginFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    private void completeLogin() {
+        if (Utils.isNetworkAvailable(getActivity())) {
+            SyncData syncData = new SyncData(context, false);
+            syncData.syncAllData();
+        }
+
+        Utils.hideKeyBoard(getActivity());
+        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
     }
 
     private void switchToCreateMode() {

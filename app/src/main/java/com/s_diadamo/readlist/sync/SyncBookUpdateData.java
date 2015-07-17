@@ -20,7 +20,12 @@ public class SyncBookUpdateData extends SyncData {
     private BookUpdateOperations bookUpdateOperations;
 
     public SyncBookUpdateData(Context context) {
-        super(context);
+        super(context, true);
+        bookUpdateOperations = new BookUpdateOperations(context);
+    }
+
+    public SyncBookUpdateData(Context context, boolean showSpinner) {
+        super(context, showSpinner);
         bookUpdateOperations = new BookUpdateOperations(context);
     }
 

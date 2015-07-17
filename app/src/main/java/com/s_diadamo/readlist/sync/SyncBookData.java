@@ -21,18 +21,27 @@ public class SyncBookData extends SyncData {
     private BookOperations bookOperations;
 
     public SyncBookData(Context context) {
-        super(context);
+        super(context, true);
+        bookOperations = new BookOperations(context);
+    }
+
+    public SyncBookData(Context context, boolean showSpinner) {
+        super(context, showSpinner);
         bookOperations = new BookOperations(context);
     }
 
     void syncAllBooks() {
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
-                syncSpinner.endThread();
+                if (showSpinner)
+                    syncSpinner.endThread();
+
                 ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
                 for (ParseObject parseBook : parseBooks) {
@@ -46,13 +55,18 @@ public class SyncBookData extends SyncData {
     }
 
     void syncAllBooks(final AppCompatActivity activity) {
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
+
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
-                syncSpinner.endThread();
+                if (showSpinner) {
+                    syncSpinner.endThread();
+                }
+
                 ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
                 for (ParseObject parseBook : parseBooks) {
@@ -90,7 +104,7 @@ public class SyncBookData extends SyncData {
 
         for (final Book book : booksOnDevice) {
             if (!parseBookIds.contains(book.getId())) {
-                if (book.isDeleted()){
+                if (book.isDeleted()) {
                     bookOperations.deleteBook(book);
                 } else {
                     booksToSend.add(toParseBook(book));

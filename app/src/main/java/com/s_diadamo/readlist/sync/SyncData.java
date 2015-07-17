@@ -26,20 +26,30 @@ public class SyncData {
     Context context;
     String userName;
     MultiProcessSpinner syncSpinner;
+    boolean showSpinner;
+
+    public SyncData(Context context, boolean showSpinner) {
+        this.context = context;
+        this.userName = getUserName();
+        this.syncSpinner = MultiProcessSpinner.getInstance();
+        this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
+        this.showSpinner = showSpinner;
+    }
 
     public SyncData(Context context) {
         this.context = context;
         this.userName = getUserName();
         this.syncSpinner = MultiProcessSpinner.getInstance();
         this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
+        this.showSpinner = true;
     }
 
     public void syncAllData() {
-        new SyncBookData(context).syncAllBooks();
-        new SyncShelfData(context).syncAllShelves();
-        new SyncGoalData(context).syncAllGoals();
-        new SyncBookUpdateData(context).syncAllBookUpdates();
-        new SyncPageUpdateData(context).syncAllPageUpdates();
+        new SyncBookData(context, showSpinner).syncAllBooks();
+        new SyncShelfData(context, showSpinner).syncAllShelves();
+        new SyncGoalData(context, showSpinner).syncAllGoals();
+        new SyncBookUpdateData(context, showSpinner).syncAllBookUpdates();
+        new SyncPageUpdateData(context, showSpinner).syncAllPageUpdates();
     }
 
     public void syncAllData(AppCompatActivity activity) {
@@ -83,5 +93,4 @@ public class SyncData {
         }
         return userName;
     }
-
 }

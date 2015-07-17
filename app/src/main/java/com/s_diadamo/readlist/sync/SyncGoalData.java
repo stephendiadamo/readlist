@@ -19,18 +19,26 @@ public class SyncGoalData extends SyncData {
     private GoalOperations goalOperations;
 
     public SyncGoalData(Context context) {
-        super(context);
+        super(context, true);
+        goalOperations = new GoalOperations(context);
+    }
+
+    public SyncGoalData(Context context, boolean showSpinner) {
+        super(context, showSpinner);
         goalOperations = new GoalOperations(context);
     }
 
     protected void syncAllGoals() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseGoals, ParseException e) {
-                syncSpinner.endThread();
+                if (showSpinner)
+                    syncSpinner.endThread();
+
                 ArrayList<Goal> goalsOnDevice = goalOperations.getAllGoals();
                 ArrayList<Goal> goalsFromParse = new ArrayList<>();
                 for (ParseObject parseGoal : parseGoals) {

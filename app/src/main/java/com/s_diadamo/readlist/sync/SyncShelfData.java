@@ -23,18 +23,25 @@ public class SyncShelfData extends SyncData {
     private ShelfOperations shelfOperations;
 
     public SyncShelfData(Context context) {
-        super(context);
+        super(context, true);
+        shelfOperations = new ShelfOperations(context);
+    }
+
+    public SyncShelfData(Context context, boolean showSpinner) {
+        super(context, showSpinner);
         shelfOperations = new ShelfOperations(context);
     }
 
     protected void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
-                syncSpinner.endThread();
+                if (showSpinner)
+                    syncSpinner.endThread();
                 ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
@@ -47,15 +54,16 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-
     protected void syncAllShelves(final AppCompatActivity activity) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
-                syncSpinner.endThread();
+                if (showSpinner)
+                    syncSpinner.endThread();
                 ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {

@@ -19,7 +19,12 @@ public class SyncPageUpdateData extends SyncData {
     private PageUpdateOperations pageUpdateOperations;
 
     public SyncPageUpdateData(Context context) {
-        super(context);
+        super(context, true);
+        pageUpdateOperations = new PageUpdateOperations(context);
+    }
+
+    public SyncPageUpdateData(Context context, boolean showSpinner) {
+        super(context, showSpinner);
         pageUpdateOperations = new PageUpdateOperations(context);
     }
 
