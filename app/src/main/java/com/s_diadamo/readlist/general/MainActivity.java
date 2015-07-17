@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private static final String SHOWED_LOGIN_FEATURE_MESSAGE = "SHOWED_LOGIN_FEATURE_MESSAGE";
+    private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
 
@@ -43,15 +44,19 @@ public class MainActivity extends AppCompatActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         imageLoader = new ImageLoader(this);
+        init();
+    }
+
+    private void init() {
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
         if (!prefs.getBoolean(CREATED_SHELF, false)) {
             Shelf defaultShelf = new Shelf(Shelf.DEFAULT_SHELF_ID, "All Books", Shelf.DEFAULT_COLOR);
             new ShelfOperations(this).addShelf(defaultShelf);
-            SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(CREATED_SHELF, true);
-            editor.apply();
         }
+
         if (!prefs.getBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, false)) {
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
             alertDialog.setTitle("Introducing Cloud Syncing!");
@@ -67,12 +72,23 @@ public class MainActivity extends AppCompatActivity
                 }
             });
             alertDialog.create().show();
-
-            SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, true);
-            editor.apply();
         }
 
+        if (!prefs.getBoolean(FIXED_REMEMBER_ME_STRING, false)) {
+            String rememberMeSet = prefs.getString(Utils.REMEMBER_ME, "");
+            if (rememberMeSet != null && !rememberMeSet.isEmpty()) {
+                editor.remove(Utils.REMEMBER_ME);
+                if (rememberMeSet.equals("yes")) {
+                    editor.putBoolean(Utils.REMEMBER_ME, true);
+                } else {
+                    editor.putBoolean(Utils.REMEMBER_ME, false);
+                }
+            }
+            editor.putBoolean(FIXED_REMEMBER_ME_STRING, true);
+        }
+
+        editor.apply();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
     }

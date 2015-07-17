@@ -48,6 +48,7 @@ public class LoginFragment extends Fragment {
     private TextView passwordLabel;
     private CheckBox rememberMe;
     private Context context;
+    private String emailAddress;
 
     @Nullable
     @Override
@@ -72,7 +73,12 @@ public class LoginFragment extends Fragment {
         repeatPasswordLabel = (TextView) rootView.findViewById(R.id.login_password_repeat_label);
         rememberMe = (CheckBox) rootView.findViewById(R.id.login_remember_me);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        if (Utils.checkRememberMe(context)) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            userNameInput.setText(prefs.getString(Utils.USER_NAME, ""));
+            passwordInput.setText(prefs.getString(Utils.PASSWORD, ""));
+            rememberMe.setChecked(true);
+        }
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +118,10 @@ public class LoginFragment extends Fragment {
                     String emailAddress = emailAddressInput.getText().toString();
                     if (!emailAddress.isEmpty()) {
                         user.setEmail(emailAddress);
+                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString(Utils.EMAIL_ADDRESS, emailAddress);
+                        editor.apply();
                     }
 
                     final ProgressDialog progressDialog = new ProgressDialog(context);
@@ -146,10 +156,11 @@ public class LoginFragment extends Fragment {
                                 rememberUser(userName, password);
                                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
                                 SharedPreferences.Editor editor = prefs.edit();
+                                editor.putBoolean(Utils.LOGGED_IN, true);
                                 if (rememberMe.isChecked()) {
-                                    editor.putString(Utils.REMEMBER_ME, "yes");
+                                    editor.putBoolean(Utils.REMEMBER_ME, true);
                                 } else {
-                                    editor.putString(Utils.REMEMBER_ME, "no");
+                                    editor.putBoolean(Utils.REMEMBER_ME, false);
                                 }
                                 editor.apply();
                                 toggleActionBar(true);
@@ -277,6 +288,9 @@ public class LoginFragment extends Fragment {
 
         createAccount.setText("Cancel");
         forgotPassword.setVisibility(View.GONE);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        emailAddressInput.setText(prefs.getString(Utils.EMAIL_ADDRESS, ""));
     }
 
     private void rememberUser(String userName, String password) {

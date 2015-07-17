@@ -31,6 +31,8 @@ public class Utils {
     public static final String USER_NAME = "USERNAME";
     public static final String PASSWORD = "PASSWORD";
     public final static String REMEMBER_ME = "REMEMBER_ME";
+    public final static String LOGGED_IN = "LOGGED_IN";
+    public final static String EMAIL_ADDRESS = "EMAIL_ADDRESS";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
@@ -109,22 +111,18 @@ public class Utils {
 
     public static boolean checkUserIsLoggedIn(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = prefs.getString(Utils.USER_NAME, "");
-        String password = prefs.getString(Utils.PASSWORD, "");
-        return (userName != null && !userName.isEmpty() && password != null && !password.isEmpty());
+        return prefs.getBoolean(LOGGED_IN, false);
     }
 
     public static boolean checkRememberMe(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String rememberMe = prefs.getString(Utils.REMEMBER_ME, "");
-        return (rememberMe != null && !rememberMe.isEmpty() &&rememberMe.equals("yes"));
+        return prefs.getBoolean(Utils.REMEMBER_ME, false);
     }
 
-    public static void logout(Context context){
+    public static void logout(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(Utils.USER_NAME);
-        editor.remove(Utils.PASSWORD);
+        editor.putBoolean(LOGGED_IN, false);
         editor.apply();
         ParseUser.logOutInBackground();
     }
