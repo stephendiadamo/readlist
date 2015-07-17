@@ -6,6 +6,14 @@ public class BookUpdate {
     private int id;
     private int bookId;
     private String date;
+    private boolean isDeleted = false;
+
+    public BookUpdate(int id, int bookId, String date, int isDeleted) {
+        this.id = id;
+        this.bookId = bookId;
+        this.date = date;
+        this.isDeleted = (isDeleted == 1);
+    }
 
     public BookUpdate(int id, int bookId, String date) {
         this.id = id;
@@ -32,5 +40,13 @@ public class BookUpdate {
 
     public String getDate() {
         return date;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 }

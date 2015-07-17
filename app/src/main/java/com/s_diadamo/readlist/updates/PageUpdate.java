@@ -7,6 +7,15 @@ public class PageUpdate {
     private int bookId;
     private String date;
     private int pages;
+    private boolean isDeleted = false;
+
+    public PageUpdate(int id, int bookId, String date, int pages, int isDeleted) {
+        this.id = id;
+        this.bookId = bookId;
+        this.date = date;
+        this.pages = pages;
+        this.isDeleted = (isDeleted == 1);
+    }
 
     public PageUpdate(int id, int bookId, String date, int pages) {
         this.id = id;
@@ -45,6 +54,14 @@ public class PageUpdate {
 
     public int getPages() {
         return pages;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
 }

@@ -16,19 +16,25 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncPageUpdateData extends SyncData {
+    private PageUpdateOperations pageUpdateOperations;
+
     public SyncPageUpdateData(Context context) {
         super(context);
+        pageUpdateOperations = new PageUpdateOperations(context);
     }
 
     protected void syncAllPageUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        syncSpinner.addThread();
+
+        if (showSpinner)
+            syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parsePageUpdates, ParseException e) {
-                syncSpinner.endThread();
-                ArrayList<PageUpdate> pageUpdatesOnDevice = new PageUpdateOperations(context).getAllPageUpdates();
+                if (showSpinner)
+                    syncSpinner.endThread();
+                ArrayList<PageUpdate> pageUpdatesOnDevice = pageUpdateOperations.getAllPageUpdates();
                 ArrayList<PageUpdate> pageUpdatesFromParse = new ArrayList<>();
                 for (ParseObject parsePageUpdate : parsePageUpdates) {
                     PageUpdate pageUpdate = parsePageUpdateToPageUpdate(parsePageUpdate);
@@ -46,8 +52,6 @@ public class SyncPageUpdateData extends SyncData {
             devicePageUpdateIds.add(pageUpdate.getId());
         }
 
-        PageUpdateOperations pageUpdateOperations = new PageUpdateOperations(context);
-
         for (PageUpdate pageUpdate : pageUpdatesFromParse) {
             if (!devicePageUpdateIds.contains(pageUpdate.getId())) {
                 pageUpdateOperations.addPageUpdate(pageUpdate);
@@ -56,16 +60,25 @@ public class SyncPageUpdateData extends SyncData {
     }
 
     private void updateParsePageUpdates(ArrayList<PageUpdate> pageUpdatesOnDevice, ArrayList<PageUpdate> pageUpdatesFromParse) {
-        HashSet<Integer> parsepageUpdateIds = new HashSet<>();
+        HashSet<Integer> parsePageUpdateIds = new HashSet<>();
         for (PageUpdate pageUpdate : pageUpdatesFromParse) {
-            parsepageUpdateIds.add(pageUpdate.getId());
+            parsePageUpdateIds.add(pageUpdate.getId());
         }
 
         ArrayList<ParseObject> pageUpdatesToSend = new ArrayList<>();
 
         for (final PageUpdate pageUpdate : pageUpdatesOnDevice) {
-            if (!parsepageUpdateIds.contains(pageUpdate.getId())) {
-                pageUpdatesToSend.add(toParsePageUpdate(pageUpdate));
+            if (!parsePageUpdateIds.contains(pageUpdate.getId())) {
+                if (pageUpdate.isDeleted()) {
+                    pageUpdateOperations.deletePageUpdate(pageUpdate);
+                } else {
+                    pageUpdatesToSend.add(toParsePageUpdate(pageUpdate));
+                }
+            } else {
+                if (pageUpdate.isDeleted()) {
+                    deleteParsePageUpdate(pageUpdate);
+                    pageUpdateOperations.deletePageUpdate(pageUpdate);
+                }
             }
         }
 
@@ -75,8 +88,8 @@ public class SyncPageUpdateData extends SyncData {
     private PageUpdate parsePageUpdateToPageUpdate(ParseObject parsePageUpdate) {
         return new PageUpdate(
                 parsePageUpdate.getInt(READLIST_ID),
-                parsePageUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
-                parsePageUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE),
+                parsePageUpdate.getInt(DatabaseHelper.PAGE_UPDATE_BOOK_ID),
+                parsePageUpdate.getString(DatabaseHelper.PAGE_UPDATE_DATE),
                 parsePageUpdate.getInt(DatabaseHelper.PAGE_UPDATE_PAGES));
     }
 
@@ -90,5 +103,29 @@ public class SyncPageUpdateData extends SyncData {
         parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
 
         return parsePageUpdate;
+    }
+
+    public void deletePageUpdates() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject.deleteAllInBackground(list);
+            }
+        });
+    }
+
+    public void deleteParsePageUpdate(PageUpdate pageUpdate) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.whereEqualTo(READLIST_ID, pageUpdate.getId());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject toDelete = list.get(0);
+                toDelete.deleteEventually();
+            }
+        });
     }
 }

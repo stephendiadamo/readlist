@@ -17,19 +17,24 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncBookUpdateData extends SyncData {
+    private BookUpdateOperations bookUpdateOperations;
+
     public SyncBookUpdateData(Context context) {
         super(context);
+        bookUpdateOperations = new BookUpdateOperations(context);
     }
 
     protected void syncAllBookUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        syncSpinner.addThread();
+        if (showSpinner)
+            syncSpinner.addThread();
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBookUpdates, ParseException e) {
-                syncSpinner.endThread();
-                ArrayList<BookUpdate> bookUpdatesOnDevice = new BookUpdateOperations(context).getAllBookUpdates();
+                if (showSpinner)
+                    syncSpinner.endThread();
+                ArrayList<BookUpdate> bookUpdatesOnDevice = bookUpdateOperations.getAllBookUpdates();
                 ArrayList<BookUpdate> bookUpdatesFromParse = new ArrayList<>();
                 for (ParseObject parseBookUpdate : parseBookUpdates) {
                     BookUpdate bookUpdate = parseBookUpdateToBookUpdate(parseBookUpdate);
@@ -46,8 +51,6 @@ public class SyncBookUpdateData extends SyncData {
         for (BookUpdate bookUpdate : bookUpdatesOnDevice) {
             deviceBookUpdateIds.add(bookUpdate.getId());
         }
-
-        BookUpdateOperations bookUpdateOperations = new BookUpdateOperations(context);
 
         for (BookUpdate bookUpdate : bookUpdatesFromParse) {
             if (!deviceBookUpdateIds.contains(bookUpdate.getId())) {
@@ -66,7 +69,16 @@ public class SyncBookUpdateData extends SyncData {
 
         for (final BookUpdate bookUpdate : bookUpdatesOnDevice) {
             if (!parseBookUpdateIds.contains(bookUpdate.getId())) {
-                bookUpdatesToSend.add(toParseBookUpdate(bookUpdate));
+                if (bookUpdate.isDeleted()) {
+                    bookUpdateOperations.deleteBookUpdate(bookUpdate);
+                } else {
+                    bookUpdatesToSend.add(toParseBookUpdate(bookUpdate));
+                }
+            } else {
+                if (bookUpdate.isDeleted()) {
+                    deleteParseBookUpdate(bookUpdate);
+                    bookUpdateOperations.deleteBookUpdate(bookUpdate);
+                }
             }
         }
 
@@ -91,4 +103,27 @@ public class SyncBookUpdateData extends SyncData {
                 parseBookUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE));
     }
 
+    public void deleteBookUpdates() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject.deleteAllInBackground(list);
+            }
+        });
+    }
+
+    public void deleteParseBookUpdate(BookUpdate bookUpdate) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.whereEqualTo(READLIST_ID, bookUpdate.getId());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject toDelete = list.get(0);
+                toDelete.deleteEventually();
+            }
+        });
+    }
 }

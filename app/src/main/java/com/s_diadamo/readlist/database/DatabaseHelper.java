@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "readList";
 
     // Tables
@@ -39,10 +39,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String PAGE_UPDATE_BOOK_ID = "book_id";
     public static final String PAGE_UPDATE_DATE = "date";
     public static final String PAGE_UPDATE_PAGES = "pages";
+    public static final String PAGE_UPDATE_IS_DELETED = "is_deleted";
 
-    // Book Updates table colums
+    // Book Updates table columns
     public static final String BOOK_UPDATE_BOOK_ID = "book_id";
     public static final String BOOK_UPDATE_DATE = "date";
+    public static final String BOOK_UPDATE_IS_DELETED = "is_deleted";
 
     // Goals table columns
     public static final String GOAL_TYPE = "type";
@@ -80,14 +82,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             PAGE_UPDATE_BOOK_ID + " INTEGER, " +
             PAGE_UPDATE_DATE + " TEXT, " +
-            PAGE_UPDATE_PAGES + " INTEGER" +
+            PAGE_UPDATE_PAGES + " INTEGER, " +
+            PAGE_UPDATE_IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_BOOK_UPDATES_TABLE = "CREATE TABLE " + TABLE_BOOK_UPDATES +
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_UPDATE_BOOK_ID + " INTEGER, " +
-            BOOK_UPDATE_DATE + " TEXT" +
+            BOOK_UPDATE_DATE + " TEXT " +
+            BOOK_IS_DELETED + "INTEGER" +
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
@@ -132,6 +136,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.execSQL(addBookColumn);
             db.execSQL(addShelfColumn);
             db.execSQL(addGoalColumn);
+        }
+
+        if (oldVersion < 3) {
+            String addPageUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
+                    TABLE_PAGE_UPDATES,
+                    SHELF_IS_DELETED);
+
+            String addBookUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
+                    TABLE_BOOK_UPDATES,
+                    GOAL_IS_DELETED);
+
+            db.execSQL(addPageUpdateColumn);
+            db.execSQL(addBookUpdateColumn);
         }
     }
 }

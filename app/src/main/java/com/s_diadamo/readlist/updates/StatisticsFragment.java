@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.updates;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -18,6 +19,12 @@ import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookOperations;
+import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncBookData;
+import com.s_diadamo.readlist.sync.SyncBookUpdateData;
+import com.s_diadamo.readlist.sync.SyncPageUpdateData;
+
+import java.util.ArrayList;
 
 
 public class StatisticsFragment extends Fragment {
@@ -25,11 +32,13 @@ public class StatisticsFragment extends Fragment {
     private BookOperations bookOperations;
     private BookUpdateOperations bookUpdateOperations;
     private PageUpdateOperations pageUpdateOperations;
+    private Context context;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_statistics, container, false);
+        context = rootView.getContext();
 
         setHasOptionsMenu(true);
 
@@ -65,8 +74,25 @@ public class StatisticsFragment extends Fragment {
                     "This cannot be undone.");
             builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    pageUpdateOperations.resetStatistics();
-                    bookUpdateOperations.resetStatistics();
+                    if (Utils.checkUserIsLoggedIn(context)) {
+                        pageUpdateOperations.resetStatistics();
+                        bookUpdateOperations.resetStatistics();
+                        new SyncBookUpdateData(context).deleteBookUpdates();
+                        new SyncPageUpdateData(context).deletePageUpdates();
+                    } else {
+                        ArrayList<BookUpdate> bookUpdates = bookUpdateOperations.getAllValidBookUpdates();
+                        for (BookUpdate bookUpdate : bookUpdates) {
+                            bookUpdate.delete();
+                            bookUpdateOperations.updateBookUpdate(bookUpdate);
+                        }
+
+                        ArrayList<PageUpdate> pageUpdates = pageUpdateOperations.getAllValidPageUpdates();
+                        for (PageUpdate pageUpdate : pageUpdates) {
+                            pageUpdate.delete();
+                            pageUpdateOperations.updatePageUpdate(pageUpdate);
+                        }
+                    }
+
                     populateData();
                 }
             });
