@@ -64,30 +64,16 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/goal_progress_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/progress" />
-
-            <TextView
-                android:id="@+id/goal_progress_made"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp" />
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:layout_marginStart="5dp"
-                android:text="@string/of" />
+                android:text="@string/goal" />
 
             <TextView
                 android:id="@+id/goal_amount"
@@ -97,34 +83,12 @@
                 android:layout_marginStart="5dp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/goal_complete_container"
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/goal_progress"
+            style="@style/CustomProgressBar"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="5dp"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/completed"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/goal_completed_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp" />
-
-            <TextView
-                android:id="@+id/goal_completed_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp" />
-        </LinearLayout>
+            android:layout_margin="5dp" />
 
     </LinearLayout>
 

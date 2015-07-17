@@ -69,6 +69,7 @@
     <string name="page_goal">Page Goal</string>
     <string name="goal_type">Goal Type</string>
     <string name="dates">Dates</string>
+    <string name="goal">Goal:</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

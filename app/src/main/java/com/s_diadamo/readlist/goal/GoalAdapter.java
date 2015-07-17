@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
@@ -40,9 +41,8 @@ class GoalAdapter extends ArrayAdapter<Goal> {
             goalHolder.goalIcon = (ImageView) row.findViewById(R.id.goal_icon);
             goalHolder.goalStartDate = (TextView) row.findViewById(R.id.goal_start_date);
             goalHolder.goalEndDate = (TextView) row.findViewById(R.id.goal_end_date);
-            goalHolder.goalProgressMade = (TextView) row.findViewById(R.id.goal_progress_made);
+            goalHolder.goalProgressBar = (ProgressBar) row.findViewById(R.id.goal_progress);
             goalHolder.goalAmount = (TextView) row.findViewById(R.id.goal_amount);
-
 
             row.setTag(goalHolder);
         } else {
@@ -58,27 +58,22 @@ class GoalAdapter extends ArrayAdapter<Goal> {
 
         goalHolder.goalStartDate.setText(goal.getCleanStartDate());
         goalHolder.goalEndDate.setText(goal.getCleanEndDate());
-
-        int progress = goal.getProgress(context);
-        if (goal.isComplete()) {
-            row.findViewById(R.id.goal_progress_container).setVisibility(View.GONE);
-            row.findViewById(R.id.goal_complete_container).setVisibility(View.VISIBLE);
-            goalHolder.completedAmount = (TextView) row.findViewById(R.id.goal_completed_amount);
-            goalHolder.completedType = (TextView) row.findViewById(R.id.goal_completed_type);
-            goalHolder.completedAmount.setText(String.valueOf(goal.getAmount()));
-            if (goal.getAmount() > 1) {
-                goalHolder.completedType.setText(goal.getType() == Goal.BOOK_GOAL ? "books" : "pages");
-            } else {
-                goalHolder.completedType.setText(goal.getType() == Goal.BOOK_GOAL ? "book" : "page");
-            }
-
+        if (goal.getType() == Goal.BOOK_GOAL) {
+            goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()) + " books");
         } else {
-            row.findViewById(R.id.goal_progress_container).setVisibility(View.VISIBLE);
-            row.findViewById(R.id.goal_complete_container).setVisibility(View.GONE);
-            goalHolder.goalProgressMade.setText(String.valueOf(progress));
-            goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()));
+            goalHolder.goalAmount.setText(String.valueOf(goal.getAmount()) + " pages");
         }
 
+        if (goal.getAmount() > 0) {
+            int normalizedProgress = (int) goal.getProgress(context) * 100 / goal.getAmount();
+            if (normalizedProgress <= 100) {
+                goalHolder.goalProgressBar.setProgress(normalizedProgress);
+            } else {
+                goalHolder.goalProgressBar.setProgress(100);
+            }
+        } else {
+            goalHolder.goalProgressBar.setProgress(0);
+        }
         return row;
     }
 
@@ -97,9 +92,7 @@ class GoalAdapter extends ArrayAdapter<Goal> {
         ImageView goalIcon;
         TextView goalStartDate;
         TextView goalEndDate;
-        TextView goalProgressMade;
         TextView goalAmount;
-        TextView completedAmount;
-        TextView completedType;
+        ProgressBar goalProgressBar;
     }
 }
