@@ -54,33 +54,6 @@ public class SyncBookData extends SyncData {
         });
     }
 
-    void syncAllBooks(final AppCompatActivity activity) {
-        if (showSpinner)
-            syncSpinner.addThread();
-
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> parseBooks, ParseException e) {
-                if (showSpinner) {
-                    syncSpinner.endThread();
-                }
-
-                ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
-                ArrayList<Book> booksFromParse = new ArrayList<>();
-                for (ParseObject parseBook : parseBooks) {
-                    Book book = parseBookToBook(parseBook);
-                    booksFromParse.add(book);
-                }
-                updateDeviceBooks(booksOnDevice, booksFromParse);
-                updateParseBooks(booksOnDevice, booksFromParse);
-                activity.startActivity(activity.getIntent());
-                Utils.launchBookFragment(activity.getSupportFragmentManager());
-            }
-        });
-    }
-
     private void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
         HashSet<Integer> deviceBookIds = new HashSet<>();
         for (Book book : booksOnDevice) {

@@ -51,6 +51,16 @@ public class LoginFragment extends Fragment {
     private Context context;
     private String emailAddress;
 
+    private void completeLogin() {
+        if (Utils.isNetworkAvailable(getActivity())) {
+            SyncData syncData = new SyncData(context, false);
+            syncData.syncAllData();
+        }
+
+        Utils.hideKeyBoard(getActivity());
+        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,7 +126,7 @@ public class LoginFragment extends Fragment {
                     user.setUsername(userName);
                     user.setPassword(password);
 
-                    String emailAddress = emailAddressInput.getText().toString();
+                    emailAddress = emailAddressInput.getText().toString();
                     if (!emailAddress.isEmpty()) {
                         user.setEmail(emailAddress);
                         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -220,16 +230,6 @@ public class LoginFragment extends Fragment {
         });
 
         return rootView;
-    }
-
-    private void completeLogin() {
-        if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context, false);
-            syncData.syncAllData();
-        }
-
-        Utils.hideKeyBoard(getActivity());
-        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
     }
 
     private void switchToCreateMode() {

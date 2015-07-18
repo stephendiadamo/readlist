@@ -19,6 +19,7 @@ import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
+import com.s_diadamo.readlist.settings.SettingsFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.updates.StatisticsFragment;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void init() {
-
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = prefs.edit();
         if (!prefs.getBoolean(CREATED_SHELF, false)) {
@@ -115,6 +115,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case 3:
                 objFragment = new StatisticsFragment();
+                break;
+            case 4:
+                objFragment = new SettingsFragment();
                 break;
         }
 

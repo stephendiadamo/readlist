@@ -72,6 +72,11 @@
     <string name="goal">Goal:</string>
     <string name="amount">Amount</string>
     <string name="number_of_pages">Number of Pages</string>
+    <string name="settings">Settings</string>
+    <string name="email_us">Email us</string>
+    <string name="readlist">Readlist</string>
+    <string name="logged_in_as">Logged in as</string>
+    <string name="logout">Logout</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

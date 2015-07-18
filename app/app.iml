@@ -93,8 +93,8 @@
     <orderEntry type="jdk" jdkName="Android API 22 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="library-2.0.3" level="project" />
-    <orderEntry type="library" exported="" name="jackson-databind-2.4.6" level="project" />
     <orderEntry type="library" exported="" name="jackson-core-2.4.6" level="project" />
+    <orderEntry type="library" exported="" name="jackson-databind-2.4.6" level="project" />
     <orderEntry type="library" exported="" name="colorpicker-0.0.9" level="project" />
     <orderEntry type="library" exported="" name="zxing-android-embedded-3.0.0" level="project" />
     <orderEntry type="library" exported="" name="bolts-android-1.2.0" level="project" />

@@ -28,7 +28,8 @@ class NavigationItemAdapter extends BaseAdapter {
             R.drawable.ic_book,
             R.drawable.ic_shelf,
             R.drawable.ic_check,
-            R.drawable.ic_stats
+            R.drawable.ic_stats,
+            R.drawable.ic_settings
     };
 
     public NavigationItemAdapter(Context context) {

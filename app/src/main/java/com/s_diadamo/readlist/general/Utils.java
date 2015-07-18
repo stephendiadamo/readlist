@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
@@ -33,6 +34,7 @@ public class Utils {
     public final static String REMEMBER_ME = "REMEMBER_ME";
     public final static String LOGGED_IN = "LOGGED_IN";
     public final static String EMAIL_ADDRESS = "EMAIL_ADDRESS";
+    public static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
@@ -132,5 +134,18 @@ public class Utils {
                 = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
+    }
+
+    public static String getUserName(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String userName = prefs.getString(Utils.USER_NAME, "");
+        if (userName == null || userName.isEmpty()) {
+            return "";
+        }
+        return userName;
+    }
+
+    public static void showToast(Context context, String string) {
+        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
     }
 }

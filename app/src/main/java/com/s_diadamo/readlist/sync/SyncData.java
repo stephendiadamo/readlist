@@ -30,7 +30,7 @@ public class SyncData {
 
     public SyncData(Context context, boolean showSpinner) {
         this.context = context;
-        this.userName = getUserName();
+        this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();
         this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
         this.showSpinner = showSpinner;
@@ -38,7 +38,7 @@ public class SyncData {
 
     public SyncData(Context context) {
         this.context = context;
-        this.userName = getUserName();
+        this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();
         this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
         this.showSpinner = true;
@@ -53,7 +53,7 @@ public class SyncData {
     }
 
     public void syncAllData(AppCompatActivity activity) {
-        new SyncBookData(context).syncAllBooks(activity);
+        new SyncBookData(context).syncAllBooks();
         new SyncShelfData(context).syncAllShelves(activity);
         new SyncGoalData(context).syncAllGoals();
         new SyncBookUpdateData(context).syncAllBookUpdates();
@@ -83,14 +83,5 @@ public class SyncData {
     public void addPageUpdateToParse(PageUpdate pageUpdate) {
         ParseObject parsePageUpdate = new SyncPageUpdateData(context).toParsePageUpdate(pageUpdate);
         parsePageUpdate.saveEventually();
-    }
-
-    private String getUserName() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String userName = prefs.getString(Utils.USER_NAME, "");
-        if (userName == null || userName.isEmpty()) {
-            return "";
-        }
-        return userName;
     }
 }

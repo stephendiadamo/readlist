@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+
+    <LinearLayout
+        android:id="@+id/settings_login_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settings_login"
+            style="@style/SettingsItem"
+            android:text="@string/login" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-15dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/settings_logged_in_user_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/logged_in_as" />
+
+            <TextView
+                android:id="@+id/settings_logged_in_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/settings_sync"
+        style="@style/SettingsItem"
+        android:text="@string/sync_data" />
+
+    <TextView
+        android:id="@+id/settings_email_us"
+        style="@style/SettingsItem"
+        android:text="@string/email_us" />
+
+    <LinearLayout
+        android:id="@+id/settings_version_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/settings_readlist"
+            style="@style/SettingsItem"
+            android:text="@string/readlist" />
+
+        <TextView
+            android:id="@+id/settings_readlist_version"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="-15dp"
+            android:text="1.1.4" />
+    </LinearLayout>
+
+
+</LinearLayout>

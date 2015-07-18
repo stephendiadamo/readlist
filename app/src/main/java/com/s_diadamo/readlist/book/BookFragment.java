@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.LoginFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncData;
@@ -57,15 +56,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private MenuItem hideCompletedBooks;
     private SharedPreferences prefs;
     private boolean loading = true;
-    private boolean userLoggedIn = false;
-    private Menu optionsMenu;
-
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String EDIT_SHELF = "EDIT_SHELF";
-    private static final String LOGIN = "LOGIN";
     private static final String BOOK_ID = "BOOK_ID";
-    private static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
+
 
     @Nullable
     @Override
@@ -113,7 +108,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_book, menu);
-        optionsMenu = menu;
     }
 
     @Override
@@ -127,13 +121,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             menu.findItem(R.id.edit_shelf).setVisible(false);
             menu.findItem(R.id.delete_shelf).setVisible(false);
         }
-
-        userLoggedIn = Utils.checkUserIsLoggedIn(getActivity());
-        if (userLoggedIn) {
-            menu.findItem(R.id.login).setTitle("Logout");
-        } else {
-            menu.findItem(R.id.login).setTitle("Login");
-        }
     }
 
     @Override
@@ -145,7 +132,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (Utils.isNetworkAvailable(getActivity())) {
                 bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
             } else {
-                showToast(CHECK_INTERNET_MESSAGE);
+                showToast(Utils.CHECK_INTERNET_MESSAGE);
             }
             return true;
         } else if (id == R.id.add_book_manually) {
@@ -155,7 +142,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (Utils.isNetworkAvailable(getActivity())) {
                 launchScanner();
             } else {
-                showToast(CHECK_INTERNET_MESSAGE);
+                showToast(Utils.CHECK_INTERNET_MESSAGE);
             }
             return true;
         } else if (id == R.id.edit_shelf) {
@@ -172,24 +159,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (id == R.id.hide_completed_books) {
             toggleHideCompletedBooks();
             updateVisibleBooks();
-        } else if (id == R.id.sync_data) {
-            if (!userLoggedIn) {
-                showToast("You must be logged in to sync data");
-            } else {
-                ((MainActivity) getActivity()).closeDrawer();
-                launchSyncData();
-            }
-        } else if (id == R.id.login) {
-            if (userLoggedIn) {
-                userLoggedIn = false;
-                optionsMenu.findItem(R.id.login).setTitle("Login");
-                Utils.logout(context);
-            } else {
-                ((MainActivity) getActivity()).closeDrawer();
-                launchLoginFragment();
-            }
-
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -291,15 +260,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .commit();
     }
 
-    private void launchLoginFragment() {
-        Fragment fragment = new LoginFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .addToBackStack(LOGIN)
-                .replace(R.id.container, fragment)
-                .commit();
-    }
-
     private void addRemainingPagesAndCompleteBook(Book book) {
         int remainingPages = book.getNumPages() - book.getCurrentPage();
         PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
@@ -349,14 +309,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         integrator.initiateScan();
     }
 
-    private void launchSyncData() {
-        if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context);
-            syncData.syncAllData((AppCompatActivity) getActivity());
-        } else {
-            showToast(CHECK_INTERNET_MESSAGE);
-        }
-    }
 
     private void refreshBookList() {
         getLoaderManager().initLoader(BookLoader.ID, null, this);
