@@ -90,8 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_UPDATE_BOOK_ID + " INTEGER, " +
-            BOOK_UPDATE_DATE + " TEXT " +
-            BOOK_IS_DELETED + "INTEGER" +
+            BOOK_UPDATE_DATE + " TEXT, " +
+            BOOK_UPDATE_IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
