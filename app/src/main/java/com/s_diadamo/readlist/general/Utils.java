@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.parse.ParseUser;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
+import com.s_diadamo.readlist.settings.SettingsFragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -106,6 +107,16 @@ public class Utils {
             fragmentManager.popBackStack();
         }
         Fragment fragment = new BookFragment();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, fragment)
+                .commit();
+    }
+
+    public static void launchSettingsFragment(FragmentManager fragmentManager) {
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        Fragment fragment = new SettingsFragment();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();

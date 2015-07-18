@@ -51,16 +51,6 @@ public class LoginFragment extends Fragment {
     private Context context;
     private String emailAddress;
 
-    private void completeLogin() {
-        if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context, false);
-            syncData.syncAllData();
-        }
-
-        Utils.hideKeyBoard(getActivity());
-        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -199,7 +189,7 @@ public class LoginFragment extends Fragment {
                                 Toast.makeText(context, "An email was sent to your account", Toast.LENGTH_LONG).show();
                                 toggleActionBar(true);
                                 Utils.hideKeyBoard(getActivity());
-                                Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+                                Utils.launchSettingsFragment(getActivity().getSupportFragmentManager());
                             } else {
                                 if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS || e.getCode() == ParseException.EMAIL_NOT_FOUND) {
                                     Toast.makeText(context, "No user associated with this address", Toast.LENGTH_LONG).show();
@@ -238,9 +228,9 @@ public class LoginFragment extends Fragment {
 //            syncData.syncAllData();
 //        }
         Utils.hideKeyBoard(getActivity());
-        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+        Utils.launchSettingsFragment(getActivity().getSupportFragmentManager());
     }
-    
+
     private void switchToCreateMode() {
         currentMode = CREATE_ACCOUNT_MODE;
 

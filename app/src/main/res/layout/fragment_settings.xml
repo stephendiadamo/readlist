@@ -5,6 +5,15 @@
     android:orientation="vertical"
     android:padding="10dp">
 
+    <TextView
+        android:id="@+id/settings_sync"
+        style="@style/SettingsItem"
+        android:text="@string/sync_data" />
+
+    <TextView
+        android:id="@+id/settings_email_us"
+        style="@style/SettingsItem"
+        android:text="@string/email_us" />
 
     <LinearLayout
         android:id="@+id/settings_login_container"
@@ -35,21 +44,11 @@
                 android:id="@+id/settings_logged_in_user"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginStart="5dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginStart="4dp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/settings_sync"
-        style="@style/SettingsItem"
-        android:text="@string/sync_data" />
-
-    <TextView
-        android:id="@+id/settings_email_us"
-        style="@style/SettingsItem"
-        android:text="@string/email_us" />
 
     <LinearLayout
         android:id="@+id/settings_version_container"

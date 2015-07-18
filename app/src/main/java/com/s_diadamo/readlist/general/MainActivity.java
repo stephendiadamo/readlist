@@ -3,6 +3,8 @@ package com.s_diadamo.readlist.general;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -32,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
+    public static String PACKAGE_NAME;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,13 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             editor.putBoolean(FIXED_REMEMBER_ME_STRING, true);
+        }
+
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
+            PACKAGE_NAME = pInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
 
         editor.apply();
