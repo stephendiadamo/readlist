@@ -141,11 +141,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             String addPageUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_PAGE_UPDATES,
-                    SHELF_IS_DELETED);
+                    PAGE_UPDATE_IS_DELETED);
 
             String addBookUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_BOOK_UPDATES,
-                    GOAL_IS_DELETED);
+                    BOOK_UPDATE_IS_DELETED);
 
             db.execSQL(addPageUpdateColumn);
             db.execSQL(addBookUpdateColumn);
