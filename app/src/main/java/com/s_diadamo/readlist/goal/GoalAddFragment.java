@@ -33,6 +33,7 @@ public class GoalAddFragment extends Fragment {
     private static final int START_DATE = 0;
     private static final int END_DATE = 1;
     private final Calendar calendar = Calendar.getInstance();
+    private RadioGroup goalTypes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +49,25 @@ public class GoalAddFragment extends Fragment {
 
         startDateButton.setOnClickListener(setDateCalendarOnClick(startDateTextView, START_DATE));
         endDateButton.setOnClickListener(setDateCalendarOnClick(endDateTextView, END_DATE));
+
+        final TextView goalAmountLabel = (TextView) rootView.findViewById(R.id.add_goal_amount_label);
+
+        goalTypes = (RadioGroup) rootView.findViewById(R.id.add_goal_type);
+        goalTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.add_goal_radio_type_book:
+                        goalAmountLabel.setText(R.string.number_of_books);
+                        break;
+                    case R.id.add_goal_radio_type_page:
+                        goalAmountLabel.setText(R.string.number_of_pages);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         return rootView;
     }
@@ -124,7 +144,6 @@ public class GoalAddFragment extends Fragment {
     }
 
     private void addGoal() {
-        RadioGroup goalTypes = (RadioGroup) rootView.findViewById(R.id.add_goal_type);
         EditText goalAmountEditText = ((EditText) rootView.findViewById(R.id.add_goal_amount));
         String goalAmount = goalAmountEditText.getText().toString();
 

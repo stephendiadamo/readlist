@@ -70,12 +70,15 @@
     <string name="goal_type">Goal Type</string>
     <string name="dates">Dates</string>
     <string name="goal">Goal:</string>
+    <string name="amount">Amount</string>
+    <string name="number_of_pages">Number of Pages</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
         <item>Shelves</item>
         <item>Goals</item>
         <item>Statistics</item>
+        <item>Settings</item>
     </string-array>
 
     <string-array name="goal_types">
