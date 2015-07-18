@@ -6,6 +6,7 @@
     android:padding="10dp">
 
     <TextView
+        android:id="@+id/account_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="15dp"
@@ -20,18 +21,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:text="@string/email_address"
-            android:textSize="16sp" />
-
-        <TextView
             android:id="@+id/account_email_address"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10dp"
-            android:paddingTop="5dp"
+            android:text="@string/email_address"
             android:textSize="16sp" />
     </LinearLayout>
 

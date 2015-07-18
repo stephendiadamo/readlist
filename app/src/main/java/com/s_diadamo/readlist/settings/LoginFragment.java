@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist.general;
+package com.s_diadamo.readlist.settings;
 
 
 import android.app.ProgressDialog;
@@ -26,6 +26,7 @@ import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
 
 public class LoginFragment extends Fragment {

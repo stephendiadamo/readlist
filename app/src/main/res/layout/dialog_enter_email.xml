@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:padding="15dp">
+
+    <TextView
+        android:id="@+id/email_address_label"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/email_address"
+        android:textSize="18sp" />
+
+    <EditText
+        android:layout_below="@+id/email_address_label"
+        android:id="@+id/enter_email"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:inputType="textEmailAddress"
+        android:padding="5dp"
+        android:hint="@string/your_email_address"
+        android:textSize="17sp" />
+
+</RelativeLayout>

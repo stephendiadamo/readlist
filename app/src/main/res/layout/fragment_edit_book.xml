@@ -39,6 +39,11 @@
     <Spinner
         android:id="@+id/edit_book_shelf_spinner"
         android:layout_width="fill_parent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/gradient_spinner"
         android:layout_height="wrap_content" />
 
 </LinearLayout>

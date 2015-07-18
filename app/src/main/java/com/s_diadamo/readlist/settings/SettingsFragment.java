@@ -2,11 +2,8 @@ package com.s_diadamo.readlist.settings;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -18,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.LoginFragment;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
@@ -75,8 +71,7 @@ public class SettingsFragment extends Fragment {
         readList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Show account settings (edit email and stuff)
-                return;
+                launchAccountFragment();
             }
         });
 
@@ -120,6 +115,15 @@ public class SettingsFragment extends Fragment {
         } else {
             Utils.showToast(context, Utils.CHECK_INTERNET_MESSAGE);
         }
+    }
+
+    private void launchAccountFragment(){
+        Fragment fragment = new AccountFragment();
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .addToBackStack(LOGIN)
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     private void setLoginLabels() {

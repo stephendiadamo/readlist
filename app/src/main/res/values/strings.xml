@@ -78,6 +78,7 @@
     <string name="logged_in_as">Logged in as</string>
     <string name="logout">Logout</string>
     <string name="account">Account</string>
+    <string name="your_email_address">Your email address</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
