@@ -36,8 +36,8 @@
                 android:id="@+id/settings_logged_in_user_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/logged_in_as" />
 
             <TextView
@@ -65,8 +65,8 @@
             android:id="@+id/settings_readlist_version"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="-15dp"
             android:text="1.1.4" />
     </LinearLayout>
