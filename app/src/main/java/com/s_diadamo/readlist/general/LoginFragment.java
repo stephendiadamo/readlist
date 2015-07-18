@@ -223,10 +223,10 @@ public class LoginFragment extends Fragment {
     }
 
     private void completeLogin() {
-        if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context, false);
-            syncData.syncAllData();
-        }
+//        if (Utils.isNetworkAvailable(getActivity())) {
+//            SyncData syncData = new SyncData(context, false);
+//            syncData.syncAllData();
+//        }
 
         Utils.hideKeyBoard(getActivity());
         Utils.launchBookFragment(getActivity().getSupportFragmentManager());
