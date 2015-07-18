@@ -90,8 +90,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_UPDATE_BOOK_ID + " INTEGER, " +
-            BOOK_UPDATE_DATE + " TEXT " +
-            BOOK_IS_DELETED + "INTEGER" +
+            BOOK_UPDATE_DATE + " TEXT, " +
+            BOOK_UPDATE_IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
@@ -141,11 +141,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             String addPageUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_PAGE_UPDATES,
-                    SHELF_IS_DELETED);
+                    PAGE_UPDATE_IS_DELETED);
 
             String addBookUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_BOOK_UPDATES,
-                    GOAL_IS_DELETED);
+                    BOOK_UPDATE_IS_DELETED);
 
             db.execSQL(addPageUpdateColumn);
             db.execSQL(addBookUpdateColumn);
