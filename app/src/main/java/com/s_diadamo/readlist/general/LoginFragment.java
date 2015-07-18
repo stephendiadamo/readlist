@@ -232,6 +232,15 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
+    private void completeLogin() {
+//        if (Utils.isNetworkAvailable(getActivity())) {
+//            SyncData syncData = new SyncData(context, false);
+//            syncData.syncAllData();
+//        }
+        Utils.hideKeyBoard(getActivity());
+        Utils.launchBookFragment(getActivity().getSupportFragmentManager());
+    }
+    
     private void switchToCreateMode() {
         currentMode = CREATE_ACCOUNT_MODE;
 
