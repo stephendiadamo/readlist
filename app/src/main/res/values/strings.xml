@@ -83,6 +83,7 @@
     <string-array name="navigation_element_names">
         <item>All Books</item>
         <item>Shelves</item>
+        <item>Lent Books</item>
         <item>Goals</item>
         <item>Statistics</item>
         <item>Settings</item>

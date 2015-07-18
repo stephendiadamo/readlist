@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "readList";
 
     // Tables
@@ -14,9 +14,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_PAGE_UPDATES = "page_updates";
     public static final String TABLE_BOOK_UPDATES = "book_updates";
     public static final String TABLE_GOALS = "goals";
+    public static final String TABLE_LENT_BOOKS = "lent_books";
 
     // Common columns
     public static final String KEY_ID = "id";
+    public static final String IS_DELETED = "is_deleted";
 
     // Books table columns
     public static final String BOOK_TITLE = "title";
@@ -28,23 +30,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_COMPLETE = "complete";
     public static final String BOOK_COMPLETION_DATE = "completion_date";
     public static final String BOOK_COVER_PICTURE_URL = "cover_picture_url";
-    public static final String BOOK_IS_DELETED = "is_deleted";
 
     // Shelves table columns
     public static final String SHELF_NAME = "name";
     public static final String SHELF_COLOR = "color";
-    public static final String SHELF_IS_DELETED = "is_deleted";
 
     // Page Updates table columns
     public static final String PAGE_UPDATE_BOOK_ID = "book_id";
     public static final String PAGE_UPDATE_DATE = "date";
     public static final String PAGE_UPDATE_PAGES = "pages";
-    public static final String PAGE_UPDATE_IS_DELETED = "is_deleted";
 
     // Book Updates table columns
     public static final String BOOK_UPDATE_BOOK_ID = "book_id";
     public static final String BOOK_UPDATE_DATE = "date";
-    public static final String BOOK_UPDATE_IS_DELETED = "is_deleted";
 
     // Goals table columns
     public static final String GOAL_TYPE = "type";
@@ -52,7 +50,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String GOAL_START_DATE = "start_date";
     public static final String GOAL_END_DATE = "end_date";
     public static final String GOAL_IS_COMPLETE = "complete";
-    public static final String GOAL_IS_DELETED = "is_deleted";
+
+    // Lent Book table columns
+    public static final String LENT_BOOK_BOOK_ID = "book_id";
+    public static final String LENT_BOOK_LENT_TO = "lent_to";
+    public static final String LENT_BOOK_DATE_LENT = "date_lent";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
@@ -66,7 +68,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BOOK_COMPLETE + " INTEGER, " +
             BOOK_COMPLETION_DATE + " TEXT, " +
             BOOK_COVER_PICTURE_URL + " TEXT, " +
-            BOOK_IS_DELETED + " INTEGER" +
+            IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_SHELVES_TABLE = "CREATE TABLE " + TABLE_SHELVES +
@@ -74,7 +76,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             SHELF_NAME + " TEXT, " +
             SHELF_COLOR + " TEXT, " +
-            SHELF_IS_DELETED + " INTEGER" +
+            IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_PAGE_UPDATES_TABLE = "CREATE TABLE " + TABLE_PAGE_UPDATES +
@@ -83,7 +85,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             PAGE_UPDATE_BOOK_ID + " INTEGER, " +
             PAGE_UPDATE_DATE + " TEXT, " +
             PAGE_UPDATE_PAGES + " INTEGER, " +
-            PAGE_UPDATE_IS_DELETED + " INTEGER" +
+            IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_BOOK_UPDATES_TABLE = "CREATE TABLE " + TABLE_BOOK_UPDATES +
@@ -91,7 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             BOOK_UPDATE_BOOK_ID + " INTEGER, " +
             BOOK_UPDATE_DATE + " TEXT, " +
-            BOOK_UPDATE_IS_DELETED + " INTEGER" +
+            IS_DELETED + " INTEGER" +
             ")";
 
     private static final String CREATE_GOALS_TABLE = "CREATE TABLE " + TABLE_GOALS +
@@ -102,7 +104,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             GOAL_START_DATE + " TEXT, " +
             GOAL_END_DATE + " TEXT, " +
             GOAL_IS_COMPLETE + " INTEGER, " +
-            GOAL_IS_DELETED + " INTEGER" +
+            IS_DELETED + " INTEGER" +
+            ")";
+
+    private static final String CREATE_LENT_BOOKS_TABLE = "CREATE TABLE " + TABLE_LENT_BOOKS +
+            "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            LENT_BOOK_BOOK_ID + " INTEGER, " +
+            LENT_BOOK_LENT_TO + " TEXT, " +
+            LENT_BOOK_DATE_LENT + " TEXT, " +
+            IS_DELETED + " INTEGER" +
             ")";
 
     public DatabaseHelper(Context context) {
@@ -116,6 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_PAGE_UPDATES_TABLE);
         db.execSQL(CREATE_BOOK_UPDATES_TABLE);
         db.execSQL(CREATE_GOALS_TABLE);
+        db.execSQL(CREATE_LENT_BOOKS_TABLE);
     }
 
     @Override
@@ -123,15 +135,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 2) {
             String addBookColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_BOOKS,
-                    BOOK_IS_DELETED);
+                    IS_DELETED);
 
             String addShelfColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_SHELVES,
-                    SHELF_IS_DELETED);
+                    IS_DELETED);
 
             String addGoalColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_GOALS,
-                    GOAL_IS_DELETED);
+                    IS_DELETED);
 
             db.execSQL(addBookColumn);
             db.execSQL(addShelfColumn);
@@ -141,14 +153,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (oldVersion < 3) {
             String addPageUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_PAGE_UPDATES,
-                    PAGE_UPDATE_IS_DELETED);
+                    IS_DELETED);
 
             String addBookUpdateColumn = String.format("ALTER TABLE %s ADD COLUMN %s INTEGER DEFAULT 0",
                     TABLE_BOOK_UPDATES,
-                    BOOK_UPDATE_IS_DELETED);
+                    IS_DELETED);
 
             db.execSQL(addPageUpdateColumn);
             db.execSQL(addBookUpdateColumn);
+        }
+
+        if (oldVersion < 4) {
+            db.execSQL(CREATE_LENT_BOOKS_TABLE);
         }
     }
 }
