@@ -26,7 +26,7 @@ public class PageUpdateOperations {
         values.put(DatabaseHelper.PAGE_UPDATE_BOOK_ID, pageUpdate.getBookId());
         values.put(DatabaseHelper.PAGE_UPDATE_DATE, pageUpdate.getDate());
         values.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
-        values.put(DatabaseHelper.PAGE_UPDATE_IS_DELETED, pageUpdate.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, pageUpdate.isDeleted());
 
         long id = db.insert(DatabaseHelper.TABLE_PAGE_UPDATES, null, values);
         pageUpdate.setId((int) id);
@@ -54,7 +54,7 @@ public class PageUpdateOperations {
         ArrayList<PageUpdate> pageUpdates = new ArrayList<>();
         String query = String.format("SELECT * FROM %s WHERE %s=0",
                 DatabaseHelper.TABLE_PAGE_UPDATES,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -73,7 +73,7 @@ public class PageUpdateOperations {
         String query = String.format("SELECT SUM(%s) FROM %s WHERE %s=0",
                 DatabaseHelper.PAGE_UPDATE_PAGES,
                 DatabaseHelper.TABLE_PAGE_UPDATES,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -108,7 +108,7 @@ public class PageUpdateOperations {
                 DatabaseHelper.PAGE_UPDATE_DATE,
                 start,
                 end,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
             numUpdates = cursor.getInt(0);
@@ -128,7 +128,7 @@ public class PageUpdateOperations {
                 DatabaseHelper.PAGE_UPDATE_DATE,
                 start,
                 end,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
             numPagesRead = cursor.getInt(0);
@@ -206,7 +206,7 @@ public class PageUpdateOperations {
                 DatabaseHelper.PAGE_UPDATE_DATE,
                 DatabaseHelper.TABLE_PAGE_UPDATES,
                 DatabaseHelper.PAGE_UPDATE_DATE,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED,
+                DatabaseHelper.IS_DELETED,
                 DatabaseHelper.PAGE_UPDATE_DATE);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -223,7 +223,7 @@ public class PageUpdateOperations {
                 DatabaseHelper.PAGE_UPDATE_PAGES,
                 DatabaseHelper.TABLE_PAGE_UPDATES,
                 DatabaseHelper.PAGE_UPDATE_DATE,
-                DatabaseHelper.PAGE_UPDATE_IS_DELETED,
+                DatabaseHelper.IS_DELETED,
                 DatabaseHelper.PAGE_UPDATE_DATE);
 
         Cursor cursor = db.rawQuery(query, null);
@@ -252,7 +252,7 @@ public class PageUpdateOperations {
         values.put(DatabaseHelper.PAGE_UPDATE_BOOK_ID, pageUpdate.getBookId());
         values.put(DatabaseHelper.PAGE_UPDATE_DATE, pageUpdate.getDate());
         values.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
-        values.put(DatabaseHelper.PAGE_UPDATE_IS_DELETED, pageUpdate.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, pageUpdate.isDeleted());
 
         db.update(DatabaseHelper.TABLE_PAGE_UPDATES, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(pageUpdate.getId())});

@@ -21,7 +21,7 @@ public class BookOperations {
             DatabaseHelper.BOOK_COMPLETE,
             DatabaseHelper.BOOK_COMPLETION_DATE,
             DatabaseHelper.BOOK_COVER_PICTURE_URL,
-            DatabaseHelper.BOOK_IS_DELETED
+            DatabaseHelper.IS_DELETED
     };
     private final DatabaseHelper dbHelper;
     private SQLiteDatabase db;
@@ -43,7 +43,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
-        values.put(DatabaseHelper.BOOK_IS_DELETED, book.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, book.isDeleted());
 
         long id = db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
         book.setId((int) id);
@@ -75,7 +75,7 @@ public class BookOperations {
         String query = String.format("SELECT COUNT(%s) FROM %s WHERE %s=0 ",
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.TABLE_BOOKS,
-                DatabaseHelper.BOOK_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             books = cursor.getInt(0);
@@ -118,7 +118,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
-        values.put(DatabaseHelper.BOOK_IS_DELETED, book.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, book.isDeleted());
 
         db.update(DatabaseHelper.TABLE_BOOKS, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(book.getId())});

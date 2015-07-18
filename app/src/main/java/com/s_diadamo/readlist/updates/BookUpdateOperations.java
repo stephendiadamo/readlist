@@ -26,7 +26,7 @@ public class BookUpdateOperations {
 
         values.put(DatabaseHelper.BOOK_UPDATE_BOOK_ID, bookUpdate.getBookId());
         values.put(DatabaseHelper.BOOK_UPDATE_DATE, bookUpdate.getDate());
-        values.put(DatabaseHelper.BOOK_UPDATE_IS_DELETED, bookUpdate.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, bookUpdate.isDeleted());
 
         long id = db.insert(DatabaseHelper.TABLE_BOOK_UPDATES, null, values);
         bookUpdate.setId((int) id);
@@ -54,7 +54,7 @@ public class BookUpdateOperations {
         ArrayList<BookUpdate> bookUpdates = new ArrayList<>();
         String query = String.format("SELECT * FROM %s WHERE %s=0",
                 DatabaseHelper.TABLE_BOOK_UPDATES,
-                DatabaseHelper.BOOK_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -73,7 +73,7 @@ public class BookUpdateOperations {
         String query = String.format("SELECT COUNT(%s) FROM %s WHERE %s=0",
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.TABLE_BOOK_UPDATES,
-                DatabaseHelper.BOOK_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             booksRead = cursor.getInt(0);
@@ -91,7 +91,7 @@ public class BookUpdateOperations {
                 DatabaseHelper.BOOK_UPDATE_DATE,
                 start,
                 end,
-                DatabaseHelper.BOOK_UPDATE_IS_DELETED);
+                DatabaseHelper.IS_DELETED);
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null && cursor.moveToFirst()) {
             numBooksRead = cursor.getInt(0);
@@ -129,7 +129,7 @@ public class BookUpdateOperations {
 
         values.put(DatabaseHelper.BOOK_UPDATE_BOOK_ID, bookUpdate.getBookId());
         values.put(DatabaseHelper.BOOK_UPDATE_DATE, bookUpdate.getDate());
-        values.put(DatabaseHelper.BOOK_UPDATE_IS_DELETED, bookUpdate.isDeleted());
+        values.put(DatabaseHelper.IS_DELETED, bookUpdate.isDeleted());
 
         db.update(DatabaseHelper.TABLE_BOOK_UPDATES, values, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(bookUpdate.getId())});

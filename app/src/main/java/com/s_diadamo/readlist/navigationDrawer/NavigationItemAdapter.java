@@ -27,6 +27,7 @@ class NavigationItemAdapter extends BaseAdapter {
     private final int[] icons = {
             R.drawable.ic_book,
             R.drawable.ic_shelf,
+            R.drawable.ic_lent_book,
             R.drawable.ic_check,
             R.drawable.ic_stats,
             R.drawable.ic_settings
