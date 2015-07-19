@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncData;
 
 import java.util.Calendar;
 
@@ -64,6 +65,7 @@ public class LentBookDialog extends AlertDialog.Builder {
                         }
                         LentBook lentBook = new LentBook(book.getId(), name, Utils.parseDate(calendar.getTime()));
                         new LentBookOperations(context).addLentBook(lentBook);
+                        new SyncData(context).add(lentBook);
                     }
                 }
         );
@@ -108,6 +110,7 @@ public class LentBookDialog extends AlertDialog.Builder {
                         lentBook.setDateLent(Utils.parseDate(calendar.getTime()));
                         new LentBookOperations(context).updateLentBook(lentBook);
                         lentBookAdapter.notifyDataSetChanged();
+                        new SyncData(context).update(lentBook);
                     }
                 }
         );

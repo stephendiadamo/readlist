@@ -23,6 +23,7 @@ import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.sync.SyncGoalData;
 
 import java.util.ArrayList;
@@ -107,7 +108,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
                 if (selectedListViewAdapter != null) {
                     Goal goal = selectedListViewAdapter.getItem(info.position);
                     if (Utils.checkUserIsLoggedIn(context)){
-                        new SyncGoalData(context).deleteParseGoal(goal);
+                        new SyncData(context).delete(goal);
                         goalOperations.deleteGoal(goal);
                     } else {
                         goal.delete();

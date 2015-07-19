@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncData;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
             case R.id.delete_lent_book:
                 if (lentBookAdapter != null) {
                     if (Utils.checkUserIsLoggedIn(context)) {
-                        //TODO: Delete from parse
+                        new SyncData(context).delete(lentBook);
                         lentBookOperations.deleteLentBook(lentBook);
                     } else {
                         lentBook.delete();

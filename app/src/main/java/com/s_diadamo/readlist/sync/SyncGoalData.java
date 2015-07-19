@@ -18,12 +18,12 @@ import java.util.List;
 public class SyncGoalData extends SyncData {
     private final GoalOperations goalOperations;
 
-    public SyncGoalData(Context context) {
+    protected SyncGoalData(Context context) {
         super(context, true);
         goalOperations = new GoalOperations(context);
     }
 
-    public SyncGoalData(Context context, boolean showSpinner) {
+    protected SyncGoalData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         goalOperations = new GoalOperations(context);
     }
@@ -92,7 +92,7 @@ public class SyncGoalData extends SyncData {
         ParseObject.saveAllInBackground(goalsToSend);
     }
 
-    public void updateParseGoal(final Goal goal) {
+    protected void updateParseGoal(final Goal goal) {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
@@ -105,7 +105,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    public void deleteParseGoal(Goal goal) {
+    protected void deleteParseGoal(Goal goal) {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
@@ -117,7 +117,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    ParseObject toParseGoal(Goal goal) {
+    protected ParseObject toParseGoal(Goal goal) {
         ParseObject parseGoal = new ParseObject(TYPE_GOAL);
 
         parseGoal.put(Utils.USER_NAME, userName);

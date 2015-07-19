@@ -213,7 +213,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Utils.checkUserIsLoggedIn(context)) {
-                            new SyncBookData(context).deleteParseBook(book);
+                            new SyncData(context).delete(book);
                             bookOperations.deleteBook(book);
                         } else {
                             book.delete();
@@ -266,7 +266,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         new PageUpdateOperations(context).
                 addPageUpdate(pageUpdate);
         if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).addPageUpdateToParse(pageUpdate);
+            new SyncData(context).add(pageUpdate);
         }
 
         book.markComplete();
@@ -278,8 +278,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         BookUpdate bookUpdate = new BookUpdate(book.getId());
         new BookUpdateOperations(context).addBookUpdate(bookUpdate);
         if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).addBookUpdateToParse(bookUpdate);
-            new SyncBookData(context).updateParseBook(book);
+            SyncData syncData = new SyncData(context);
+            syncData.add(bookUpdate);
+            syncData.update(book);
         }
     }
 

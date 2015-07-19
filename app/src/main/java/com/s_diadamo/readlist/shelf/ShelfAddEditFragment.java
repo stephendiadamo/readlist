@@ -253,14 +253,14 @@ public class ShelfAddEditFragment extends Fragment {
                     findFragmentById(R.id.navigation_drawer)).updateShelfFromExpandableList(shelf);
 
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
-                new SyncShelfData(context).updateParseShelf(shelf);
+                new SyncData(context).update(shelf);
             }
         } else {
             shelfOperations.addShelf(shelf);
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).addShelf(shelf);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
-                new SyncData(context).addShelfToParse(shelf);
+                new SyncData(context).add(shelf);
             }
         }
 

@@ -14,11 +14,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.shelf.ShelfSpinnerAdapter;
+import com.s_diadamo.readlist.sync.SyncData;
 
 import java.util.ArrayList;
 
@@ -101,7 +101,7 @@ public class BookEditFragment extends Fragment {
         book.setShelfId(shelves.get(selectedShelfPosition).getId());
         bookOperations.updateBook(book);
         if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncBookData(context).updateParseBook(book);
+            new SyncData(context).update(book);
         }
     }
 }

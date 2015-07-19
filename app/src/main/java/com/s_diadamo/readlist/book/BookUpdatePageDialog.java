@@ -57,8 +57,8 @@ class BookUpdatePageDialog extends AlertDialog {
                 PageUpdate pageUpdate = new PageUpdate(book.getId(), Utils.getCurrentDate(), pagePicker.getValue());
                 new PageUpdateOperations(context).addPageUpdate(pageUpdate);
                 if (Utils.checkUserIsLoggedIn(context)) {
-                    new SyncData(context).addPageUpdateToParse(pageUpdate);
-                    new SyncBookData(context).updateParseBook(book);
+                    new SyncData(context).add(pageUpdate);
+                    new SyncData(context).update(book);
                 }
 
                 dismiss();

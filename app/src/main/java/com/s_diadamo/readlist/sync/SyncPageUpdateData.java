@@ -28,7 +28,7 @@ public class SyncPageUpdateData extends SyncData {
         pageUpdateOperations = new PageUpdateOperations(context);
     }
 
-    void syncAllPageUpdates() {
+    protected void syncAllPageUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
 
@@ -98,7 +98,7 @@ public class SyncPageUpdateData extends SyncData {
                 parsePageUpdate.getInt(DatabaseHelper.PAGE_UPDATE_PAGES));
     }
 
-    ParseObject toParsePageUpdate(PageUpdate pageUpdate) {
+    protected ParseObject toParsePageUpdate(PageUpdate pageUpdate) {
         ParseObject parsePageUpdate = new ParseObject(TYPE_PAGE_UPDATE);
 
         parsePageUpdate.put(Utils.USER_NAME, userName);
@@ -121,7 +121,7 @@ public class SyncPageUpdateData extends SyncData {
         });
     }
 
-    private void deleteParsePageUpdate(PageUpdate pageUpdate) {
+    protected void deleteParsePageUpdate(PageUpdate pageUpdate) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.whereEqualTo(READLIST_ID, pageUpdate.getId());

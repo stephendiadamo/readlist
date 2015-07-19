@@ -29,7 +29,7 @@ public class SyncBookUpdateData extends SyncData {
         bookUpdateOperations = new BookUpdateOperations(context);
     }
 
-    void syncAllBookUpdates() {
+    protected void syncAllBookUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -90,7 +90,7 @@ public class SyncBookUpdateData extends SyncData {
         ParseObject.saveAllInBackground(bookUpdatesToSend);
     }
 
-    ParseObject toParseBookUpdate(BookUpdate bookUpdate) {
+    protected ParseObject toParseBookUpdate(BookUpdate bookUpdate) {
         ParseObject parseBookUpdate = new ParseObject(TYPE_BOOK_UPDATE);
 
         parseBookUpdate.put(Utils.USER_NAME, userName);
@@ -119,7 +119,7 @@ public class SyncBookUpdateData extends SyncData {
         });
     }
 
-    private void deleteParseBookUpdate(BookUpdate bookUpdate) {
+    protected void deleteParseBookUpdate(BookUpdate bookUpdate) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.whereEqualTo(READLIST_ID, bookUpdate.getId());

@@ -22,17 +22,17 @@ import java.util.List;
 public class SyncShelfData extends SyncData {
     private final ShelfOperations shelfOperations;
 
-    public SyncShelfData(Context context) {
+    protected SyncShelfData(Context context) {
         super(context, true);
         shelfOperations = new ShelfOperations(context);
     }
 
-    public SyncShelfData(Context context, boolean showSpinner) {
+    protected SyncShelfData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         shelfOperations = new ShelfOperations(context);
     }
 
-    void syncAllShelves() {
+    protected void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -54,7 +54,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    void syncAllShelves(final AppCompatActivity activity) {
+    protected void syncAllShelves(final AppCompatActivity activity) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -77,7 +77,6 @@ public class SyncShelfData extends SyncData {
             }
         });
     }
-
 
     private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {
         HashSet<Integer> deviceShelfIds = new HashSet<>();
@@ -120,7 +119,7 @@ public class SyncShelfData extends SyncData {
         ParseObject.saveAllInBackground(shelvesToSend);
     }
 
-    public void updateParseShelf(final Shelf shelf) {
+    protected void updateParseShelf(final Shelf shelf) {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {
@@ -133,7 +132,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    public void deleteParseShelf(Shelf shelf) {
+    protected void deleteParseShelf(Shelf shelf) {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {

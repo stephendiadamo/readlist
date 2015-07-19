@@ -19,6 +19,7 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.sync.SyncShelfData;
 
 class BookMenuActions {
@@ -78,7 +79,7 @@ class BookMenuActions {
         builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (Utils.checkUserIsLoggedIn(context)) {
-                    new SyncShelfData(context).deleteParseShelf(shelf);
+                    new SyncData(context).delete(shelf);
                     new ShelfOperations(context).deleteShelf(shelf);
                 } else {
                     shelf.delete();

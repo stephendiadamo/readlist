@@ -132,7 +132,7 @@ public class BookManualAddActivity extends AppCompatActivity {
             new BookOperations(this).addBook(book);
 
             if (Utils.checkUserIsLoggedIn(this)){
-                new SyncData(this).addBookToParse(book);
+                new SyncData(this).add(book);
             }
 
             finish();

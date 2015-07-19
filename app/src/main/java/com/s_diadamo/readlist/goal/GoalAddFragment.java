@@ -152,7 +152,7 @@ public class GoalAddFragment extends Fragment {
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);
             new GoalOperations(rootView.getContext()).addGoal(goal);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
-                new SyncData(rootView.getContext()).addGoalToParse(goal);
+                new SyncData(rootView.getContext()).add(goal);
             }
             backToGoals();
         } else {

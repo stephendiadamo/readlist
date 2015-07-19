@@ -36,7 +36,7 @@ class SearchResultDialog extends AlertDialog {
                     Book book = books.get(position);
                     new BookOperations(context).addBook(book);
                     if (Utils.checkUserIsLoggedIn(context)) {
-                        new SyncData(context).addBookToParse(book);
+                        new SyncData(context).add(book);
                     }
                     Toast.makeText(context, "Added book", Toast.LENGTH_SHORT).show();
                     Utils.launchBookFragment(manager);

@@ -22,6 +22,13 @@ public class LentBook extends Book {
         this.isDeleted = (isDeleted == 1);
     }
 
+    public LentBook(int id, int bookId, String lentTo, String dateLent) {
+        super.setId(id);
+        this.bookId = bookId;
+        this.lentTo = lentTo;
+        this.dateLent = dateLent;
+    }
+
     public LentBook(int bookId, String lentTo, String date) {
         this.bookId = bookId;
         this.lentTo = lentTo;
