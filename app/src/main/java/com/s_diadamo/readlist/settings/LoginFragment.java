@@ -135,10 +135,14 @@ public class LoginFragment extends Fragment {
                             if (e == null) {
                                 Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show();
                                 switchToLoginMode();
-                            } else if (e.getCode() == ParseException.ACCOUNT_ALREADY_LINKED) {
+                            } else if (e.getCode() == ParseException.USERNAME_TAKEN) {
+                                Toast.makeText(context, "The username has already been used", Toast.LENGTH_SHORT).show();
+                            } else if (e.getCode() == ParseException.EMAIL_TAKEN) {
                                 Toast.makeText(context, "This email address has been used. Did you forget your password?", Toast.LENGTH_SHORT).show();
                             } else if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS) {
                                 Toast.makeText(context, "The email address entered is invalid", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(context, "An error occurred, please try again", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -229,7 +233,7 @@ public class LoginFragment extends Fragment {
             editor.putBoolean(Utils.REMEMBER_ME, false);
         }
         ParseUser user = ParseUser.getCurrentUser();
-        if (user != null && !user.getEmail().isEmpty()) {
+        if (user != null && user.getEmail() != null && !user.getEmail().isEmpty()) {
             editor.putString(Utils.EMAIL_ADDRESS, user.getEmail());
         }
 

@@ -60,24 +60,6 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(CREATED_SHELF, true);
         }
 
-        if (!prefs.getBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, false)) {
-            AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-            alertDialog.setTitle("Introducing Cloud Syncing!");
-            alertDialog.setMessage("In this update, you will be able to backup all of your data " +
-                    "on the cloud. Be sure to create an account by clicking 'Login' " +
-                    "in the options menu to start syncing.\n\nThere have also been improvements to" +
-                    " book search to get more accurate results.\n\nKeep the " +
-                    "feedback coming and thank you for using Readlist!");
-            alertDialog.setPositiveButton("Got it", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-            alertDialog.create().show();
-            editor.putBoolean(SHOWED_LOGIN_FEATURE_MESSAGE, true);
-        }
-
         if (!prefs.getBoolean(FIXED_REMEMBER_ME_STRING, false)) {
             String rememberMeSet = prefs.getString(Utils.REMEMBER_ME, "");
             if (rememberMeSet != null && !rememberMeSet.isEmpty()) {
