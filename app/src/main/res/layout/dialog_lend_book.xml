@@ -10,7 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:hint="@string/lent_to"
+        android:hint="@string/lend_to"
         android:inputType="textCapWords"
         android:padding="15dp"
         android:textColor="#000"

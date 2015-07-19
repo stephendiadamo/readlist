@@ -145,7 +145,7 @@ public class SyncLentBookData extends SyncData {
     private void queryForLentBook(LentBook lentBook, FindCallback<ParseObject> callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_LENT_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        query.whereEqualTo(READLIST_ID, lentBook.getBookId());
+        query.whereEqualTo(READLIST_ID, lentBook.getId());
         query.findInBackground(callback);
     }
 

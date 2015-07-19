@@ -35,12 +35,13 @@ public class LentBook extends Book {
         this.dateLent = date;
     }
 
-    public LentBook(int id, String bookTitle, String bookCoverUrl, String lentTo, String dateLent) {
+    public LentBook(int id, String bookTitle, String bookCoverUrl, String lentTo, String dateLent, int bookId) {
         super.setId(id);
         super.setTitle(bookTitle);
         super.setCoverPictureUrl(bookCoverUrl);
         this.lentTo = lentTo;
         this.dateLent = dateLent;
+        this.bookId = bookId;
     }
 
     public int getBookId() {

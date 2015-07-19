@@ -65,7 +65,9 @@ public class LentBookDialog extends AlertDialog.Builder {
                         }
                         LentBook lentBook = new LentBook(book.getId(), name, Utils.parseDate(calendar.getTime()));
                         new LentBookOperations(context).addLentBook(lentBook);
-                        new SyncData(context).add(lentBook);
+                        if (Utils.checkUserIsLoggedIn(context)){
+                            new SyncData(context).add(lentBook);
+                        }
                     }
                 }
         );
@@ -109,8 +111,10 @@ public class LentBookDialog extends AlertDialog.Builder {
                         lentBook.setLentTo(name);
                         lentBook.setDateLent(Utils.parseDate(calendar.getTime()));
                         new LentBookOperations(context).updateLentBook(lentBook);
+                        if (Utils.checkUserIsLoggedIn(context)) {
+                            new SyncData(context).update(lentBook);
+                        }
                         lentBookAdapter.notifyDataSetChanged();
-                        new SyncData(context).update(lentBook);
                     }
                 }
         );

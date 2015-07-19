@@ -85,6 +85,7 @@
     <string name="delete">Delete</string>
     <string name="date">Date</string>
     <string name="lent_books">Lent Books</string>
+    <string name="lend_to">Lend to</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

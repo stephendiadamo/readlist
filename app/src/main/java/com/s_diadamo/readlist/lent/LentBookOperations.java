@@ -53,12 +53,13 @@ public class LentBookOperations {
         db = dbHelper.getReadableDatabase();
         ArrayList<LentBook> lentBooks = new ArrayList<>();
         String query = String.format(
-                "SELECT l.%s, b.%s, b.%s, l.%s, l.%s FROM %s b INNER JOIN %s l ON b.%s=l.%s WHERE l.%s=0",
+                "SELECT l.%s, b.%s, b.%s, l.%s, l.%s, l.%s FROM %s b INNER JOIN %s l ON b.%s=l.%s WHERE l.%s=0",
                 DatabaseHelper.KEY_ID,
                 DatabaseHelper.BOOK_TITLE,
                 DatabaseHelper.BOOK_COVER_PICTURE_URL,
                 DatabaseHelper.LENT_BOOK_LENT_TO,
                 DatabaseHelper.LENT_BOOK_DATE_LENT,
+                DatabaseHelper.LENT_BOOK_BOOK_ID,
                 DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.TABLE_LENT_BOOKS,
                 DatabaseHelper.KEY_ID,
@@ -114,7 +115,8 @@ public class LentBookOperations {
                 cursor.getString(1),
                 cursor.getString(2),
                 cursor.getString(3),
-                cursor.getString(4));
+                cursor.getString(4),
+                cursor.getInt(5));
     }
 
 }
