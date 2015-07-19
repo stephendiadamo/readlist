@@ -82,7 +82,7 @@ public class LentBookOperations {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getId());
+        values.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getBookId());
         values.put(DatabaseHelper.LENT_BOOK_LENT_TO, lentBook.getLentTo());
         values.put(DatabaseHelper.LENT_BOOK_DATE_LENT, lentBook.getDateLent());
         values.put(DatabaseHelper.IS_DELETED, lentBook.isDeleted());

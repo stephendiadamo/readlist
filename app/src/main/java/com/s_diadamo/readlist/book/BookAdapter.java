@@ -90,6 +90,8 @@ public class BookAdapter extends BaseAdapter {
             } else {
                 MainActivity.imageLoader.DisplayImage(book.getCoverPictureUrl(), bookHolder.bookCover);
             }
+        } else {
+            bookHolder.bookCover.setImageResource(R.drawable.sample_cover);
         }
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());

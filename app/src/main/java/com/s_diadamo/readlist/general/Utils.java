@@ -78,6 +78,15 @@ public class Utils {
         return simpleDateFormat.format(date);
     }
 
+    public static Date getDateFromString(String date) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat(DATE_FORMAT);
+            return df.parse(date);
+        } catch (ParseException pe) {
+            return null;
+        }
+    }
+
     public static void setDynamicHeight(ListView mListView) {
         ListAdapter mListAdapter = mListView.getAdapter();
         if (mListAdapter == null) {

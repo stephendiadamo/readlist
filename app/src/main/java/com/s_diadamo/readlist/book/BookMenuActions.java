@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.lent.LentBookDialog;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
@@ -23,15 +24,19 @@ import com.s_diadamo.readlist.sync.SyncShelfData;
 class BookMenuActions {
 
     private final Context context;
-    private final BookOperations bookOperations;
-    private final BookAdapter bookAdapter;
-    private final Shelf shelf;
+    private BookOperations bookOperations;
+    private BookAdapter bookAdapter;
+    private Shelf shelf;
 
     public BookMenuActions(Context context, BookOperations bookOperations, BookAdapter bookAdapter, Shelf shelf) {
         this.context = context;
         this.bookOperations = bookOperations;
         this.bookAdapter = bookAdapter;
         this.shelf = shelf;
+    }
+
+    public BookMenuActions(Context context) {
+        this.context = context;
     }
 
     public void setCurrentPage(final Book book) {
@@ -95,5 +100,10 @@ class BookMenuActions {
 
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void lendBook(final Book book) {
+        LentBookDialog lentBookDialog = new LentBookDialog(context, book);
+        lentBookDialog.show();
     }
 }

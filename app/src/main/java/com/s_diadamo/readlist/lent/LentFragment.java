@@ -6,21 +6,29 @@ import android.content.Context;
 import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 
 public class LentFragment extends Fragment implements LoaderManager.LoaderCallbacks {
-
     private Context context;
+    private ListView lentBookListView;
     private ArrayList<LentBook> lentBooks;
     private LentBookAdapter lentBookAdapter;
-    private ListView lentBookListView;
+    private LentBookOperations lentBookOperations;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,14 +36,52 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
         context = rootView.getContext();
 
         setHasOptionsMenu(false);
+        lentBookOperations = new LentBookOperations(context);
 
         lentBookListView = (ListView) rootView.findViewById(R.id.general_list_view);
         getLoaderManager().initLoader(LentBookLoader.ID, null, this);
 
-        new LentBookOperations(context).getLentBooks();
-
+        ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (ab != null) {
+            ab.setTitle(getResources().getString(R.string.lent_books));
+        }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.clear();
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.menu_lent_book_actions, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        LentBook lentBook = lentBookAdapter.getItem(info.position);
+        switch (item.getItemId()) {
+            case R.id.edit_lent_book:
+                LentBookDialog lentBookDialog = new LentBookDialog(context, lentBook);
+                lentBookDialog.setLentBookAdapter(lentBookAdapter);
+                lentBookDialog.show();
+                return true;
+            case R.id.delete_lent_book:
+                if (lentBookAdapter != null) {
+                    if (Utils.checkUserIsLoggedIn(context)) {
+                        //TODO: Delete from parse
+                        lentBookOperations.deleteLentBook(lentBook);
+                    } else {
+                        lentBook.delete();
+                        lentBookOperations.updateLentBook(lentBook);
+                    }
+
+                    lentBookAdapter.remove(lentBook);
+                }
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -56,6 +102,18 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
                 lentBooks = (ArrayList<LentBook>) data;
                 lentBookAdapter = new LentBookAdapter(context, R.layout.row_lent_book_element, lentBooks);
                 lentBookListView.setAdapter(lentBookAdapter);
+
+                registerForContextMenu(lentBookListView);
+                lentBookListView.setLongClickable(false);
+                lentBookListView.setOnItemClickListener(
+                        new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                getActivity().openContextMenu(view);
+                            }
+                        }
+                );
+
                 break;
         }
     }

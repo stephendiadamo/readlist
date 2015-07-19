@@ -22,10 +22,10 @@ public class LentBook extends Book {
         this.isDeleted = (isDeleted == 1);
     }
 
-    public LentBook(int bookId, String lentTo) {
+    public LentBook(int bookId, String lentTo, String date) {
         this.bookId = bookId;
         this.lentTo = lentTo;
-        this.dateLent = Utils.getCurrentDate();
+        this.dateLent = date;
     }
 
     public LentBook(int id, String bookTitle, String bookCoverUrl, String lentTo, String dateLent) {
@@ -66,5 +66,13 @@ public class LentBook extends Book {
 
     public void delete() {
         this.isDeleted = true;
+    }
+
+    public void setLentTo(String lentTo) {
+        this.lentTo = lentTo;
+    }
+
+    public void setDateLent(String dateLent) {
+        this.dateLent = dateLent;
     }
 }
