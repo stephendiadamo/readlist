@@ -2,7 +2,6 @@ package com.s_diadamo.readlist.sync;
 
 
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -18,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncBookData extends SyncData {
-    private BookOperations bookOperations;
+    private final BookOperations bookOperations;
 
     public SyncBookData(Context context) {
         super(context, true);
@@ -135,7 +134,7 @@ public class SyncBookData extends SyncData {
         parseBook.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
     }
 
-    protected ParseObject toParseBook(Book book) {
+    ParseObject toParseBook(Book book) {
         ParseObject parseBook = new ParseObject(TYPE_BOOK);
 
         parseBook.put(Utils.USER_NAME, userName);

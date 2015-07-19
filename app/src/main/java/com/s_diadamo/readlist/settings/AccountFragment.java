@@ -20,7 +20,7 @@ import com.s_diadamo.readlist.general.Utils;
 
 public class AccountFragment extends Fragment {
 
-    TextView emailAddressText;
+    private TextView emailAddressText;
 
     @Nullable
     @Override
@@ -55,6 +55,7 @@ public class AccountFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(context);
         final View emailDialog = inflater.inflate(R.layout.dialog_enter_email, null);
         alert.setView(emailDialog);
+        alert.setTitle(R.string.your_email_address);
         alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

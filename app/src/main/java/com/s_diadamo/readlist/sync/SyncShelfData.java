@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncShelfData extends SyncData {
-    private ShelfOperations shelfOperations;
+    private final ShelfOperations shelfOperations;
 
     public SyncShelfData(Context context) {
         super(context, true);
@@ -32,7 +32,7 @@ public class SyncShelfData extends SyncData {
         shelfOperations = new ShelfOperations(context);
     }
 
-    protected void syncAllShelves() {
+    void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -54,7 +54,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    protected void syncAllShelves(final AppCompatActivity activity) {
+    void syncAllShelves(final AppCompatActivity activity) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -145,7 +145,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    protected ParseObject toParseShelf(Shelf shelf) {
+    ParseObject toParseShelf(Shelf shelf) {
         ParseObject parseShelf = new ParseObject(TYPE_SHELF);
 
         parseShelf.put(Utils.USER_NAME, userName);

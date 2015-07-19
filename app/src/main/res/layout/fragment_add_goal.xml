@@ -69,11 +69,13 @@
 
         <Button
             android:id="@+id/add_goal_start_date_button"
+            style="?android:buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:padding="8dp"
             android:text="@string/start_date"
+            android:textColor="#000"
             android:textSize="16sp" />
 
         <TextView
@@ -94,12 +96,14 @@
 
         <Button
             android:id="@+id/add_goal_end_date_button"
+            style="?android:buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_weight="0.4"
             android:padding="8dp"
             android:text="@string/end_date"
+            android:textColor="#000"
             android:textSize="16sp" />
 
         <TextView

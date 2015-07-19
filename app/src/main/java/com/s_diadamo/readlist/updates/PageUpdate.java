@@ -4,9 +4,9 @@ import com.s_diadamo.readlist.general.Utils;
 
 public class PageUpdate {
     private int id;
-    private int bookId;
-    private String date;
-    private int pages;
+    private final int bookId;
+    private final String date;
+    private final int pages;
     private boolean isDeleted = false;
 
     public PageUpdate(int id, int bookId, String date, int pages, int isDeleted) {

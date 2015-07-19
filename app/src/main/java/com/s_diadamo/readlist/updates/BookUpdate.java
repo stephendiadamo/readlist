@@ -4,8 +4,8 @@ import com.s_diadamo.readlist.general.Utils;
 
 public class BookUpdate {
     private int id;
-    private int bookId;
-    private String date;
+    private final int bookId;
+    private final String date;
     private boolean isDeleted = false;
 
     public BookUpdate(int id, int bookId, String date, int isDeleted) {

@@ -17,7 +17,7 @@ import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 
-public class BookAdapter extends BaseAdapter {
+class BookAdapter extends BaseAdapter {
     private final Context context;
     private final int layoutResourceID;
     private final ArrayList<Book> books;

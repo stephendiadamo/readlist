@@ -1,8 +1,6 @@
 package com.s_diadamo.readlist.sync;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 
 import com.parse.ParseObject;
@@ -16,19 +14,19 @@ import com.s_diadamo.readlist.updates.PageUpdate;
 
 public class SyncData {
 
-    public static final String READLIST_ID = "readlist_id";
-    public static final String TYPE_BOOK = "book";
-    public static final String TYPE_SHELF = "shelf";
-    public static final String TYPE_GOAL = "goal";
-    public static final String TYPE_BOOK_UPDATE = "book_update";
-    public static final String TYPE_PAGE_UPDATE = "page_update";
+    static final String READLIST_ID = "readlist_id";
+    static final String TYPE_BOOK = "book";
+    static final String TYPE_SHELF = "shelf";
+    static final String TYPE_GOAL = "goal";
+    static final String TYPE_BOOK_UPDATE = "book_update";
+    static final String TYPE_PAGE_UPDATE = "page_update";
 
-    Context context;
-    String userName;
-    MultiProcessSpinner syncSpinner;
-    boolean showSpinner;
+    private final Context context;
+    final String userName;
+    final MultiProcessSpinner syncSpinner;
+    final boolean showSpinner;
 
-    public SyncData(Context context, boolean showSpinner) {
+    SyncData(Context context, boolean showSpinner) {
         this.context = context;
         this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();

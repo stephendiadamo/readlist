@@ -13,7 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -27,7 +26,6 @@ import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
-import com.s_diadamo.readlist.sync.SyncData;
 
 public class LoginFragment extends Fragment {
 
@@ -156,16 +154,8 @@ public class LoginFragment extends Fragment {
                             if (parseUser != null) {
                                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
                                 rememberUser(userName, password);
-                                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-                                SharedPreferences.Editor editor = prefs.edit();
-                                editor.putBoolean(Utils.LOGGED_IN, true);
-                                if (rememberMe.isChecked()) {
-                                    editor.putBoolean(Utils.REMEMBER_ME, true);
-                                } else {
-                                    editor.putBoolean(Utils.REMEMBER_ME, false);
-                                }
-                                editor.apply();
-                                toggleActionBar(true);
+
+
                                 completeLogin();
                             } else {
                                 Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
@@ -228,6 +218,24 @@ public class LoginFragment extends Fragment {
 //            SyncData syncData = new SyncData(context, false);
 //            syncData.syncAllData();
 //        }
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(Utils.LOGGED_IN, true);
+
+        if (rememberMe.isChecked()) {
+            editor.putBoolean(Utils.REMEMBER_ME, true);
+        } else {
+            editor.putBoolean(Utils.REMEMBER_ME, false);
+        }
+        ParseUser user = ParseUser.getCurrentUser();
+        if (user != null && !user.getEmail().isEmpty()) {
+            editor.putString(Utils.EMAIL_ADDRESS, user.getEmail());
+        }
+
+        editor.apply();
+        toggleActionBar(true);
+
         Utils.hideKeyBoard(getActivity());
         Utils.launchSettingsFragment(getActivity().getSupportFragmentManager());
     }

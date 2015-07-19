@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 public class LentFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
     private ListView lentBookListView;
-    private ArrayList<LentBook> lentBooks;
     private LentBookAdapter lentBookAdapter;
     private LentBookOperations lentBookOperations;
 
@@ -99,7 +97,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
         int id = loader.getId();
         switch (id) {
             case LentBookLoader.ID:
-                lentBooks = (ArrayList<LentBook>) data;
+                ArrayList<LentBook> lentBooks = (ArrayList<LentBook>) data;
                 lentBookAdapter = new LentBookAdapter(context, R.layout.row_lent_book_element, lentBooks);
                 lentBookListView.setAdapter(lentBookAdapter);
 

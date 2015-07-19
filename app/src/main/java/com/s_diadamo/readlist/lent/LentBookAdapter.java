@@ -16,7 +16,7 @@ import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 
-public class LentBookAdapter extends ArrayAdapter<LentBook> {
+class LentBookAdapter extends ArrayAdapter<LentBook> {
 
     private final Context context;
     private final int layoutResourceID;

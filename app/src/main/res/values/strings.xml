@@ -43,9 +43,7 @@
     <string name="book_goals">Book Goals</string>
     <string name="goal_icon">Goal Icon</string>
     <string name="deadline">Deadline:</string>
-    <string name="progress">Progress:</string>
     <string name="started">Started:</string>
-    <string name="goal_amount">Goal Amount</string>
     <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
     <string name="hide_completed_goals">Hide Completed Goals</string>
@@ -79,10 +77,14 @@
     <string name="logout">Logout</string>
     <string name="account">Account</string>
     <string name="your_email_address">Your email address</string>
-    <string name="lent_to">Lent to:</string>
-    <string name="lent">Lent:</string>
+    <string name="lent_to_colon">Lent to:</string>
+    <string name="lent_to">Lent to</string>
     <string name="lent_on">Lent on:</string>
     <string name="lend_book">Lend Book</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="date">Date</string>
+    <string name="lent_books">Lent Books</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
@@ -91,11 +93,6 @@
         <item>Goals</item>
         <item>Statistics</item>
         <item>Settings</item>
-    </string-array>
-
-    <string-array name="goal_types">
-        <item>Book Goal</item>
-        <item>Page Goal</item>
     </string-array>
 
 </resources>

@@ -48,7 +48,7 @@ public class Book {
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
-        this.currentPage = currentPage;
+        this.currentPage = 0;
         this.colour = colour;
         this.complete = (complete == 1);
         this.completionDate = completionDate;

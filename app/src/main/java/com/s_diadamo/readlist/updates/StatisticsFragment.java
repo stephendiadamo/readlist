@@ -20,7 +20,6 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.general.Utils;
-import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncBookUpdateData;
 import com.s_diadamo.readlist.sync.SyncPageUpdateData;
 

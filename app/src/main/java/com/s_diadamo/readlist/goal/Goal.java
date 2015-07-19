@@ -22,7 +22,7 @@ public class Goal {
     private boolean isComplete;
     private boolean isDeleted = false;
     public static final int BOOK_GOAL = 0;
-    public static final int PAGE_GOAL = 1;
+    private static final int PAGE_GOAL = 1;
     private static final int END_DATE = 0;
     private static final int START_DATE = 1;
 

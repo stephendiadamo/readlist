@@ -11,13 +11,12 @@
 
         <ImageView
             android:id="@+id/nav_element_image"
-            android:contentDescription="@string/nav_element_image"
-            style="@style/NavDrawerItemImage" />
+            style="@style/NavDrawerItemImage"
+            android:contentDescription="@string/nav_element_image" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/nav_element_label"
         style="@style/NavDrawerItemLabel"
-        android:layout_toEndOf="@+id/image_container"
-        android:layout_toRightOf="@+id/image_container" />
+        android:layout_toEndOf="@+id/image_container" />
 </RelativeLayout>

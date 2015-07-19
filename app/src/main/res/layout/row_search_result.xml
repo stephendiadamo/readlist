@@ -11,7 +11,6 @@
         android:layout_height="80dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
         android:layout_marginTop="2dp"
         android:contentDescription="@string/book_cover_image"
         android:src="@drawable/sample_cover" />

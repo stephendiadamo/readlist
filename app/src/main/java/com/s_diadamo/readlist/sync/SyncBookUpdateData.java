@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncBookUpdateData extends SyncData {
-    private BookUpdateOperations bookUpdateOperations;
+    private final BookUpdateOperations bookUpdateOperations;
 
     public SyncBookUpdateData(Context context) {
         super(context, true);
@@ -29,7 +29,7 @@ public class SyncBookUpdateData extends SyncData {
         bookUpdateOperations = new BookUpdateOperations(context);
     }
 
-    protected void syncAllBookUpdates() {
+    void syncAllBookUpdates() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -90,7 +90,7 @@ public class SyncBookUpdateData extends SyncData {
         ParseObject.saveAllInBackground(bookUpdatesToSend);
     }
 
-    protected ParseObject toParseBookUpdate(BookUpdate bookUpdate) {
+    ParseObject toParseBookUpdate(BookUpdate bookUpdate) {
         ParseObject parseBookUpdate = new ParseObject(TYPE_BOOK_UPDATE);
 
         parseBookUpdate.put(Utils.USER_NAME, userName);
@@ -119,7 +119,7 @@ public class SyncBookUpdateData extends SyncData {
         });
     }
 
-    public void deleteParseBookUpdate(BookUpdate bookUpdate) {
+    private void deleteParseBookUpdate(BookUpdate bookUpdate) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.whereEqualTo(READLIST_ID, bookUpdate.getId());

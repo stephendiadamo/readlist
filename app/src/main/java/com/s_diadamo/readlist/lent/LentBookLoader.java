@@ -6,7 +6,7 @@ import android.content.Context;
 
 import java.util.ArrayList;
 
-public class LentBookLoader extends AsyncTaskLoader<ArrayList<LentBook>> {
+class LentBookLoader extends AsyncTaskLoader<ArrayList<LentBook>> {
     public static final int ID = 5;
     private final Context context;
 

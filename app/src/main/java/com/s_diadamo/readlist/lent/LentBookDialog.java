@@ -19,8 +19,8 @@ import com.s_diadamo.readlist.general.Utils;
 import java.util.Calendar;
 
 public class LentBookDialog extends AlertDialog.Builder {
-    private Calendar calendar = Calendar.getInstance();
-    private Context context;
+    private final Calendar calendar = Calendar.getInstance();
+    private final Context context;
     private LentBookAdapter lentBookAdapter;
 
     public LentBookDialog(Context context, final LentBook lentBook) {

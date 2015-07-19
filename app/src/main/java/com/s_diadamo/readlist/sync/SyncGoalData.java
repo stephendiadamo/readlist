@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 
 public class SyncGoalData extends SyncData {
-    private GoalOperations goalOperations;
+    private final GoalOperations goalOperations;
 
     public SyncGoalData(Context context) {
         super(context, true);
@@ -28,7 +28,7 @@ public class SyncGoalData extends SyncData {
         goalOperations = new GoalOperations(context);
     }
 
-    protected void syncAllGoals() {
+    void syncAllGoals() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_GOAL);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -117,7 +117,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    protected ParseObject toParseGoal(Goal goal) {
+    ParseObject toParseGoal(Goal goal) {
         ParseObject parseGoal = new ParseObject(TYPE_GOAL);
 
         parseGoal.put(Utils.USER_NAME, userName);

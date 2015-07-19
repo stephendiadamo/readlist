@@ -10,7 +10,6 @@
         android:id="@+id/lent_book_cover"
         android:layout_width="60dp"
         android:layout_height="80dp"
-        android:layout_marginLeft="2dp"
         android:layout_marginStart="2dp"
         android:contentDescription="@string/book_cover_image"
         android:scaleType="fitXY"
@@ -32,7 +31,6 @@
             android:layout_gravity="start"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="Harry Potter"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -46,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
-                android:text="@string/lent_to"
+                android:text="@string/lent_to_colon"
                 android:textSize="16sp" />
 
             <TextView
@@ -60,7 +58,6 @@
                 android:paddingStart="3dp"
                 android:paddingTop="2dp"
                 android:singleLine="true"
-                android:text="Stephen Diadamo"
                 android:textSize="15sp" />
         </LinearLayout>
 
@@ -88,7 +85,6 @@
                 android:paddingStart="3dp"
                 android:paddingTop="2dp"
                 android:singleLine="true"
-                android:text="01/03/2015"
                 android:textSize="15sp" />
         </LinearLayout>
     </LinearLayout>

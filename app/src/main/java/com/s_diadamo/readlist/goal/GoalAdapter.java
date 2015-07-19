@@ -65,7 +65,7 @@ class GoalAdapter extends ArrayAdapter<Goal> {
         }
 
         if (goal.getAmount() > 0) {
-            int normalizedProgress = (int) goal.getProgress(context) * 100 / goal.getAmount();
+            int normalizedProgress = goal.getProgress(context) * 100 / goal.getAmount();
             if (normalizedProgress <= 100) {
                 goalHolder.goalProgressBar.setProgress(normalizedProgress);
             } else {
