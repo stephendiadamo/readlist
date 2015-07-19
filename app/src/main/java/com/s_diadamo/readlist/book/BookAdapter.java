@@ -13,12 +13,11 @@ import android.widget.TextView;
 
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 
 public class BookAdapter extends BaseAdapter {
-    private final static String STORAGE_FILE_START = "/storage";
-
     private final Context context;
     private final int layoutResourceID;
     private final ArrayList<Book> books;
@@ -36,12 +35,6 @@ public class BookAdapter extends BaseAdapter {
                 i--;
             }
         }
-        notifyDataSetChanged();
-        notifyDataSetInvalidated();
-    }
-
-    public void addBook(Book book) {
-        books.add(book);
         notifyDataSetChanged();
         notifyDataSetInvalidated();
     }
@@ -89,7 +82,7 @@ public class BookAdapter extends BaseAdapter {
         Book book = books.get(position);
         if (!book.getCoverPictureUrl().isEmpty()) {
             String bookCoverUri = book.getCoverPictureUrl();
-            if (bookCoverUri.startsWith(STORAGE_FILE_START)) {
+            if (bookCoverUri.startsWith(Utils.STORAGE_FILE_START)) {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 8;
                 final Bitmap bitmap = BitmapFactory.decodeFile(bookCoverUri, options);

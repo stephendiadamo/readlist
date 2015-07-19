@@ -35,6 +35,7 @@ public class Utils {
     public final static String REMEMBER_ME = "REMEMBER_ME";
     public final static String LOGGED_IN = "LOGGED_IN";
     public final static String EMAIL_ADDRESS = "EMAIL_ADDRESS";
+    public final static String STORAGE_FILE_START = "/storage";
     public static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
 
     public static String getCurrentDate() {

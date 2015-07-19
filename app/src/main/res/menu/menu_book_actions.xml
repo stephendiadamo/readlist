@@ -7,6 +7,9 @@
         android:id="@+id/mark_complete"
         android:title="@string/mark_complete" />
     <item
+        android:id="@+id/lend_book"
+        android:title="@string/lend_book" />
+    <item
         android:id="@+id/edit_book"
         android:title="@string/edit_book" />
     <item

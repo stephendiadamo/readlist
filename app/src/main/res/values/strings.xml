@@ -79,6 +79,10 @@
     <string name="logout">Logout</string>
     <string name="account">Account</string>
     <string name="your_email_address">Your email address</string>
+    <string name="lent_to">Lent to:</string>
+    <string name="lent">Lent:</string>
+    <string name="lent_on">Lent on:</string>
+    <string name="lend_book">Lend Book</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

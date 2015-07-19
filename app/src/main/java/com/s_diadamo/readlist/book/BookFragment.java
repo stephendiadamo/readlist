@@ -28,7 +28,6 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
@@ -60,7 +59,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String EDIT_SHELF = "EDIT_SHELF";
     private static final String BOOK_ID = "BOOK_ID";
-
 
     @Nullable
     @Override
@@ -132,7 +130,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (Utils.isNetworkAvailable(getActivity())) {
                 bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
             } else {
-                showToast(Utils.CHECK_INTERNET_MESSAGE);
+                Utils.showToast(context, Utils.CHECK_INTERNET_MESSAGE);
             }
             return true;
         } else if (id == R.id.add_book_manually) {
@@ -142,7 +140,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (Utils.isNetworkAvailable(getActivity())) {
                 launchScanner();
             } else {
-                showToast(Utils.CHECK_INTERNET_MESSAGE);
+                Utils.showToast(context, Utils.CHECK_INTERNET_MESSAGE);
             }
             return true;
         } else if (id == R.id.edit_shelf) {
@@ -153,7 +151,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                         findFragmentById(R.id.navigation_drawer)), getActivity().getSupportFragmentManager());
             } else {
-                showToast("You cannot delete this shelf");
+                Utils.showToast(context, "You cannot delete this shelf");
             }
             return true;
         } else if (id == R.id.hide_completed_books) {
@@ -194,6 +192,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 return true;
             case R.id.mark_complete:
                 addRemainingPagesAndCompleteBook(book);
+                return true;
+            case R.id.lend_book:
+                new BookMenuActions(context).lendBook(book);
                 return true;
             case R.id.edit_book:
                 launchEditBookFragment(userBooks.get(info.position));
@@ -324,7 +325,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 search.searchWithISBN(bookISBN);
             }
         } else {
-            showToast("Scan Failed");
+            Utils.showToast(context, "Scan Failed");
         }
     }
 
@@ -363,9 +364,5 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public void onLoaderReset(Loader loader) {
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
     }
 }

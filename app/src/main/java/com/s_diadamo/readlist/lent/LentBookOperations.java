@@ -21,7 +21,7 @@ public class LentBookOperations {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getId());
+        values.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getBookId());
         values.put(DatabaseHelper.LENT_BOOK_LENT_TO, lentBook.getLentTo());
         values.put(DatabaseHelper.LENT_BOOK_DATE_LENT, lentBook.getDateLent());
         values.put(DatabaseHelper.IS_DELETED, lentBook.isDeleted());
@@ -52,14 +52,23 @@ public class LentBookOperations {
     public ArrayList<LentBook> getValidLentBooks() {
         db = dbHelper.getReadableDatabase();
         ArrayList<LentBook> lentBooks = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s WHERE %s=0",
+        String query = String.format(
+                "SELECT l.%s, b.%s, b.%s, l.%s, l.%s FROM %s b INNER JOIN %s l ON b.%s=l.%s WHERE l.%s=0",
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.BOOK_TITLE,
+                DatabaseHelper.BOOK_COVER_PICTURE_URL,
+                DatabaseHelper.LENT_BOOK_LENT_TO,
+                DatabaseHelper.LENT_BOOK_DATE_LENT,
+                DatabaseHelper.TABLE_BOOKS,
                 DatabaseHelper.TABLE_LENT_BOOKS,
+                DatabaseHelper.KEY_ID,
+                DatabaseHelper.LENT_BOOK_BOOK_ID,
                 DatabaseHelper.IS_DELETED);
 
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                LentBook lentBook = parseLentBook(cursor);
+                LentBook lentBook = parseJoinedLentBook(cursor);
                 lentBooks.add(lentBook);
             } while (cursor.moveToNext());
             cursor.close();
@@ -97,6 +106,15 @@ public class LentBookOperations {
                 cursor.getString(2),
                 cursor.getString(3),
                 cursor.getInt(4));
+    }
+
+    private LentBook parseJoinedLentBook(Cursor cursor) {
+        return new LentBook(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3),
+                cursor.getString(4));
     }
 
 }
