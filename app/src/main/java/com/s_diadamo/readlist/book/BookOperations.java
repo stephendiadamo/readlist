@@ -57,16 +57,14 @@ public class BookOperations {
                 , DatabaseHelper.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
 
-        if (cursor != null) {
-            cursor.moveToFirst();
-            Book book = parseBook(cursor);
+        Book book = null;
+        if (cursor.moveToFirst()) {
+            book = parseBook(cursor);
             cursor.close();
-            db.close();
-            return book;
         }
 
         db.close();
-        return null;
+        return book;
     }
 
     public int getBooksCount() {
@@ -126,8 +124,16 @@ public class BookOperations {
     }
 
     public void deleteBook(Book book) {
+        deleteAssociatedLentBooks(book);
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_BOOKS, DatabaseHelper.KEY_ID + "=?",
+                new String[]{String.valueOf(book.getId())});
+        db.close();
+    }
+
+    public void deleteAssociatedLentBooks(Book book) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_LENT_BOOKS, DatabaseHelper.LENT_BOOK_BOOK_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
         db.close();
     }

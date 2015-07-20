@@ -86,6 +86,10 @@
     <string name="date">Date</string>
     <string name="lent_books">Lent Books</string>
     <string name="lend_to">Lend to</string>
+    <string name="pick_date">Pick Date</string>
+    <string name="set_start_date">Set Start Date</string>
+    <string name="set_start">Set Start</string>
+    <string name="set_end">Set End</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

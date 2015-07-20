@@ -1,8 +1,11 @@
 package com.s_diadamo.readlist.book;
 
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.lent.LentBook;
+import com.s_diadamo.readlist.lent.LentBookOperations;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -219,5 +222,16 @@ public class Book {
         this.completionDate = "";
         this.currentPage = 0;
         this.complete = false;
+    }
+
+    public void deleteLentBooks(Context context) {
+        LentBookOperations lentBookOperations = new LentBookOperations(context);
+        LentBook lentBook = lentBookOperations.getLentBook(this);
+        lentBook.delete();
+        lentBookOperations.updateLentBook(lentBook);
+    }
+
+    public LentBook getLentBook(Context context) {
+        return new LentBookOperations(context).getLentBook(this);
     }
 }

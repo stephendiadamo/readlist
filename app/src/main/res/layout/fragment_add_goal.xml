@@ -45,7 +45,7 @@
     <EditText
         android:id="@+id/add_goal_amount"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="2dp"
         android:hint="@string/amount"
         android:inputType="number"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.4"
             android:padding="8dp"
-            android:text="@string/start_date"
+            android:text="@string/set_start"
             android:textColor="#000"
             android:textSize="16sp" />
 
@@ -102,7 +102,7 @@
             android:layout_marginTop="20dp"
             android:layout_weight="0.4"
             android:padding="8dp"
-            android:text="@string/end_date"
+            android:text="@string/set_end"
             android:textColor="#000"
             android:textSize="16sp" />
 

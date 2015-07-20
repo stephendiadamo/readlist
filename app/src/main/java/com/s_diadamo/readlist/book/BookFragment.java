@@ -217,6 +217,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                             bookOperations.deleteBook(book);
                         } else {
                             book.delete();
+                            book.deleteLentBooks(context);
                             bookOperations.updateBook(book);
                         }
                         userBooks.remove(book);

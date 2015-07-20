@@ -14,6 +14,7 @@ import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.lent.LentBook;
 import com.s_diadamo.readlist.lent.LentBookDialog;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.search.Search;
@@ -106,7 +107,12 @@ class BookMenuActions {
     }
 
     public void lendBook(final Book book) {
-        LentBookDialog lentBookDialog = new LentBookDialog(context, book);
-        lentBookDialog.show();
+        LentBook lentBook = book.getLentBook(context);
+        if (lentBook == null) {
+            LentBookDialog lentBookDialog = new LentBookDialog(context, book);
+            lentBookDialog.show();
+        } else {
+            Utils.showToast(context, "This book has already been lent to " + lentBook.getLentTo());
+        }
     }
 }

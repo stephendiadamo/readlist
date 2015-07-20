@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.database.DatabaseHelper;
 
 import java.util.ArrayList;
@@ -98,6 +99,25 @@ public class LentBookOperations {
         db.delete(DatabaseHelper.TABLE_LENT_BOOKS, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(lentBook.getId())});
         db.close();
+    }
+
+    public LentBook getLentBook(Book book) {
+        db = dbHelper.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s=%d AND %s=0",
+                DatabaseHelper.TABLE_LENT_BOOKS,
+                DatabaseHelper.LENT_BOOK_BOOK_ID,
+                book.getId(),
+                DatabaseHelper.IS_DELETED);
+
+        Cursor cursor = db.rawQuery(query, null);
+        LentBook lentBook = null;
+        if (cursor.moveToFirst()) {
+            lentBook = parseLentBook(cursor);
+            cursor.close();
+        }
+
+        db.close();
+        return lentBook;
     }
 
     private LentBook parseLentBook(Cursor cursor) {
