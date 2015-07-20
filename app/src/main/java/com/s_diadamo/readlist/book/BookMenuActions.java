@@ -82,6 +82,8 @@ class BookMenuActions {
                     new SyncData(context).delete(shelf);
                     new ShelfOperations(context).deleteShelf(shelf);
                 } else {
+                    ShelfOperations shelfOperations = new ShelfOperations(context);
+                    shelfOperations.removeAssociatedBooks(shelf);
                     shelf.delete();
                     new ShelfOperations(context).updateShelf(shelf);
                 }

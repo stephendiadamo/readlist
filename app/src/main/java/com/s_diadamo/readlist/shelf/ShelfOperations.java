@@ -189,16 +189,20 @@ public class ShelfOperations {
     }
 
     public void deleteShelf(Shelf shelf) {
+        removeAssociatedBooks(shelf);
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_SHELVES, DatabaseHelper.KEY_ID + "=?",
+                new String[]{String.valueOf(shelf.getId())});
+        db.close();
+    }
+
+    public void removeAssociatedBooks(Shelf shelf) {
         ArrayList<Book> books = getShelf(shelf.getId()).fetchBooks(context);
         BookOperations bookOperations = new BookOperations(context);
         for (Book book : books) {
             book.setShelfId(Shelf.DEFAULT_SHELF_ID);
             bookOperations.updateBook(book);
         }
-        db = dbHelper.getWritableDatabase();
-        db.delete(DatabaseHelper.TABLE_SHELVES, DatabaseHelper.KEY_ID + "=?",
-                new String[]{String.valueOf(shelf.getId())});
-        db.close();
     }
 
     private Shelf parseShelf(Cursor cursor) {
