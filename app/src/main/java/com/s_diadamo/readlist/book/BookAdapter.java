@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,17 @@ class BookAdapter extends BaseAdapter {
     public void hideCompletedBooks() {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i).isComplete()) {
+                books.remove(i);
+                i--;
+            }
+        }
+        notifyDataSetChanged();
+        notifyDataSetInvalidated();
+    }
+
+    public void hideShelvedBooks() {
+        for (int i = 0; i < books.size(); i++) {
+            if (books.get(i).getShelfId() != Shelf.DEFAULT_SHELF_ID) {
                 books.remove(i);
                 i--;
             }

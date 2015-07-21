@@ -28,6 +28,7 @@
         <Button
             android:id="@+id/lent_book_date_button"
             style="?android:buttonBarButtonStyle"
+            android:background="#ccc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"
@@ -42,6 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:padding="5dp"
+            android:layout_marginStart="5dp"
             android:text="@string/date"
             android:textSize="18sp" />
     </LinearLayout>

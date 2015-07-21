@@ -27,7 +27,6 @@ import android.widget.ListView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.sync.SyncBookData;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
@@ -52,9 +51,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private Shelf shelf;
     private int shelfId;
     private MenuItem hideCompletedBooks;
+    private MenuItem hideShelvedBooks;
     private SharedPreferences prefs;
     private boolean loading = true;
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
+    private static final String HIDE_SHELVED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String EDIT_SHELF = "EDIT_SHELF";
     private static final String BOOK_ID = "BOOK_ID";
@@ -111,12 +112,18 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
         hideCompletedBooks = menu.findItem(R.id.hide_completed_books);
         hideCompletedBooks.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
+
+        hideShelvedBooks = menu.findItem(R.id.hide_shelved_books);
+        hideShelvedBooks.setChecked(prefs.getBoolean(HIDE_SHELVED_BOOKS, false));
 
         if (shelfId == Shelf.DEFAULT_SHELF_ID) {
             menu.findItem(R.id.edit_shelf).setVisible(false);
             menu.findItem(R.id.delete_shelf).setVisible(false);
+        } else {
+            menu.findItem(R.id.hide_shelved_books).setVisible(false);
         }
     }
 
@@ -155,7 +162,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             return true;
         } else if (id == R.id.hide_completed_books) {
             toggleHideCompletedBooks();
-            updateVisibleBooks();
+        } else if (id == R.id.hide_shelved_books) {
+            toggleHideShelvedBooks();
         }
 
         return super.onOptionsItemSelected(item);
@@ -286,15 +294,34 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void toggleHideCompletedBooks() {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putBoolean(HIDE_COMPLETED_BOOKS, !hideCompletedBooks.isChecked());
-        editor.apply();
         hideCompletedBooks.setChecked(!hideCompletedBooks.isChecked());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(HIDE_COMPLETED_BOOKS, hideCompletedBooks.isChecked());
+        editor.apply();
+        updateVisibleCompleteBooks();
     }
 
-    private void updateVisibleBooks() {
+    private void toggleHideShelvedBooks() {
+        hideShelvedBooks.setChecked(!hideShelvedBooks.isChecked());
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putBoolean(HIDE_SHELVED_BOOKS, hideShelvedBooks.isChecked());
+        editor.apply();
+        updateVisibleShelvedBooks();
+    }
+
+    private void updateVisibleCompleteBooks() {
         if (!loading && hideCompletedBooks != null && hideCompletedBooks.isChecked()) {
             bookAdapter.hideCompletedBooks();
+        } else if (shelf != null && !loading) {
+            userBooks = shelf.fetchBooks(context);
+            bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks);
+            bookListView.setAdapter(bookAdapter);
+        }
+    }
+
+    private void updateVisibleShelvedBooks() {
+        if (!loading && hideShelvedBooks != null && hideShelvedBooks.isChecked()) {
+            bookAdapter.hideShelvedBooks();
         } else if (shelf != null && !loading) {
             userBooks = shelf.fetchBooks(context);
             bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks);
@@ -351,7 +378,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks);
                 bookListView.setAdapter(bookAdapter);
                 loading = false;
-                updateVisibleBooks();
+                updateVisibleCompleteBooks();
                 break;
             case ShelfLoader.ID:
                 shelf = (Shelf) data;

@@ -90,6 +90,7 @@
     <string name="set_start_date">Set Start Date</string>
     <string name="set_start">Set Start</string>
     <string name="set_end">Set End</string>
+    <string name="hide_shelved_books">Hide Shelved Books</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
