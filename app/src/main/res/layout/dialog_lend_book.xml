@@ -31,7 +31,7 @@
             android:background="#ccc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
+            android:layout_weight="0.35"
             android:padding="8dp"
             android:text="@string/pick_date"
             android:textColor="#000"
