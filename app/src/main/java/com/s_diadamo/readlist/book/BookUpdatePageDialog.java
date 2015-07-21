@@ -50,11 +50,13 @@ class BookUpdatePageDialog extends AlertDialog {
         done.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                int pagesRead = pagePicker.getValue() - book.getCurrentPage();
+
                 book.setCurrentPage(pagePicker.getValue());
                 bookOperations.updateBook(book);
                 bookAdapter.notifyDataSetChanged();
 
-                PageUpdate pageUpdate = new PageUpdate(book.getId(), Utils.getCurrentDate(), pagePicker.getValue());
+                PageUpdate pageUpdate = new PageUpdate(book.getId(), Utils.getCurrentDate(), pagesRead);
                 new PageUpdateOperations(context).addPageUpdate(pageUpdate);
                 if (Utils.checkUserIsLoggedIn(context)) {
                     new SyncData(context).add(pageUpdate);
