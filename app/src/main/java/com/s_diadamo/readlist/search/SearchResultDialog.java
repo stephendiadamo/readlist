@@ -40,8 +40,6 @@ class SearchResultDialog extends AlertDialog.Builder {
             final ListView bookListView = new ListView(context);
             bookListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-            final String addLabel = "Add";
-
             final SearchAdapter searchAdapter = new SearchAdapter(context, R.layout.row_search_result, books);
 
             bookListView.setAdapter(searchAdapter);
@@ -58,7 +56,7 @@ class SearchResultDialog extends AlertDialog.Builder {
                 }
             });
 
-            setPositiveButton(addLabel, new DialogInterface.OnClickListener() {
+            setPositiveButton("Add all", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     BookOperations bookOperations = new BookOperations(context);
