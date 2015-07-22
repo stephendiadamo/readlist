@@ -1,13 +1,6 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="android:actionButtonStyle">@style/MyActionButtonStyle</item>
-    </style>
-
-    <style name="MyActionButtonStyle">
-        <item name="android:minWidth">65dip</item>
-        <item name="android:padding">0dip</item>
-    </style>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar"/>
 
     <style name="UpdateHeader">
         <item name="android:layout_width">fill_parent</item>

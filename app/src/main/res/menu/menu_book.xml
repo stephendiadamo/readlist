@@ -24,8 +24,8 @@
     <item
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:orderInCategory="1"
-        app:showAsAction="always"
-        android:title="">
+        android:title=""
+        app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/edit_shelf"

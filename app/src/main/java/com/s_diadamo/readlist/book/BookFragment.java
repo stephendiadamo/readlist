@@ -107,6 +107,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
         inflater.inflate(R.menu.menu_book, menu);
     }
 
