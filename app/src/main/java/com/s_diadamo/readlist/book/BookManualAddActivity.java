@@ -33,7 +33,7 @@ import java.util.Locale;
 public class BookManualAddActivity extends AppCompatActivity {
 
     private static final int CAMERA_CAPTURE_IMAGE_REQUEST_CODE = 100;
-    private static final String IMAGE_DIRECTORY_NAME = "readlist_bookcovers";
+    private static final String IMAGE_DIRECTORY_NAME = "Readlist";
     private Shelf shelf;
     private Uri fileUri;
     private ImageView bookImageCamera;
@@ -131,7 +131,7 @@ public class BookManualAddActivity extends AppCompatActivity {
 
             new BookOperations(this).addBook(book);
 
-            if (Utils.checkUserIsLoggedIn(this)){
+            if (Utils.checkUserIsLoggedIn(this)) {
                 new SyncData(this).add(book);
             }
 

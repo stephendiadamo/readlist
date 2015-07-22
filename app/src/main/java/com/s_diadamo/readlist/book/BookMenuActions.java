@@ -37,8 +37,9 @@ class BookMenuActions {
         this.shelf = shelf;
     }
 
-    public BookMenuActions(Context context) {
+    public BookMenuActions(Context context, BookAdapter bookAdapter) {
         this.context = context;
+        this.bookAdapter = bookAdapter;
     }
 
     public void setCurrentPage(final Book book) {
@@ -110,7 +111,15 @@ class BookMenuActions {
         LentBook lentBook = book.getLentBook(context);
         if (lentBook == null) {
             LentBookDialog lentBookDialog = new LentBookDialog(context, book);
+            lentBookDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    bookAdapter.notifyDataSetChanged();
+                    bookAdapter.notifyDataSetInvalidated();
+                }
+            });
             lentBookDialog.show();
+
         } else {
             Utils.showToast(context, "This book has already been lent to " + lentBook.getLentTo());
         }

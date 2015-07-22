@@ -22,6 +22,7 @@ import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class GoalAddFragment extends Fragment {
@@ -32,6 +33,7 @@ public class GoalAddFragment extends Fragment {
     private static final int START_DATE = 0;
     private static final int END_DATE = 1;
     private final Calendar calendar = Calendar.getInstance();
+    private Date startDateLimit;
     private RadioGroup goalTypes;
 
     @Override
@@ -87,10 +89,16 @@ public class GoalAddFragment extends Fragment {
                     }
                 };
 
-                new DatePickerDialog(rootView.getContext(), dateSetListener,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(rootView.getContext(), dateSetListener,
                         calendar.get(Calendar.YEAR),
                         calendar.get(Calendar.MONTH),
-                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+                        calendar.get(Calendar.DAY_OF_MONTH));
+
+                if (whichDate == END_DATE && startDateLimit != null) {
+                    datePickerDialog.getDatePicker().setMinDate(startDateLimit.getTime());
+                }
+
+                datePickerDialog.show();
             }
         };
     }
@@ -99,6 +107,7 @@ public class GoalAddFragment extends Fragment {
         switch (whichDate) {
             case START_DATE:
                 startDate = date;
+                startDateLimit = calendar.getTime();
                 break;
             case END_DATE:
                 endDate = date;

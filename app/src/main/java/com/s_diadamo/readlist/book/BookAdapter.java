@@ -1,8 +1,10 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,33 +24,44 @@ class BookAdapter extends BaseAdapter {
     private final Context context;
     private final int layoutResourceID;
     private final ArrayList<Book> books;
+    private boolean hideComplete;
+    private boolean hideShelved;
 
-    public BookAdapter(Context context, int layoutResourceID, ArrayList<Book> books) {
+
+    public BookAdapter(Context context, int layoutResourceID, ArrayList<Book> books, boolean hideComplete, boolean hideShelved) {
         this.context = context;
         this.layoutResourceID = layoutResourceID;
         this.books = books;
+        this.hideComplete = hideComplete;
+        this.hideShelved = hideShelved;
     }
 
-    public void hideCompletedBooks() {
-        for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).isComplete()) {
-                books.remove(i);
-                i--;
-            }
-        }
-        notifyDataSetChanged();
-        notifyDataSetInvalidated();
+    public void toggleHideComplete() {
+        hideComplete = !hideComplete;
     }
 
-    public void hideShelvedBooks() {
+    public void toggleHideShelved() {
+        hideShelved = !hideShelved;
+    }
+
+    public void updateVisibleBooks() {
         for (int i = 0; i < books.size(); i++) {
-            if (books.get(i).getShelfId() != Shelf.DEFAULT_SHELF_ID) {
-                books.remove(i);
-                i--;
+            if (hideComplete) {
+                if (books.get(i).isComplete()) {
+                    books.remove(i);
+                    i--;
+                }
+            }
+
+            if (hideShelved) {
+                if (books.get(i).getShelfId() != Shelf.DEFAULT_SHELF_ID) {
+                    books.remove(i);
+                    i--;
+                }
             }
         }
+
         notifyDataSetChanged();
-        notifyDataSetInvalidated();
     }
 
     @Override
@@ -78,6 +91,7 @@ class BookAdapter extends BaseAdapter {
             bookHolder = new BookHolder();
             bookHolder.bookCover = (ImageView) row.findViewById(R.id.book_cover);
             bookHolder.bookTitle = (TextView) row.findViewById(R.id.book_title);
+            bookHolder.bookLentIcon = (ImageView) row.findViewById(R.id.book_lent_icon);
             bookHolder.bookAuthor = (TextView) row.findViewById(R.id.book_author);
             bookHolder.currentPage = (TextView) row.findViewById(R.id.book_current_page);
             bookHolder.pages = (TextView) row.findViewById(R.id.book_pages);
@@ -105,6 +119,7 @@ class BookAdapter extends BaseAdapter {
         } else {
             bookHolder.bookCover.setImageResource(R.drawable.sample_cover);
         }
+
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
@@ -130,12 +145,19 @@ class BookAdapter extends BaseAdapter {
             bookHolder.pages.setText(String.valueOf(book.getNumPages()));
         }
 
+        if (book.isLent(row.getContext())) {
+            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
+        } else {
+            bookHolder.bookLentIcon.setVisibility(View.INVISIBLE);
+        }
+
         bookHolder.infoContainer.setBackground(book.getColorAsDrawalbe());
         return row;
     }
 
     static class BookHolder {
         ImageView bookCover;
+        ImageView bookLentIcon;
         TextView bookTitle;
         TextView bookAuthor;
         TextView currentPage;

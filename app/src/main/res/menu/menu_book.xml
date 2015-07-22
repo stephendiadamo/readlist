@@ -4,7 +4,7 @@
 
     <item
         android:icon="@drawable/ic_plus_white"
-        android:orderInCategory="100"
+        android:orderInCategory="0"
         android:title=""
         app:showAsAction="always">
         <menu>
@@ -23,21 +23,24 @@
 
     <item
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
+        android:orderInCategory="1"
+        app:showAsAction="always"
         android:title="">
-        <item
-            android:id="@+id/edit_shelf"
-            android:title="@string/edit_shelf" />
-        <item
-            android:id="@+id/delete_shelf"
-            android:title="@string/delete_shelf" />
-        <item
-            android:id="@+id/hide_completed_books"
-            android:checkable="true"
-            android:title="@string/hide_completed_books" />
-
-        <item
-            android:id="@+id/hide_shelved_books"
-            android:checkable="true"
-            android:title="@string/hide_shelved_books" />
+        <menu>
+            <item
+                android:id="@+id/edit_shelf"
+                android:title="@string/edit_shelf" />
+            <item
+                android:id="@+id/delete_shelf"
+                android:title="@string/delete_shelf" />
+            <item
+                android:id="@+id/hide_completed_books"
+                android:checkable="true"
+                android:title="@string/hide_completed_books" />
+            <item
+                android:id="@+id/hide_shelved_books"
+                android:checkable="true"
+                android:title="@string/hide_shelved_books" />
+        </menu>
     </item>
 </menu>

@@ -4,17 +4,20 @@
     <item
         android:id="@+id/add_goal"
         android:icon="@drawable/ic_plus_white"
-        android:orderInCategory="100"
+        android:orderInCategory="0"
         android:title=""
         app:showAsAction="always" />
 
     <item
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
-        android:title="">
-
-        <item
-            android:id="@+id/hide_completed_goals"
-            android:checkable="true"
-            android:title="@string/hide_completed_goals" />
+        android:orderInCategory="1"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/hide_completed_goals"
+                android:checkable="true"
+                android:title="@string/hide_completed_goals" />
+        </menu>
     </item>
 </menu>

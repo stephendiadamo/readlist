@@ -68,6 +68,7 @@ public class LentBookDialog extends AlertDialog.Builder {
                         if (Utils.checkUserIsLoggedIn(context)){
                             new SyncData(context).add(lentBook);
                         }
+                        dialog.dismiss();
                     }
                 }
         );

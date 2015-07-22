@@ -26,6 +26,7 @@ public class Book {
     private String completionDate = "";
     private String coverPictureUrl = "";
     private Boolean isDeleted = false;
+    private Boolean isLent = false;
 
     public Book() {
     }
@@ -233,5 +234,9 @@ public class Book {
 
     public LentBook getLentBook(Context context) {
         return new LentBookOperations(context).getLentBook(this);
+    }
+
+    public boolean isLent(Context context) {
+        return new LentBookOperations(context).getLentBook(this) != null;
     }
 }
