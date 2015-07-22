@@ -11,7 +11,8 @@
         <TextView
             android:id="@+id/page_goals_header"
             style="@style/UpdateHeader"
-            android:text="@string/page_goals" />
+            android:text="@string/page_goals"
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/goals_page_goals"
@@ -21,7 +22,8 @@
         <TextView
             android:id="@+id/book_goals_header"
             style="@style/UpdateHeader"
-            android:text="@string/book_goals" />
+            android:text="@string/book_goals"
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/goals_book_goals"

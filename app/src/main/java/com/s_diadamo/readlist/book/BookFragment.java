@@ -234,10 +234,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                     public void onClick(DialogInterface dialog, int id) {
                         if (Utils.checkUserIsLoggedIn(context)) {
                             new SyncData(context).delete(book);
+                            if (book.isLent(context)) {
+                                new SyncData(context).delete(book.getLentBook(context));
+                            }
                             bookOperations.deleteBook(book);
                         } else {
                             book.delete();
-                            book.deleteLentBooks(context);
+                            book.deleteLentBook(context);
                             bookOperations.updateBook(book);
                         }
                         userBooks.remove(book);

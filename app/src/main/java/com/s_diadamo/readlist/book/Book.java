@@ -225,7 +225,7 @@ public class Book {
         this.complete = false;
     }
 
-    public void deleteLentBooks(Context context) {
+    public void deleteLentBook(Context context) {
         LentBookOperations lentBookOperations = new LentBookOperations(context);
         LentBook lentBook = lentBookOperations.getLentBook(this);
         lentBook.delete();
