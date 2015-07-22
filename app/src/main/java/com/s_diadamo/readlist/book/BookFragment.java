@@ -56,7 +56,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private boolean loadingBooks = true;
     private boolean loadingShelf = true;
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
-    private static final String HIDE_SHELVED_BOOKS = "HIDE_COMPLETED_BOOKS";
+    private static final String HIDE_SHELVED_BOOKS = "HIDE_SHELVED_BOOKS";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String EDIT_SHELF = "EDIT_SHELF";
     private static final String BOOK_ID = "BOOK_ID";
