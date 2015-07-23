@@ -228,8 +228,10 @@ public class Book {
     public void deleteLentBook(Context context) {
         LentBookOperations lentBookOperations = new LentBookOperations(context);
         LentBook lentBook = lentBookOperations.getLentBook(this);
-        lentBook.delete();
-        lentBookOperations.updateLentBook(lentBook);
+        if (lentBook != null) {
+            lentBook.delete();
+            lentBookOperations.updateLentBook(lentBook);
+        }
     }
 
     public LentBook getLentBook(Context context) {

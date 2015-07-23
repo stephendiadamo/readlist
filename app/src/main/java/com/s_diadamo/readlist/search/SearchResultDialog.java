@@ -56,7 +56,7 @@ class SearchResultDialog extends AlertDialog.Builder {
                 }
             });
 
-            setPositiveButton("Add all", new DialogInterface.OnClickListener() {
+            setPositiveButton("Add selected", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     BookOperations bookOperations = new BookOperations(context);
