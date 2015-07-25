@@ -19,5 +19,5 @@ public class Analytics {
     public static final String DELETED_BOOK = "deleted_book";
     public static final String TOGGLED_COMPLETED_BOOKS = "toggled_completed_books";
     public static final String TOGGLED_SHELVED_BOOKS = "toggled_shelved_books";
-    
+
 }

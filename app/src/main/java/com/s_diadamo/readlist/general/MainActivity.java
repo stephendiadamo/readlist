@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.support.v4.widget.DrawerLayout;
 
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookFragment;
 import com.s_diadamo.readlist.goal.GoalFragment;
@@ -30,7 +31,6 @@ public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
-    private static final String SHOWED_LOGIN_FEATURE_MESSAGE = "SHOWED_LOGIN_FEATURE_MESSAGE";
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         imageLoader = new ImageLoader(this);
         init();
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
     }
 
     private void init() {
