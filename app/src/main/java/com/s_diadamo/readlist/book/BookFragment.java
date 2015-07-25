@@ -26,7 +26,11 @@ import android.widget.ListView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Analytics;
+import com.s_diadamo.readlist.lent.LentBook;
+import com.s_diadamo.readlist.lent.LentBookOperations;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
@@ -41,6 +45,8 @@ import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
@@ -88,6 +94,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         });
 
+        ParseAnalytics.trackEventInBackground(Analytics.OPENED_BOOK_FRAGMENT);
         return rootView;
     }
 
@@ -96,10 +103,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         String stringShelfId = "";
         if (args != null) {
             stringShelfId = args.getString(Shelf.SHELF_ID);
+
         }
         if (!stringShelfId.isEmpty()) {
+            ParseAnalytics.trackEventInBackground(Analytics.VIEWED_PARTICULAR_SHELF);
             shelfId = Integer.parseInt(stringShelfId);
         } else {
+            ParseAnalytics.trackEventInBackground(Analytics.VIEWED_DEFAULT_SHELF);
             shelfId = Shelf.DEFAULT_SHELF_ID;
         }
     }
@@ -149,6 +159,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         BookMenuActions bookMenuActions = new BookMenuActions(context, bookOperations, bookAdapter, shelf);
 
         if (id == R.id.add_book_search) {
+            ParseAnalytics.trackEventInBackground(Analytics.SEARCHED_BOOK);
             if (Utils.isNetworkAvailable(getActivity())) {
                 bookMenuActions.searchBook(getActivity().getSupportFragmentManager());
             } else {
@@ -156,9 +167,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             return true;
         } else if (id == R.id.add_book_manually) {
+            ParseAnalytics.trackEventInBackground(Analytics.MANUALLY_ADDED_BOOK);
             bookMenuActions.manuallyAddBook();
             return true;
         } else if (id == R.id.add_book_scan) {
+            ParseAnalytics.trackEventInBackground(Analytics.SCANNED_BOOK);
             if (Utils.isNetworkAvailable(getActivity())) {
                 launchScanner();
             } else {
@@ -166,9 +179,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             return true;
         } else if (id == R.id.edit_shelf) {
+            ParseAnalytics.trackEventInBackground(Analytics.EDITED_SHELF);
             launchEditShelfFragment();
             return true;
         } else if (id == R.id.delete_shelf) {
+            ParseAnalytics.trackEventInBackground(Analytics.DELETED_SHELF);
             if (shelf.getId() != Shelf.DEFAULT_SHELF_ID) {
                 bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                         findFragmentById(R.id.navigation_drawer)), getActivity().getSupportFragmentManager());
@@ -192,6 +207,10 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (userBooks.get(info.position).isComplete()) {
             menu.findItem(R.id.set_current_page).setTitle("Reread");
         }
+
+        if (userBooks.get(info.position).isLent(context)) {
+            menu.findItem(R.id.lend_book).setTitle("Unlend");
+        }
     }
 
     @Override
@@ -201,6 +220,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
         switch (item.getItemId()) {
             case R.id.set_current_page:
+                ParseAnalytics.trackEventInBackground(Analytics.UPDATED_PAGE);
                 if (book.isComplete()) {
                     book.reread();
                     bookAdapter.notifyDataSetChanged();
@@ -210,15 +230,31 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 }
                 return true;
             case R.id.mark_complete:
+                ParseAnalytics.trackEventInBackground(Analytics.COMPLETED_BOOK);
                 addRemainingPagesAndCompleteBook(book);
                 return true;
             case R.id.lend_book:
-                new BookMenuActions(context, bookAdapter).lendBook(book);
+                if (book.isLent(context)) {
+                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
+                    LentBook lentBook = book.getLentBook(context);
+                    if (Utils.checkUserIsLoggedIn(context)) {
+                        new SyncData(context).delete(lentBook);
+                        new LentBookOperations(context).deleteLentBook(lentBook);
+                    } else {
+                        lentBook.delete();
+                        new LentBookOperations(context).updateLentBook(lentBook);
+                    }
+                } else {
+                    ParseAnalytics.trackEventInBackground(Analytics.LENT_BOOK);
+                    new BookMenuActions(context, bookAdapter).lendBook(book);
+                }
                 return true;
             case R.id.edit_book:
+                ParseAnalytics.trackEventInBackground(Analytics.EDITED_BOOK);
                 launchEditBookFragment(userBooks.get(info.position));
                 return true;
             case R.id.delete_book:
+                ParseAnalytics.trackEventInBackground(Analytics.DELETED_BOOK);
                 deleteBook(userBooks.get(info.position));
                 return true;
         }
@@ -315,6 +351,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         editor.apply();
         bookAdapter.toggleHideComplete();
         updateVisibleBooks();
+
+        ParseAnalytics.trackEventInBackground(Analytics.TOGGLED_COMPLETED_BOOKS);
     }
 
     private void toggleHideShelvedBooks() {
@@ -324,6 +362,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         editor.apply();
         bookAdapter.toggleHideShelved();
         updateVisibleBooks();
+
+        ParseAnalytics.trackEventInBackground(Analytics.TOGGLED_SHELVED_BOOKS);
     }
 
     private void updateVisibleBooks() {

@@ -4,7 +4,8 @@
     <item
         android:icon="@drawable/abc_ic_menu_moreoverflow_mtrl_alpha"
         android:orderInCategory="0"
-        android:title="">
+        android:title=""
+        app:showAsAction="always">
         <menu>
             <item
                 android:id="@+id/reset_stats"
