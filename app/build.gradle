@@ -25,15 +25,14 @@ android {
 
 repositories {
     jcenter()
-    maven {
-        url "https://jitpack.io"
-    }
+    maven { url "https://jitpack.io" }
+    maven { url 'http://clinker.47deg.com/nexus/content/groups/public' }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.1.1'
-    compile (
+    compile(
             [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.6'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.6'],
             [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
@@ -42,7 +41,11 @@ dependencies {
     compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.github.QuadFlask:colorpicker:[0.0.9]'
-    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.parse.bolts:bolts-android:1.2.1'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
+    compile ('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
+        transitive = true
+    }
+
 }

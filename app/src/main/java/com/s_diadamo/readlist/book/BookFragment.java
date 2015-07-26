@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.fortysevendeg.swipelistview.SwipeListView;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.parse.ParseAnalytics;
@@ -50,7 +51,7 @@ import java.util.Map;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
-    private ListView bookListView;
+    private SwipeListView bookListView;
     private ArrayList<Book> userBooks;
     private BookOperations bookOperations;
     private BookAdapter bookAdapter;
@@ -70,13 +71,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_book_swipe_listview, container, false);
         context = rootView.getContext();
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         setHasOptionsMenu(true);
 
-        bookListView = (ListView) rootView.findViewById(R.id.general_list_view);
+        bookListView = (SwipeListView) rootView.findViewById(R.id.book_swipe_listview);
         bookOperations = new BookOperations(container.getContext());
 
         setShelfId();
@@ -370,11 +371,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         if (!loadingShelf && !loadingBooks) {
             userBooks = shelf.fetchBooks(context);
             if (shelf.getId() == Shelf.DEFAULT_SHELF_ID) {
-                bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks,
+                bookAdapter = new BookAdapter(context, userBooks,
                         hideCompletedBooksMenuItem.isChecked(),
                         hideShelvedBooksMenuItem.isChecked());
             } else {
-                bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks,
+                bookAdapter = new BookAdapter(context, userBooks,
                         hideCompletedBooksMenuItem.isChecked(),
                         false);
             }
@@ -425,7 +426,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             case BookLoader.ID:
                 userBooks = (ArrayList<Book>) data;
 
-                bookAdapter = new BookAdapter(context, R.layout.row_book_element, userBooks,
+                bookAdapter = new BookAdapter(context, userBooks,
                         prefs.getBoolean(HIDE_COMPLETED_BOOKS, false), prefs.getBoolean(HIDE_SHELVED_BOOKS, false));
                 bookListView.setAdapter(bookAdapter);
                 loadingBooks = false;

@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.shelf;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import com.s_diadamo.readlist.book.Book;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class Shelf {
 
-    public static final int DEFAULT_COLOR = android.R.color.transparent;
+    public static final int DEFAULT_COLOR = Color.WHITE;
     public static final String SHELF_ID = "SHELF_ID";
     public static final int DEFAULT_SHELF_ID = 1;
 

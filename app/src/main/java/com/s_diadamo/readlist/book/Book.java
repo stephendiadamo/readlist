@@ -1,11 +1,13 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
 import com.s_diadamo.readlist.lent.LentBookOperations;
+import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -215,7 +217,12 @@ public class Book {
         this.coverPictureUrl = coverPictureUrl;
     }
 
-    public ColorDrawable getColorAsDrawalbe() {
+    public ColorDrawable getColorAsDrawable() {
+        // For retention...
+        if (this.shelfId == Shelf.DEFAULT_SHELF_ID) {
+            return new ColorDrawable(Shelf.DEFAULT_COLOR);
+        }
+
         return new ColorDrawable(this.colour);
     }
 

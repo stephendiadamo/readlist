@@ -1,10 +1,8 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +20,13 @@ import java.util.ArrayList;
 
 class BookAdapter extends BaseAdapter {
     private final Context context;
-    private final int layoutResourceID;
     private final ArrayList<Book> books;
     private boolean hideComplete;
     private boolean hideShelved;
 
 
-    public BookAdapter(Context context, int layoutResourceID, ArrayList<Book> books, boolean hideComplete, boolean hideShelved) {
+    public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved) {
         this.context = context;
-        this.layoutResourceID = layoutResourceID;
         this.books = books;
         this.hideComplete = hideComplete;
         this.hideShelved = hideShelved;
@@ -86,7 +82,7 @@ class BookAdapter extends BaseAdapter {
 
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(layoutResourceID, parent, false);
+            row = inflater.inflate(R.layout.row_book_element_swipe, parent, false);
 
             bookHolder = new BookHolder();
             bookHolder.bookCover = (ImageView) row.findViewById(R.id.book_cover);
@@ -100,6 +96,10 @@ class BookAdapter extends BaseAdapter {
             bookHolder.infoContainer = (LinearLayout) row.findViewById(R.id.book_info_container);
             bookHolder.pageInfoContainer = (LinearLayout) row.findViewById(R.id.book_page_detail_container);
             bookHolder.completeInfoContainer = (LinearLayout) row.findViewById(R.id.book_complete_container);
+
+            bookHolder.deleteBook = (ImageView) row.findViewById(R.id.book_delete_book);
+            bookHolder.editBook = (ImageView) row.findViewById(R.id.book_edit_book);
+            bookHolder.lendBook = (ImageView) row.findViewById(R.id.book_lend_book);
 
             row.setTag(bookHolder);
         } else {
@@ -151,7 +151,7 @@ class BookAdapter extends BaseAdapter {
             bookHolder.bookLentIcon.setVisibility(View.INVISIBLE);
         }
 
-        bookHolder.infoContainer.setBackground(book.getColorAsDrawalbe());
+        bookHolder.infoContainer.setBackground(book.getColorAsDrawable());
         return row;
     }
 
@@ -167,5 +167,9 @@ class BookAdapter extends BaseAdapter {
         LinearLayout infoContainer;
         LinearLayout pageInfoContainer;
         LinearLayout completeInfoContainer;
+
+        ImageView deleteBook;
+        ImageView editBook;
+        ImageView lendBook;
     }
 }
