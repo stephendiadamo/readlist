@@ -28,7 +28,7 @@ public class SyncData {
     final MultiProcessSpinner syncSpinner;
     final boolean showSpinner;
 
-    SyncData(Context context, boolean showSpinner) {
+    public SyncData(Context context, boolean showSpinner) {
         this.context = context;
         this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();

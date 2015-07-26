@@ -26,6 +26,7 @@ import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncData;
 
 public class LoginFragment extends Fragment {
 
@@ -218,10 +219,10 @@ public class LoginFragment extends Fragment {
     }
 
     private void completeLogin() {
-//        if (Utils.isNetworkAvailable(getActivity())) {
-//            SyncData syncData = new SyncData(context, false);
-//            syncData.syncAllData();
-//        }
+        if (Utils.isNetworkAvailable(getActivity())) {
+            SyncData syncData = new SyncData(context, false);
+            syncData.syncAllData();
+        }
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
