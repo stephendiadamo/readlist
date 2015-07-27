@@ -92,6 +92,10 @@
     <string name="set_end">Set End</string>
     <string name="hide_shelved_books">Hide Shelved Books</string>
     <string name="lent_book">Lent Book</string>
+    <string name="rate">Rate</string>
+    <string name="comment">Comment</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

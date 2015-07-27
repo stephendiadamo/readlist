@@ -37,6 +37,12 @@ class BookMenuActions {
         this.shelf = shelf;
     }
 
+    public BookMenuActions(Context context, BookOperations bookOperations, BookAdapter bookAdapter) {
+        this.context = context;
+        this.bookOperations = bookOperations;
+        this.bookAdapter = bookAdapter;
+    }
+
     public BookMenuActions(Context context, BookAdapter bookAdapter) {
         this.context = context;
         this.bookAdapter = bookAdapter;

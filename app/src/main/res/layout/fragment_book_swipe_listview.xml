@@ -12,4 +12,4 @@
     swipe:swipeCloseAllItemsWhenMoveList="true"
     swipe:swipeFrontView="@+id/front"
     swipe:swipeMode="left"
-    swipe:swipeOffsetLeft="120dp" />
+    swipe:swipeOffsetLeft="80dp" />

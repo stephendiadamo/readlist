@@ -1,8 +1,6 @@
 package com.s_diadamo.readlist.book;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -14,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -30,9 +26,6 @@ import com.google.zxing.integration.android.IntentResult;
 import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Analytics;
-import com.s_diadamo.readlist.lent.LentBook;
-import com.s_diadamo.readlist.lent.LentBookOperations;
-import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
@@ -40,14 +33,9 @@ import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 import com.s_diadamo.readlist.shelf.ShelfLoader;
-import com.s_diadamo.readlist.updates.BookUpdate;
-import com.s_diadamo.readlist.updates.BookUpdateOperations;
-import com.s_diadamo.readlist.updates.PageUpdate;
-import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
@@ -64,9 +52,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private boolean loadingShelf = true;
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String HIDE_SHELVED_BOOKS = "HIDE_SHELVED_BOOKS";
-    private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String EDIT_SHELF = "EDIT_SHELF";
-    private static final String BOOK_ID = "BOOK_ID";
 
     @Nullable
     @Override
@@ -85,7 +71,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         getLoaderManager().initLoader(BookLoader.ID, null, this);
         getLoaderManager().initLoader(ShelfLoader.ID, null, this);
 
-        registerForContextMenu(bookListView);
         bookListView.setLongClickable(false);
 
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -197,116 +182,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.clear();
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu_book_actions, menu);
-
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        if (userBooks.get(info.position).isComplete()) {
-            menu.findItem(R.id.set_current_page).setTitle("Reread");
-        }
-
-        if (userBooks.get(info.position).isLent(context)) {
-            menu.findItem(R.id.lend_book).setTitle("Unlend");
-        }
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        Book book = userBooks.get(info.position);
-
-        switch (item.getItemId()) {
-            case R.id.set_current_page:
-                ParseAnalytics.trackEventInBackground(Analytics.UPDATED_PAGE);
-                if (book.isComplete()) {
-                    book.reread();
-                    bookAdapter.notifyDataSetChanged();
-                    bookOperations.updateBook(book);
-                } else {
-                    new BookMenuActions(context, bookOperations, bookAdapter, shelf).setCurrentPage(book);
-                }
-                return true;
-            case R.id.mark_complete:
-                ParseAnalytics.trackEventInBackground(Analytics.COMPLETED_BOOK);
-                addRemainingPagesAndCompleteBook(book);
-                return true;
-            case R.id.lend_book:
-                if (book.isLent(context)) {
-                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-                    LentBook lentBook = book.getLentBook(context);
-                    if (Utils.checkUserIsLoggedIn(context)) {
-                        new SyncData(context).delete(lentBook);
-                        new LentBookOperations(context).deleteLentBook(lentBook);
-                    } else {
-                        lentBook.delete();
-                        new LentBookOperations(context).updateLentBook(lentBook);
-                    }
-                } else {
-                    ParseAnalytics.trackEventInBackground(Analytics.LENT_BOOK);
-                    new BookMenuActions(context, bookAdapter).lendBook(book);
-                }
-                return true;
-            case R.id.edit_book:
-                ParseAnalytics.trackEventInBackground(Analytics.EDITED_BOOK);
-                launchEditBookFragment(userBooks.get(info.position));
-                return true;
-            case R.id.delete_book:
-                ParseAnalytics.trackEventInBackground(Analytics.DELETED_BOOK);
-                deleteBook(userBooks.get(info.position));
-                return true;
-        }
-
-        return super.onContextItemSelected(item);
-    }
-
-    private void deleteBook(final Book book) {
-        new AlertDialog.Builder(context)
-                .setMessage("Delete \"" + book.getTitle() + "\"?")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (Utils.checkUserIsLoggedIn(context)) {
-                            new SyncData(context).delete(book);
-                            if (book.isLent(context)) {
-                                new SyncData(context).delete(book.getLentBook(context));
-                            }
-                            bookOperations.deleteBook(book);
-                        } else {
-                            book.delete();
-                            book.deleteLentBook(context);
-                            bookOperations.updateBook(book);
-                        }
-                        userBooks.remove(book);
-                        bookAdapter.notifyDataSetChanged();
-                        bookAdapter.notifyDataSetInvalidated();
-                    }
-                })
-                .setNegativeButton("No", null)
-                .show();
-    }
-
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        l.showContextMenuForChild(v);
-    }
-
-    private void launchEditBookFragment(Book book) {
-        Bundle bundle = new Bundle();
-        String bookId = String.valueOf(book.getId());
-        bundle.putString(BOOK_ID, bookId);
-
-        Fragment fragment = new BookEditFragment();
-        fragment.setArguments(bundle);
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .addToBackStack(EDIT_BOOK)
-                .replace(R.id.container, fragment)
-                .commit();
-    }
-
     private void launchEditShelfFragment() {
         Bundle bundle = new Bundle();
         bundle.putString(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
@@ -319,30 +194,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 .addToBackStack(EDIT_SHELF)
                 .replace(R.id.container, fragment)
                 .commit();
-    }
-
-    private void addRemainingPagesAndCompleteBook(Book book) {
-        int remainingPages = book.getNumPages() - book.getCurrentPage();
-        PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
-        new PageUpdateOperations(context).
-                addPageUpdate(pageUpdate);
-        if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).add(pageUpdate);
-        }
-
-        book.markComplete();
-        book.setCurrentPage(book.getNumPages());
-
-        bookAdapter.notifyDataSetChanged();
-        bookOperations.updateBook(book);
-
-        BookUpdate bookUpdate = new BookUpdate(book.getId());
-        new BookUpdateOperations(context).addBookUpdate(bookUpdate);
-        if (Utils.checkUserIsLoggedIn(context)) {
-            SyncData syncData = new SyncData(context);
-            syncData.add(bookUpdate);
-            syncData.update(book);
-        }
     }
 
     private void toggleHideCompletedBooks() {
@@ -373,11 +224,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             if (shelf.getId() == Shelf.DEFAULT_SHELF_ID) {
                 bookAdapter = new BookAdapter(context, userBooks,
                         hideCompletedBooksMenuItem.isChecked(),
-                        hideShelvedBooksMenuItem.isChecked());
+                        hideShelvedBooksMenuItem.isChecked(),
+                        getActivity().getSupportFragmentManager());
             } else {
                 bookAdapter = new BookAdapter(context, userBooks,
                         hideCompletedBooksMenuItem.isChecked(),
-                        false);
+                        false, getActivity().getSupportFragmentManager());
             }
             bookAdapter.updateVisibleBooks();
             bookListView.setAdapter(bookAdapter);
@@ -425,9 +277,10 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (id) {
             case BookLoader.ID:
                 userBooks = (ArrayList<Book>) data;
-
                 bookAdapter = new BookAdapter(context, userBooks,
-                        prefs.getBoolean(HIDE_COMPLETED_BOOKS, false), prefs.getBoolean(HIDE_SHELVED_BOOKS, false));
+                        prefs.getBoolean(HIDE_COMPLETED_BOOKS, false),
+                        prefs.getBoolean(HIDE_SHELVED_BOOKS, false),
+                        getActivity().getSupportFragmentManager());
                 bookListView.setAdapter(bookAdapter);
                 loadingBooks = false;
                 break;

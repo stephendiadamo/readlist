@@ -14,29 +14,41 @@
         android:padding="2dp"
         android:tag="back">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/book_delete_book"
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:layout_marginEnd="20dp"
+            style="@style/BookSwipeIcon"
             android:contentDescription="@string/delete_book"
             android:src="@drawable/ic_delete_black_24dp" />
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/book_edit_book"
+            style="@style/BookSwipeIcon"
+            android:contentDescription="@string/edit_book"
+            android:src="@drawable/ic_mode_edit_black_24dp" />
+
+        <ImageButton
             android:id="@+id/book_lend_book"
-            android:layout_width="40dp"
-            android:layout_height="fill_parent"
-            android:layout_marginEnd="20dp"
+            style="@style/BookSwipeIconV2"
             android:contentDescription="@string/lend_book"
             android:src="@drawable/ic_lent_book" />
 
-        <ImageView
-            android:id="@+id/book_edit_book"
-            android:layout_width="30dp"
-            android:layout_height="fill_parent"
-            android:layout_marginEnd="10dp"
-            android:contentDescription="@string/edit_book"
-            android:src="@drawable/ic_mode_edit_black_24dp" />
+        <ImageButton
+            android:id="@+id/book_mark_complete"
+            style="@style/BookSwipeIcon"
+            android:contentDescription="@string/mark_complete"
+            android:src="@drawable/ic_done_black_128dp_2x" />
+
+        <ImageButton
+            android:id="@+id/book_update"
+            style="@style/BookSwipeIcon"
+            android:contentDescription="@string/lend_book"
+            android:src="@drawable/ic_swap_horiz_black_48dp" />
+
+        <ImageButton
+            android:id="@+id/book_more_options"
+            style="@style/BookSwipeIcon"
+            android:contentDescription="@string/lend_book"
+            android:src="@drawable/ic_more" />
 
     </LinearLayout>
 
