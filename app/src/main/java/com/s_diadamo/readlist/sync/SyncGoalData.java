@@ -96,7 +96,7 @@ public class SyncGoalData extends SyncData {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
-                if (goalList.size() > 0) {
+                if (goalList != null && goalList.size() > 0) {
                     ParseObject goalToUpdate = goalList.get(0);
                     copyGoalValues(goalToUpdate, goal);
                     goalToUpdate.saveEventually();
@@ -109,7 +109,7 @@ public class SyncGoalData extends SyncData {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
-                if (goalList.size() > 0) {
+                if (goalList != null && goalList.size() > 0) {
                     ParseObject goalToDelete = goalList.get(0);
                     goalToDelete.deleteEventually();
                 }

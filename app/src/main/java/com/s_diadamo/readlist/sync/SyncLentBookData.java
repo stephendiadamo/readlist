@@ -121,7 +121,7 @@ public class SyncLentBookData extends SyncData {
         queryForLentBook(lentBook, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
-                if (list.size() > 0) {
+                if (list != null && list.size() > 0) {
                     ParseObject lentBookToUpdate = list.get(0);
                     copyLentBookValues(lentBookToUpdate, lentBook);
                     lentBookToUpdate.saveEventually();

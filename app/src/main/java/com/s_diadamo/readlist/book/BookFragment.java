@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.fortysevendeg.swipelistview.SwipeListView;
+import com.fortysevendeg.swipelistview.SwipeListViewListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.parse.ParseAnalytics;
@@ -71,12 +72,71 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         getLoaderManager().initLoader(BookLoader.ID, null, this);
         getLoaderManager().initLoader(ShelfLoader.ID, null, this);
 
-        bookListView.setLongClickable(false);
+        bookListView.setSwipeCloseAllItemsWhenMoveList(true);
+        bookListView.setSwipeListViewListener(new SwipeListViewListener() {
 
-        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                getActivity().openContextMenu(view);
+            public void onOpened(int i, boolean b) {
+            }
+
+            @Override
+            public void onClosed(int i, boolean b) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int i, float v) {
+            }
+
+            @Override
+            public void onStartOpen(int i, int i1, boolean b) {
+            }
+
+            @Override
+            public void onStartClose(int i, boolean b) {
+            }
+
+            @Override
+            public void onClickFrontView(int i) {
+                bookListView.closeOpenedItems();
+                bookListView.openAnimate(i);
+            }
+
+            @Override
+            public void onClickBackView(int i) {
+                bookListView.closeOpenedItems();
+            }
+
+            @Override
+            public void onDismiss(int[] ints) {
+            }
+
+            @Override
+            public int onChangeSwipeMode(int i) {
+                return 0;
+            }
+
+            @Override
+            public void onChoiceChanged(int i, boolean b) {
+            }
+
+            @Override
+            public void onChoiceStarted() {
+            }
+
+            @Override
+            public void onChoiceEnded() {
+            }
+
+            @Override
+            public void onFirstListItem() {
+            }
+
+            @Override
+            public void onLastListItem() {
             }
         });
 
@@ -219,7 +279,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
     private void updateVisibleBooks() {
-        if (!loadingShelf && !loadingBooks) {
+        if (!loadingShelf && !loadingBooks && hideCompletedBooksMenuItem != null && hideShelvedBooksMenuItem != null) {
             userBooks = shelf.fetchBooks(context);
             if (shelf.getId() == Shelf.DEFAULT_SHELF_ID) {
                 bookAdapter = new BookAdapter(context, userBooks,

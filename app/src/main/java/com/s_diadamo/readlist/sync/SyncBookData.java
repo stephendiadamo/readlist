@@ -131,7 +131,7 @@ public class SyncBookData extends SyncData {
         queryForBook(book, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> bookList, ParseException e) {
-                if (bookList.size() > 0) {
+                if (bookList != null && bookList.size() > 0) {
                     ParseObject bookToUpdate = bookList.get(0);
                     copyBookValues(bookToUpdate, book);
                     bookToUpdate.saveEventually();
@@ -144,7 +144,7 @@ public class SyncBookData extends SyncData {
         queryForBook(book, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> bookList, ParseException e) {
-                if (bookList.size() > 0) {
+                if (bookList != null && bookList.size() > 0) {
                     ParseObject bookToDelete = bookList.get(0);
                     bookToDelete.deleteEventually();
                 }

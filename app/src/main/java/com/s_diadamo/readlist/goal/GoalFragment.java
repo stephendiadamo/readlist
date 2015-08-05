@@ -39,6 +39,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     private ListView bookListView;
     private ListView pageListView;
     private Context context;
+    private boolean doneLoading = false;
 
     private static final String HIDE_COMPLETED_GOALS = "HIDE_COMPLETED_GOALS";
 
@@ -72,6 +73,9 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         hideCompletedGoals = menu.findItem(R.id.hide_completed_goals);
         hideCompletedGoals.setChecked(prefs.getBoolean(HIDE_COMPLETED_GOALS, false));
+        if (doneLoading) {
+            updateVisibleGoals();
+        }
     }
 
     @Override
@@ -107,7 +111,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             case R.id.delete_goal:
                 if (selectedListViewAdapter != null) {
                     Goal goal = selectedListViewAdapter.getItem(info.position);
-                    if (Utils.checkUserIsLoggedIn(context)){
+                    if (Utils.checkUserIsLoggedIn(context)) {
                         new SyncData(context).delete(goal);
                         goalOperations.deleteGoal(goal);
                     } else {
@@ -191,9 +195,10 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
 
             Utils.setDynamicHeight(bookListView);
         }
-        if (hideCompletedGoals.isChecked()) {
+        if (hideCompletedGoals != null && hideCompletedGoals.isChecked()) {
             updateVisibleGoals();
         }
+        doneLoading = true;
     }
 
     @Override

@@ -156,6 +156,10 @@ public class ShelfAddEditFragment extends Fragment {
                         .setPositiveButton("Done", new ColorPickerClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int selectedColor, Integer[] allColors) {
+                                if (shelf == null) {
+                                    Utils.showToast(v.getContext(), "Please wait and while shelf data is loading and try again");
+                                    return;
+                                }
                                 shelf.setColour(userSelectedColour.getColor());
                                 selectors[currentSelectedColour].setVisibility(View.GONE);
                                 customColourCheck.setVisibility(View.VISIBLE);

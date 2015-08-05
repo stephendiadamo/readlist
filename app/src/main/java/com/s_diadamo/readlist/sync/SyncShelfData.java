@@ -123,7 +123,7 @@ public class SyncShelfData extends SyncData {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {
-                if (shelfList.size() > 0) {
+                if (shelfList != null && shelfList.size() > 0) {
                     ParseObject shelfToUpdate = shelfList.get(0);
                     copyShelfValues(shelfToUpdate, shelf);
                     shelfToUpdate.saveEventually();
@@ -136,7 +136,7 @@ public class SyncShelfData extends SyncData {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {
-                if (shelfList.size() > 0) {
+                if (shelfList != null && shelfList.size() > 0) {
                     ParseObject shelfToDelete = shelfList.get(0);
                     shelfToDelete.deleteEventually();
                 }
