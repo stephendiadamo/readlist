@@ -129,7 +129,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COMMENT_BOOK_ID + " INTEGER, " +
             COMMENT_COMMENT + " TEXT, " +
-            COMMENT_DATE_ADDED + " TEXT" +
+            COMMENT_DATE_ADDED + " TEXT, " +
+            IS_DELETED + " INTEGER" +
             ")";
 
     public DatabaseHelper(Context context) {

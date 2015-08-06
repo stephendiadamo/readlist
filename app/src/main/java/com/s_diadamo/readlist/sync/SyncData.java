@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.parse.ParseObject;
 import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.comment.Comment;
 import com.s_diadamo.readlist.general.MultiProcessSpinner;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
@@ -22,6 +23,7 @@ public class SyncData {
     static final String TYPE_BOOK_UPDATE = "book_update";
     static final String TYPE_PAGE_UPDATE = "page_update";
     static final String TYPE_LENT_BOOK = "lent_book";
+    static final String TYPE_COMMENT = "comment";
 
     private final Context context;
     final String userName;
@@ -51,6 +53,7 @@ public class SyncData {
         new SyncBookUpdateData(context, showSpinner).syncAllBookUpdates();
         new SyncPageUpdateData(context, showSpinner).syncAllPageUpdates();
         new SyncLentBookData(context, showSpinner).syncAllLentBooks();
+        new SyncCommentData(context, showSpinner).syncAllComments();
     }
 
     public void syncAllData(AppCompatActivity activity) {
@@ -60,6 +63,7 @@ public class SyncData {
         new SyncBookUpdateData(context).syncAllBookUpdates();
         new SyncPageUpdateData(context).syncAllPageUpdates();
         new SyncLentBookData(context).syncAllLentBooks();
+        new SyncCommentData(context).syncAllComments();
     }
 
     public void add(Book book) {
@@ -92,6 +96,11 @@ public class SyncData {
         parseLentBook.saveEventually();
     }
 
+    public void add(Comment comment) {
+        ParseObject parseComment = new SyncCommentData(context).toParseComment(comment);
+        parseComment.saveEventually();
+    }
+
     public void delete(Book book) {
         new SyncBookData(context).deleteParseBook(book);
     }
@@ -116,6 +125,10 @@ public class SyncData {
         new SyncLentBookData(context).deleteParseLentBook(lentBook);
     }
 
+    public void delete(Comment comment) {
+        new SyncCommentData(context).deleteParseComment(comment);
+    }
+
     public void update(Book book) {
         new SyncBookData(context).updateParseBook(book);
     }
@@ -130,5 +143,9 @@ public class SyncData {
 
     public void update(LentBook lentBook) {
         new SyncLentBookData(context).updateParseLentBook(lentBook);
+    }
+
+    public void update(Comment comment) {
+        new SyncCommentData(context).updateParseComment(comment);
     }
 }

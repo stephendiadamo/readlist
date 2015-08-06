@@ -138,5 +138,4 @@ public class LentBookOperations {
                 cursor.getString(4),
                 cursor.getInt(5));
     }
-
 }

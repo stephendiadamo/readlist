@@ -149,8 +149,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         String stringShelfId = "";
         if (args != null) {
             stringShelfId = args.getString(Shelf.SHELF_ID);
-
         }
+
         if (!stringShelfId.isEmpty()) {
             ParseAnalytics.trackEventInBackground(Analytics.VIEWED_PARTICULAR_SHELF);
             shelfId = Integer.parseInt(stringShelfId);

@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         Fragment objFragment = null;
+        Utils.hideKeyBoard(this);
 
         switch (position) {
             case 0:

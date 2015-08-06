@@ -6,8 +6,9 @@
     android:padding="5dp">
 
     <EditText
-        android:id="@+id/comment_book_edit_text"
+        android:id="@+id/comment_book_comment_box"
         android:layout_width="fill_parent"
+        android:hint="@string/comment"
         android:layout_height="wrap_content" />
 
     <Button
@@ -18,7 +19,7 @@
         android:text="@string/add_comment" />
 
     <ListView
-        android:id="@+id/comment_book_list"
+        android:id="@+id/comment_book_comments_list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 

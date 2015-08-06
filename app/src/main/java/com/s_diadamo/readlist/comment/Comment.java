@@ -10,6 +10,8 @@ import java.util.Locale;
 
 public class Comment {
 
+    public static final String COMMENT_BOOK_ID = "COMMENT_BOOK_ID";
+
     private int id;
     private int bookId;
     private String comment;
@@ -22,6 +24,13 @@ public class Comment {
         this.comment = comment;
         this.dateAdded = dateAdded;
         this.isDeleted = (isDeleted == 1);
+    }
+
+    public Comment(int id, int bookId, String comment, String dateAdded) {
+        this.id = id;
+        this.bookId = bookId;
+        this.comment = comment;
+        this.dateAdded = dateAdded;
     }
 
     public Comment(int bookId, String comment) {
@@ -70,8 +79,12 @@ public class Comment {
         return "";
     }
 
-    public void setDateAdded(String dateAdded) {
-        this.dateAdded = dateAdded;
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 
 }

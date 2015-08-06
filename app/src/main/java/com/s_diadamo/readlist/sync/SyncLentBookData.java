@@ -20,7 +20,6 @@ import java.util.List;
 public class SyncLentBookData extends SyncData {
     private final LentBookOperations lentBookOperations;
 
-
     public SyncLentBookData(Context context) {
         super(context);
         lentBookOperations = new LentBookOperations(context);
@@ -104,7 +103,6 @@ public class SyncLentBookData extends SyncData {
         parseLentBook.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getBookId());
         parseLentBook.put(DatabaseHelper.LENT_BOOK_LENT_TO, lentBook.getLentTo());
         parseLentBook.put(DatabaseHelper.LENT_BOOK_DATE_LENT, lentBook.getDateLent());
-        parseLentBook.put(DatabaseHelper.IS_DELETED, lentBook.isDeleted());
 
         return parseLentBook;
     }
@@ -117,7 +115,7 @@ public class SyncLentBookData extends SyncData {
                 parseLentBook.getString(DatabaseHelper.LENT_BOOK_DATE_LENT));
     }
 
-    public void updateParseLentBook(final LentBook lentBook) {
+    protected void updateParseLentBook(final LentBook lentBook) {
         queryForLentBook(lentBook, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -130,7 +128,7 @@ public class SyncLentBookData extends SyncData {
         });
     }
 
-    public void deleteParseLentBook(LentBook lentBook) {
+    protected void deleteParseLentBook(LentBook lentBook) {
         queryForLentBook(lentBook, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -154,6 +152,5 @@ public class SyncLentBookData extends SyncData {
         parseLentBook.put(DatabaseHelper.LENT_BOOK_BOOK_ID, lentBook.getBookId());
         parseLentBook.put(DatabaseHelper.LENT_BOOK_LENT_TO, lentBook.getLentTo());
         parseLentBook.put(DatabaseHelper.LENT_BOOK_DATE_LENT, lentBook.getDateLent());
-        parseLentBook.put(DatabaseHelper.IS_DELETED, lentBook.isDeleted());
     }
 }

@@ -226,7 +226,6 @@ public class ShelfOperations {
                 cursor.getString(12),
                 cursor.getString(13),
                 cursor.getDouble(14),
-                cursor.getString(15),
-                cursor.getInt(16));
+                cursor.getInt(15));
     }
 }

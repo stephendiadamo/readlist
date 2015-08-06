@@ -53,31 +53,35 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onCreateContextMenu(menu, v, menuInfo);
         menu.clear();
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu_lent_book_actions, menu);
+        inflater.inflate(R.menu.menu_general_delete_edit, menu);
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
+        if (lentBookAdapter == null) {
+            Utils.showToast(context, "Loading has not finished, please try again");
+            return false;
+        }
+
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         LentBook lentBook = lentBookAdapter.getItem(info.position);
         switch (item.getItemId()) {
-            case R.id.edit_lent_book:
+            case R.id.edit:
                 LentBookDialog lentBookDialog = new LentBookDialog(context, lentBook);
                 lentBookDialog.setLentBookAdapter(lentBookAdapter);
                 lentBookDialog.show();
                 return true;
-            case R.id.delete_lent_book:
-                if (lentBookAdapter != null) {
-                    if (Utils.checkUserIsLoggedIn(context)) {
-                        new SyncData(context).delete(lentBook);
-                        lentBookOperations.deleteLentBook(lentBook);
-                    } else {
-                        lentBook.delete();
-                        lentBookOperations.updateLentBook(lentBook);
-                    }
-
-                    lentBookAdapter.remove(lentBook);
+            case R.id.delete:
+                if (Utils.checkUserIsLoggedIn(context)) {
+                    new SyncData(context).delete(lentBook);
+                    lentBookOperations.deleteLentBook(lentBook);
+                } else {
+                    lentBook.delete();
+                    lentBookOperations.updateLentBook(lentBook);
                 }
+
+                lentBookAdapter.remove(lentBook);
+
                 return true;
         }
         return super.onContextItemSelected(item);

@@ -99,6 +99,7 @@
     <string name="add_rating">Add Rating</string>
     <string name="cancel">Cancel</string>
     <string name="add_comment">Add Comment</string>
+    <string name="edit_comment">Edit Comment</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

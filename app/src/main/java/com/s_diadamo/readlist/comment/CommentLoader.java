@@ -29,9 +29,7 @@ public class CommentLoader extends AsyncTaskLoader<ArrayList<Comment>> {
         if (isReset()) {
             return null;
         }
-
-        //TODO: Fetch comments
-        return null;
+        return new CommentOperations(context).getCommentsForBook(bookId);
     }
 
     @Override

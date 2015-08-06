@@ -22,6 +22,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
+import com.s_diadamo.readlist.comment.Comment;
+import com.s_diadamo.readlist.comment.CommentFragment;
 import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
@@ -47,6 +49,7 @@ class BookAdapter extends BaseAdapter {
 
     private static final String BOOK_ID = "BOOK_ID";
     private static final String EDIT_BOOK = "EDIT_BOOK";
+    private static final String COMMENT_BOOK = "COMMENT_BOOK";
 
 
     public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved, FragmentManager fragmentManager) {
@@ -253,7 +256,7 @@ class BookAdapter extends BaseAdapter {
                     public boolean onMenuItemClick(MenuItem item) {
                         long id = item.getItemId();
                         if (id == R.id.comment) {
-                            Utils.showToast(context, "Comment");
+                            launchCommentFragment(book);
                         } else if (id == R.id.rate) {
                             showRatingDialog(book);
                         }
@@ -274,6 +277,18 @@ class BookAdapter extends BaseAdapter {
         bookHolder.infoContainer.setBackground(book.getColorAsDrawable());
 
         return row;
+    }
+
+    private void launchCommentFragment(Book book) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(Comment.COMMENT_BOOK_ID, book.getId());
+
+        Fragment fragment = new CommentFragment();
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .addToBackStack(COMMENT_BOOK)
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     private void deleteBook(final Book book) {
@@ -303,6 +318,7 @@ class BookAdapter extends BaseAdapter {
 
     private void launchEditBookFragment(Book book) {
         Bundle bundle = new Bundle();
+        //TODO: WTF is this? Use putInt...
         String bookId = String.valueOf(book.getId());
         bundle.putString(BOOK_ID, bookId);
 
