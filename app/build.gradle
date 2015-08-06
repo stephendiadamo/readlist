@@ -8,8 +8,8 @@ android {
         applicationId "com.s_diadamo.readlist"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 1211
-        versionName "1.2.1.1"
+        versionCode 1220
+        versionName "1.2.2.0"
     }
     buildTypes {
         release {
@@ -44,7 +44,7 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.2.1'
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
-    compile ('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
+    compile('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
         transitive = true
     }
 
