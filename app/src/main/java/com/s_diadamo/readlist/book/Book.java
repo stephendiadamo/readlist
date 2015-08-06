@@ -28,12 +28,12 @@ public class Book {
     private String completionDate = "";
     private String coverPictureUrl = "";
     private Boolean isDeleted = false;
-    private Boolean isLent = false;
+    private double rating = -1;
 
     public Book() {
     }
 
-    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl, int isDeleted) {
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, double rating, int isDeleted) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -41,10 +41,10 @@ public class Book {
         this.dateAdded = dateAdded;
         this.numPages = numPages;
         this.currentPage = currentPage;
-        this.colour = colour;
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
+        this.rating = rating;
         this.isDeleted = (isDeleted == 1);
     }
 
@@ -54,14 +54,26 @@ public class Book {
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
-        this.currentPage = 0;
+        this.currentPage = currentPage;
         this.colour = colour;
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
     }
 
-    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
+    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, String completionDate, String coverPictureUrl) {
+        this.title = title;
+        this.author = author;
+        this.shelfId = shelfId;
+        this.dateAdded = dateAdded;
+        this.numPages = numPages;
+        this.currentPage = currentPage;
+        this.colour = colour;
+        this.completionDate = completionDate;
+        this.coverPictureUrl = coverPictureUrl;
+    }
+
+    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, double rating) {
         this.id = id;
         this.title = title;
         this.author = author;
@@ -72,32 +84,7 @@ public class Book {
         this.complete = (complete == 1);
         this.completionDate = completionDate;
         this.coverPictureUrl = coverPictureUrl;
-    }
-
-    public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, int isDeleted) {
-        this.id = id;
-        this.title = title;
-        this.author = author;
-        this.shelfId = shelfId;
-        this.dateAdded = dateAdded;
-        this.numPages = numPages;
-        this.currentPage = currentPage;
-        this.complete = (complete == 1);
-        this.completionDate = completionDate;
-        this.coverPictureUrl = coverPictureUrl;
-        this.isDeleted = (isDeleted == 1);
-    }
-
-    public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl) {
-        this.title = title;
-        this.author = author;
-        this.shelfId = shelfId;
-        this.dateAdded = dateAdded;
-        this.numPages = numPages;
-        this.currentPage = currentPage;
-        this.complete = (complete == 1);
-        this.completionDate = completionDate;
-        this.coverPictureUrl = coverPictureUrl;
+        this.rating = rating;
     }
 
     public int getId() {
@@ -248,4 +235,13 @@ public class Book {
     public boolean isLent(Context context) {
         return new LentBookOperations(context).getLentBook(this) != null;
     }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
 }

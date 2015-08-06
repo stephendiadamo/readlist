@@ -89,7 +89,7 @@
     </style>
 
     <style name="BookSwipeIcon">
-        <item name="android:background">@drawable/nav_listview_background</item>
+        <item name="android:background">@drawable/on_click_grey</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:layout_width">35dp</item>
         <item name="android:layout_height">35dp</item>
@@ -97,7 +97,7 @@
     </style>
 
     <style name="BookSwipeIconV2">
-        <item name="android:background">@drawable/nav_listview_background</item>
+        <item name="android:background">@drawable/on_click_grey</item>
         <item name="android:scaleType">fitXY</item>
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>

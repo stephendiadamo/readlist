@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "readList";
 
     // Tables
@@ -15,6 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_BOOK_UPDATES = "book_updates";
     public static final String TABLE_GOALS = "goals";
     public static final String TABLE_LENT_BOOKS = "lent_books";
+    public static final String TABLE_COMMENTS = "comments";
 
     // Common columns
     public static final String KEY_ID = "id";
@@ -30,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String BOOK_COMPLETE = "complete";
     public static final String BOOK_COMPLETION_DATE = "completion_date";
     public static final String BOOK_COVER_PICTURE_URL = "cover_picture_url";
+    public static final String BOOK_RATING = "rating";
 
     // Shelves table columns
     public static final String SHELF_NAME = "name";
@@ -56,6 +58,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String LENT_BOOK_LENT_TO = "lent_to";
     public static final String LENT_BOOK_DATE_LENT = "date_lent";
 
+    //Comment table columns
+    public static final String COMMENT_BOOK_ID = "book_id";
+    public static final String COMMENT_COMMENT = "comment";
+    public static final String COMMENT_DATE_ADDED = "date_added";
+
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -68,6 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BOOK_COMPLETE + " INTEGER, " +
             BOOK_COMPLETION_DATE + " TEXT, " +
             BOOK_COVER_PICTURE_URL + " TEXT, " +
+            BOOK_RATING + " REAL, " +
             IS_DELETED + " INTEGER" +
             ")";
 
@@ -116,6 +124,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             IS_DELETED + " INTEGER" +
             ")";
 
+    private static final String CREATE_COMMENT_TABLE = "CREATE TABLE " + TABLE_COMMENTS +
+            "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COMMENT_BOOK_ID + " INTEGER, " +
+            COMMENT_COMMENT + " TEXT, " +
+            COMMENT_DATE_ADDED + " TEXT" +
+            ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -128,6 +144,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_BOOK_UPDATES_TABLE);
         db.execSQL(CREATE_GOALS_TABLE);
         db.execSQL(CREATE_LENT_BOOKS_TABLE);
+        db.execSQL(CREATE_COMMENT_TABLE);
     }
 
     @Override
@@ -165,6 +182,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (oldVersion < 4) {
             db.execSQL(CREATE_LENT_BOOKS_TABLE);
+        }
+
+        if (oldVersion < 5) {
+            String addRatingColumn = String.format("ALTER TABLE %s ADD COLUMN %s REAL DEFAULT -1",
+                    TABLE_BOOKS,
+                    BOOK_RATING);
+
+            db.execSQL(addRatingColumn);
+            db.execSQL(CREATE_COMMENT_TABLE);
         }
     }
 }

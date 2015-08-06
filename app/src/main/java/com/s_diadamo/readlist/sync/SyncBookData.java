@@ -105,7 +105,8 @@ public class SyncBookData extends SyncData {
                 parseBook.getInt(DatabaseHelper.BOOK_CURRENT_PAGE),
                 parseBook.getInt(DatabaseHelper.BOOK_COMPLETE),
                 parseBook.getString(DatabaseHelper.BOOK_COMPLETION_DATE),
-                parseBook.getString(DatabaseHelper.BOOK_COVER_PICTURE_URL));
+                parseBook.getString(DatabaseHelper.BOOK_COVER_PICTURE_URL),
+                parseBook.getDouble(DatabaseHelper.BOOK_RATING));
     }
 
 
@@ -123,6 +124,7 @@ public class SyncBookData extends SyncData {
         parseBook.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         parseBook.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         parseBook.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
+        parseBook.put(DatabaseHelper.BOOK_RATING, book.getRating());
 
         return parseBook;
     }
@@ -170,5 +172,6 @@ public class SyncBookData extends SyncData {
         parseBook.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         parseBook.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         parseBook.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
+        parseBook.put(DatabaseHelper.BOOK_RATING, book.getRating());
     }
 }

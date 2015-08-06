@@ -57,12 +57,13 @@
         android:layout_width="match_parent"
         android:layout_height="90dp"
         android:baselineAligned="false"
+        android:clickable="true"
         android:orientation="horizontal"
         android:padding="2dp"
         android:tag="front">
 
         <FrameLayout
-            android:layout_width="60dp"
+            android:layout_width="65dp"
             android:layout_height="90dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="2dp">
@@ -74,6 +75,14 @@
                 android:contentDescription="@string/book_cover_image"
                 android:scaleType="fitXY"
                 android:src="@drawable/sample_cover" />
+
+            <RatingBar
+                android:id="@+id/book_rating"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="4" />
 
             <ImageView
                 android:id="@+id/book_percentage_background"

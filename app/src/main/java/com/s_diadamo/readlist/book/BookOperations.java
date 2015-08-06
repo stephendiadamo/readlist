@@ -21,6 +21,7 @@ public class BookOperations {
             DatabaseHelper.BOOK_COMPLETE,
             DatabaseHelper.BOOK_COMPLETION_DATE,
             DatabaseHelper.BOOK_COVER_PICTURE_URL,
+            DatabaseHelper.BOOK_RATING,
             DatabaseHelper.IS_DELETED
     };
     private final DatabaseHelper dbHelper;
@@ -43,6 +44,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
+        values.put(DatabaseHelper.BOOK_RATING, book.getRating());
         values.put(DatabaseHelper.IS_DELETED, book.isDeleted());
 
         long id = db.insert(DatabaseHelper.TABLE_BOOKS, null, values);
@@ -116,6 +118,7 @@ public class BookOperations {
         values.put(DatabaseHelper.BOOK_COMPLETE, book.isComplete());
         values.put(DatabaseHelper.BOOK_COMPLETION_DATE, book.getCompletionDate());
         values.put(DatabaseHelper.BOOK_COVER_PICTURE_URL, book.getCoverPictureUrl());
+        values.put(DatabaseHelper.BOOK_RATING, book.getRating());
         values.put(DatabaseHelper.IS_DELETED, book.isDeleted());
 
         db.update(DatabaseHelper.TABLE_BOOKS, values, DatabaseHelper.KEY_ID + "=?",
@@ -150,6 +153,7 @@ public class BookOperations {
                 cursor.getInt(7),
                 cursor.getString(8),
                 cursor.getString(9),
-                cursor.getInt(10));
+                cursor.getDouble(10),
+                cursor.getInt(11));
     }
 }

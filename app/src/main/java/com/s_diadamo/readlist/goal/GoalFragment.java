@@ -24,7 +24,6 @@ import android.widget.ListView;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
-import com.s_diadamo.readlist.sync.SyncGoalData;
 
 import java.util.ArrayList;
 
@@ -96,7 +95,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.menu_goal_actions, menu);
+        inflater.inflate(R.menu.menu_general_delete, menu);
         try {
             ListView selectedListView = (ListView) v;
             selectedListViewAdapter = (GoalAdapter) selectedListView.getAdapter();
@@ -108,7 +107,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
-            case R.id.delete_goal:
+            case R.id.delete:
                 if (selectedListViewAdapter != null) {
                     Goal goal = selectedListViewAdapter.getItem(info.position);
                     if (Utils.checkUserIsLoggedIn(context)) {

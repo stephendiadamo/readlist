@@ -1,6 +1,5 @@
 package com.s_diadamo.readlist.book;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.parse.ParseAnalytics;
@@ -76,7 +76,7 @@ class BookAdapter extends BaseAdapter {
             }
 
             if (hideShelved) {
-                if (books.get(i).getShelfId() != Shelf.DEFAULT_SHELF_ID) {
+                if (books.size() > 0 && books.get(i).getShelfId() != Shelf.DEFAULT_SHELF_ID) {
                     books.remove(i);
                     i--;
                 }
@@ -122,6 +122,7 @@ class BookAdapter extends BaseAdapter {
             bookHolder.infoContainer = (LinearLayout) row.findViewById(R.id.book_info_container);
             bookHolder.pageInfoContainer = (LinearLayout) row.findViewById(R.id.book_page_detail_container);
             bookHolder.completeInfoContainer = (LinearLayout) row.findViewById(R.id.book_complete_container);
+            bookHolder.rating = (RatingBar) row.findViewById(R.id.book_rating);
 
             bookHolder.deleteBook = (ImageButton) row.findViewById(R.id.book_delete_book);
             bookHolder.editBook = (ImageButton) row.findViewById(R.id.book_edit_book);
@@ -200,7 +201,7 @@ class BookAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-                    unlendBook(book);
+                    unLendBook(book);
                 }
             });
         } else {
@@ -254,7 +255,7 @@ class BookAdapter extends BaseAdapter {
                         if (id == R.id.comment) {
                             Utils.showToast(context, "Comment");
                         } else if (id == R.id.rate) {
-                            Utils.showToast(context, "Rate");
+                            showRatingDialog(book);
                         }
                         return true;
                     }
@@ -264,7 +265,14 @@ class BookAdapter extends BaseAdapter {
             }
         });
 
+        if (book.getRating() == -1) {
+            bookHolder.rating.setVisibility(View.GONE);
+        } else {
+            bookHolder.rating.setRating((float) book.getRating());
+        }
+
         bookHolder.infoContainer.setBackground(book.getColorAsDrawable());
+
         return row;
     }
 
@@ -330,7 +338,7 @@ class BookAdapter extends BaseAdapter {
         }
     }
 
-    private void unlendBook(Book book) {
+    private void unLendBook(Book book) {
         ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
         final LentBook lentBook = book.getLentBook(context);
         new AlertDialog.Builder(context)
@@ -369,6 +377,32 @@ class BookAdapter extends BaseAdapter {
         new BookMenuActions(context, bookOperations, this).setCurrentPage(book);
     }
 
+
+    private void showRatingDialog(final Book book) {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        final View rateBookDialog = inflater.inflate(R.layout.dialog_rate_book, null);
+        final RatingBar ratingBar = (RatingBar) rateBookDialog.findViewById(R.id.book_rating_bar);
+
+        ratingBar.setRating((float) book.getRating());
+        alertDialog.setView(rateBookDialog);
+        alertDialog.setTitle(R.string.add_rating);
+        alertDialog
+                .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        book.setRating(ratingBar.getRating());
+                        bookOperations.updateBook(book);
+                        if (Utils.checkUserIsLoggedIn(context)) {
+                            new SyncData(context).update(book);
+                        }
+                        notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
     static class BookHolder {
         ImageView bookCover;
         ImageView bookLentIcon;
@@ -381,6 +415,7 @@ class BookAdapter extends BaseAdapter {
         LinearLayout infoContainer;
         LinearLayout pageInfoContainer;
         LinearLayout completeInfoContainer;
+        RatingBar rating;
 
         ImageButton deleteBook;
         ImageButton editBook;

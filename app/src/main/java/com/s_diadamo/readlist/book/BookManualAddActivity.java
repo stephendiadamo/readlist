@@ -124,9 +124,9 @@ public class BookManualAddActivity extends AppCompatActivity {
             bookAuthor = bookAuthor.isEmpty() ? "" : bookAuthor;
             Book book;
             if (fileUri != null) {
-                book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", fileUri.getPath());
+                book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), shelf.getColour(), 0, "", fileUri.getPath());
             } else {
-                book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), 0, shelf.getColour(), 0, "", "");
+                book = new Book(bookTitle, bookAuthor, shelf.getId(), Utils.getCurrentDate(), Integer.parseInt(pages), shelf.getColour(), 0, "", "");
             }
 
             new BookOperations(this).addBook(book);

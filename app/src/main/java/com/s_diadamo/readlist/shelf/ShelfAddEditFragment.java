@@ -140,7 +140,7 @@ public class ShelfAddEditFragment extends Fragment {
         Button moreColours = (Button) rootView.findViewById(R.id.edit_shelf_more_colours);
         moreColours.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 ColorPickerDialogBuilder
                         .with(rootView.getContext())
                         .setTitle("More Colours")

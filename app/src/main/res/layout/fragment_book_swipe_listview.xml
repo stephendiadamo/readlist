@@ -8,6 +8,7 @@
     android:divider="#ccc"
     android:dividerHeight="1dp"
     android:footerDividersEnabled="false"
+    swipe:swipeActionRight="dismiss"
     swipe:swipeBackView="@+id/back"
     swipe:swipeCloseAllItemsWhenMoveList="true"
     swipe:swipeFrontView="@+id/front"

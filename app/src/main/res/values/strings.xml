@@ -96,6 +96,9 @@
     <string name="comment">Comment</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="add_rating">Add Rating</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_comment">Add Comment</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
