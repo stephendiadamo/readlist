@@ -271,6 +271,7 @@ class BookAdapter extends BaseAdapter {
         if (book.getRating() == -1) {
             bookHolder.rating.setVisibility(View.GONE);
         } else {
+            bookHolder.rating.setVisibility(View.VISIBLE);
             bookHolder.rating.setRating((float) book.getRating());
         }
 
@@ -310,6 +311,7 @@ class BookAdapter extends BaseAdapter {
                         }
                         books.remove(book);
                         notifyDataSetChanged();
+
                     }
                 })
                 .setNegativeButton("No", null)

@@ -85,6 +85,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
             @Override
             public void onListChanged() {
+                bookListView.closeOpenedItems();
             }
 
             @Override
