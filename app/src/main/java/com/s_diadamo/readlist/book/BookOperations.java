@@ -128,6 +128,7 @@ public class BookOperations {
 
     public void deleteBook(Book book) {
         deleteAssociatedLentBooks(book);
+        deleteAssociatedComments(book);
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_BOOKS, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
@@ -139,6 +140,12 @@ public class BookOperations {
         db.delete(DatabaseHelper.TABLE_LENT_BOOKS, DatabaseHelper.LENT_BOOK_BOOK_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
         db.close();
+    }
+
+    private void deleteAssociatedComments(Book book) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_COMMENTS, DatabaseHelper.COMMENT_BOOK_ID + "=?",
+                new String[]{String.valueOf(book.getId())});
     }
 
     private Book parseBook(Cursor cursor) {
