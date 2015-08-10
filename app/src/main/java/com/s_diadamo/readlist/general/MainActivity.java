@@ -17,7 +17,9 @@ import android.support.v4.widget.DrawerLayout;
 
 import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookFragment;
+import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.goal.GoalFragment;
 import com.s_diadamo.readlist.lazylist.ImageLoader;
 import com.s_diadamo.readlist.lent.LentFragment;
@@ -89,6 +91,16 @@ public class MainActivity extends AppCompatActivity
                     pageUpdateOperations.deletePageUpdate(p);
                 }
             }
+
+            BookOperations bookOperations = new BookOperations(this);
+            ArrayList<Book> books = bookOperations.getAllBooks();
+            for (Book b : books) {
+                if (b.getCurrentPage() < 0) {
+                    b.setCurrentPage(0);
+                    bookOperations.updateBook(b);
+                }
+            }
+
             editor.putBoolean(FIXED_BAD_PAGES, true);
         }
 
