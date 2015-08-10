@@ -25,13 +25,19 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.settings.SettingsFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.updates.PageUpdate;
+import com.s_diadamo.readlist.updates.PageUpdateOperations;
 import com.s_diadamo.readlist.updates.StatisticsFragment;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
+    private static final String FIXED_BAD_PAGES = "FIXED_BAD_PAGES";
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
     public static String PACKAGE_NAME;
@@ -73,6 +79,17 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             editor.putBoolean(FIXED_REMEMBER_ME_STRING, true);
+        }
+
+        if (!prefs.getBoolean(FIXED_BAD_PAGES, false)) {
+            PageUpdateOperations pageUpdateOperations = new PageUpdateOperations(this);
+            ArrayList<PageUpdate> pageUpdates = pageUpdateOperations.getAllPageUpdates();
+            for (PageUpdate p : pageUpdates) {
+                if (p.getPages() < -1000) {
+                    pageUpdateOperations.deletePageUpdate(p);
+                }
+            }
+            editor.putBoolean(FIXED_BAD_PAGES, true);
         }
 
         try {
