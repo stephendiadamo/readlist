@@ -75,7 +75,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             BOOK_COMPLETE + " INTEGER, " +
             BOOK_COMPLETION_DATE + " TEXT, " +
             BOOK_COVER_PICTURE_URL + " TEXT, " +
-            BOOK_RATING + " REAL, " +
+            BOOK_RATING + " REAL DEFAULT -1, " +
             IS_DELETED + " INTEGER" +
             ")";
 

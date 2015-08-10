@@ -107,6 +107,10 @@ public class GoalAddFragment extends Fragment {
         switch (whichDate) {
             case START_DATE:
                 startDate = date;
+                calendar.set(Calendar.HOUR_OF_DAY, calendar.getMinimum(Calendar.HOUR_OF_DAY));
+                calendar.set(Calendar.MINUTE, calendar.getMinimum(Calendar.MINUTE));
+                calendar.set(Calendar.SECOND, calendar.getMinimum(Calendar.SECOND));
+                calendar.set(Calendar.MILLISECOND, calendar.getMinimum(Calendar.MILLISECOND));
                 startDateLimit = calendar.getTime();
                 break;
             case END_DATE:

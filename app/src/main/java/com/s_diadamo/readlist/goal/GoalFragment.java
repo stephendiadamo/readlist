@@ -71,7 +71,11 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onPrepareOptionsMenu(menu);
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         hideCompletedGoals = menu.findItem(R.id.hide_completed_goals);
-        hideCompletedGoals.setChecked(prefs.getBoolean(HIDE_COMPLETED_GOALS, false));
+
+        // Not sure why this would ever be null...
+        if (hideCompletedGoals != null) {
+            hideCompletedGoals.setChecked(prefs.getBoolean(HIDE_COMPLETED_GOALS, false));
+        }
         if (doneLoading) {
             updateVisibleGoals();
         }
