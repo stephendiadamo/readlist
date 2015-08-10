@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
             PageUpdateOperations pageUpdateOperations = new PageUpdateOperations(this);
             ArrayList<PageUpdate> pageUpdates = pageUpdateOperations.getAllPageUpdates();
             for (PageUpdate p : pageUpdates) {
-                if (p.getPages() < -1000) {
+                if (Math.abs(p.getPages()) > 10000) {
                     pageUpdateOperations.deletePageUpdate(p);
                 }
             }
