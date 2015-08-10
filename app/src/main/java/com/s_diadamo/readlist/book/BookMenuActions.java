@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -60,21 +61,28 @@ class BookMenuActions {
     }
 
     public void searchBook(final FragmentManager manager) {
-        final Dialog searchBookDialog = new Dialog(context);
-        searchBookDialog.setContentView(R.layout.dialog_search_book);
-        searchBookDialog.setTitle("Search");
+        final AlertDialog.Builder searchBookDialog = new AlertDialog.Builder(context);
+        final View searchDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_search_book, null);
 
-        final Button searchBookButton = (Button) searchBookDialog.findViewById(R.id.search_book);
-        searchBookButton.setOnClickListener(new View.OnClickListener() {
+        searchBookDialog.setTitle("Search");
+        searchBookDialog.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                String bookTitle = ((EditText) searchBookDialog.findViewById(R.id.book_search_title)).getText().toString();
-                String bookAuthor = ((EditText) searchBookDialog.findViewById(R.id.book_search_author)).getText().toString();
+            public void onClick(DialogInterface dialog, int which) {
+                String bookTitle = ((EditText) searchDialogView.findViewById(R.id.book_search_title)).getText().toString();
+                String bookAuthor = ((EditText) searchDialogView.findViewById(R.id.book_search_author)).getText().toString();
                 Search search = new Search(context, manager, shelf);
                 search.searchWithAuthorAndTitle(bookAuthor, bookTitle);
-                searchBookDialog.dismiss();
+                dialog.dismiss();
             }
         });
+        searchBookDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        searchBookDialog.setView(searchDialogView);
         searchBookDialog.show();
     }
 

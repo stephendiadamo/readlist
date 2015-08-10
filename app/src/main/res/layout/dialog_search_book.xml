@@ -28,16 +28,4 @@
         android:textColor="#000"
         android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/search_book"
-        style="?android:buttonBarButtonStyle"
-        android:background="#ccc"
-        android:padding="15dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/book_search_author"
-        android:layout_centerHorizontal="true"
-        android:text="@string/search"
-        android:textColor="#000" />
-
 </RelativeLayout>
