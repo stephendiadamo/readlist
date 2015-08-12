@@ -160,7 +160,13 @@ public class ShelfAddEditFragment extends Fragment {
                                     Utils.showToast(v.getContext(), "Please wait and while shelf data is loading and try again");
                                     return;
                                 }
-                                shelf.setColour(userSelectedColour.getColor());
+                                if (userSelectedColour != null) {
+                                    shelf.setColour(userSelectedColour.getColor());
+                                } else {
+                                    userSelectedColour = new ColorDrawable(Shelf.DEFAULT_COLOR);
+                                    shelf.setColour(userSelectedColour.getColor());
+                                }
+
                                 selectors[currentSelectedColour].setVisibility(View.GONE);
                                 customColourCheck.setVisibility(View.VISIBLE);
                                 customColourWrapper.setVisibility(View.VISIBLE);
