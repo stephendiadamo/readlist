@@ -36,7 +36,6 @@ import com.s_diadamo.readlist.shelf.ShelfLoader;
 
 import java.util.ArrayList;
 
-
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
     private SwipeListView bookListView;
@@ -234,7 +233,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 bookMenuActions.deleteShelf(shelf, ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                         findFragmentById(R.id.navigation_drawer)), getActivity().getSupportFragmentManager());
             } else {
-                Utils.showToast(context, "You cannot delete this shelf");
+                Utils.showToast(context, getString(R.string.you_cannot_delete_this_shelf));
             }
             return true;
         }
@@ -245,7 +244,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private void launchEditShelfFragment() {
         Bundle bundle = new Bundle();
         bundle.putString(Shelf.SHELF_ID, String.valueOf(shelf.getId()));
-        bundle.putString(ShelfAddEditFragment.EDIT_MODE, "yes");
+        bundle.putString(ShelfAddEditFragment.EDIT_MODE, getString(R.string.yes));
 
         Fragment fragment = new ShelfAddEditFragment();
         fragment.setArguments(bundle);
@@ -315,7 +314,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 search.searchWithISBN(bookISBN);
             }
         } else {
-            Utils.showToast(context, "Scan Failed");
+            Utils.showToast(context, getString(R.string.scan_failed));
         }
     }
 

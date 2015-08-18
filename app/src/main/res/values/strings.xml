@@ -97,6 +97,18 @@
     <string name="edit_comment">Edit Comment</string>
     <string name="add_books">Add Books</string>
     <string name="add_comment">Add Comment</string>
+    <string name="no_results_found">No Results Found</string>
+    <string name="please_try_again_different_parameters">Please try again with different search parameters</string>
+    <string name="search_results">Search Results</string>
+    <string name="add_selected">Add Selected</string>
+    <string name="unlend_confirmation">Unlend Confirmation</string>
+    <string name="retrieve_book_from">Retrieve book from</string>
+    <string name="you_cannot_delete_this_shelf">You cannot delete this shelf</string>
+    <string name="scan_failed">Scan Failed</string>
+    <string name="camera_is_not_supported">Camera is not supported on this device</string>
+    <string name="add_book">Add Book</string>
+    <string name="please_add_a_title">Please add a title</string>
+    <string name="this_book_has_already_been_lent_to">This book has already been lent to</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

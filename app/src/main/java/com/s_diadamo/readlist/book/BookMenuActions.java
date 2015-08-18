@@ -61,7 +61,7 @@ class BookMenuActions {
         final AlertDialog.Builder searchBookDialog = new AlertDialog.Builder(context);
         final View searchDialogView = LayoutInflater.from(context).inflate(R.layout.dialog_search_book, null);
 
-        searchBookDialog.setTitle("Search");
+        searchBookDialog.setTitle(R.string.search);
         searchBookDialog.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -86,10 +86,10 @@ class BookMenuActions {
     public void deleteShelf(final Shelf shelf, final NavigationDrawerFragment shelfDrawer, final FragmentManager manager) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
-        builder.setTitle("Delete Shelf");
-        builder.setMessage("Delete " + shelf.getName() + "?");
+        builder.setTitle(R.string.delete_shelf);
+        builder.setMessage(R.string.delete + " " + shelf.getName() + "?");
 
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 if (Utils.checkUserIsLoggedIn(context)) {
                     new SyncData(context).delete(shelf);
@@ -107,7 +107,7 @@ class BookMenuActions {
             }
         });
 
-        builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -132,7 +132,7 @@ class BookMenuActions {
             lentBookDialog.show();
 
         } else {
-            Utils.showToast(context, "This book has already been lent to " + lentBook.getLentTo());
+            Utils.showToast(context, R.string.this_book_has_already_been_lent_to + " " + lentBook.getLentTo());
         }
     }
 }
