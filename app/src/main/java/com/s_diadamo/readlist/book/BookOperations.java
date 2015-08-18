@@ -105,6 +105,26 @@ public class BookOperations {
         return books;
     }
 
+    public ArrayList<Book> getAllValidBooks() {
+        ArrayList<Book> books = new ArrayList<>();
+        db = dbHelper.getReadableDatabase();
+        String query = String.format("SELECT * FROM %s WHERE %s=0",
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.IS_DELETED);
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Book book = parseBook(cursor);
+                books.add(book);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        cursor.close();
+
+        db.close();
+        return books;
+    }
+
     public void updateBook(Book book) {
         db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();

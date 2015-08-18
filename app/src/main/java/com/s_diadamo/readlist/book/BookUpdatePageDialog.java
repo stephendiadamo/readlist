@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.book;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,7 @@ import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
-class BookUpdatePageDialog extends AlertDialog {
+class BookUpdatePageDialog extends AlertDialog.Builder {
     public BookUpdatePageDialog(final Context context, final Book book, final BookAdapter bookAdapter, final BookOperations bookOperations) {
         super(context);
 
@@ -31,7 +32,6 @@ class BookUpdatePageDialog extends AlertDialog {
 
         Button addTwenty = (Button) content.findViewById(R.id.set_page_plus_twenty);
         Button addFifty = (Button) content.findViewById(R.id.set_page_plus_fifty);
-        Button done = (Button) content.findViewById(R.id.set_page_done);
 
         addTwenty.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,10 +46,9 @@ class BookUpdatePageDialog extends AlertDialog {
                 pagePicker.setValue(pagePicker.getValue() + 50);
             }
         });
-
-        done.setOnClickListener(new View.OnClickListener() {
+        setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(DialogInterface dialog, int which) {
                 int pagesRead = pagePicker.getValue() - book.getCurrentPage();
 
                 book.setCurrentPage(pagePicker.getValue());
@@ -62,11 +61,9 @@ class BookUpdatePageDialog extends AlertDialog {
                     new SyncData(context).add(pageUpdate);
                     new SyncData(context).update(book);
                 }
-
-                dismiss();
             }
         });
-
+        setNegativeButton(R.string.cancel, null);
         setView(content);
     }
 }

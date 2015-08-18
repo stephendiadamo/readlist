@@ -17,7 +17,7 @@ import com.s_diadamo.readlist.book.Book;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-class SearchAdapter extends ArrayAdapter<Book> {
+public class SearchAdapter extends ArrayAdapter<Book> {
 
     private final int layoutResourceID;
     private final ArrayList<Book> results;

@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.shelf;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -10,29 +11,37 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.OnColorSelectedListener;
 import com.flask.colorpicker.builder.ColorPickerClickListener;
 import com.flask.colorpicker.builder.ColorPickerDialogBuilder;
+import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookFragment;
+import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.search.SearchAdapter;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
-import com.s_diadamo.readlist.sync.SyncShelfData;
+
+import java.util.ArrayList;
 
 public class ShelfAddEditFragment extends Fragment {
 
@@ -185,6 +194,65 @@ public class ShelfAddEditFragment extends Fragment {
             }
         });
 
+        Button addBooks = (Button) rootView.findViewById(R.id.edit_shelf_add_books);
+        addBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BookOperations bookOperations = new BookOperations(context);
+
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Select Books");
+                final ListView bookListView = new ListView(context);
+                bookListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+
+                final ArrayList<Book> books = bookOperations.getAllValidBooks();
+
+                //TODO: Refactor for simple adapter instead of misusing search adapter
+                final SearchAdapter searchAdapter = new SearchAdapter(context, R.layout.row_search_result, books);
+                bookListView.setAdapter(searchAdapter);
+                bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (searchAdapter.selectedBooks.contains(position)) {
+                            searchAdapter.selectedBooks.remove(position);
+                            view.setBackground(new ColorDrawable(Color.TRANSPARENT));
+                        } else {
+                            searchAdapter.selectedBooks.add(position);
+                            view.setBackground(new ColorDrawable(Color.LTGRAY));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("Add selected", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        boolean loggedIn = Utils.checkUserIsLoggedIn(context);
+                        SyncData syncData = new SyncData(context);
+                        SparseBooleanArray booleanArray = bookListView.getCheckedItemPositions();
+                        Book book;
+                        int added = 0;
+                        for (int i = 0; i < books.size(); i++) {
+                            if (booleanArray.get(i)) {
+                                book = books.get(i);
+                                book.setShelfId(shelf.getId());
+                                bookOperations.updateBook(book);
+                                if (loggedIn) {
+                                    syncData.update(book);
+                                }
+                                added++;
+                            }
+                        }
+                        Utils.showToast(context, "Added " + added + " books");
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", null);
+                builder.setView(bookListView);
+                builder.show();
+            }
+        });
+
         ((MainActivity) getActivity()).closeDrawer();
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -196,8 +264,15 @@ public class ShelfAddEditFragment extends Fragment {
                 ab.setTitle("Add Shelf");
             }
         }
-
         return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        if (!isEditMode && shelf != null && shelf.getName() == null) {
+            shelfOperations.deleteShelf(shelf);
+        }
+        super.onStop();
     }
 
     private void setUpShelf() {
@@ -212,6 +287,7 @@ public class ShelfAddEditFragment extends Fragment {
             shelf = shelfOperations.getShelf(shelfId);
         } else {
             shelf = new Shelf();
+            shelfOperations.addShelf(shelf);
         }
     }
 
@@ -266,7 +342,7 @@ public class ShelfAddEditFragment extends Fragment {
                 new SyncData(context).update(shelf);
             }
         } else {
-            shelfOperations.addShelf(shelf);
+            shelfOperations.updateShelf(shelf);
             ((NavigationDrawerFragment) getActivity().getSupportFragmentManager().
                     findFragmentById(R.id.navigation_drawer)).addShelf(shelf);
             if (Utils.checkUserIsLoggedIn(rootView.getContext())) {
