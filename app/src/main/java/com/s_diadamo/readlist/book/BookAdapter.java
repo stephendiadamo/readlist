@@ -294,9 +294,9 @@ class BookAdapter extends BaseAdapter {
 
     private void deleteBook(final Book book) {
         new AlertDialog.Builder(context)
-                .setMessage("Delete \"" + book.getTitle() + "\"?")
+                .setMessage(R.string.delete + "\"" + book.getTitle() + "\"?")
                 .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (Utils.checkUserIsLoggedIn(context)) {
                             new SyncData(context).delete(book);
@@ -314,7 +314,7 @@ class BookAdapter extends BaseAdapter {
 
                     }
                 })
-                .setNegativeButton("No", null)
+                .setNegativeButton(R.string.no, null)
                 .show();
     }
 
@@ -360,8 +360,8 @@ class BookAdapter extends BaseAdapter {
         ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
         final LentBook lentBook = book.getLentBook(context);
         new AlertDialog.Builder(context)
-                .setTitle("Unlend Confirmation")
-                .setMessage("Retrieve book from " + lentBook.getLentTo() + "?")
+                .setTitle(R.string.unlend_confirmation)
+                .setMessage(R.string.retrieve_book_from + " " + lentBook.getLentTo() + "?")
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

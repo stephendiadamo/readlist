@@ -54,7 +54,7 @@ public class BookManualAddActivity extends AppCompatActivity {
                 if (context.getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
                     captureImage();
                 } else {
-                    Toast.makeText(context, "Camera is not supported on this device.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.camera_is_not_supported, Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -64,7 +64,7 @@ public class BookManualAddActivity extends AppCompatActivity {
 
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
         actionBar.show();
-        actionBar.setTitle("Add Book");
+        actionBar.setTitle(R.string.add_book);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class BookManualAddActivity extends AppCompatActivity {
         String pages = bookPagesEditText.getText().toString();
 
         if (bookTitle.isEmpty()) {
-            Toast.makeText(this, "Please add a title", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.please_add_a_title, Toast.LENGTH_LONG).show();
         } else {
             pages = pages.isEmpty() ? "0" : pages;
             bookAuthor = bookAuthor.isEmpty() ? "" : bookAuthor;

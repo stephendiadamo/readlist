@@ -26,17 +26,17 @@ class SearchResultDialog extends AlertDialog.Builder {
         super(context);
 
         if (books.isEmpty()) {
-            setTitle("No results found");
-            setMessage("Please try again with different search parameters.");
+            setTitle(R.string.no_results_found);
+            setMessage(R.string.please_try_again_different_parameters);
 
-            setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Utils.launchBookFragment(manager);
                 }
             });
         } else {
-            setTitle("Search Results");
+            setTitle(R.string.search_results);
             final ListView bookListView = new ListView(context);
             bookListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
@@ -56,7 +56,7 @@ class SearchResultDialog extends AlertDialog.Builder {
                 }
             });
 
-            setPositiveButton("Add selected", new DialogInterface.OnClickListener() {
+            setPositiveButton(R.string.add_selected, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     BookOperations bookOperations = new BookOperations(context);
@@ -78,7 +78,7 @@ class SearchResultDialog extends AlertDialog.Builder {
                 }
             });
 
-            setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.cancel();

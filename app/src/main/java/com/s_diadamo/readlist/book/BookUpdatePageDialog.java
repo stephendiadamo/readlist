@@ -22,7 +22,7 @@ class BookUpdatePageDialog extends AlertDialog.Builder {
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View content = layoutInflater.inflate(R.layout.dialog_set_book_current_page, null);
 
-        setTitle("Update Page");
+        setTitle(R.string.update_page);
 
         final NumberPicker pagePicker = (NumberPicker) content.findViewById(R.id.set_page_picker);
         pagePicker.setMinValue(0);
