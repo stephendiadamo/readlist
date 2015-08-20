@@ -8,6 +8,8 @@ import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.shelf.Shelf;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 
 class SearchResultJSONParser {
