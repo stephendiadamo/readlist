@@ -166,6 +166,7 @@ public class BookOperations {
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_COMMENTS, DatabaseHelper.COMMENT_BOOK_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
+        db.close();
     }
 
     private Book parseBook(Cursor cursor) {
