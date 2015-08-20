@@ -19,10 +19,10 @@ public class ShelfSpinnerAdapter extends ArrayAdapter<Shelf> {
     private final int layoutResourceID;
     private final ArrayList<Shelf> shelves;
 
-    public ShelfSpinnerAdapter(Context context, int layoutResourceID, int textViewId, ArrayList<Shelf> shelves) {
-        super(context, layoutResourceID, textViewId, shelves);
+    public ShelfSpinnerAdapter(Context context, ArrayList<Shelf> shelves) {
+        super(context, R.layout.row_sub_shelf, R.id.sub_shelf_label, shelves);
         this.context = context;
-        this.layoutResourceID = layoutResourceID;
+        this.layoutResourceID = R.layout.row_sub_shelf;
         this.shelves = shelves;
     }
 

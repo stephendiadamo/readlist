@@ -2,7 +2,6 @@ package com.s_diadamo.readlist.book;
 
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,7 +9,6 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 
 import com.s_diadamo.readlist.R;
@@ -22,13 +20,12 @@ import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.sync.SyncData;
-import com.s_diadamo.readlist.sync.SyncShelfData;
 
 class BookMenuActions {
 
     private final Context context;
     private BookOperations bookOperations;
-    private BookAdapter bookAdapter;
+    private final BookAdapter bookAdapter;
     private Shelf shelf;
 
     public BookMenuActions(Context context, BookOperations bookOperations, BookAdapter bookAdapter, Shelf shelf) {

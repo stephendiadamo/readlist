@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SyncCommentData extends SyncData {
+class SyncCommentData extends SyncData {
 
     private final CommentOperations commentOperations;
 
@@ -96,7 +96,7 @@ public class SyncCommentData extends SyncData {
         ParseObject.saveAllInBackground(commentsToSend);
     }
 
-    protected void updateParseComment(final Comment comment) {
+    void updateParseComment(final Comment comment) {
         queryForComment(comment, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -109,7 +109,7 @@ public class SyncCommentData extends SyncData {
         });
     }
 
-    protected void deleteParseComment(Comment comment) {
+    void deleteParseComment(Comment comment) {
         queryForComment(comment, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -143,7 +143,7 @@ public class SyncCommentData extends SyncData {
                 parseComment.getString(DatabaseHelper.COMMENT_DATE_ADDED));
     }
 
-    protected ParseObject toParseComment(Comment comment) {
+    ParseObject toParseComment(Comment comment) {
         ParseObject parseComment = new ParseObject(TYPE_COMMENT);
 
         parseComment.put(Utils.USER_NAME, userName);

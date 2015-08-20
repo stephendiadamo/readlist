@@ -10,16 +10,13 @@ import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 class SearchResultDialog extends AlertDialog.Builder {
     public SearchResultDialog(final Context context, final ArrayList<Book> books, final FragmentManager manager) {
@@ -40,7 +37,7 @@ class SearchResultDialog extends AlertDialog.Builder {
             final ListView bookListView = new ListView(context);
             bookListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-            final SearchAdapter searchAdapter = new SearchAdapter(context, R.layout.row_search_result, books);
+            final SearchAdapter searchAdapter = new SearchAdapter(context, books);
 
             bookListView.setAdapter(searchAdapter);
             bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

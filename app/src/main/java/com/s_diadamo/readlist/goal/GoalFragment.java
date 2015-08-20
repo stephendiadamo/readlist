@@ -158,8 +158,8 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             }
         }
 
-        pageGoalAdapter = new GoalAdapter(context, R.layout.row_goal_element, pageGoals);
-        bookGoalAdapter = new GoalAdapter(context, R.layout.row_goal_element, bookGoals);
+        pageGoalAdapter = new GoalAdapter(context, pageGoals);
+        bookGoalAdapter = new GoalAdapter(context, bookGoals);
 
         if (pageGoals.isEmpty()) {
             rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);

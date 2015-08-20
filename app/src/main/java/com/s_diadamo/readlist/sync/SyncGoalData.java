@@ -15,15 +15,15 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SyncGoalData extends SyncData {
+class SyncGoalData extends SyncData {
     private final GoalOperations goalOperations;
 
-    protected SyncGoalData(Context context) {
+    SyncGoalData(Context context) {
         super(context, true);
         goalOperations = new GoalOperations(context);
     }
 
-    protected SyncGoalData(Context context, boolean showSpinner) {
+    SyncGoalData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         goalOperations = new GoalOperations(context);
     }
@@ -92,7 +92,7 @@ public class SyncGoalData extends SyncData {
         ParseObject.saveAllInBackground(goalsToSend);
     }
 
-    protected void updateParseGoal(final Goal goal) {
+    void updateParseGoal(final Goal goal) {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
@@ -105,7 +105,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    protected void deleteParseGoal(Goal goal) {
+    void deleteParseGoal(Goal goal) {
         queryForGoal(goal, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> goalList, ParseException e) {
@@ -117,7 +117,7 @@ public class SyncGoalData extends SyncData {
         });
     }
 
-    protected ParseObject toParseGoal(Goal goal) {
+    ParseObject toParseGoal(Goal goal) {
         ParseObject parseGoal = new ParseObject(TYPE_GOAL);
 
         parseGoal.put(Utils.USER_NAME, userName);

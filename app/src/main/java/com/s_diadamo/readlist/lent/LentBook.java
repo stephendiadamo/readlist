@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 public class LentBook extends Book {
-    private int bookId;
+    private final int bookId;
     private String lentTo;
     private String dateLent;
     private boolean isDeleted = false;

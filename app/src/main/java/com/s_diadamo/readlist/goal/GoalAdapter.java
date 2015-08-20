@@ -21,10 +21,10 @@ class GoalAdapter extends ArrayAdapter<Goal> {
     private final ArrayList<Goal> goals;
 
 
-    public GoalAdapter(Context context, int layoutResourceID, ArrayList<Goal> goals) {
-        super(context, layoutResourceID, goals);
+    public GoalAdapter(Context context, ArrayList<Goal> goals) {
+        super(context, R.layout.row_goal_element, goals);
         this.context = context;
-        this.layoutResourceID = layoutResourceID;
+        this.layoutResourceID = R.layout.row_goal_element;
         this.goals = goals;
     }
 

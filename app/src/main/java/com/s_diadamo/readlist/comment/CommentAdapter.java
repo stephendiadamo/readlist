@@ -18,10 +18,10 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     private final int resourceId;
     private final ArrayList<Comment> comments;
 
-    public CommentAdapter(Context context, int resourceId, ArrayList<Comment> comments) {
-        super(context, resourceId, comments);
+    public CommentAdapter(Context context, ArrayList<Comment> comments) {
+        super(context, R.layout.row_comment_element, comments);
         this.context = context;
-        this.resourceId = resourceId;
+        this.resourceId = R.layout.row_comment_element;
         this.comments = comments;
     }
 

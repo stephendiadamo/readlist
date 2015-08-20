@@ -1,7 +1,6 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 
 import com.s_diadamo.readlist.general.Utils;

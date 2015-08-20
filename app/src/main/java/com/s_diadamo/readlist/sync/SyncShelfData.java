@@ -19,20 +19,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SyncShelfData extends SyncData {
+class SyncShelfData extends SyncData {
     private final ShelfOperations shelfOperations;
 
-    protected SyncShelfData(Context context) {
+    SyncShelfData(Context context) {
         super(context, true);
         shelfOperations = new ShelfOperations(context);
     }
 
-    protected SyncShelfData(Context context, boolean showSpinner) {
+    SyncShelfData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         shelfOperations = new ShelfOperations(context);
     }
 
-    protected void syncAllShelves() {
+    void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -54,7 +54,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    protected void syncAllShelves(final AppCompatActivity activity) {
+    void syncAllShelves(final AppCompatActivity activity) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
         if (showSpinner)
@@ -119,7 +119,7 @@ public class SyncShelfData extends SyncData {
         ParseObject.saveAllInBackground(shelvesToSend);
     }
 
-    protected void updateParseShelf(final Shelf shelf) {
+    void updateParseShelf(final Shelf shelf) {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {
@@ -132,7 +132,7 @@ public class SyncShelfData extends SyncData {
         });
     }
 
-    protected void deleteParseShelf(Shelf shelf) {
+    void deleteParseShelf(Shelf shelf) {
         queryForShelf(shelf, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> shelfList, ParseException e) {

@@ -22,7 +22,7 @@ import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 
 import java.util.ArrayList;
 
-public class NavigationExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
+class NavigationExpandableListAdapter extends BaseExpandableListAdapter implements ExpandableListAdapter {
 
     private final Context context;
     private final ArrayList<Shelf> shelves;
@@ -62,7 +62,7 @@ public class NavigationExpandableListAdapter extends BaseExpandableListAdapter i
         notifyChanges();
     }
 
-    public void notifyChanges() {
+    private void notifyChanges() {
         this.notifyDataSetInvalidated();
         this.notifyDataSetChanged();
     }

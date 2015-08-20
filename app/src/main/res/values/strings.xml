@@ -8,7 +8,6 @@
     <string name="book_title">Book Title</string>
     <string name="search">Search</string>
     <string name="add_book_manually">Manually Add</string>
-    <string name="update_page">Update Page</string>
     <string name="mark_complete">Mark Complete</string>
     <string name="delete_book">Delete Book</string>
     <string name="plus_twenty">+20</string>
@@ -48,7 +47,6 @@
     <string name="end_date">End Date</string>
     <string name="hide_completed_goals">Hide Completed Goals</string>
     <string name="cover_photo_capture">Cover Photo Capture</string>
-    <string name="delete_goal">Delete Goal</string>
     <string name="dark_red">Dark Red</string>
     <string name="dark_blue">Dark Blue</string>
     <string name="more_colours">More Colours</string>
@@ -78,7 +76,6 @@
     <string name="account">Account</string>
     <string name="your_email_address">Your email address</string>
     <string name="lent_to_colon">Lent to:</string>
-    <string name="lent_to">Lent to</string>
     <string name="lent_on">Lent on:</string>
     <string name="lend_book">Lend Book</string>
     <string name="edit">Edit</string>
@@ -87,7 +84,6 @@
     <string name="lent_books">Lent Books</string>
     <string name="lend_to">Lend to</string>
     <string name="pick_date">Pick Date</string>
-    <string name="set_start_date">Set Start Date</string>
     <string name="set_start">Set Start</string>
     <string name="set_end">Set End</string>
     <string name="hide_shelved_books">Hide Shelved Books</string>
@@ -98,9 +94,9 @@
     <string name="no">No</string>
     <string name="add_rating">Add Rating</string>
     <string name="cancel">Cancel</string>
-    <string name="add_comment">Add Comment</string>
     <string name="edit_comment">Edit Comment</string>
     <string name="add_books">Add Books</string>
+    <string name="add_comment">Add Comment</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

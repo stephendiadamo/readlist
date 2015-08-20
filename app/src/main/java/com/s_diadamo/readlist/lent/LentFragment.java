@@ -103,7 +103,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
         switch (id) {
             case LentBookLoader.ID:
                 ArrayList<LentBook> lentBooks = (ArrayList<LentBook>) data;
-                lentBookAdapter = new LentBookAdapter(context, R.layout.row_lent_book_element, lentBooks);
+                lentBookAdapter = new LentBookAdapter(context, lentBooks);
                 lentBookListView.setAdapter(lentBookAdapter);
 
                 registerForContextMenu(lentBookListView);

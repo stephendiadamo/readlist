@@ -22,10 +22,10 @@ class LentBookAdapter extends ArrayAdapter<LentBook> {
     private final int layoutResourceID;
     private final ArrayList<LentBook> lentBooks;
 
-    public LentBookAdapter(Context context, int resource, ArrayList<LentBook> lentBooks) {
-        super(context, resource, lentBooks);
+    public LentBookAdapter(Context context, ArrayList<LentBook> lentBooks) {
+        super(context, R.layout.row_lent_book_element, lentBooks);
         this.context = context;
-        this.layoutResourceID = resource;
+        this.layoutResourceID = R.layout.row_lent_book_element;
         this.lentBooks = lentBooks;
     }
 

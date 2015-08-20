@@ -8,8 +8,8 @@
     <EditText
         android:id="@+id/comment_book_comment_box"
         android:layout_width="fill_parent"
-        android:hint="@string/comment"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="@string/comment" />
 
     <Button
         android:id="@+id/comment_book_add_comment"

@@ -16,20 +16,20 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SyncBookData extends SyncData {
+class SyncBookData extends SyncData {
     private final BookOperations bookOperations;
 
-    protected SyncBookData(Context context) {
+    SyncBookData(Context context) {
         super(context, true);
         bookOperations = new BookOperations(context);
     }
 
-    protected SyncBookData(Context context, boolean showSpinner) {
+    SyncBookData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         bookOperations = new BookOperations(context);
     }
 
-    protected void syncAllBooks() {
+    void syncAllBooks() {
         if (showSpinner)
             syncSpinner.addThread();
 
@@ -110,7 +110,7 @@ public class SyncBookData extends SyncData {
     }
 
 
-    protected ParseObject toParseBook(Book book) {
+    ParseObject toParseBook(Book book) {
         ParseObject parseBook = new ParseObject(TYPE_BOOK);
 
         parseBook.put(Utils.USER_NAME, userName);
@@ -129,7 +129,7 @@ public class SyncBookData extends SyncData {
         return parseBook;
     }
 
-    protected void updateParseBook(final Book book) {
+    void updateParseBook(final Book book) {
         queryForBook(book, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> bookList, ParseException e) {
@@ -142,7 +142,7 @@ public class SyncBookData extends SyncData {
         });
     }
 
-    protected void deleteParseBook(Book book) {
+    void deleteParseBook(Book book) {
         queryForBook(book, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> bookList, ParseException e) {

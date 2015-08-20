@@ -15,7 +15,7 @@ public class Comment {
     private int id;
     private int bookId;
     private String comment;
-    private String dateAdded;
+    private final String dateAdded;
     private boolean isDeleted = false;
 
     public Comment(int id, int bookId, String comment, String dateAdded, int isDeleted) {
@@ -49,10 +49,6 @@ public class Comment {
 
     public int getBookId() {
         return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
     }
 
     public String getComment() {

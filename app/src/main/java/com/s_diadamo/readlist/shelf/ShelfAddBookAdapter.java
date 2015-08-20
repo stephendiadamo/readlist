@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist.search;
+package com.s_diadamo.readlist.shelf;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,24 +10,24 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.general.MainActivity;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 
-class SearchAdapter extends ArrayAdapter<Book> {
+class ShelfAddBookAdapter extends ArrayAdapter<Book> {
 
+    private final ArrayList<Book> books;
     private final int layoutResourceID;
-    private final ArrayList<Book> results;
     private final LayoutInflater layoutInflater;
     public final HashSet<Integer> selectedBooks;
 
-    public SearchAdapter(Context context, ArrayList<Book> results) {
-        super(context, R.layout.row_search_result, results);
+    public ShelfAddBookAdapter(Context context, ArrayList<Book> books) {
+        super(context, R.layout.row_search_result, books);
         this.layoutResourceID = R.layout.row_search_result;
-        this.results = results;
+        this.books = books;
         this.layoutInflater = LayoutInflater.from(context);
         this.selectedBooks = new HashSet<>();
     }
@@ -35,27 +35,27 @@ class SearchAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
-        final ResultHolder resultHolder;
+        final SearchBookHolder searchBookHolder;
 
         if (row == null) {
             row = layoutInflater.inflate(layoutResourceID, parent, false);
-            resultHolder = new ResultHolder();
-            resultHolder.resultBookCover = (ImageView) row.findViewById(R.id.search_book_cover);
-            resultHolder.resultBookTitle = (TextView) row.findViewById(R.id.search_book_title);
-            resultHolder.resultBookAuthor = (TextView) row.findViewById(R.id.search_book_author);
-            row.setTag(resultHolder);
+            searchBookHolder = new SearchBookHolder();
+            searchBookHolder.resultBookCover = (ImageView) row.findViewById(R.id.search_book_cover);
+            searchBookHolder.resultBookTitle = (TextView) row.findViewById(R.id.search_book_title);
+            searchBookHolder.resultBookAuthor = (TextView) row.findViewById(R.id.search_book_author);
+            row.setTag(searchBookHolder);
         } else {
-            resultHolder = (ResultHolder) row.getTag();
+            searchBookHolder = (SearchBookHolder) row.getTag();
         }
 
-        Book result = results.get(position);
+        Book result = books.get(position);
 
         if (!result.getCoverPictureUrl().isEmpty()) {
-            MainActivity.imageLoader.DisplayImage(result.getCoverPictureUrl(), resultHolder.resultBookCover);
+            MainActivity.imageLoader.DisplayImage(result.getCoverPictureUrl(), searchBookHolder.resultBookCover);
         }
 
-        resultHolder.resultBookTitle.setText(result.getTitle());
-        resultHolder.resultBookAuthor.setText(result.getAuthor());
+        searchBookHolder.resultBookTitle.setText(result.getTitle());
+        searchBookHolder.resultBookAuthor.setText(result.getAuthor());
 
         if (selectedBooks.contains(position)) {
             row.setBackground(new ColorDrawable(Color.LTGRAY));
@@ -66,7 +66,7 @@ class SearchAdapter extends ArrayAdapter<Book> {
         return row;
     }
 
-    static class ResultHolder {
+    static class SearchBookHolder {
         ImageView resultBookCover;
         TextView resultBookTitle;
         TextView resultBookAuthor;

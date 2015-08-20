@@ -253,7 +253,8 @@
 
         <EditText
             android:id="@+id/edit_shelf_shelf_name"
-            style="@style/ShelfName" />
+            style="@style/ShelfName"
+            android:hint="@string/shelf_name" />
 
         <Button
             android:id="@+id/edit_shelf_add_books"

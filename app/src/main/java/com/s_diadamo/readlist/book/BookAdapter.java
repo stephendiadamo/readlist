@@ -44,8 +44,8 @@ class BookAdapter extends BaseAdapter {
     private final ArrayList<Book> books;
     private boolean hideComplete;
     private boolean hideShelved;
-    private BookOperations bookOperations;
-    private FragmentManager fragmentManager;
+    private final BookOperations bookOperations;
+    private final FragmentManager fragmentManager;
 
     private static final String BOOK_ID = "BOOK_ID";
     private static final String EDIT_BOOK = "EDIT_BOOK";

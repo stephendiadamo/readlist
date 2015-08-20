@@ -7,7 +7,6 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class SyncLentBookData extends SyncData {
+class SyncLentBookData extends SyncData {
     private final LentBookOperations lentBookOperations;
 
     public SyncLentBookData(Context context) {
@@ -115,7 +114,7 @@ public class SyncLentBookData extends SyncData {
                 parseLentBook.getString(DatabaseHelper.LENT_BOOK_DATE_LENT));
     }
 
-    protected void updateParseLentBook(final LentBook lentBook) {
+    void updateParseLentBook(final LentBook lentBook) {
         queryForLentBook(lentBook, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {
@@ -128,7 +127,7 @@ public class SyncLentBookData extends SyncData {
         });
     }
 
-    protected void deleteParseLentBook(LentBook lentBook) {
+    void deleteParseLentBook(LentBook lentBook) {
         queryForLentBook(lentBook, new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> list, ParseException e) {

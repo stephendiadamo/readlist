@@ -161,7 +161,7 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
         switch (id) {
             case CommentLoader.ID:
                 comments = (ArrayList<Comment>) data;
-                commentAdapter = new CommentAdapter(context, R.layout.row_comment_element, comments);
+                commentAdapter = new CommentAdapter(context, comments);
                 commentListView.setAdapter(commentAdapter);
 
                 registerForContextMenu(commentListView);
