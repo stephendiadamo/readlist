@@ -27,4 +27,5 @@ public class Analytics {
     public static final String LOGGED_IN = "logged_in";
     public static final String CREATED_ACCOUNT = "created_account";
     public static final String STARTED_CREATING_ACCOUNT = "started_creating_account";
+    public static final String STARTED_READING_SESSION = "started_reading_session";
 }

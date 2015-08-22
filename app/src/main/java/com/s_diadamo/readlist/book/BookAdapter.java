@@ -36,6 +36,7 @@ import com.s_diadamo.readlist.updates.BookUpdate;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
+import com.s_diadamo.readlist.updates.ReadingSessionFragment;
 
 import java.util.ArrayList;
 
@@ -50,7 +51,7 @@ class BookAdapter extends BaseAdapter {
     private static final String BOOK_ID = "BOOK_ID";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String COMMENT_BOOK = "COMMENT_BOOK";
-
+    private static final String READING_SESSION = "READING_SESSION";
 
     public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved, FragmentManager fragmentManager) {
         this.context = context;
@@ -129,7 +130,7 @@ class BookAdapter extends BaseAdapter {
 
             bookHolder.deleteBook = (ImageButton) row.findViewById(R.id.book_delete_book);
             bookHolder.editBook = (ImageButton) row.findViewById(R.id.book_edit_book);
-            bookHolder.recordReadingActivity = (ImageButton) row.findViewById(R.id.book_record_reading_session);
+            bookHolder.recordReadingSession = (ImageButton) row.findViewById(R.id.book_record_reading_session);
             bookHolder.completeBook = (ImageButton) row.findViewById(R.id.book_mark_complete);
             bookHolder.updateBook = (ImageButton) row.findViewById(R.id.book_update);
             bookHolder.moreOptions = (ImageButton) row.findViewById(R.id.book_more_options);
@@ -197,30 +198,6 @@ class BookAdapter extends BaseAdapter {
             });
         }
 
-        //TODO: Fix this logic for menu item
-
-//        if (book.isLent(row.getContext())) {
-//            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
-//            bookHolder.lendBook.setImageResource(R.drawable.ic_unlend);
-//            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-//                    unLendBook(book);
-//                }
-//            });
-//        } else {
-//            bookHolder.bookLentIcon.setVisibility(View.INVISIBLE);
-//            bookHolder.lendBook.setImageResource(R.drawable.ic_lent_book);
-//            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-//                    lendBook(book);
-//                }
-//            });
-//        }
-
         bookHolder.deleteBook.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,6 +214,12 @@ class BookAdapter extends BaseAdapter {
             }
         });
 
+        bookHolder.recordReadingSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startReadingSession(book);
+            }
+        });
 
         bookHolder.updateBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,6 +236,12 @@ class BookAdapter extends BaseAdapter {
                 MenuInflater inflater = popupMenu.getMenuInflater();
                 inflater.inflate(R.menu.menu_book_more_options, popupMenu.getMenu());
 
+                final boolean isLent = book.isLent(context);
+
+                if (isLent) {
+                    popupMenu.getMenu().findItem(R.id.lend_book).setTitle(R.string.unlend_book);
+                }
+
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -262,7 +251,11 @@ class BookAdapter extends BaseAdapter {
                         } else if (id == R.id.rate) {
                             showRatingDialog(book);
                         } else if (id == R.id.lend_book) {
-                            lendBook(book);
+                            if (!isLent) {
+                                lendBook(book);
+                            } else {
+                                unLendBook(book);
+                            }
                         }
                         return true;
                     }
@@ -399,7 +392,6 @@ class BookAdapter extends BaseAdapter {
         new BookMenuActions(context, bookOperations, this).setCurrentPage(book);
     }
 
-
     private void showRatingDialog(final Book book) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
@@ -425,6 +417,19 @@ class BookAdapter extends BaseAdapter {
                 .show();
     }
 
+    private void startReadingSession(Book book) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(ReadingSessionFragment.SESSION_BOOK_ID, book.getId());
+
+        Fragment fragment = new ReadingSessionFragment();
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .addToBackStack(READING_SESSION)
+                .replace(R.id.container, fragment)
+                .commit();
+
+    }
+
     static class BookHolder {
         ImageView bookCover;
         ImageView bookLentIcon;
@@ -441,7 +446,7 @@ class BookAdapter extends BaseAdapter {
 
         ImageButton deleteBook;
         ImageButton editBook;
-        ImageButton recordReadingActivity;
+        ImageButton recordReadingSession;
         ImageButton completeBook;
         ImageButton updateBook;
         ImageButton moreOptions;

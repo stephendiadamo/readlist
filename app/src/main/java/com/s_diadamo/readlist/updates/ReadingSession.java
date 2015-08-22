@@ -6,21 +6,21 @@ import com.s_diadamo.readlist.general.Utils;
 public class ReadingSession {
     private int id;
     private final int bookId;
-    private String startTime;
-    private String endTime;
+    private String date;
+    private int lengthOfTime;
     private boolean isDeleted;
 
-    public ReadingSession(int id, int bookId, String startTime, String endTime, int isDeleted) {
+    public ReadingSession(int id, int bookId, String date, int lengthOfTIme, int isDeleted) {
         this.id = id;
         this.bookId = bookId;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.date = date;
+        this.lengthOfTime = lengthOfTIme;
         this.isDeleted = (isDeleted == 1);
     }
 
     public ReadingSession(int bookId) {
         this.bookId = bookId;
-        this.startTime = Utils.getCurrentDate();
+        this.date = Utils.getCurrentDate();
     }
 
     public int getId() {
@@ -35,21 +35,21 @@ public class ReadingSession {
         return bookId;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+//    public String getStartTime() {
+//        return startTime;
+//    }
+//
+//    public void setStartTime(String startTime) {
+//        this.startTime = startTime;
+//    }
+//
+//    public String getEndTime() {
+//        return endTime;
+//    }
+//
+//    public void setEndTime(String endTime) {
+//        this.endTime = endTime;
+//    }
 
     public boolean isDeleted() {
         return isDeleted;
