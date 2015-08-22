@@ -109,6 +109,8 @@
     <string name="add_book">Add Book</string>
     <string name="please_add_a_title">Please add a title</string>
     <string name="this_book_has_already_been_lent_to">This book has already been lent to</string>
+    <string name="record_reading_activity">Record Reading Activity</string>
+    <string name="view_stats">View Stats</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
