@@ -20,11 +20,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.RequestPasswordResetCallback;
 import com.parse.SignUpCallback;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
 
@@ -95,6 +97,7 @@ public class LoginFragment extends Fragment {
                 }
 
                 if (currentMode == CREATE_ACCOUNT_MODE) {
+                    ParseAnalytics.trackEventInBackground(Analytics.STARTED_CREATING_ACCOUNT);
                     String passwordRepeat = passwordRepeatInput.getText().toString();
 
                     if (password.length() < 4) {
@@ -134,6 +137,7 @@ public class LoginFragment extends Fragment {
                         public void done(ParseException e) {
                             progressDialog.dismiss();
                             if (e == null) {
+                                ParseAnalytics.trackEventInBackground(Analytics.CREATED_ACCOUNT);
                                 Toast.makeText(context, "Account created successfully", Toast.LENGTH_SHORT).show();
                                 switchToLoginMode();
                             } else if (e.getCode() == ParseException.USERNAME_TAKEN) {
@@ -157,10 +161,9 @@ public class LoginFragment extends Fragment {
                         public void done(ParseUser parseUser, ParseException e) {
                             progressDialog.dismiss();
                             if (parseUser != null) {
+                                ParseAnalytics.trackEventInBackground(Analytics.LOGGED_IN);
                                 Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
                                 rememberUser(userName, password);
-
-
                                 completeLogin();
                             } else {
                                 Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();

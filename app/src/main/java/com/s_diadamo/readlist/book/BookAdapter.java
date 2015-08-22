@@ -129,7 +129,7 @@ class BookAdapter extends BaseAdapter {
 
             bookHolder.deleteBook = (ImageButton) row.findViewById(R.id.book_delete_book);
             bookHolder.editBook = (ImageButton) row.findViewById(R.id.book_edit_book);
-            bookHolder.lendBook = (ImageButton) row.findViewById(R.id.book_lend_book);
+            bookHolder.recordReadingActivity = (ImageButton) row.findViewById(R.id.book_record_reading_session);
             bookHolder.completeBook = (ImageButton) row.findViewById(R.id.book_mark_complete);
             bookHolder.updateBook = (ImageButton) row.findViewById(R.id.book_update);
             bookHolder.moreOptions = (ImageButton) row.findViewById(R.id.book_more_options);
@@ -197,27 +197,29 @@ class BookAdapter extends BaseAdapter {
             });
         }
 
-        if (book.isLent(row.getContext())) {
-            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
-            bookHolder.lendBook.setImageResource(R.drawable.ic_unlend);
-            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-                    unLendBook(book);
-                }
-            });
-        } else {
-            bookHolder.bookLentIcon.setVisibility(View.INVISIBLE);
-            bookHolder.lendBook.setImageResource(R.drawable.ic_lent_book);
-            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
-                    lendBook(book);
-                }
-            });
-        }
+        //TODO: Fix this logic for menu item
+
+//        if (book.isLent(row.getContext())) {
+//            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
+//            bookHolder.lendBook.setImageResource(R.drawable.ic_unlend);
+//            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
+//                    unLendBook(book);
+//                }
+//            });
+//        } else {
+//            bookHolder.bookLentIcon.setVisibility(View.INVISIBLE);
+//            bookHolder.lendBook.setImageResource(R.drawable.ic_lent_book);
+//            bookHolder.lendBook.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ParseAnalytics.trackEventInBackground(Analytics.UNLENT_BOOK);
+//                    lendBook(book);
+//                }
+//            });
+//        }
 
         bookHolder.deleteBook.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,6 +261,8 @@ class BookAdapter extends BaseAdapter {
                             launchCommentFragment(book);
                         } else if (id == R.id.rate) {
                             showRatingDialog(book);
+                        } else if (id == R.id.lend_book) {
+                            lendBook(book);
                         }
                         return true;
                     }
@@ -437,7 +441,7 @@ class BookAdapter extends BaseAdapter {
 
         ImageButton deleteBook;
         ImageButton editBook;
-        ImageButton lendBook;
+        ImageButton recordReadingActivity;
         ImageButton completeBook;
         ImageButton updateBook;
         ImageButton moreOptions;

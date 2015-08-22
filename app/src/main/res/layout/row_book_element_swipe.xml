@@ -27,10 +27,10 @@
             android:src="@drawable/ic_mode_edit_black_24dp" />
 
         <ImageButton
-            android:id="@+id/book_lend_book"
-            style="@style/BookSwipeIconV2"
-            android:contentDescription="@string/lend_book"
-            android:src="@drawable/ic_lent_book" />
+            android:id="@+id/book_record_reading_session"
+            style="@style/BookSwipeIcon"
+            android:contentDescription="@string/record_reading_activity"
+            android:src="@drawable/ic_timer_black_48dp" />
 
         <ImageButton
             android:id="@+id/book_mark_complete"

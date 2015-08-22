@@ -21,7 +21,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
 
@@ -112,6 +114,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delete:
+                ParseAnalytics.trackEventInBackground(Analytics.DELETED_GOAL);
                 if (selectedListViewAdapter != null) {
                     Goal goal = selectedListViewAdapter.getItem(info.position);
                     if (Utils.checkUserIsLoggedIn(context)) {

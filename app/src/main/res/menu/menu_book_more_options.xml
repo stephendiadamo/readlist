@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/lend_book"
+        android:title="@string/lend_book" />
+    <item
         android:id="@+id/rate"
         android:title="@string/rate" />
     <item
         android:id="@+id/comment"
         android:title="@string/comment" />
+    <item
+        android:id="@+id/view_stats"
+        android:title="@string/view_stats" />
 </menu>

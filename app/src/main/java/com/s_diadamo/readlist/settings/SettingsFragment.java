@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
@@ -109,6 +111,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void launchSyncData() {
+        ParseAnalytics.trackEventInBackground(Analytics.SYNCED_DATA);
         if (Utils.isNetworkAvailable(getActivity())) {
             SyncData syncData = new SyncData(context);
             syncData.syncAllData((AppCompatActivity) getActivity());
@@ -117,7 +120,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void launchAccountFragment(){
+    private void launchAccountFragment() {
         Fragment fragment = new AccountFragment();
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()

@@ -17,7 +17,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.general.Utils;
 
@@ -160,6 +162,8 @@ public class GoalAddFragment extends Fragment {
         String goalAmount = goalAmountEditText.getText().toString();
 
         if (!startDate.isEmpty() && !endDate.isEmpty() && !goalAmount.isEmpty()) {
+            ParseAnalytics.trackEventInBackground(Analytics.ADDED_GOAL);
+
             int amount = Integer.parseInt(goalAmount);
             int goalTypeIndex = goalTypes.indexOfChild(rootView.findViewById(goalTypes.getCheckedRadioButtonId()));
             Goal goal = new Goal(goalTypeIndex, amount, startDate, endDate);

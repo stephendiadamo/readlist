@@ -16,6 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GOALS = "goals";
     public static final String TABLE_LENT_BOOKS = "lent_books";
     public static final String TABLE_COMMENTS = "comments";
+    public static final String TABLE_READER_RECORD = "reader_record";
 
     // Common columns
     public static final String KEY_ID = "id";
@@ -62,6 +63,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COMMENT_BOOK_ID = "book_id";
     public static final String COMMENT_COMMENT = "comment";
     public static final String COMMENT_DATE_ADDED = "date_added";
+
+    //Reader Record table columns
+    public static final String READER_RECORD_BOOK_ID = "book_id";
+    public static final String READER_RECORD_START_TIME = "start_time";
+    public static final String READER_RECORD_END_TIME = "end_time";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
@@ -130,6 +136,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COMMENT_BOOK_ID + " INTEGER, " +
             COMMENT_COMMENT + " TEXT, " +
             COMMENT_DATE_ADDED + " TEXT, " +
+            IS_DELETED + " INTEGER" +
+            ")";
+
+    public static final String CREATE_READER_RECORD_TABLE = "CREATE TABLE " + TABLE_READER_RECORD +
+            "(" +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            READER_RECORD_BOOK_ID + " INTEGER, " +
+            READER_RECORD_START_TIME + " TEXT, " +
+            READER_RECORD_END_TIME + " TEXT, " +
             IS_DELETED + " INTEGER" +
             ")";
 

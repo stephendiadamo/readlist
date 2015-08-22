@@ -2,6 +2,8 @@ package com.s_diadamo.readlist.goal;
 
 import android.content.Context;
 
+import com.parse.ParseAnalytics;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
@@ -83,6 +85,7 @@ public class Goal {
     }
 
     private void markComplete() {
+        ParseAnalytics.trackEventInBackground(Analytics.COMPLETED_GOAL);
         isComplete = true;
     }
 
