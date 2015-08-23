@@ -36,7 +36,7 @@ import com.s_diadamo.readlist.updates.BookUpdate;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
-import com.s_diadamo.readlist.updates.ReadingSessionFragment;
+import reading_session.ReadingSessionFragment;
 
 import java.util.ArrayList;
 

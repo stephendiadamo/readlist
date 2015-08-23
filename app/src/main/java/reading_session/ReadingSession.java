@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist.updates;
+package reading_session;
 
 
 import com.s_diadamo.readlist.general.Utils;
