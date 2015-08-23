@@ -358,7 +358,7 @@ class BookAdapter extends BaseAdapter {
         final LentBook lentBook = book.getLentBook(context);
         new AlertDialog.Builder(context)
                 .setTitle(R.string.unlend_confirmation)
-                .setMessage(R.string.retrieve_book_from + " " + lentBook.getLentTo() + "?")
+                .setMessage(context.getString(R.string.retrieve_book_from) + " " + lentBook.getLentTo() + "?")
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

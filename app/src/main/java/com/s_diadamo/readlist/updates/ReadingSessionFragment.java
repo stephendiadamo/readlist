@@ -1,5 +1,6 @@
 package com.s_diadamo.readlist.updates;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.Handler;
@@ -13,6 +14,9 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
+import com.s_diadamo.readlist.book.Book;
+import com.s_diadamo.readlist.general.Utils;
+
 
 public class ReadingSessionFragment extends Fragment {
 
@@ -26,6 +30,8 @@ public class ReadingSessionFragment extends Fragment {
     long updatedTime = 0L;
 
     private TextView timerTextView;
+    private static Book book;
+    private Context context;
 
     private Runnable timerThread = new Runnable() {
         @Override
@@ -46,6 +52,7 @@ public class ReadingSessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_reading_session, container, false);
+        context = rootView.getContext();
 
         TextView bookTitle = (TextView) rootView.findViewById(R.id.record_reading_activity_book_title);
         final ImageButton startStopButton = (ImageButton) rootView.findViewById(R.id.record_reading_activity_start_button);
@@ -67,6 +74,15 @@ public class ReadingSessionFragment extends Fragment {
                     saveSession.setEnabled(true);
                     pauseTimer();
                 }
+            }
+        });
+
+        saveSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReadingSession readingSession = new ReadingSession(book.getId(), (int) (timeInMilliseconds / 1000));
+                // TODO: Save reading session
+                Utils.showToast(context, getString(R.string.saved_successfully));
             }
         });
 

@@ -18,8 +18,9 @@ public class ReadingSession {
         this.isDeleted = (isDeleted == 1);
     }
 
-    public ReadingSession(int bookId) {
+    public ReadingSession(int bookId, int lengthOfTime) {
         this.bookId = bookId;
+        this.lengthOfTime = lengthOfTime;
         this.date = Utils.getCurrentDate();
     }
 
@@ -35,21 +36,21 @@ public class ReadingSession {
         return bookId;
     }
 
-//    public String getStartTime() {
-//        return startTime;
-//    }
-//
-//    public void setStartTime(String startTime) {
-//        this.startTime = startTime;
-//    }
-//
-//    public String getEndTime() {
-//        return endTime;
-//    }
-//
-//    public void setEndTime(String endTime) {
-//        this.endTime = endTime;
-//    }
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public int getLengthOfTime() {
+        return lengthOfTime;
+    }
+
+    public void setLengthOfTime(int lengthOfTime) {
+        this.lengthOfTime = lengthOfTime;
+    }
 
     public boolean isDeleted() {
         return isDeleted;
