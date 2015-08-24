@@ -87,7 +87,7 @@ class BookMenuActions {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
         builder.setTitle(R.string.delete_shelf);
-        builder.setMessage(R.string.delete + " " + shelf.getName() + "?");
+        builder.setMessage(context.getString(R.string.delete) + " " + shelf.getName() + "?");
 
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

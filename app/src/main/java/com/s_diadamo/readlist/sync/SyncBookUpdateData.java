@@ -41,9 +41,11 @@ public class SyncBookUpdateData extends SyncData {
                     syncSpinner.endThread();
                 ArrayList<BookUpdate> bookUpdatesOnDevice = bookUpdateOperations.getAllBookUpdates();
                 ArrayList<BookUpdate> bookUpdatesFromParse = new ArrayList<>();
-                for (ParseObject parseBookUpdate : parseBookUpdates) {
-                    BookUpdate bookUpdate = parseBookUpdateToBookUpdate(parseBookUpdate);
-                    bookUpdatesFromParse.add(bookUpdate);
+                if (parseBookUpdates != null) {
+                    for (ParseObject parseBookUpdate : parseBookUpdates) {
+                        BookUpdate bookUpdate = parseBookUpdateToBookUpdate(parseBookUpdate);
+                        bookUpdatesFromParse.add(bookUpdate);
+                    }
                 }
                 updateDeviceBookUpdates(bookUpdatesOnDevice, bookUpdatesFromParse);
                 updateParseBookUpdates(bookUpdatesOnDevice, bookUpdatesFromParse);

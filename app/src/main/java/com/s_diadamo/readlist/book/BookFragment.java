@@ -171,24 +171,28 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         super.onPrepareOptionsMenu(menu);
 
         hideCompletedBooksMenuItem = menu.findItem(R.id.hide_completed_books);
-        hideCompletedBooksMenuItem.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
-        hideCompletedBooksMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                toggleHideCompletedBooks();
-                return true;
-            }
-        });
+        if (hideCompletedBooksMenuItem != null) {
+            hideCompletedBooksMenuItem.setChecked(prefs.getBoolean(HIDE_COMPLETED_BOOKS, false));
+            hideCompletedBooksMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    toggleHideCompletedBooks();
+                    return true;
+                }
+            });
+        }
 
         hideShelvedBooksMenuItem = menu.findItem(R.id.hide_shelved_books);
-        hideShelvedBooksMenuItem.setChecked(prefs.getBoolean(HIDE_SHELVED_BOOKS, false));
-        hideShelvedBooksMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                toggleHideShelvedBooks();
-                return true;
-            }
-        });
+        if (hideShelvedBooksMenuItem != null) {
+            hideShelvedBooksMenuItem.setChecked(prefs.getBoolean(HIDE_SHELVED_BOOKS, false));
+            hideShelvedBooksMenuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    toggleHideShelvedBooks();
+                    return true;
+                }
+            });
+        }
 
         if (shelfId == Shelf.DEFAULT_SHELF_ID) {
             menu.findItem(R.id.edit_shelf).setVisible(false);
