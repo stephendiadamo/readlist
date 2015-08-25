@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
-    private static final String FIXED_BAD_PAGES = "FIXED_BAD_PAGES";
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
@@ -79,27 +78,6 @@ public class MainActivity extends AppCompatActivity
                 }
             }
             editor.putBoolean(FIXED_REMEMBER_ME_STRING, true);
-        }
-
-        if (!prefs.getBoolean(FIXED_BAD_PAGES, false)) {
-            PageUpdateOperations pageUpdateOperations = new PageUpdateOperations(this);
-            ArrayList<PageUpdate> pageUpdates = pageUpdateOperations.getAllPageUpdates();
-            for (PageUpdate p : pageUpdates) {
-                if (Math.abs(p.getPages()) > 10000) {
-                    pageUpdateOperations.deletePageUpdate(p);
-                }
-            }
-
-            BookOperations bookOperations = new BookOperations(this);
-            ArrayList<Book> books = bookOperations.getAllBooks();
-            for (Book b : books) {
-                if (b.getCurrentPage() < 0) {
-                    b.setCurrentPage(0);
-                    bookOperations.updateBook(b);
-                }
-            }
-
-            editor.putBoolean(FIXED_BAD_PAGES, true);
         }
 
         try {
