@@ -15,6 +15,11 @@
         style="@style/SettingsItem"
         android:text="@string/email_us" />
 
+    <TextView
+        android:id="@+id/settings_connect_goodreads"
+        style="@style/SettingsItem"
+        android:text="@string/connect_goodreads_account" />
+
     <LinearLayout
         android:id="@+id/settings_login_container"
         android:layout_width="fill_parent"

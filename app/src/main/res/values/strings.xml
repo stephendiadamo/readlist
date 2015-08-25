@@ -118,6 +118,7 @@
     <string name="reading_colon">Reading:</string>
     <string name="unlend_book">Unlend Book</string>
     <string name="saved_successfully">Saved successfully</string>
+    <string name="connect_goodreads_account">Connect Goodreads Account</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

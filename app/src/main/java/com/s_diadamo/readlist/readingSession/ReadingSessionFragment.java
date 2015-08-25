@@ -1,4 +1,4 @@
-package reading_session;
+package com.s_diadamo.readlist.readingSession;
 
 import android.app.Notification;
 import android.app.NotificationManager;
