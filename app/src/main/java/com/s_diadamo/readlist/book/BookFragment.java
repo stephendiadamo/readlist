@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.book;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -352,6 +353,11 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
                 if (ab != null) {
                     ab.setTitle(shelf.getName());
+                    if (shelf.getColour() != Shelf.DEFAULT_COLOR) {
+                        ab.setBackgroundDrawable(new ColorDrawable(shelf.getColour()));
+                    } else {
+                        ab.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
+                    }
                 }
                 loadingShelf = false;
                 break;
