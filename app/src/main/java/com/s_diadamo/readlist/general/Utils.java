@@ -80,7 +80,7 @@ public class Utils {
 
     public static Date getDateFromString(String date) {
         try {
-            SimpleDateFormat df = new SimpleDateFormat(DATE_FORMAT);
+            SimpleDateFormat df = new SimpleDateFormat(DATE_FORMAT, Locale.CANADA);
             return df.parse(date);
         } catch (ParseException pe) {
             return null;

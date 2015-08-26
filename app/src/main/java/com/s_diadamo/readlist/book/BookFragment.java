@@ -36,6 +36,9 @@ import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 import com.s_diadamo.readlist.shelf.ShelfLoader;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
     private Context context;
@@ -146,7 +149,6 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     }
 
 
-
     private void setShelfId() {
         Bundle args = getArguments();
         String stringShelfId = "";
@@ -243,6 +245,48 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             } else {
                 Utils.showToast(context, getString(R.string.you_cannot_delete_this_shelf));
             }
+            return true;
+        } else if (id == R.id.sort_by_title) {
+            Collections.sort(userBooks, new Comparator<Book>() {
+                @Override
+                public int compare(Book lhs, Book rhs) {
+                    return lhs.getTitle().compareTo(rhs.getTitle());
+                }
+            });
+            bookAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.sort_by_date) {
+            Collections.sort(userBooks, new Comparator<Book>() {
+                @Override
+                public int compare(Book lhs, Book rhs) {
+                    Date bookOneDate = Utils.getDateFromString(lhs.getDateAdded());
+                    Date bookTwoDate = Utils.getDateFromString(rhs.getDateAdded());
+                    if (bookOneDate != null && bookTwoDate != null) {
+                        return bookOneDate.compareTo(bookTwoDate);
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+            bookAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.sort_by_shelf) {
+            Collections.sort(userBooks, new Comparator<Book>() {
+                @Override
+                public int compare(Book lhs, Book rhs) {
+                    return lhs.getShelfId() - rhs.getShelfId();
+                }
+            });
+            bookAdapter.notifyDataSetChanged();
+            return true;
+        } else if (id == R.id.sort_by_author) {
+            Collections.sort(userBooks, new Comparator<Book>() {
+                @Override
+                public int compare(Book lhs, Book rhs) {
+                    return lhs.getAuthor().compareTo(rhs.getAuthor());
+                }
+            });
+            bookAdapter.notifyDataSetChanged();
             return true;
         }
 

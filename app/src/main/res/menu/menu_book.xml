@@ -32,10 +32,13 @@
                 android:title="@string/sort_by_title" />
             <item
                 android:id="@+id/sort_by_date"
-                android:title="@string/sort_by_date" />
+                android:title="@string/sort_by_date_added" />
             <item
                 android:id="@+id/sort_by_shelf"
                 android:title="@string/sort_by_shelf" />
+            <item
+                android:id="@+id/sort_by_author"
+                android:title="@string/sort_by_author" />
         </menu>
     </item>
 
