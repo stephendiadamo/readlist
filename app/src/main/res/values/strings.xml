@@ -121,6 +121,9 @@
     <string name="connect_goodreads_account">Connect Goodreads Account</string>
     <string name="update_book_page">Would you like to update the current page?</string>
     <string name="dont_ask_me_again">Don\'t ask me again</string>
+    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_date">Sort by Date</string>
+    <string name="sort_by_shelf">Sort by Shelf</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
