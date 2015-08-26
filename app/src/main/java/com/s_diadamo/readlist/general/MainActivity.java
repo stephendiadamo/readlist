@@ -25,6 +25,7 @@ import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.settings.SettingsFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 import com.s_diadamo.readlist.updates.StatisticsFragment;
@@ -85,6 +86,11 @@ public class MainActivity extends AppCompatActivity
             PACKAGE_NAME = pInfo.versionName;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
+        }
+
+        if (Utils.checkUserIsLoggedIn(this) && Utils.isNetworkAvailable(this)) {
+            SyncData syncData = new SyncData(this, true);
+            syncData.syncAllData(this);
         }
 
         editor.apply();

@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.book;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -36,7 +37,7 @@ import com.s_diadamo.readlist.updates.BookUpdate;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
-import com.s_diadamo.readlist.readingSession.ReadingSessionFragment;
+import com.s_diadamo.readlist.readingSession.ReadingSessionActivity;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,6 @@ class BookAdapter extends BaseAdapter {
     private static final String BOOK_ID = "BOOK_ID";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String COMMENT_BOOK = "COMMENT_BOOK";
-    private static final String READING_SESSION = "READING_SESSION";
 
     public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved, FragmentManager fragmentManager) {
         this.context = context;
@@ -291,7 +291,7 @@ class BookAdapter extends BaseAdapter {
 
     private void deleteBook(final Book book) {
         new AlertDialog.Builder(context)
-                .setMessage(R.string.delete + "\"" + book.getTitle() + "\"?")
+                .setMessage(context.getString(R.string.delete) + "\"" + book.getTitle() + "\"?")
                 .setCancelable(true)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -418,16 +418,9 @@ class BookAdapter extends BaseAdapter {
     }
 
     private void startReadingSession(Book book) {
-        Bundle bundle = new Bundle();
-        bundle.putInt(ReadingSessionFragment.SESSION_BOOK_ID, book.getId());
-
-        Fragment fragment = new ReadingSessionFragment();
-        fragment.setArguments(bundle);
-        fragmentManager.beginTransaction()
-                .addToBackStack(READING_SESSION)
-                .replace(R.id.container, fragment)
-                .commit();
-
+        Intent intent = new Intent(context, ReadingSessionActivity.class);
+        intent.putExtra(ReadingSessionActivity.SESSION_BOOK_ID, book.getId());
+        context.startActivity(intent);
     }
 
     static class BookHolder {

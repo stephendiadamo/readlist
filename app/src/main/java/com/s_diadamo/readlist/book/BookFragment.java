@@ -112,6 +112,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
             @Override
             public void onDismiss(int[] ints) {
+                bookListView.closeOpenedItems();
             }
 
             @Override
@@ -143,6 +144,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         ParseAnalytics.trackEventInBackground(Analytics.OPENED_BOOK_FRAGMENT);
         return rootView;
     }
+
+
 
     private void setShelfId() {
         Bundle args = getArguments();

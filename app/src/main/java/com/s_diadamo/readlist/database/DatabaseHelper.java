@@ -16,7 +16,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_GOALS = "goals";
     public static final String TABLE_LENT_BOOKS = "lent_books";
     public static final String TABLE_COMMENTS = "comments";
-    public static final String TABLE_READER_RECORD = "reader_record";
+    public static final String TABLE_READING_SESSIONS = "reading_session";
 
     // Common columns
     public static final String KEY_ID = "id";
@@ -65,9 +65,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COMMENT_DATE_ADDED = "date_added";
 
     //Reader Record table columns
-    public static final String READER_RECORD_BOOK_ID = "book_id";
-    public static final String READER_RECORD_START_TIME = "start_time";
-    public static final String READER_RECORD_END_TIME = "end_time";
+    public static final String READING_SESSION_BOOK_ID = "book_id";
+    public static final String READING_SESSION_DATE = "date";
+    public static final String READING_SESSION_LENGTH = "length";
 
     private static final String CREATE_BOOKS_TABLE = "CREATE TABLE " + TABLE_BOOKS +
             "(" +
@@ -139,12 +139,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             IS_DELETED + " INTEGER" +
             ")";
 
-    public static final String CREATE_READER_RECORD_TABLE = "CREATE TABLE " + TABLE_READER_RECORD +
+    public static final String CREATE_READING_SESSION_TABLE = "CREATE TABLE " + TABLE_READING_SESSIONS +
             "(" +
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            READER_RECORD_BOOK_ID + " INTEGER, " +
-            READER_RECORD_START_TIME + " TEXT, " +
-            READER_RECORD_END_TIME + " TEXT, " +
+            READING_SESSION_BOOK_ID + " INTEGER, " +
+            READING_SESSION_DATE + " TEXT, " +
+            READING_SESSION_LENGTH + " INTEGER, " +
             IS_DELETED + " INTEGER" +
             ")";
 
@@ -161,6 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_GOALS_TABLE);
         db.execSQL(CREATE_LENT_BOOKS_TABLE);
         db.execSQL(CREATE_COMMENT_TABLE);
+        db.execSQL(CREATE_READING_SESSION_TABLE);
     }
 
     @Override
@@ -207,6 +208,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.execSQL(addRatingColumn);
             db.execSQL(CREATE_COMMENT_TABLE);
+        }
+
+        if (oldVersion < 6) {
+            db.execSQL(CREATE_READING_SESSION_TABLE);
         }
     }
 }

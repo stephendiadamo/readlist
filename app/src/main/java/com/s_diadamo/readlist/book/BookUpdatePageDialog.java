@@ -14,12 +14,15 @@ import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
-class BookUpdatePageDialog extends AlertDialog.Builder {
-    public BookUpdatePageDialog(final Context context, final Book book, final BookAdapter bookAdapter, final BookOperations bookOperations) {
+public class BookUpdatePageDialog extends AlertDialog.Builder {
+
+
+    public BookUpdatePageDialog(final Context context, final Book book) {
         super(context);
 
         LayoutInflater layoutInflater = LayoutInflater.from(context);
         View content = layoutInflater.inflate(R.layout.dialog_set_book_current_page, null);
+        final BookOperations bookOperations = new BookOperations(context);
 
         setTitle(R.string.update_page);
 
@@ -52,7 +55,6 @@ class BookUpdatePageDialog extends AlertDialog.Builder {
 
                 book.setCurrentPage(pagePicker.getValue());
                 bookOperations.updateBook(book);
-                bookAdapter.notifyDataSetChanged();
 
                 PageUpdate pageUpdate = new PageUpdate(book.getId(), Utils.getCurrentDate(), pagesRead);
                 new PageUpdateOperations(context).addPageUpdate(pageUpdate);
@@ -60,6 +62,7 @@ class BookUpdatePageDialog extends AlertDialog.Builder {
                     new SyncData(context).add(pageUpdate);
                     new SyncData(context).update(book);
                 }
+                dialog.dismiss();
             }
         });
         setNegativeButton(R.string.cancel, null);

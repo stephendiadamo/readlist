@@ -37,6 +37,8 @@ public class MultiProcessSpinner {
         if (runningThreads == 1) {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(syncMessage);
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.show();
         }
     }

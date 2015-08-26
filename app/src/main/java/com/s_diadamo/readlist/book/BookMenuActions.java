@@ -47,7 +47,14 @@ class BookMenuActions {
     }
 
     public void setCurrentPage(final Book book) {
-        BookUpdatePageDialog bookUpdatePageDialog = new BookUpdatePageDialog(context, book, bookAdapter, bookOperations);
+        BookUpdatePageDialog bookUpdatePageDialog = new BookUpdatePageDialog(context, book);
+        bookUpdatePageDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                bookAdapter.notifyDataSetChanged();
+            }
+        });
+
         bookUpdatePageDialog.show();
     }
 

@@ -4,11 +4,11 @@ package com.s_diadamo.readlist.readingSession;
 import com.s_diadamo.readlist.general.Utils;
 
 public class ReadingSession {
-    private int id;
+    private long id;
     private final int bookId;
     private String date;
     private int lengthOfTime;
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     public ReadingSession(int id, int bookId, String date, int lengthOfTIme, int isDeleted) {
         this.id = id;
@@ -24,11 +24,11 @@ public class ReadingSession {
         this.date = Utils.getCurrentDate();
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

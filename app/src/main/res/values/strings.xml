@@ -119,6 +119,8 @@
     <string name="unlend_book">Unlend Book</string>
     <string name="saved_successfully">Saved successfully</string>
     <string name="connect_goodreads_account">Connect Goodreads Account</string>
+    <string name="update_book_page">Would you like to update the current page?</string>
+    <string name="dont_ask_me_again">Don\'t ask me again</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

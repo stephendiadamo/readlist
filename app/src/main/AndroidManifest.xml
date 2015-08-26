@@ -37,5 +37,11 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/cover_photo_capture"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".readingSession.ReadingSessionActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+
     </application>
 </manifest>
