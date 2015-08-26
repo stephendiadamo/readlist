@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.general;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
@@ -168,5 +169,21 @@ public class Utils {
 
     public static void showToast(Context context, String string) {
         Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+    }
+
+    public static int calculateAverageWithQuery(Cursor cursor) {
+        int updatesInWeek = 0;
+        int numWeeks = 0;
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                updatesInWeek += cursor.getInt(1);
+                numWeeks++;
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        if (numWeeks != 0) {
+            return updatesInWeek / numWeeks;
+        }
+        return 0;
     }
 }

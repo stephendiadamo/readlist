@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.readingSession.ReadingSessionOperations;
 import com.s_diadamo.readlist.sync.SyncBookUpdateData;
 import com.s_diadamo.readlist.sync.SyncPageUpdateData;
 
@@ -31,6 +32,7 @@ public class StatisticsFragment extends Fragment {
     private BookOperations bookOperations;
     private BookUpdateOperations bookUpdateOperations;
     private PageUpdateOperations pageUpdateOperations;
+    private ReadingSessionOperations readingSessionOperations;
     private Context context;
 
     @Nullable
@@ -41,12 +43,13 @@ public class StatisticsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        bookOperations = new BookOperations(container.getContext());
-        bookUpdateOperations = new BookUpdateOperations(container.getContext());
-        pageUpdateOperations = new PageUpdateOperations(container.getContext());
+        bookOperations = new BookOperations(context);
+        bookUpdateOperations = new BookUpdateOperations(context);
+        pageUpdateOperations = new PageUpdateOperations(context);
+        readingSessionOperations = new ReadingSessionOperations(context);
 
         ProgressDialog progressDialog = new ProgressDialog(rootView.getContext());
-        progressDialog.setMessage("Crunching the numbers.");
+        progressDialog.setMessage("Crunching the numbers");
         populateData();
         progressDialog.dismiss();
 
@@ -117,45 +120,63 @@ public class StatisticsFragment extends Fragment {
         setAllTimeData();
     }
 
-    private void setYearlyData() {
-        TextView yearlyUpdates = (TextView) rootView.findViewById(R.id.updates_yearly_updates);
-        TextView yearlyPages = (TextView) rootView.findViewById(R.id.updates_yearly_pages_read);
-        TextView yearlyBooks = (TextView) rootView.findViewById(R.id.updates_yearly_books_read);
+    private void setAverageWeeklyData() {
+        TextView averageWeeklyReadingSessions = (TextView) rootView.findViewById(R.id.updates_weekly_reading_sessions);
+        TextView averageWeeklyPages = (TextView) rootView.findViewById(R.id.updates_weekly_pages_read);
+        TextView averageWeeklyTimeSpentReading = (TextView) rootView.findViewById(R.id.updates_weekly_time_spent_reading);
 
-        yearlyUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdatesThisYear()));
-        yearlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesThisYear()));
-        yearlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisYear()));
+        averageWeeklyReadingSessions.setText(String.valueOf(readingSessionOperations.getAverageWeeklyReadingSessions()));
+        averageWeeklyPages.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPages()));
+        averageWeeklyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getAverageWeeklyTimeSpentReading()));
     }
 
     private void setMonthlyData() {
-        TextView monthlyUpdates = (TextView) rootView.findViewById(R.id.updates_monthly_updates);
+        TextView monthlyReadingSessions = (TextView) rootView.findViewById(R.id.updates_monthly_reading_sessions);
         TextView monthlyPages = (TextView) rootView.findViewById(R.id.updates_monthly_pages_read);
         TextView monthlyBooks = (TextView) rootView.findViewById(R.id.updates_monthly_books_read);
+        TextView monthlyTimeSpentReading = (TextView) rootView.findViewById(R.id.updates_monthly_time_spent_reading);
 
-        monthlyUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdatesThisMonth()));
+        monthlyReadingSessions.setText(String.valueOf(readingSessionOperations.getNumberOfReadingSessionsThisMonth()));
         monthlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesReadThisMonth()));
         monthlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisMonth()));
-
+        monthlyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisMonth()));
     }
 
-    private void setAverageWeeklyData() {
-        TextView averageWeeklyUpdates = (TextView) rootView.findViewById(R.id.updates_weekly_updates);
-        TextView averageWeeklyPages = (TextView) rootView.findViewById(R.id.updates_weekly_pages_read);
+    private void setYearlyData() {
+        TextView yearlyReadingSessions = (TextView) rootView.findViewById(R.id.updates_yearly_reading_sessions);
+        TextView yearlyPages = (TextView) rootView.findViewById(R.id.updates_yearly_pages_read);
+        TextView yearlyBooks = (TextView) rootView.findViewById(R.id.updates_yearly_books_read);
+        TextView yearlyTimeSpentReading = (TextView) rootView.findViewById(R.id.updates_yearly_time_spent_reading);
 
-        averageWeeklyUpdates.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPageUpdates()));
-        averageWeeklyPages.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPages()));
+        yearlyReadingSessions.setText(String.valueOf(readingSessionOperations.getNumberOfReadingSessionsThisYear()));
+        yearlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesThisYear()));
+        yearlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisYear()));
+        yearlyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisYear()));
     }
 
     private void setAllTimeData() {
-        TextView allTimeUpdates = (TextView) rootView.findViewById(R.id.updates_all_time_updates);
+        TextView allTimeReadingSessions = (TextView) rootView.findViewById(R.id.updates_all_time_reading_sessions);
         TextView allTimePages = (TextView) rootView.findViewById(R.id.updates_all_time_pages_read);
         TextView allTimeBooks = (TextView) rootView.findViewById(R.id.updates_all_time_books);
         TextView allTimeBooksRead = (TextView) rootView.findViewById(R.id.updates_all_time_books_read);
+        TextView allTimeTimeSpentReading = (TextView) rootView.findViewById(R.id.updates_all_time_time_spent_reading);
 
-        allTimeUpdates.setText(String.valueOf(pageUpdateOperations.getNumberOfPageUpdates()));
+        allTimeReadingSessions.setText(String.valueOf(readingSessionOperations.getNumberOfReadingSessions()));
         allTimePages.setText(String.valueOf(pageUpdateOperations.getAllTimePagesRead()));
         allTimeBooks.setText(String.valueOf(bookOperations.getBooksCount()));
         allTimeBooksRead.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksRead()));
+        allTimeTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReading()));
     }
 
+    private String formatTimeSpentReading(int seconds) {
+        int minutes = seconds / 60;
+        int hours = minutes / 60;
+
+        seconds = seconds % 60;
+        minutes = minutes % 60;
+
+        return "" + String.format("%02d", hours)
+                + ":" + String.format("%02d", minutes)
+                + ":" + String.format("%02d", seconds);
+    }
 }

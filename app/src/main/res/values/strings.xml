@@ -126,6 +126,9 @@
     <string name="sort_by_shelf">Sort by Shelf</string>
     <string name="sort_by_date_added">Sort by Date Added</string>
     <string name="sort_by_author">Sort by Author</string>
+    <string name="page_updates">Page Updates</string>
+    <string name="reading_sessions">Reading Sessions</string>
+    <string name="time_spent_reading">Time Spent Reading</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
