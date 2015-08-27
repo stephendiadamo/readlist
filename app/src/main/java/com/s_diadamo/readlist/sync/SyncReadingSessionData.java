@@ -47,22 +47,25 @@ public class SyncReadingSessionData extends SyncData {
                     ReadingSession readingSession = parseReadingSessionToReadingSession(parseReadingSession);
                     readingSessionsFromParse.add(readingSession);
                 }
-                updateDeviceReadingSessions(readingSessionsOnDevice, readingSessionsFromParse);
+                updateDeviceReadingSessions(readingSessionsOnDevice, readingSessionsFromParse, parseReadingSessions);
                 updateParseReadingSessions(readingSessionsOnDevice, readingSessionsFromParse);
             }
         });
     }
 
-    private void updateDeviceReadingSessions(ArrayList<ReadingSession> readingSessionsOnDevice, ArrayList<ReadingSession> readingSessionsFromParse) {
+    private void updateDeviceReadingSessions(ArrayList<ReadingSession> readingSessionsOnDevice, ArrayList<ReadingSession> readingSessionsFromParse, List<ParseObject> parseReadingSessions) {
         HashSet<Long> deviceReadingSessionIds = new HashSet<>();
         for (ReadingSession readingSession : readingSessionsOnDevice) {
             deviceReadingSessionIds.add(readingSession.getId());
         }
-
+        int i = 0;
         for (ReadingSession readingSession : readingSessionsFromParse) {
             if (!deviceReadingSessionIds.contains(readingSession.getId())) {
                 readingSessionOperations.addReadingSession(readingSession);
+                copyReadingSessionValues(parseReadingSessions.get(i), readingSession);
+                parseReadingSessions.get(i).saveEventually();
             }
+            i++;
         }
     }
 

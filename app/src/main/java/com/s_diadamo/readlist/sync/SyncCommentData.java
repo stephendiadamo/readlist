@@ -48,23 +48,27 @@ class SyncCommentData extends SyncData {
                     Comment comment = parseCommentToComment(parseComment);
                     commentsFromParse.add(comment);
                 }
-                updateDeviceComments(commentsOnDevice, commentsFromParse);
+                updateDeviceComments(commentsOnDevice, commentsFromParse, parseComments);
                 updateParseComments(commentsOnDevice, commentsFromParse);
             }
         });
     }
 
 
-    private void updateDeviceComments(ArrayList<Comment> commentsOnDevice, ArrayList<Comment> commentsFromParse) {
+    private void updateDeviceComments(ArrayList<Comment> commentsOnDevice, ArrayList<Comment> commentsFromParse, List<ParseObject> parseComments) {
         HashSet<Integer> deviceCommentIds = new HashSet<>();
         for (Comment comment : commentsOnDevice) {
             deviceCommentIds.add(comment.getId());
         }
 
+        int i = 0;
         for (Comment comment : commentsFromParse) {
             if (!deviceCommentIds.contains(comment.getId())) {
                 commentOperations.addComment(comment);
+                copyCommentValues(parseComments.get(i), comment);
+                parseComments.get(i).saveEventually();
             }
+            i++;
         }
     }
 

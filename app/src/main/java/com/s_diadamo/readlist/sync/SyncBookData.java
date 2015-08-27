@@ -47,22 +47,26 @@ class SyncBookData extends SyncData {
                     Book book = parseBookToBook(parseBook);
                     booksFromParse.add(book);
                 }
-                updateDeviceBooks(booksOnDevice, booksFromParse);
+                updateDeviceBooks(booksOnDevice, booksFromParse, parseBooks);
                 updateParseBooks(booksOnDevice, booksFromParse);
             }
         });
     }
 
-    private void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
+    private void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse, List<ParseObject> parseBooks) {
         HashSet<Integer> deviceBookIds = new HashSet<>();
         for (Book book : booksOnDevice) {
             deviceBookIds.add(book.getId());
         }
 
+        int i = 0;
         for (Book book : booksFromParse) {
             if (!deviceBookIds.contains(book.getId())) {
                 bookOperations.addBook(book);
+                copyBookValues(parseBooks.get(i), book);
+                parseBooks.get(i).saveEventually();
             }
+            i++;
         }
     }
 

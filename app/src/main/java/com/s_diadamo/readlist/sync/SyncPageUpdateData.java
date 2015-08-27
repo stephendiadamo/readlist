@@ -45,22 +45,26 @@ public class SyncPageUpdateData extends SyncData {
                     PageUpdate pageUpdate = parsePageUpdateToPageUpdate(parsePageUpdate);
                     pageUpdatesFromParse.add(pageUpdate);
                 }
-                updateDevicePageUpdates(pageUpdatesOnDevice, pageUpdatesFromParse);
+                updateDevicePageUpdates(pageUpdatesOnDevice, pageUpdatesFromParse, parsePageUpdates);
                 updateParsePageUpdates(pageUpdatesOnDevice, pageUpdatesFromParse);
             }
         });
     }
 
-    private void updateDevicePageUpdates(ArrayList<PageUpdate> pageUpdatesOnDevice, ArrayList<PageUpdate> pageUpdatesFromParse) {
+    private void updateDevicePageUpdates(ArrayList<PageUpdate> pageUpdatesOnDevice, ArrayList<PageUpdate> pageUpdatesFromParse, List<ParseObject> parsePageUpdates) {
         HashSet<Integer> devicePageUpdateIds = new HashSet<>();
         for (PageUpdate pageUpdate : pageUpdatesOnDevice) {
             devicePageUpdateIds.add(pageUpdate.getId());
         }
 
+        int i = 0;
         for (PageUpdate pageUpdate : pageUpdatesFromParse) {
             if (!devicePageUpdateIds.contains(pageUpdate.getId())) {
                 pageUpdateOperations.addPageUpdate(pageUpdate);
+                copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
+                parsePageUpdates.get(i).saveEventually();
             }
+            i++;
         }
     }
 
@@ -121,5 +125,12 @@ public class SyncPageUpdateData extends SyncData {
                 toDelete.deleteEventually();
             }
         });
+    }
+
+    void copyPageUpdateValues(ParseObject parsePageUpdate, PageUpdate pageUpdate){
+        parsePageUpdate.put(READLIST_ID, pageUpdate.getId());
+        parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_BOOK_ID, pageUpdate.getBookId());
+        parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_DATE, pageUpdate.getDate());
+        parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
     }
 }

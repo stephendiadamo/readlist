@@ -47,22 +47,26 @@ class SyncLentBookData extends SyncData {
                     LentBook lentBook = parseLentBookToLentBook(parseLentBook);
                     lentBooksFromParse.add(lentBook);
                 }
-                updateDeviceLentBooks(lentBooksOnDevice, lentBooksFromParse);
+                updateDeviceLentBooks(lentBooksOnDevice, lentBooksFromParse, parseLentBooks);
                 updateParseLentBooks(lentBooksOnDevice, lentBooksFromParse);
             }
         });
     }
 
-    private void updateDeviceLentBooks(ArrayList<LentBook> lentBooksOnDevice, ArrayList<LentBook> lentBooksFromParse) {
+    private void updateDeviceLentBooks(ArrayList<LentBook> lentBooksOnDevice, ArrayList<LentBook> lentBooksFromParse, List<ParseObject> parseLentBooks) {
         HashSet<Integer> deviceLentBookIds = new HashSet<>();
         for (LentBook lentBook : lentBooksOnDevice) {
             deviceLentBookIds.add(lentBook.getId());
         }
 
+        int i = 0;
         for (LentBook lentBook : lentBooksFromParse) {
             if (!deviceLentBookIds.contains(lentBook.getId())) {
                 lentBookOperations.addLentBook(lentBook);
+                copyLentBookValues(parseLentBooks.get(i), lentBook);
+                parseLentBooks.get(i).saveEventually();
             }
+            i++;
         }
     }
 

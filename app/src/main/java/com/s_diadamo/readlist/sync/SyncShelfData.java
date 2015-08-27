@@ -48,7 +48,7 @@ class SyncShelfData extends SyncData {
                     Shelf shelf = parseShelfToShelf(parseShelf);
                     shelvesFromParse.add(shelf);
                 }
-                updateDeviceShelves(shelvesOnDevice, shelvesFromParse);
+                updateDeviceShelves(shelvesOnDevice, shelvesFromParse, parseShelves);
                 updateParseShelves(shelvesOnDevice, shelvesFromParse);
             }
         });
@@ -70,7 +70,7 @@ class SyncShelfData extends SyncData {
                     Shelf shelf = parseShelfToShelf(parseShelf);
                     shelvesFromParse.add(shelf);
                 }
-                updateDeviceShelves(shelvesOnDevice, shelvesFromParse);
+                updateDeviceShelves(shelvesOnDevice, shelvesFromParse, parseShelves);
                 updateParseShelves(shelvesOnDevice, shelvesFromParse);
                 ((NavigationDrawerFragment) activity.getSupportFragmentManager().
                         findFragmentById(R.id.navigation_drawer)).resetAdapter();
@@ -78,16 +78,20 @@ class SyncShelfData extends SyncData {
         });
     }
 
-    private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {
+    private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse, List<ParseObject> parseShelves) {
         HashSet<Integer> deviceShelfIds = new HashSet<>();
         for (Shelf shelf : shelvesOnDevice) {
             deviceShelfIds.add(shelf.getId());
         }
 
+        int i = 0;
         for (Shelf shelf : shelvesFromParse) {
             if (!deviceShelfIds.contains(shelf.getId())) {
                 shelfOperations.addShelf(shelf);
+                copyShelfValues(parseShelves.get(i), shelf);
+                parseShelves.get(i).saveEventually();
             }
+            i++;
         }
     }
 

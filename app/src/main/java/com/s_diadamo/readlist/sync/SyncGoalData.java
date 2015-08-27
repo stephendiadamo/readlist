@@ -45,22 +45,25 @@ class SyncGoalData extends SyncData {
                     Goal goal = parseGoalToGoal(parseGoal);
                     goalsFromParse.add(goal);
                 }
-                updateDeviceGoals(goalsOnDevice, goalsFromParse);
+                updateDeviceGoals(goalsOnDevice, goalsFromParse, parseGoals);
                 updateParseGoals(goalsOnDevice, goalsFromParse);
             }
         });
     }
 
-    private void updateDeviceGoals(ArrayList<Goal> goalsOnDevice, ArrayList<Goal> goalsFromParse) {
+    private void updateDeviceGoals(ArrayList<Goal> goalsOnDevice, ArrayList<Goal> goalsFromParse, List<ParseObject> parseGoals) {
         HashSet<Integer> deviceGoalIds = new HashSet<>();
         for (Goal goal : goalsOnDevice) {
             deviceGoalIds.add(goal.getId());
         }
-
+        int i = 0;
         for (Goal goal : goalsFromParse) {
             if (!deviceGoalIds.contains(goal.getId())) {
                 goalOperations.addGoal(goal);
+                copyGoalValues(parseGoals.get(i), goal);
+                parseGoals.get(i).saveEventually();
             }
+            i++;
         }
     }
 

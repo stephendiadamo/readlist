@@ -47,22 +47,26 @@ public class SyncBookUpdateData extends SyncData {
                         bookUpdatesFromParse.add(bookUpdate);
                     }
                 }
-                updateDeviceBookUpdates(bookUpdatesOnDevice, bookUpdatesFromParse);
+                updateDeviceBookUpdates(bookUpdatesOnDevice, bookUpdatesFromParse, parseBookUpdates);
                 updateParseBookUpdates(bookUpdatesOnDevice, bookUpdatesFromParse);
             }
         });
     }
 
-    private void updateDeviceBookUpdates(ArrayList<BookUpdate> bookUpdatesOnDevice, ArrayList<BookUpdate> bookUpdatesFromParse) {
+    private void updateDeviceBookUpdates(ArrayList<BookUpdate> bookUpdatesOnDevice, ArrayList<BookUpdate> bookUpdatesFromParse, List<ParseObject> parseBookUdpates) {
         HashSet<Integer> deviceBookUpdateIds = new HashSet<>();
         for (BookUpdate bookUpdate : bookUpdatesOnDevice) {
             deviceBookUpdateIds.add(bookUpdate.getId());
         }
 
+        int i = 0;
         for (BookUpdate bookUpdate : bookUpdatesFromParse) {
             if (!deviceBookUpdateIds.contains(bookUpdate.getId())) {
                 bookUpdateOperations.addBookUpdate(bookUpdate);
+                copyBookUpdateValues(parseBookUdpates.get(i), bookUpdate);
+                parseBookUdpates.get(i).saveEventually();
             }
+            i++;
         }
     }
 
@@ -121,5 +125,11 @@ public class SyncBookUpdateData extends SyncData {
                 toDelete.deleteEventually();
             }
         });
+    }
+
+    void copyBookUpdateValues(ParseObject parseBookUpdate, BookUpdate bookUpdate) {
+        parseBookUpdate.put(READLIST_ID, bookUpdate.getId());
+        parseBookUpdate.put(DatabaseHelper.BOOK_UPDATE_BOOK_ID, bookUpdate.getBookId());
+        parseBookUpdate.put(DatabaseHelper.BOOK_UPDATE_DATE, bookUpdate.getDate());
     }
 }
