@@ -20,8 +20,10 @@ import android.widget.TextView;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.readingSession.ReadingSession;
 import com.s_diadamo.readlist.readingSession.ReadingSessionOperations;
 import com.s_diadamo.readlist.sync.SyncBookUpdateData;
+import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.sync.SyncPageUpdateData;
 
 import java.util.ArrayList;
@@ -78,8 +80,12 @@ public class StatisticsFragment extends Fragment {
                     if (Utils.checkUserIsLoggedIn(context)) {
                         pageUpdateOperations.resetStatistics();
                         bookUpdateOperations.resetStatistics();
-                        new SyncBookUpdateData(context).deleteBookUpdates();
-                        new SyncPageUpdateData(context).deletePageUpdates();
+                        readingSessionOperations.resetStatistics();
+
+                        SyncData syncData = new SyncData(context);
+                        syncData.deleteBookUpdates();
+                        syncData.deletePageUpdates();
+                        syncData.deleteReadingSessions();
                     } else {
                         ArrayList<BookUpdate> bookUpdates = bookUpdateOperations.getAllValidBookUpdates();
                         for (BookUpdate bookUpdate : bookUpdates) {
@@ -91,6 +97,12 @@ public class StatisticsFragment extends Fragment {
                         for (PageUpdate pageUpdate : pageUpdates) {
                             pageUpdate.delete();
                             pageUpdateOperations.updatePageUpdate(pageUpdate);
+                        }
+
+                        ArrayList<ReadingSession> readingSessions = readingSessionOperations.getValidReadingSessions();
+                        for (ReadingSession readingSession : readingSessions) {
+                            readingSession.delete();
+                            readingSessionOperations.update(readingSession);
                         }
                     }
 

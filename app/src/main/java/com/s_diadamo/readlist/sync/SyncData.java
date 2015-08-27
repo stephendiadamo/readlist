@@ -3,7 +3,10 @@ package com.s_diadamo.readlist.sync;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.comment.Comment;
 import com.s_diadamo.readlist.general.MultiProcessSpinner;
@@ -14,6 +17,8 @@ import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.goal.Goal;
 import com.s_diadamo.readlist.updates.BookUpdate;
 import com.s_diadamo.readlist.updates.PageUpdate;
+
+import java.util.List;
 
 public class SyncData {
 
@@ -177,4 +182,39 @@ public class SyncData {
     public void update(ReadingSession readingSession) {
         new SyncReadingSessionData(context).updateParseReadingSession(readingSession);
     }
+
+    public void deleteReadingSessions(){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_READING_SESSION);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject.deleteAllInBackground(list);
+            }
+        });
+    }
+
+    public void deleteBookUpdates() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject.deleteAllInBackground(list);
+            }
+        });
+    }
+
+    public void deletePageUpdates() {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
+        query.whereEqualTo(Utils.USER_NAME, userName);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                ParseObject.deleteAllInBackground(list);
+            }
+        });
+    }
+
+
 }

@@ -65,6 +65,26 @@ public class ReadingSessionOperations {
 
     }
 
+    public ArrayList<ReadingSession> getValidReadingSessions(){
+        db = dbHelper.getReadableDatabase();
+        ArrayList<ReadingSession> sessions = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=0",
+                DatabaseHelper.TABLE_READING_SESSIONS,
+                DatabaseHelper.IS_DELETED);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                ReadingSession session = parseReadingSession(cursor);
+                sessions.add(session);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        db.close();
+        return sessions;
+    }
+
     public ArrayList<ReadingSession> getReadingSessionsForBook(int bookId) {
         db = dbHelper.getReadableDatabase();
         ArrayList<ReadingSession> sessions = new ArrayList<>();
@@ -270,5 +290,10 @@ public class ReadingSessionOperations {
                 cursor.getString(2),
                 cursor.getInt(3),
                 cursor.getInt(4));
+    }
+
+    public void resetStatistics() {
+        db = dbHelper.getWritableDatabase();
+        db.delete(DatabaseHelper.TABLE_READING_SESSIONS, null, null);
     }
 }

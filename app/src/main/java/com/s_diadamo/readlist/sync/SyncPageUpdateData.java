@@ -18,12 +18,12 @@ import java.util.List;
 public class SyncPageUpdateData extends SyncData {
     private final PageUpdateOperations pageUpdateOperations;
 
-    public SyncPageUpdateData(Context context) {
+    protected SyncPageUpdateData(Context context) {
         super(context, true);
         pageUpdateOperations = new PageUpdateOperations(context);
     }
 
-    public SyncPageUpdateData(Context context, boolean showSpinner) {
+    protected SyncPageUpdateData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         pageUpdateOperations = new PageUpdateOperations(context);
     }
@@ -108,17 +108,6 @@ public class SyncPageUpdateData extends SyncData {
         parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_PAGES, pageUpdate.getPages());
 
         return parsePageUpdate;
-    }
-
-    public void deletePageUpdates() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_PAGE_UPDATE);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                ParseObject.deleteAllInBackground(list);
-            }
-        });
     }
 
     void deleteParsePageUpdate(PageUpdate pageUpdate) {

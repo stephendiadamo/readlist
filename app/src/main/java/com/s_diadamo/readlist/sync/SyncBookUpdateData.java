@@ -19,12 +19,12 @@ import java.util.List;
 public class SyncBookUpdateData extends SyncData {
     private final BookUpdateOperations bookUpdateOperations;
 
-    public SyncBookUpdateData(Context context) {
+    protected SyncBookUpdateData(Context context) {
         super(context, true);
         bookUpdateOperations = new BookUpdateOperations(context);
     }
 
-    public SyncBookUpdateData(Context context, boolean showSpinner) {
+    protected SyncBookUpdateData(Context context, boolean showSpinner) {
         super(context, showSpinner);
         bookUpdateOperations = new BookUpdateOperations(context);
     }
@@ -108,17 +108,6 @@ public class SyncBookUpdateData extends SyncData {
                 parseBookUpdate.getInt(READLIST_ID),
                 parseBookUpdate.getInt(DatabaseHelper.BOOK_UPDATE_BOOK_ID),
                 parseBookUpdate.getString(DatabaseHelper.BOOK_UPDATE_DATE));
-    }
-
-    public void deleteBookUpdates() {
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK_UPDATE);
-        query.whereEqualTo(Utils.USER_NAME, userName);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                ParseObject.deleteAllInBackground(list);
-            }
-        });
     }
 
     void deleteParseBookUpdate(BookUpdate bookUpdate) {

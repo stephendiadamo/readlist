@@ -142,6 +142,7 @@
     <string name="delete_comment">Delete comment</string>
     <string name="are_you_sure_reset_stats">Are you sure you want to reset your statistics? This cannot be undone</string>
     <string name="you_have_an_active_reading_session">You have an active reading session</string>
+    <string name="update_book_page">Would you like to update the current page?</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
