@@ -16,8 +16,8 @@ import java.util.Locale;
 public class Book {
 
     private int id;
-    private String title;
-    private String author;
+    private String title = "";
+    private String author = "";
     private int shelfId = 0;
     private String dateAdded;
     private int numPages;
@@ -34,8 +34,8 @@ public class Book {
 
     public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, double rating, int isDeleted) {
         this.id = id;
-        this.title = title;
-        this.author = author;
+        this.title = title != null ? title : "";
+        this.author = author != null ? author : "";
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
@@ -48,8 +48,8 @@ public class Book {
     }
 
     public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, int complete, String completionDate, String coverPictureUrl) {
-        this.title = title;
-        this.author = author;
+        this.title = title != null ? title : "";
+        this.author = author != null ? author : "";
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
@@ -61,8 +61,8 @@ public class Book {
     }
 
     public Book(String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int colour, String completionDate, String coverPictureUrl) {
-        this.title = title;
-        this.author = author;
+        this.title = title != null ? title : "";
+        this.author = author != null ? author : "";
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;
@@ -74,8 +74,8 @@ public class Book {
 
     public Book(int id, String title, String author, int shelfId, String dateAdded, int numPages, int currentPage, int complete, String completionDate, String coverPictureUrl, double rating) {
         this.id = id;
-        this.title = title;
-        this.author = author;
+        this.title = title != null ? title : "";
+        this.author = author != null ? author : "";
         this.shelfId = shelfId;
         this.dateAdded = dateAdded;
         this.numPages = numPages;

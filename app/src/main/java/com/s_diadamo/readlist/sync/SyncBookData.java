@@ -119,8 +119,12 @@ class SyncBookData extends SyncData {
 
         parseBook.put(Utils.USER_NAME, userName);
         parseBook.put(READLIST_ID, book.getId());
-        parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
-        parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
+        if (book.getTitle() != null) {
+            parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
+        }
+        if (book.getAuthor() != null) {
+            parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
+        }
         parseBook.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
         parseBook.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         parseBook.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
@@ -167,8 +171,12 @@ class SyncBookData extends SyncData {
 
     private void copyBookValues(ParseObject parseBook, Book book) {
         parseBook.put(READLIST_ID, book.getId());
-        parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
-        parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
+        if (book.getTitle() != null) {
+            parseBook.put(DatabaseHelper.BOOK_TITLE, book.getTitle());
+        }
+        if (book.getAuthor() != null) {
+            parseBook.put(DatabaseHelper.BOOK_AUTHOR, book.getAuthor());
+        }
         parseBook.put(DatabaseHelper.BOOK_SHELF, book.getShelfId());
         parseBook.put(DatabaseHelper.BOOK_DATE_ADDED, book.getDateAdded());
         parseBook.put(DatabaseHelper.BOOK_NUM_PAGES, book.getNumPages());
