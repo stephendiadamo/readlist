@@ -25,6 +25,7 @@ import com.s_diadamo.readlist.sync.SyncData;
 import java.util.ArrayList;
 
 public class CommentFragment extends Fragment implements LoaderManager.LoaderCallbacks {
+    private View rootView;
     private Context context;
     private ListView commentListView;
     private CommentAdapter commentAdapter;
@@ -35,7 +36,7 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_comment_book, container, false);
+        rootView = inflater.inflate(R.layout.fragment_comment_book, container, false);
         context = rootView.getContext();
 
         setHasOptionsMenu(false);
@@ -161,6 +162,7 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
             case CommentLoader.ID:
                 comments = (ArrayList<Comment>) data;
                 commentAdapter = new CommentAdapter(context, comments);
+                commentListView.setEmptyView(rootView.findViewById(R.id.comment_book_empty_view));
                 commentListView.setAdapter(commentAdapter);
 
                 registerForContextMenu(commentListView);

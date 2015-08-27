@@ -23,4 +23,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
 
+    <TextView
+        android:id="@+id/comment_book_empty_view"
+        style="@style/EmptyList"
+        android:text="@string/no_comments_added" />
+
 </LinearLayout>

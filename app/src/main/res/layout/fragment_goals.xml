@@ -11,8 +11,7 @@
         <TextView
             android:id="@+id/page_goals_header"
             style="@style/UpdateHeader"
-            android:text="@string/page_goals"
-            android:visibility="gone" />
+            android:text="@string/page_goals" />
 
         <ListView
             android:id="@+id/goals_page_goals"
@@ -20,15 +19,26 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/page_goals_empty_list"
+            style="@style/EmptyList"
+            android:layout_marginBottom="30dp"
+            android:text="@string/you_havent_set_any_page_goals" />
+
+        <TextView
             android:id="@+id/book_goals_header"
             style="@style/UpdateHeader"
-            android:text="@string/book_goals"
-            android:visibility="gone" />
+            android:text="@string/book_goals" />
 
         <ListView
             android:id="@+id/goals_book_goals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/book_goals_empty_list"
+            style="@style/EmptyList"
+            android:text="@string/you_havent_set_any_book_goals" />
+
     </LinearLayout>
 
 </ScrollView>

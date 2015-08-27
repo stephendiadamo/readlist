@@ -24,6 +24,7 @@ import com.s_diadamo.readlist.sync.SyncData;
 import java.util.ArrayList;
 
 public class LentFragment extends Fragment implements LoaderManager.LoaderCallbacks {
+    private View rootView;
     private Context context;
     private ListView lentBookListView;
     private LentBookAdapter lentBookAdapter;
@@ -31,13 +32,13 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_listview, container, false);
+        rootView = inflater.inflate(R.layout.fragment_lent_book, container, false);
         context = rootView.getContext();
 
         setHasOptionsMenu(false);
         lentBookOperations = new LentBookOperations(context);
 
-        lentBookListView = (ListView) rootView.findViewById(R.id.general_list_view);
+        lentBookListView = (ListView) rootView.findViewById(R.id.lent_book_list_view);
         getLoaderManager().initLoader(LentBookLoader.ID, null, this);
 
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
@@ -79,9 +80,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
                     lentBook.delete();
                     lentBookOperations.updateLentBook(lentBook);
                 }
-
                 lentBookAdapter.remove(lentBook);
-
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -104,6 +103,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
             case LentBookLoader.ID:
                 ArrayList<LentBook> lentBooks = (ArrayList<LentBook>) data;
                 lentBookAdapter = new LentBookAdapter(context, lentBooks);
+                lentBookListView.setEmptyView(rootView.findViewById(R.id.lent_book_empty_view));
                 lentBookListView.setAdapter(lentBookAdapter);
 
                 registerForContextMenu(lentBookListView);

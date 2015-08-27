@@ -5,11 +5,15 @@
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/general_list_view"
+        android:id="@+id/lent_book_list_view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="#ccc"
-        android:footerDividersEnabled="false"
-        android:dividerHeight="1dp" />
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="false" />
 
+    <TextView
+        android:id="@+id/lent_book_empty_view"
+        style="@style/EmptyList"
+        android:text="@string/you_havent_lent_any_books" />
 </LinearLayout>

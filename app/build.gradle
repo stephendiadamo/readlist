@@ -8,8 +8,8 @@ android {
         applicationId "com.s_diadamo.readlist"
         minSdkVersion 17
         targetSdkVersion 22
-        versionCode 1223
-        versionName "1.2.2.3"
+        versionCode 1230
+        versionName "1.2.3.0"
     }
     buildTypes {
         release {

@@ -138,6 +138,12 @@
     <string name="sync_data_on_app_start">Sync data on app start</string>
     <string name="on">On</string>
     <string name="off">Off</string>
+    <string name="your_library_is_empty">Your library is empty</string>
+    <string name="there_s_nothing_here">There\'s nothing here</string>
+    <string name="you_havent_lent_any_books">You haven\'t lent any books</string>
+    <string name="no_comments_added">No comments added</string>
+    <string name="you_havent_set_any_page_goals">You haven\'t set any page goals</string>
+    <string name="you_havent_set_any_book_goals">You haven\'t set any book goals</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

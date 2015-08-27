@@ -164,43 +164,36 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         pageGoalAdapter = new GoalAdapter(context, pageGoals);
         bookGoalAdapter = new GoalAdapter(context, bookGoals);
 
-        if (pageGoals.isEmpty()) {
-            rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
-        } else {
-            rootView.findViewById(R.id.page_goals_header).setVisibility(View.VISIBLE);
-            pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
-            pageListView.setAdapter(pageGoalAdapter);
-            registerForContextMenu(pageListView);
-            pageListView.setLongClickable(false);
+        pageListView = (ListView) rootView.findViewById(R.id.goals_page_goals);
+        pageListView.setEmptyView(rootView.findViewById(R.id.page_goals_empty_list));
+        pageListView.setAdapter(pageGoalAdapter);
+        registerForContextMenu(pageListView);
+        pageListView.setLongClickable(false);
 
-            pageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    getActivity().openContextMenu(view);
-                }
-            });
+        pageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getActivity().openContextMenu(view);
+            }
+        });
 
-            Utils.setDynamicHeight(pageListView);
-        }
+        Utils.setDynamicHeight(pageListView);
 
-        if (bookGoals.isEmpty()) {
-            rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
-        } else {
-            rootView.findViewById(R.id.book_goals_header).setVisibility(View.VISIBLE);
-            bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
-            bookListView.setAdapter(bookGoalAdapter);
-            registerForContextMenu(bookListView);
-            bookListView.setLongClickable(false);
+        bookListView = (ListView) rootView.findViewById(R.id.goals_book_goals);
+        bookListView.setEmptyView(rootView.findViewById(R.id.book_goals_empty_list));
+        bookListView.setAdapter(bookGoalAdapter);
+        registerForContextMenu(bookListView);
+        bookListView.setLongClickable(false);
 
-            bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    getActivity().openContextMenu(view);
-                }
-            });
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                getActivity().openContextMenu(view);
+            }
+        });
 
-            Utils.setDynamicHeight(bookListView);
-        }
+        Utils.setDynamicHeight(bookListView);
+
         if (hideCompletedGoals != null && hideCompletedGoals.isChecked()) {
             updateVisibleGoals();
         }
@@ -223,16 +216,6 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
             pageGoalAdapter.hideCompletedGoals();
             bookGoalAdapter.hideCompletedGoals();
 
-            if (pageGoalAdapter.isEmpty()) {
-                rootView.findViewById(R.id.page_goals_header).setVisibility(View.GONE);
-            } else {
-                rootView.findViewById(R.id.page_goals_header).setVisibility(View.VISIBLE);
-            }
-            if (bookGoalAdapter.isEmpty()) {
-                rootView.findViewById(R.id.book_goals_header).setVisibility(View.GONE);
-            } else {
-                rootView.findViewById(R.id.book_goals_header).setVisibility(View.VISIBLE);
-            }
 
             if (pageListView != null)
                 Utils.setDynamicHeight(pageListView);

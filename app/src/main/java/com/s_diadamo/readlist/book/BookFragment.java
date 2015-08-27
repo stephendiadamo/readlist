@@ -41,6 +41,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 public class BookFragment extends Fragment implements LoaderManager.LoaderCallbacks {
+    private View rootView;
     private Context context;
     private SwipeListView bookListView;
     private ArrayList<Book> userBooks;
@@ -66,7 +67,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_book_swipe_listview, container, false);
+        rootView = inflater.inflate(R.layout.fragment_book_swipe_listview, container, false);
         context = rootView.getContext();
         prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -448,6 +449,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                         prefs.getBoolean(HIDE_COMPLETED_BOOKS, false),
                         prefs.getBoolean(HIDE_SHELVED_BOOKS, false),
                         getActivity().getSupportFragmentManager());
+
+                bookListView.setEmptyView(rootView.findViewById(R.id.book_empty_list_view));
                 bookListView.setAdapter(bookAdapter);
                 loadingBooks = false;
                 break;

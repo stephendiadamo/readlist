@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
                 syncData.syncAllData(this);
             }
         }
-        
+
         editor.apply();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));

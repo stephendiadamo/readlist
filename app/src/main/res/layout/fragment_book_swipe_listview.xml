@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.fortysevendeg.swipelistview.SwipeListView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:swipe="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/book_swipe_listview"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white"
-    android:divider="#ccc"
-    android:dividerHeight="1dp"
-    android:footerDividersEnabled="false"
-    swipe:swipeActionRight="dismiss"
-    swipe:swipeBackView="@+id/back"
-    swipe:swipeCloseAllItemsWhenMoveList="true"
-    swipe:swipeFrontView="@+id/front"
-    swipe:swipeMode="left"
-    swipe:swipeOffsetLeft="80dp" />
+    android:orientation="vertical">
+
+    <com.fortysevendeg.swipelistview.SwipeListView xmlns:swipe="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/book_swipe_listview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/white"
+        android:divider="#ccc"
+        android:dividerHeight="1dp"
+        android:footerDividersEnabled="false"
+        swipe:swipeActionRight="dismiss"
+        swipe:swipeBackView="@+id/back"
+        swipe:swipeCloseAllItemsWhenMoveList="true"
+        swipe:swipeFrontView="@+id/front"
+        swipe:swipeMode="left"
+        swipe:swipeOffsetLeft="80dp" />
+
+    <TextView
+        android:id="@+id/book_empty_list_view"
+        style="@style/EmptyList"
+        android:text="@string/your_library_is_empty" />
+</LinearLayout>
