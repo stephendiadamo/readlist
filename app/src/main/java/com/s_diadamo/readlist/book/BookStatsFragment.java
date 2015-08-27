@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.book;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v4.app.LoaderManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -33,6 +35,8 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
     private int bookId;
     private ListView readingSessionsListView;
     private ReadingSessionAdapter readingSessionAdapter;
+    private ReadingSessionOperations readingSessionOperations;
+    private TextView timeSpentReading;
 
     @Nullable
     @Override
@@ -43,14 +47,16 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
         bookId = getArguments().getInt(BookAdapter.BOOK_ID);
         Book book = new BookOperations(context).getBook(bookId);
 
-        ReadingSessionOperations readingSessionOperations = new ReadingSessionOperations(context);
+        readingSessionOperations = new ReadingSessionOperations(context);
+
+        getLoaderManager().initLoader(ReadingSessionLoader.ID, null, this);
 
         TextView title = (TextView) rootView.findViewById(R.id.view_book_stats_title);
         TextView author = (TextView) rootView.findViewById(R.id.view_book_stats_author);
         TextView dateAdded = (TextView) rootView.findViewById(R.id.view_book_stats_date_added);
         TextView percentComplete = (TextView) rootView.findViewById(R.id.view_book_stats_percent_completed);
         TextView rating = (TextView) rootView.findViewById(R.id.view_book_stats_rating);
-        TextView timeSpentReading = (TextView) rootView.findViewById(R.id.view_book_time_spent_reading);
+        timeSpentReading = (TextView) rootView.findViewById(R.id.view_book_time_spent_reading);
         readingSessionsListView = (ListView) rootView.findViewById(R.id.view_book_stats_reading_sessions_list);
 
         title.setText(book.getTitle());
@@ -84,13 +90,26 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
         final ReadingSession readingSession = readingSessionAdapter.getItem(info.position);
         switch (item.getItemId()) {
             case R.id.delete:
-                if (Utils.checkUserIsLoggedIn(context)) {
-                    //TODO: Parse update here
-                    new ReadingSessionOperations(context).deleteSession(readingSession);
-                } else {
-                    readingSession.delete();
-                    new ReadingSessionOperations(context).update(readingSession);
-                }
+                new AlertDialog.Builder(context)
+                        .setMessage(context.getString(R.string.are_you_sure))
+                        .setCancelable(true)
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                if (Utils.checkUserIsLoggedIn(context)) {
+                                    //TODO: Parse update here
+                                    readingSessionOperations.deleteSession(readingSession);
+                                } else {
+                                    readingSession.delete();
+                                    readingSessionOperations.update(readingSession);
+                                }
+
+                                int timeSpentReadingBook = readingSessionOperations.getTimeSpentReadingForBook(bookId);
+                                timeSpentReading.setText(Utils.formatTimeSpentReading(timeSpentReadingBook));
+                                readingSessionAdapter.remove(readingSession);
+                            }
+                        })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
                 return true;
         }
 

@@ -56,6 +56,12 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final String HIDE_COMPLETED_BOOKS = "HIDE_COMPLETED_BOOKS";
     private static final String HIDE_SHELVED_BOOKS = "HIDE_SHELVED_BOOKS";
     private static final String EDIT_SHELF = "EDIT_SHELF";
+    private static final String SORT_TYPE = "SORT_TYPE";
+    private static final int SORT_DATE_ADDED = 0;
+    private static final int SORT_TITLE = 1;
+    private static final int SORT_AUTHOR = 2;
+    private static final int SORT_SHELF = 3;
+
 
     @Nullable
     @Override
@@ -247,50 +253,99 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             return true;
         } else if (id == R.id.sort_by_title) {
-            Collections.sort(userBooks, new Comparator<Book>() {
-                @Override
-                public int compare(Book lhs, Book rhs) {
-                    return lhs.getTitle().compareTo(rhs.getTitle());
-                }
-            });
-            bookAdapter.notifyDataSetChanged();
+            sortBooksByTitle();
             return true;
         } else if (id == R.id.sort_by_date) {
-            Collections.sort(userBooks, new Comparator<Book>() {
-                @Override
-                public int compare(Book lhs, Book rhs) {
-                    Date bookOneDate = Utils.getDateFromString(lhs.getDateAdded());
-                    Date bookTwoDate = Utils.getDateFromString(rhs.getDateAdded());
-                    if (bookOneDate != null && bookTwoDate != null) {
-                        return bookOneDate.compareTo(bookTwoDate);
-                    } else {
-                        return 0;
-                    }
-                }
-            });
-            bookAdapter.notifyDataSetChanged();
+            sortBooksByDate();
             return true;
         } else if (id == R.id.sort_by_shelf) {
-            Collections.sort(userBooks, new Comparator<Book>() {
-                @Override
-                public int compare(Book lhs, Book rhs) {
-                    return lhs.getShelfId() - rhs.getShelfId();
-                }
-            });
-            bookAdapter.notifyDataSetChanged();
+            sortBooksByShelf();
             return true;
         } else if (id == R.id.sort_by_author) {
-            Collections.sort(userBooks, new Comparator<Book>() {
-                @Override
-                public int compare(Book lhs, Book rhs) {
-                    return lhs.getAuthor().compareTo(rhs.getAuthor());
-                }
-            });
-            bookAdapter.notifyDataSetChanged();
+            sortBooksByAuthor();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sortBooksByAuthor() {
+        Collections.sort(userBooks, new Comparator<Book>() {
+            @Override
+            public int compare(Book lhs, Book rhs) {
+                return lhs.getAuthor().compareTo(rhs.getAuthor());
+            }
+        });
+        bookAdapter.notifyDataSetChanged();
+        saveSortingType(SORT_AUTHOR);
+    }
+
+    private void sortBooksByTitle() {
+        Collections.sort(userBooks, new Comparator<Book>() {
+            @Override
+            public int compare(Book lhs, Book rhs) {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        });
+        bookAdapter.notifyDataSetChanged();
+        saveSortingType(SORT_TITLE);
+    }
+
+    private void sortBooksByShelf() {
+        Collections.sort(userBooks, new Comparator<Book>() {
+            @Override
+            public int compare(Book lhs, Book rhs) {
+                return lhs.getShelfId() - rhs.getShelfId();
+            }
+        });
+        bookAdapter.notifyDataSetChanged();
+        saveSortingType(SORT_SHELF);
+    }
+
+    private void sortBooksByDate() {
+        Collections.sort(userBooks, new Comparator<Book>() {
+            @Override
+            public int compare(Book lhs, Book rhs) {
+                Date bookOneDate = Utils.getDateFromString(lhs.getDateAdded());
+                Date bookTwoDate = Utils.getDateFromString(rhs.getDateAdded());
+                if (bookOneDate != null && bookTwoDate != null) {
+                    return -1 * bookOneDate.compareTo(bookTwoDate);
+                } else {
+                    return 0;
+                }
+            }
+        });
+        bookAdapter.notifyDataSetChanged();
+        saveSortingType(SORT_DATE_ADDED);
+    }
+
+    private void saveSortingType(int type) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(SORT_TYPE, type);
+        editor.apply();
+    }
+
+    private void sortBooks() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        int type = prefs.getInt(SORT_TYPE, SORT_DATE_ADDED);
+        switch (type) {
+            case SORT_DATE_ADDED:
+                sortBooksByDate();
+                break;
+            case SORT_TITLE:
+                sortBooksByTitle();
+                break;
+            case SORT_AUTHOR:
+                sortBooksByAuthor();
+                break;
+            case SORT_SHELF:
+                sortBooksByShelf();
+                break;
+            default:
+                sortBooksByDate();
+                break;
+        }
     }
 
     private void launchEditShelfFragment() {
@@ -344,6 +399,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             }
             bookAdapter.updateVisibleBooks();
             bookListView.setAdapter(bookAdapter);
+            sortBooks();
         }
     }
 
