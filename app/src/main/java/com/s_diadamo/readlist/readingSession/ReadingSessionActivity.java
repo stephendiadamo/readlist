@@ -30,6 +30,7 @@ import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.book.BookUpdatePageDialog;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
+import com.s_diadamo.readlist.sync.SyncData;
 
 
 public class ReadingSessionActivity extends AppCompatActivity {
@@ -53,6 +54,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
     private ImageButton startStopButton;
     private static Book book;
     private Context context;
+    private boolean clickedNo = false;
 
     private Runnable timerThread = new Runnable() {
         @Override
@@ -103,6 +105,10 @@ public class ReadingSessionActivity extends AppCompatActivity {
             public void onClick(View v) {
                 ReadingSession readingSession = new ReadingSession(book.getId(), (int) (timeInMilliseconds / 1000));
                 new ReadingSessionOperations(context).addReadingSession(readingSession);
+                if (Utils.checkUserIsLoggedIn(context)) {
+                    new SyncData(context).add(readingSession);
+                }
+
                 Utils.showToast(v.getContext(), getString(R.string.saved_successfully));
 
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -146,6 +152,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
 
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_show_update_progress, viewGroup, false);
         final CheckBox doNotAskAgain = (CheckBox) view.findViewById(R.id.show_update_dont_ask_me_again);
+
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -175,6 +182,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
                     editor.putBoolean(DO_NOT_ASK_TO_UPDATE_PAGE, true);
                     editor.apply();
                 }
+                clickedNo = true;
                 dialog.dismiss();
             }
         });
@@ -182,7 +190,9 @@ public class ReadingSessionActivity extends AppCompatActivity {
         builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
-                goBackToMainActivity();
+                if (clickedNo) {
+                    goBackToMainActivity();
+                }
             }
         });
 
@@ -227,10 +237,11 @@ public class ReadingSessionActivity extends AppCompatActivity {
 
         Notification notification =
                 new NotificationCompat.Builder(this)
-                        .setContentTitle("Readlist")
-                        .setContentText("You have a reading session active")
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(getString(R.string.you_have_an_active_reading_session))
                         .setSmallIcon(R.drawable.notification_icon)
                         .setAutoCancel(false)
+                        .setOngoing(true)
                         .setContentIntent(pendingIntent)
                         .build();
 

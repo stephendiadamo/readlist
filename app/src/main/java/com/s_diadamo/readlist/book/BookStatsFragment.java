@@ -91,12 +91,12 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
         switch (item.getItemId()) {
             case R.id.delete:
                 new AlertDialog.Builder(context)
-                        .setMessage(context.getString(R.string.are_you_sure))
+                        .setMessage(context.getString(R.string.delete_this_reading_session))
                         .setCancelable(true)
                         .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 if (Utils.checkUserIsLoggedIn(context)) {
-                                    //TODO: Parse update here
+                                    new SyncData(context).delete(readingSession);
                                     readingSessionOperations.deleteSession(readingSession);
                                 } else {
                                     readingSession.delete();

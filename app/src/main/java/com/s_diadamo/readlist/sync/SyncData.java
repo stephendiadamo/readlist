@@ -9,6 +9,7 @@ import com.s_diadamo.readlist.comment.Comment;
 import com.s_diadamo.readlist.general.MultiProcessSpinner;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
+import com.s_diadamo.readlist.readingSession.ReadingSession;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.goal.Goal;
 import com.s_diadamo.readlist.updates.BookUpdate;
@@ -24,6 +25,7 @@ public class SyncData {
     static final String TYPE_PAGE_UPDATE = "page_update";
     static final String TYPE_LENT_BOOK = "lent_book";
     static final String TYPE_COMMENT = "comment";
+    static final String TYPE_READING_SESSION = "reading_session";
 
     private final Context context;
     final String userName;
@@ -34,15 +36,27 @@ public class SyncData {
         this.context = context;
         this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();
-        this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
+        this.syncSpinner.setCancelable(false);
+        this.syncSpinner.setInfo(context, "Syncing data...");
         this.showSpinner = showSpinner;
+    }
+
+    public SyncData(Context context, boolean showSpinner, boolean fromMain) {
+        this.context = context;
+        this.userName = Utils.getUserName(context);
+        this.syncSpinner = MultiProcessSpinner.getInstance();
+        this.syncSpinner.setInfo(context, "Syncing data...");
+        this.showSpinner = showSpinner;
+        if (fromMain) {
+            syncSpinner.setCancelable(true);
+        }
     }
 
     public SyncData(Context context) {
         this.context = context;
         this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();
-        this.syncSpinner.setInfo(context, "Syncing data...", "Syncing complete");
+        this.syncSpinner.setInfo(context, "Syncing data...");
         this.showSpinner = true;
     }
 
@@ -54,6 +68,7 @@ public class SyncData {
         new SyncPageUpdateData(context, showSpinner).syncAllPageUpdates();
         new SyncLentBookData(context, showSpinner).syncAllLentBooks();
         new SyncCommentData(context, showSpinner).syncAllComments();
+        new SyncReadingSessionData(context, showSpinner).syncAllReadingSessions();
     }
 
     public void syncAllData(AppCompatActivity activity) {
@@ -64,6 +79,7 @@ public class SyncData {
         new SyncPageUpdateData(context).syncAllPageUpdates();
         new SyncLentBookData(context).syncAllLentBooks();
         new SyncCommentData(context).syncAllComments();
+        new SyncReadingSessionData(context).syncAllReadingSessions();
     }
 
     public void add(Book book) {
@@ -101,6 +117,11 @@ public class SyncData {
         parseComment.saveEventually();
     }
 
+    public void add(ReadingSession readingSession) {
+        ParseObject parseReadingSession = new SyncReadingSessionData(context).toParseReadingSession(readingSession);
+        parseReadingSession.saveEventually();
+    }
+
     public void delete(Book book) {
         new SyncBookData(context).deleteParseBook(book);
     }
@@ -129,6 +150,10 @@ public class SyncData {
         new SyncCommentData(context).deleteParseComment(comment);
     }
 
+    public void delete(ReadingSession readingSession) {
+        new SyncReadingSessionData(context).deleteParseReadingSession(readingSession);
+    }
+
     public void update(Book book) {
         new SyncBookData(context).updateParseBook(book);
     }
@@ -147,5 +172,9 @@ public class SyncData {
 
     public void update(Comment comment) {
         new SyncCommentData(context).updateParseComment(comment);
+    }
+
+    public void update(ReadingSession readingSession) {
+        new SyncReadingSessionData(context).updateParseReadingSession(readingSession);
     }
 }
