@@ -23,7 +23,6 @@
     <string name="average_weekly_reading">Average Weekly Reading</string>
     <string name="reading_this_year">Reading This Year</string>
     <string name="all_time">All Time</string>
-    <string name="updates">Updates</string>
     <string name="pages_read">Pages Read</string>
     <string name="books_completed">Books Completed</string>
     <string name="reading_this_month">Reading This Month</string>
@@ -118,15 +117,11 @@
     <string name="reading_colon">Reading:</string>
     <string name="unlend_book">Unlend Book</string>
     <string name="saved_successfully">Saved successfully</string>
-    <string name="connect_goodreads_account">Connect Goodreads Account</string>
-    <string name="update_book_page">Would you like to update the current page?</string>
     <string name="dont_ask_me_again">Don\'t ask me again</string>
     <string name="sort_by_title">Sort by Title</string>
-    <string name="sort_by_date">Sort by Date</string>
     <string name="sort_by_shelf">Sort by Shelf</string>
     <string name="sort_by_date_added">Sort by Date Added</string>
     <string name="sort_by_author">Sort by Author</string>
-    <string name="page_updates">Page Updates</string>
     <string name="reading_sessions">Reading Sessions</string>
     <string name="time_spent_reading">Time Spent Reading</string>
     <string name="percent_completed">Percent Completed</string>
@@ -134,16 +129,19 @@
     <string name="book_statistics">Book Statistics</string>
     <string name="added">Added</string>
     <string name="rating">Rating</string>
-    <string name="are_you_sure">Are you sure?</string>
+    <string name="delete_this_reading_session">Delete this reading session?</string>
     <string name="sync_data_on_app_start">Sync data on app start</string>
     <string name="on">On</string>
     <string name="off">Off</string>
     <string name="your_library_is_empty">Your library is empty</string>
-    <string name="there_s_nothing_here">There\'s nothing here</string>
     <string name="you_havent_lent_any_books">You haven\'t lent any books</string>
     <string name="no_comments_added">No comments added</string>
     <string name="you_havent_set_any_page_goals">You haven\'t set any page goals</string>
     <string name="you_havent_set_any_book_goals">You haven\'t set any book goals</string>
+    <string name="crunching_the_numbers">Crunching the numbers</string>
+    <string name="delete_comment">Delete comment</string>
+    <string name="are_you_sure_reset_stats">Are you sure you want to reset your statistics? This cannot be undone</string>
+    <string name="you_have_an_active_reading_session">You have an active reading session</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

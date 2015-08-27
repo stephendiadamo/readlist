@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        if (prefs.getBoolean(Utils.SYNC_ON_START, true)){
+        if (prefs.getBoolean(Utils.SYNC_ON_START, true)) {
             if (Utils.checkUserIsLoggedIn(this) && Utils.isNetworkAvailable(this)) {
-                SyncData syncData = new SyncData(this, true);
+                SyncData syncData = new SyncData(this, true, true);
                 syncData.syncAllData(this);
             }
         }

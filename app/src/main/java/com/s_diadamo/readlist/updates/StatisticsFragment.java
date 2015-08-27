@@ -49,7 +49,7 @@ public class StatisticsFragment extends Fragment {
         readingSessionOperations = new ReadingSessionOperations(context);
 
         ProgressDialog progressDialog = new ProgressDialog(rootView.getContext());
-        progressDialog.setMessage("Crunching the numbers");
+        progressDialog.setMessage(getString(R.string.crunching_the_numbers));
         populateData();
         progressDialog.dismiss();
 
@@ -72,9 +72,8 @@ public class StatisticsFragment extends Fragment {
         long id = item.getItemId();
         if (id == R.id.reset_stats) {
             AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
-            builder.setMessage("Are you sure you want to reset your statistics? " +
-                    "This cannot be undone.");
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            builder.setMessage(getString(R.string.are_you_sure_reset_stats));
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     if (Utils.checkUserIsLoggedIn(context)) {
                         pageUpdateOperations.resetStatistics();
@@ -99,7 +98,7 @@ public class StatisticsFragment extends Fragment {
                 }
             });
 
-            builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

@@ -13,7 +13,7 @@ public class RequestQueueSingleton {
     private static Context context;
 
     private RequestQueueSingleton(Context context) {
-        this.context = context;
+        RequestQueueSingleton.context = context;
         requestQueue = getRequestQueue();
     }
 

@@ -104,7 +104,7 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
                 final EditText editCommentBox = (EditText) editCommentDialog.findViewById(R.id.edit_comment);
                 editCommentBox.setText(comment.getComment());
                 alertDialog.setView(editCommentDialog);
-                alertDialog.setTitle("Edit Comment");
+                alertDialog.setTitle(R.string.edit_comment);
                 alertDialog
                         .setPositiveButton(R.string.done, new DialogInterface.OnClickListener() {
                             @Override
@@ -122,8 +122,8 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
                 return true;
             case R.id.delete:
                 new AlertDialog.Builder(context)
-                        .setMessage("Delete comment?")
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setMessage(getString(R.string.delete_comment) + "?")
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (commentAdapter != null) {
@@ -138,7 +138,7 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
                                 }
                             }
                         })
-                        .setNegativeButton("No", null)
+                        .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
         }

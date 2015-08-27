@@ -11,7 +11,7 @@ public class MultiProcessSpinner {
     private int runningThreads;
     private ProgressDialog progressDialog;
     private String syncMessage;
-    private String completeMessage;
+    private boolean cancelable;
 
     private MultiProcessSpinner() {
         this.runningThreads = 0;
@@ -24,12 +24,15 @@ public class MultiProcessSpinner {
         return instance;
     }
 
-    public void setInfo(Context context, String syncMessage, String completeMessage) {
+    public void setInfo(Context context, String syncMessage) {
         if (instance != null) {
             instance.context = context;
             instance.syncMessage = syncMessage;
-            instance.completeMessage = completeMessage;
         }
+    }
+
+    public void setCancelable(boolean cancelable) {
+        this.cancelable = cancelable;
     }
 
     public void addThread() {
@@ -37,8 +40,8 @@ public class MultiProcessSpinner {
         if (runningThreads == 1) {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(syncMessage);
-            progressDialog.setCancelable(false);
-            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.setCancelable(cancelable);
+            progressDialog.setCanceledOnTouchOutside(cancelable);
             progressDialog.show();
         }
     }
@@ -47,7 +50,6 @@ public class MultiProcessSpinner {
         runningThreads--;
         if (runningThreads == 0) {
             progressDialog.dismiss();
-            Toast.makeText(context, completeMessage, Toast.LENGTH_SHORT).show();
         }
     }
 }
