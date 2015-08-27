@@ -22,9 +22,9 @@ class GoalAdapter extends ArrayAdapter<Goal> {
 
 
     public GoalAdapter(Context context, ArrayList<Goal> goals) {
-        super(context, R.layout.row_goal_element, goals);
+        super(context, R.layout.row_goal, goals);
         this.context = context;
-        this.layoutResourceID = R.layout.row_goal_element;
+        this.layoutResourceID = R.layout.row_goal;
         this.goals = goals;
     }
 

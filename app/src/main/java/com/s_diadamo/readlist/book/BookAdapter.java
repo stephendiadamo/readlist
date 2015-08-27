@@ -49,9 +49,10 @@ class BookAdapter extends BaseAdapter {
     private final BookOperations bookOperations;
     private final FragmentManager fragmentManager;
 
-    private static final String BOOK_ID = "BOOK_ID";
+    public static final String BOOK_ID = "BOOK_ID";
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String COMMENT_BOOK = "COMMENT_BOOK";
+    private static final String BOOK_STATS = "BOOK_STATS";
 
     public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved, FragmentManager fragmentManager) {
         this.context = context;
@@ -256,6 +257,8 @@ class BookAdapter extends BaseAdapter {
                             } else {
                                 unLendBook(book);
                             }
+                        } else if (id == R.id.view_stats) {
+                            launchViewBookStatsFragment(book);
                         }
                         return true;
                     }
@@ -275,6 +278,18 @@ class BookAdapter extends BaseAdapter {
         bookHolder.infoContainer.setBackground(book.getColorAsDrawable());
 
         return row;
+    }
+
+    private void launchViewBookStatsFragment(Book book) {
+        Bundle bundle = new Bundle();
+        bundle.putInt(BOOK_ID, book.getId());
+
+        Fragment fragment = new BookStatsFragment();
+        fragment.setArguments(bundle);
+        fragmentManager.beginTransaction()
+                .addToBackStack(BOOK_STATS)
+                .replace(R.id.container, fragment)
+                .commit();
     }
 
     private void launchCommentFragment(Book book) {
@@ -317,9 +332,7 @@ class BookAdapter extends BaseAdapter {
 
     private void launchEditBookFragment(Book book) {
         Bundle bundle = new Bundle();
-        //TODO: WTF is this? Use putInt...
-        String bookId = String.valueOf(book.getId());
-        bundle.putString(BOOK_ID, bookId);
+        bundle.putInt(BOOK_ID, book.getId());
 
         Fragment fragment = new BookEditFragment();
         fragment.setArguments(bundle);

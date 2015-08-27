@@ -3,6 +3,11 @@ package com.s_diadamo.readlist.readingSession;
 
 import com.s_diadamo.readlist.general.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ReadingSession {
     private long id;
     private final int bookId;
@@ -48,6 +53,18 @@ public class ReadingSession {
         return lengthOfTime;
     }
 
+    public String getCleanDateAdded() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+        try {
+            Date d = simpleDateFormat.parse(date);
+            simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
+            return simpleDateFormat.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
     public void setLengthOfTime(int lengthOfTime) {
         this.lengthOfTime = lengthOfTime;
     }
@@ -56,7 +73,8 @@ public class ReadingSession {
         return isDeleted;
     }
 
-    public void setIsDeleted(boolean isDeleted) {
-        this.isDeleted = isDeleted;
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

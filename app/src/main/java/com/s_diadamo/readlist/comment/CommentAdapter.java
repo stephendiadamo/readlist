@@ -15,13 +15,11 @@ import java.util.ArrayList;
 public class CommentAdapter extends ArrayAdapter<Comment> {
 
     private final Context context;
-    private final int resourceId;
     private final ArrayList<Comment> comments;
 
     public CommentAdapter(Context context, ArrayList<Comment> comments) {
-        super(context, R.layout.row_comment_element, comments);
+        super(context, R.layout.row_comment, comments);
         this.context = context;
-        this.resourceId = R.layout.row_comment_element;
         this.comments = comments;
     }
 
@@ -31,7 +29,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         CommentHolder commentHolder;
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
-            row = inflater.inflate(resourceId, parent, false);
+            row = inflater.inflate(R.layout.row_comment, parent, false);
 
             commentHolder = new CommentHolder();
             commentHolder.dateAdded = (TextView) row.findViewById(R.id.comment_date_added);

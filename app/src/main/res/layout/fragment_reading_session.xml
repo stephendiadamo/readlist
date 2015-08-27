@@ -23,6 +23,17 @@
             android:textStyle="italic" />
     </LinearLayout>
 
+
+    <TextView
+        android:id="@+id/record_reading_activity_timer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:paddingBottom="15dp"
+        android:text="@string/start_time_default"
+        android:textSize="30sp" />
+
     <ImageButton
         android:id="@+id/record_reading_activity_start_button"
         android:layout_width="wrap_content"
@@ -33,21 +44,12 @@
         android:padding="15dp"
         android:src="@drawable/ic_play_circle_outline_black_48dp" />
 
-    <TextView
-        android:id="@+id/record_reading_activity_timer"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:paddingBottom="15dp"
-        android:text="@string/start_time_default"
-        android:textSize="30sp" />
-
     <Button
         android:id="@+id/record_reading_activity_save_session"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="5dp"
+        android:layout_marginTop="50dp"
         android:enabled="false"
         android:paddingBottom="20dp"
         android:paddingEnd="40dp"

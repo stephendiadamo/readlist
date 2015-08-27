@@ -127,7 +127,7 @@ public class StatisticsFragment extends Fragment {
 
         averageWeeklyReadingSessions.setText(String.valueOf(readingSessionOperations.getAverageWeeklyReadingSessions()));
         averageWeeklyPages.setText(String.valueOf(pageUpdateOperations.getAverageWeeklyPages()));
-        averageWeeklyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getAverageWeeklyTimeSpentReading()));
+        averageWeeklyTimeSpentReading.setText(Utils.formatTimeSpentReading(readingSessionOperations.getAverageWeeklyTimeSpentReading()));
     }
 
     private void setMonthlyData() {
@@ -139,7 +139,7 @@ public class StatisticsFragment extends Fragment {
         monthlyReadingSessions.setText(String.valueOf(readingSessionOperations.getNumberOfReadingSessionsThisMonth()));
         monthlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesReadThisMonth()));
         monthlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisMonth()));
-        monthlyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisMonth()));
+        monthlyTimeSpentReading.setText(Utils.formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisMonth()));
     }
 
     private void setYearlyData() {
@@ -151,7 +151,7 @@ public class StatisticsFragment extends Fragment {
         yearlyReadingSessions.setText(String.valueOf(readingSessionOperations.getNumberOfReadingSessionsThisYear()));
         yearlyPages.setText(String.valueOf(pageUpdateOperations.getNumberOfPagesThisYear()));
         yearlyBooks.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksReadThisYear()));
-        yearlyTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisYear()));
+        yearlyTimeSpentReading.setText(Utils.formatTimeSpentReading(readingSessionOperations.getTimeSpentReadingThisYear()));
     }
 
     private void setAllTimeData() {
@@ -165,18 +165,6 @@ public class StatisticsFragment extends Fragment {
         allTimePages.setText(String.valueOf(pageUpdateOperations.getAllTimePagesRead()));
         allTimeBooks.setText(String.valueOf(bookOperations.getBooksCount()));
         allTimeBooksRead.setText(String.valueOf(bookUpdateOperations.getNumberOfBooksRead()));
-        allTimeTimeSpentReading.setText(formatTimeSpentReading(readingSessionOperations.getTimeSpentReading()));
-    }
-
-    private String formatTimeSpentReading(int seconds) {
-        int minutes = seconds / 60;
-        int hours = minutes / 60;
-
-        seconds = seconds % 60;
-        minutes = minutes % 60;
-
-        return "" + String.format("%02d", hours)
-                + ":" + String.format("%02d", minutes)
-                + ":" + String.format("%02d", seconds);
+        allTimeTimeSpentReading.setText(Utils.formatTimeSpentReading(readingSessionOperations.getTimeSpentReading()));
     }
 }

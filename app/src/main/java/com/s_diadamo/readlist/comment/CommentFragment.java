@@ -79,7 +79,6 @@ public class CommentFragment extends Fragment implements LoaderManager.LoaderCal
         if (args != null) {
             bookId = args.getInt(Comment.COMMENT_BOOK_ID);
         } else {
-            //TODO: handle wtf scenario
             Utils.showToast(context, "Something bad happened");
         }
     }

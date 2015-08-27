@@ -42,7 +42,7 @@ public class BookEditFragment extends Fragment {
         setHasOptionsMenu(true);
 
         bookOperations = new BookOperations(rootView.getContext());
-        int bookId = Integer.parseInt(getArguments().getString("BOOK_ID"));
+        int bookId = getArguments().getInt(BookAdapter.BOOK_ID);
         book = bookOperations.getBook(bookId);
 
         bookTitle = (EditText) rootView.findViewById(R.id.edit_book_title);

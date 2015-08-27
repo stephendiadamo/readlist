@@ -50,6 +50,21 @@ public class ReadingSessionOperations {
         return sessions;
     }
 
+    public void update(ReadingSession readingSession) {
+        db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(DatabaseHelper.READING_SESSION_BOOK_ID, readingSession.getBookId());
+        values.put(DatabaseHelper.READING_SESSION_DATE, readingSession.getDate());
+        values.put(DatabaseHelper.READING_SESSION_LENGTH, readingSession.getLengthOfTime());
+        values.put(DatabaseHelper.IS_DELETED, readingSession.isDeleted());
+
+        db.update(DatabaseHelper.TABLE_READING_SESSIONS, values, DatabaseHelper.KEY_ID + "=?",
+                new String[]{String.valueOf(readingSession.getId())});
+        db.close();
+
+    }
+
     public ArrayList<ReadingSession> getReadingSessionsForBook(int bookId) {
         db = dbHelper.getReadableDatabase();
         ArrayList<ReadingSession> sessions = new ArrayList<>();
@@ -171,6 +186,26 @@ public class ReadingSessionOperations {
         String query = String.format("SELECT SUM(%s) FROM %s WHERE %s=0",
                 DatabaseHelper.READING_SESSION_LENGTH,
                 DatabaseHelper.TABLE_READING_SESSIONS,
+                DatabaseHelper.IS_DELETED);
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            timeSpentReading = cursor.getInt(0);
+            cursor.close();
+        }
+        db.close();
+        return timeSpentReading;
+    }
+
+    public int getTimeSpentReadingForBook(int bookId) {
+        db = dbHelper.getReadableDatabase();
+        int timeSpentReading = 0;
+
+        String query = String.format("SELECT SUM(%s) FROM %s WHERE %s=%d AND %s=0",
+                DatabaseHelper.READING_SESSION_LENGTH,
+                DatabaseHelper.TABLE_READING_SESSIONS,
+                DatabaseHelper.READING_SESSION_BOOK_ID,
+                bookId,
                 DatabaseHelper.IS_DELETED);
 
         Cursor cursor = db.rawQuery(query, null);
