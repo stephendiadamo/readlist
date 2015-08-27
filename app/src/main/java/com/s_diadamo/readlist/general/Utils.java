@@ -38,6 +38,7 @@ public class Utils {
     public final static String EMAIL_ADDRESS = "EMAIL_ADDRESS";
     public final static String STORAGE_FILE_START = "/storage";
     public static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
+    public static final String SYNC_ON_START = "SYNC_ON_START";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();

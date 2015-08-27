@@ -83,6 +83,18 @@
         <item name="android:paddingTop">15dp</item>
         <item name="android:paddingBottom">15dp</item>
         <item name="android:paddingLeft">3dp</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="SettingsItem2">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingTop">15dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:paddingBottom">15dp</item>
+        <item name="android:background"> ?attr/selectableItemBackground</item>
+        <item name="android:paddingLeft">3dp</item>
         <item name="android:layout_margin">5dp</item>
         <item name="android:textSize">16sp</item>
     </style>

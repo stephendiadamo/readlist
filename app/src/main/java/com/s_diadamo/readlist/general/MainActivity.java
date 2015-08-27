@@ -88,11 +88,13 @@ public class MainActivity extends AppCompatActivity
             e.printStackTrace();
         }
 
-        if (Utils.checkUserIsLoggedIn(this) && Utils.isNetworkAvailable(this)) {
-            SyncData syncData = new SyncData(this, true);
-            syncData.syncAllData(this);
+        if (prefs.getBoolean(Utils.SYNC_ON_START, true)){
+            if (Utils.checkUserIsLoggedIn(this) && Utils.isNetworkAvailable(this)) {
+                SyncData syncData = new SyncData(this, true);
+                syncData.syncAllData(this);
+            }
         }
-
+        
         editor.apply();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));

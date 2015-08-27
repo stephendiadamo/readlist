@@ -135,6 +135,9 @@
     <string name="added">Added</string>
     <string name="rating">Rating</string>
     <string name="are_you_sure">Are you sure?</string>
+    <string name="sync_data_on_app_start">Sync data on app start</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

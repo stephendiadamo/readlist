@@ -2,8 +2,10 @@ package com.s_diadamo.readlist.settings;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,10 +31,11 @@ public class SettingsFragment extends Fragment {
     private TextView login;
     private TextView loggedInAsLabel;
     private TextView loggedInAs;
+    private boolean syncOnStart;
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         context = rootView.getContext();
         setHasOptionsMenu(false);
@@ -41,6 +44,8 @@ public class SettingsFragment extends Fragment {
         loggedInAsLabel = (TextView) rootView.findViewById(R.id.settings_logged_in_user_label);
         loggedInAs = (TextView) rootView.findViewById(R.id.settings_logged_in_user);
         TextView syncData = (TextView) rootView.findViewById(R.id.settings_sync);
+        TextView syncDataOnStart = (TextView) rootView.findViewById(R.id.settings_sync_on_start);
+        final TextView syncDataOnStartOnOff = (TextView) rootView.findViewById(R.id.settings_sync_on_start_on_off);
         TextView emailUs = (TextView) rootView.findViewById(R.id.settings_email_us);
         TextView readList = (TextView) rootView.findViewById(R.id.settings_readlist);
         TextView readListVersion = (TextView) rootView.findViewById(R.id.settings_readlist_version);
@@ -67,6 +72,21 @@ public class SettingsFragment extends Fragment {
                 } else {
                     launchSyncData();
                 }
+            }
+        });
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        syncOnStart = prefs.getBoolean(Utils.SYNC_ON_START, true);
+        updateSyncOnOff(syncDataOnStartOnOff);
+
+        syncDataOnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                syncOnStart = !syncOnStart;
+                updateSyncOnOff(syncDataOnStartOnOff);
+                editor.putBoolean(Utils.SYNC_ON_START, syncOnStart);
+                editor.apply();
             }
         });
 
@@ -99,6 +119,14 @@ public class SettingsFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void updateSyncOnOff(TextView syncDataOnStartOnOff) {
+        if (syncOnStart){
+            syncDataOnStartOnOff.setText(R.string.on);
+        } else {
+            syncDataOnStartOnOff.setText(R.string.off);
+        }
     }
 
     private void launchLoginFragment() {

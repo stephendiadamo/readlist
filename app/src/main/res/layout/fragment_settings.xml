@@ -10,15 +10,29 @@
         style="@style/SettingsItem"
         android:text="@string/sync_data" />
 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/settings_sync_on_start"
+            style="@style/SettingsItem2"
+            android:layout_weight="0.70"
+            android:text="@string/sync_data_on_app_start" />
+
+        <TextView
+            android:id="@+id/settings_sync_on_start_on_off"
+            style="@style/SettingsItem2"
+            android:layout_weight="0.30"
+            android:text="@string/on" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/settings_email_us"
         style="@style/SettingsItem"
         android:text="@string/email_us" />
-
-    <TextView
-        android:id="@+id/settings_connect_goodreads"
-        style="@style/SettingsItem"
-        android:text="@string/connect_goodreads_account" />
 
     <LinearLayout
         android:id="@+id/settings_login_container"
