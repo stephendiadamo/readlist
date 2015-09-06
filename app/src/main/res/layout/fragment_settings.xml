@@ -86,5 +86,10 @@
             android:layout_marginTop="-15dp" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/settings_share_readlist"
+        style="@style/SettingsItem"
+        android:text="@string/share_readlist" />
+
 
 </LinearLayout>

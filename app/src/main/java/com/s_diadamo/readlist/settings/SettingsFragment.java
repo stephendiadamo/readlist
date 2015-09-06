@@ -49,6 +49,7 @@ public class SettingsFragment extends Fragment {
         TextView emailUs = (TextView) rootView.findViewById(R.id.settings_email_us);
         TextView readList = (TextView) rootView.findViewById(R.id.settings_readlist);
         TextView readListVersion = (TextView) rootView.findViewById(R.id.settings_readlist_version);
+        TextView shareReadlist = (TextView) rootView.findViewById(R.id.settings_share_readlist);
 
         setLoginLabels();
 
@@ -90,6 +91,17 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        syncDataOnStartOnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = prefs.edit();
+                syncOnStart = !syncOnStart;
+                updateSyncOnOff(syncDataOnStartOnOff);
+                editor.putBoolean(Utils.SYNC_ON_START, syncOnStart);
+                editor.apply();
+            }
+        });
+
         readList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +125,18 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        shareReadlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_TEXT,
+                        "Check out this reading habits app: https://play.google.com/store/apps/details?id=com.s_diadamo.readlist");
+                sendIntent.setType("text/plain");
+                startActivity(sendIntent);
+            }
+        });
+
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
             ab.setTitle(R.string.settings);
@@ -122,7 +146,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void updateSyncOnOff(TextView syncDataOnStartOnOff) {
-        if (syncOnStart){
+        if (syncOnStart) {
             syncDataOnStartOnOff.setText(R.string.on);
         } else {
             syncDataOnStartOnOff.setText(R.string.off);

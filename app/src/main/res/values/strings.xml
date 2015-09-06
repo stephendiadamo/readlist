@@ -146,6 +146,7 @@
     <string name="sort_by_completion">Sort by Completion</string>
     <string name="complete_book_question">Are you finished reading this book?</string>
     <string name="you_can_only_run_one_session_at_a_time">You can only run one session at a time</string>
+    <string name="share_readlist">Share Readlist</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>
