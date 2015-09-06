@@ -62,6 +62,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     private static final int SORT_TITLE = 1;
     private static final int SORT_AUTHOR = 2;
     private static final int SORT_SHELF = 3;
+    private static final int SORT_COMPLETION = 4;
 
 
     @Nullable
@@ -163,7 +164,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             stringShelfId = args.getString(Shelf.SHELF_ID);
         }
 
-        if (!stringShelfId.isEmpty()) {
+        if (stringShelfId != null && !stringShelfId.isEmpty()) {
             ParseAnalytics.trackEventInBackground(Analytics.VIEWED_PARTICULAR_SHELF);
             shelfId = Integer.parseInt(stringShelfId);
         } else {
@@ -265,6 +266,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (id == R.id.sort_by_author) {
             sortBooksByAuthor();
             return true;
+        } else if (id == R.id.sort_by_completion) {
+            sortBooksByCompletion();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -320,6 +324,19 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         saveSortingType(SORT_DATE_ADDED);
     }
 
+    private void sortBooksByCompletion() {
+        Collections.sort(userBooks, new Comparator<Book>() {
+            @Override
+            public int compare(Book lhs, Book rhs) {
+                int leftHandCompletion = lhs.getNumPages() <= 0 ? 101 : (100 * lhs.getCurrentPage() / lhs.getNumPages());
+                int rightHandCompletion = rhs.getNumPages() <= 0 ? 101 : (100 * rhs.getCurrentPage() / rhs.getNumPages());
+                return -1 * (leftHandCompletion - rightHandCompletion);
+            }
+        });
+        bookAdapter.notifyDataSetChanged();
+        saveSortingType(SORT_COMPLETION);
+    }
+
     private void saveSortingType(int type) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
@@ -342,6 +359,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
             case SORT_SHELF:
                 sortBooksByShelf();
+                break;
+            case SORT_COMPLETION:
+                sortBooksByCompletion();
                 break;
             default:
                 sortBooksByDate();

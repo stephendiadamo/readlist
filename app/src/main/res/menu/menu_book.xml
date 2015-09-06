@@ -39,6 +39,9 @@
             <item
                 android:id="@+id/sort_by_author"
                 android:title="@string/sort_by_author" />
+            <item
+                android:id="@+id/sort_by_completion"
+                android:title="@string/sort_by_completion" />
         </menu>
     </item>
 
