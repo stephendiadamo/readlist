@@ -23,11 +23,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.book.BookOperations;
 import com.s_diadamo.readlist.book.BookUpdatePageDialog;
+import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
@@ -36,14 +39,13 @@ import com.s_diadamo.readlist.sync.SyncData;
 public class ReadingSessionActivity extends AppCompatActivity {
 
     public static String SESSION_BOOK_ID = "session_book_id";
-    private static String NOTIFICATION_ID_TAG = "notification_id";
     private static String DO_NOT_ASK_TO_UPDATE_PAGE = "do_not_ask_to_update_page";
-    private static String START_TIME = "start_time";
+    public static String START_TIME = "start_time";
     private static int NOTIFICATION_ID = 0;
 
     boolean timerStarted = false;
 
-    private Handler handler = new Handler();
+    private Handler handler;
     private long startTime = 0L;
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
@@ -77,6 +79,8 @@ public class ReadingSessionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_reading_session);
         context = this;
+
+        handler = new Handler();
 
         bookTitle = (TextView) findViewById(R.id.record_reading_activity_book_title);
         startStopButton = (ImageButton) findViewById(R.id.record_reading_activity_start_button);
@@ -125,20 +129,46 @@ public class ReadingSessionActivity extends AppCompatActivity {
 
     private void goBackToMainActivity() {
         Intent intent = new Intent(context, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+        finish();
     }
 
     private void init() {
         Intent intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
-            book = new BookOperations(this).getBook(extras.getInt(SESSION_BOOK_ID));
-            bookTitle.setText(book.getTitle());
-            if (intent.hasExtra(START_TIME)) {
-                startTime = extras.getLong(START_TIME);
-                handler.postDelayed(timerThread, 0);
-                timerStarted = true;
-                startStopButton.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+            int bookId = extras.getInt(SESSION_BOOK_ID);
+            if (bookId == -1) {
+                goBackToMainActivity();
+            } else {
+                book = new BookOperations(this).getBook(bookId);
+                bookTitle.setText(book.getTitle());
+                if (intent.hasExtra(START_TIME)) {
+                    startTime = extras.getLong(START_TIME);
+                    handler.postDelayed(timerThread, 0);
+                    timerStarted = true;
+                    startStopButton.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+                }
+            }
+        }
+    }
+
+    private void init(Intent intent) {
+        Bundle extras = intent.getExtras();
+        if (extras != null) {
+            int bookId = extras.getInt(SESSION_BOOK_ID);
+            if (bookId == -1) {
+                goBackToMainActivity();
+            } else {
+                book = new BookOperations(this).getBook(bookId);
+                bookTitle.setText(book.getTitle());
+                if (intent.hasExtra(START_TIME)) {
+                    startTime = extras.getLong(START_TIME);
+                    handler.postDelayed(timerThread, 0);
+                    timerStarted = true;
+                    startStopButton.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+                }
             }
         }
     }
@@ -201,6 +231,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
     }
 
     private void startTimer() {
+        ParseAnalytics.trackEventInBackground(Analytics.STARTED_READING_SESSION);
         startTime = SystemClock.uptimeMillis();
         handler.postDelayed(timerThread, 0);
         showNotificationTimer();
@@ -248,9 +279,58 @@ public class ReadingSessionActivity extends AppCompatActivity {
         notificationManager.notify(NOTIFICATION_ID, notification);
     }
 
+    public void saveReadingSessionData() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(SESSION_BOOK_ID, book.getId());
+        editor.putLong(START_TIME, startTime);
+        editor.apply();
+    }
+
+    public void clearReadingSessionData() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(SESSION_BOOK_ID);
+        editor.remove(START_TIME);
+        editor.apply();
+    }
+
+    public void loadReadingSessionData() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        if (prefs.contains(SESSION_BOOK_ID) && prefs.contains(START_TIME)) {
+            Intent intent = new Intent(this, ReadingSessionActivity.class);
+            intent.putExtra(SESSION_BOOK_ID, prefs.getInt(SESSION_BOOK_ID, -1));
+            intent.putExtra(START_TIME, prefs.getLong(START_TIME, 0));
+            init(intent);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         getFragmentManager().popBackStack();
+        if (timerStarted) {
+            saveReadingSessionData();
+        } else {
+            clearReadingSessionData();
+        }
+        handler.removeCallbacks(timerThread);
         goBackToMainActivity();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timerStarted) {
+            saveReadingSessionData();
+        } else {
+            clearReadingSessionData();
+        }
+        handler.removeCallbacks(timerThread);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadReadingSessionData();
     }
 }

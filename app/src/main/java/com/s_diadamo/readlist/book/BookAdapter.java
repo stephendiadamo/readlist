@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -31,6 +33,7 @@ import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
 import com.s_diadamo.readlist.lent.LentBookOperations;
+import com.s_diadamo.readlist.readingSession.ReadingSession;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.updates.BookUpdate;
@@ -342,28 +345,38 @@ class BookAdapter extends BaseAdapter {
                 .commit();
     }
 
-    private void addRemainingPagesAndCompleteBook(Book book) {
-        int remainingPages = book.getNumPages() - book.getCurrentPage();
-        PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
-        new PageUpdateOperations(context).
-                addPageUpdate(pageUpdate);
-        if (Utils.checkUserIsLoggedIn(context)) {
-            new SyncData(context).add(pageUpdate);
-        }
+    private void addRemainingPagesAndCompleteBook(final Book book) {
+        new AlertDialog.Builder(context)
+                .setMessage(R.string.complete_book_question)
+                .setCancelable(true)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        int remainingPages = book.getNumPages() - book.getCurrentPage();
+                        PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
+                        new PageUpdateOperations(context).
+                                addPageUpdate(pageUpdate);
+                        if (Utils.checkUserIsLoggedIn(context)) {
+                            new SyncData(context).add(pageUpdate);
+                        }
 
-        book.markComplete();
-        book.setCurrentPage(book.getNumPages());
+                        book.markComplete();
+                        book.setCurrentPage(book.getNumPages());
 
-        notifyDataSetChanged();
-        bookOperations.updateBook(book);
+                        notifyDataSetChanged();
+                        bookOperations.updateBook(book);
 
-        BookUpdate bookUpdate = new BookUpdate(book.getId());
-        new BookUpdateOperations(context).addBookUpdate(bookUpdate);
-        if (Utils.checkUserIsLoggedIn(context)) {
-            SyncData syncData = new SyncData(context);
-            syncData.add(bookUpdate);
-            syncData.update(book);
-        }
+                        BookUpdate bookUpdate = new BookUpdate(book.getId());
+                        new BookUpdateOperations(context).addBookUpdate(bookUpdate);
+                        if (Utils.checkUserIsLoggedIn(context)) {
+                            SyncData syncData = new SyncData(context);
+                            syncData.add(bookUpdate);
+                            syncData.update(book);
+                        }
+                    }
+                })
+                .setNegativeButton(R.string.no, null)
+                .show();
     }
 
     private void unLendBook(Book book) {
@@ -431,9 +444,19 @@ class BookAdapter extends BaseAdapter {
     }
 
     private void startReadingSession(Book book) {
-        Intent intent = new Intent(context, ReadingSessionActivity.class);
-        intent.putExtra(ReadingSessionActivity.SESSION_BOOK_ID, book.getId());
-        context.startActivity(intent);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        if (prefs.contains(ReadingSessionActivity.SESSION_BOOK_ID)) {
+            if (book.getId() == prefs.getInt(ReadingSessionActivity.SESSION_BOOK_ID, -1)) {
+                Intent intent = new Intent(context, ReadingSessionActivity.class);
+                context.startActivity(intent);
+            } else {
+                Utils.showToast(context, context.getString(R.string.you_can_only_run_one_session_at_a_time));
+            }
+        } else {
+            Intent intent = new Intent(context, ReadingSessionActivity.class);
+            intent.putExtra(ReadingSessionActivity.SESSION_BOOK_ID, book.getId());
+            context.startActivity(intent);
+        }
     }
 
     static class BookHolder {

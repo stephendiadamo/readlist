@@ -169,7 +169,7 @@ public class Utils {
     }
 
     public static void showToast(Context context, String string) {
-        Toast.makeText(context, string, Toast.LENGTH_LONG).show();
+        Toast.makeText(context, string, Toast.LENGTH_SHORT).show();
     }
 
     public static int calculateAverageWithQuery(Cursor cursor) {

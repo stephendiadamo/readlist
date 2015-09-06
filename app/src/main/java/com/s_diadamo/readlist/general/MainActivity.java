@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity
 
     private static final String CREATED_SHELF = "CREATED_SHELF";
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
+    private static final String FIXED_DEFAULT_SHELF_COLOR = "FIXED_DEFAULT_SHELF_COLOR";
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
@@ -68,6 +69,15 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(CREATED_SHELF, true);
         }
 
+
+        if (!prefs.getBoolean(FIXED_DEFAULT_SHELF_COLOR, false)) {
+            ShelfOperations shelfOperations = new ShelfOperations(this);
+            Shelf defaultShelf = shelfOperations.getShelf(Shelf.DEFAULT_SHELF_ID);
+            defaultShelf.setColour(Shelf.DEFAULT_COLOR);
+            shelfOperations.updateShelf(defaultShelf);
+            editor.putBoolean(FIXED_DEFAULT_SHELF_COLOR, true);
+        }
+        
         if (!prefs.getBoolean(FIXED_REMEMBER_ME_STRING, false)) {
             String rememberMeSet = prefs.getString(Utils.REMEMBER_ME, "");
             if (rememberMeSet != null && !rememberMeSet.isEmpty()) {
