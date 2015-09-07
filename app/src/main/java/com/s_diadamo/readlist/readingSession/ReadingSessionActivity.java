@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
@@ -41,9 +40,11 @@ public class ReadingSessionActivity extends AppCompatActivity {
     public static String SESSION_BOOK_ID = "session_book_id";
     private static String DO_NOT_ASK_TO_UPDATE_PAGE = "do_not_ask_to_update_page";
     public static String START_TIME = "start_time";
+    public static String TIME_BUFFER = "time_buffer";
     private static int NOTIFICATION_ID = 0;
 
     boolean timerStarted = false;
+    boolean sessionCreated = false;
 
     private Handler handler;
     private long startTime = 0L;
@@ -144,11 +145,13 @@ public class ReadingSessionActivity extends AppCompatActivity {
             } else {
                 book = new BookOperations(this).getBook(bookId);
                 bookTitle.setText(book.getTitle());
-                if (intent.hasExtra(START_TIME)) {
+                if (intent.hasExtra(START_TIME) && intent.hasExtra(TIME_BUFFER)) {
                     startTime = extras.getLong(START_TIME);
-                    handler.postDelayed(timerThread, 0);
+                    timeSwapBuff = extras.getLong(TIME_BUFFER);
                     timerStarted = true;
+                    sessionCreated = true;
                     startStopButton.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+                    handler.postDelayed(timerThread, 0);
                 }
             }
         }
@@ -163,11 +166,13 @@ public class ReadingSessionActivity extends AppCompatActivity {
             } else {
                 book = new BookOperations(this).getBook(bookId);
                 bookTitle.setText(book.getTitle());
-                if (intent.hasExtra(START_TIME)) {
+                if (intent.hasExtra(START_TIME) && intent.hasExtra(TIME_BUFFER)) {
                     startTime = extras.getLong(START_TIME);
-                    handler.postDelayed(timerThread, 0);
+                    timeSwapBuff = extras.getLong(TIME_BUFFER);
                     timerStarted = true;
+                    sessionCreated = true;
                     startStopButton.setImageResource(R.drawable.ic_pause_circle_outline_black_48dp);
+                    handler.postDelayed(timerThread, 0);
                 }
             }
         }
@@ -233,6 +238,9 @@ public class ReadingSessionActivity extends AppCompatActivity {
     private void startTimer() {
         ParseAnalytics.trackEventInBackground(Analytics.STARTED_READING_SESSION);
         startTime = SystemClock.uptimeMillis();
+        if (!sessionCreated) {
+            sessionCreated = true;
+        }
         handler.postDelayed(timerThread, 0);
         showNotificationTimer();
     }
@@ -259,6 +267,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ReadingSessionActivity.class);
         intent.putExtra(SESSION_BOOK_ID, book.getId());
         intent.putExtra(START_TIME, startTime);
+        intent.putExtra(TIME_BUFFER, timeSwapBuff);
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addParentStack(this);
@@ -284,6 +293,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(SESSION_BOOK_ID, book.getId());
         editor.putLong(START_TIME, startTime);
+        editor.putLong(TIME_BUFFER, timeSwapBuff);
         editor.apply();
     }
 
@@ -292,6 +302,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(SESSION_BOOK_ID);
         editor.remove(START_TIME);
+        editor.remove(TIME_BUFFER);
         editor.apply();
     }
 
@@ -301,6 +312,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
             Intent intent = new Intent(this, ReadingSessionActivity.class);
             intent.putExtra(SESSION_BOOK_ID, prefs.getInt(SESSION_BOOK_ID, -1));
             intent.putExtra(START_TIME, prefs.getLong(START_TIME, 0));
+            intent.putExtra(TIME_BUFFER, prefs.getLong(TIME_BUFFER, 0));
             init(intent);
         }
     }
@@ -313,8 +325,22 @@ public class ReadingSessionActivity extends AppCompatActivity {
         } else {
             clearReadingSessionData();
         }
-        handler.removeCallbacks(timerThread);
-        goBackToMainActivity();
+        if (sessionCreated && !timerStarted) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle(R.string.warning);
+            builder.setMessage(R.string.your_session_will_be_lost);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    goBackToMainActivity();
+                }
+            });
+            builder.setNegativeButton(R.string.no, null);
+            builder.show();
+        } else {
+            handler.removeCallbacks(timerThread);
+            goBackToMainActivity();
+        }
     }
 
     @Override
