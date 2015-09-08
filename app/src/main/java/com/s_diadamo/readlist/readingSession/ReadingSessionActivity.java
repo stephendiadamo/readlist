@@ -108,7 +108,7 @@ public class ReadingSessionActivity extends AppCompatActivity {
         saveSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ReadingSession readingSession = new ReadingSession(book.getId(), (int) (timeInMilliseconds / 1000));
+                ReadingSession readingSession = new ReadingSession(book.getId(), (int) (updatedTime / 1000));
                 new ReadingSessionOperations(context).addReadingSession(readingSession);
                 if (Utils.checkUserIsLoggedIn(context)) {
                     new SyncData(context).add(readingSession);
