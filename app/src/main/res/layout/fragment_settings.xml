@@ -30,9 +30,20 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/settings_sync_external_data"
+        style="@style/SettingsItem"
+        android:text="@string/sync_external_data" />
+
+    <TextView
         android:id="@+id/settings_email_us"
         style="@style/SettingsItem"
         android:text="@string/email_us" />
+
+    <TextView
+        android:id="@+id/settings_share_readlist"
+        style="@style/SettingsItem"
+        android:text="@string/share_readlist" />
+
 
     <LinearLayout
         android:id="@+id/settings_login_container"
@@ -85,11 +96,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="-15dp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/settings_share_readlist"
-        style="@style/SettingsItem"
-        android:text="@string/share_readlist" />
 
 
 </LinearLayout>

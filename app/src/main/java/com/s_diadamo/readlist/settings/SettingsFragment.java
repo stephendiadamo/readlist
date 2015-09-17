@@ -22,30 +22,32 @@ import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
+import com.s_diadamo.readlist.syncExternalData.SyncExternalDataFragment;
 
 public class SettingsFragment extends Fragment {
     private static final String LOGIN = "LOGIN";
-    private boolean userLoggedIn;
+    private boolean mUserLoggedIn;
 
-    private Context context;
-    private TextView login;
-    private TextView loggedInAsLabel;
-    private TextView loggedInAs;
-    private boolean syncOnStart;
+    private Context mContext;
+    private TextView mLogin;
+    private TextView mLoggedInAsLabel;
+    private TextView mLoggedInAs;
+    private boolean mSyncOnStart;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
-        context = rootView.getContext();
+        mContext = rootView.getContext();
         setHasOptionsMenu(false);
 
-        login = (TextView) rootView.findViewById(R.id.settings_login);
-        loggedInAsLabel = (TextView) rootView.findViewById(R.id.settings_logged_in_user_label);
-        loggedInAs = (TextView) rootView.findViewById(R.id.settings_logged_in_user);
+        mLogin = (TextView) rootView.findViewById(R.id.settings_login);
+        mLoggedInAsLabel = (TextView) rootView.findViewById(R.id.settings_logged_in_user_label);
+        mLoggedInAs = (TextView) rootView.findViewById(R.id.settings_logged_in_user);
         TextView syncData = (TextView) rootView.findViewById(R.id.settings_sync);
         TextView syncDataOnStart = (TextView) rootView.findViewById(R.id.settings_sync_on_start);
         final TextView syncDataOnStartOnOff = (TextView) rootView.findViewById(R.id.settings_sync_on_start_on_off);
+        TextView syncExternalData = (TextView) rootView.findViewById(R.id.settings_sync_external_data);
         TextView emailUs = (TextView) rootView.findViewById(R.id.settings_email_us);
         TextView readList = (TextView) rootView.findViewById(R.id.settings_readlist);
         TextView readListVersion = (TextView) rootView.findViewById(R.id.settings_readlist_version);
@@ -53,11 +55,11 @@ public class SettingsFragment extends Fragment {
 
         setLoginLabels();
 
-        login.setOnClickListener(new View.OnClickListener() {
+        mLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userLoggedIn) {
-                    Utils.logout(context);
+                if (mUserLoggedIn) {
+                    Utils.logout(mContext);
                     setLoginLabels();
                 } else {
                     launchLoginFragment();
@@ -68,25 +70,25 @@ public class SettingsFragment extends Fragment {
         syncData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!userLoggedIn) {
-                    Utils.showToast(context, "You must be logged in to sync data");
+                if (!mUserLoggedIn) {
+                    Utils.showToast(mContext, "You must be logged in to sync data");
                 } else {
                     launchSyncData();
                 }
             }
         });
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        syncOnStart = prefs.getBoolean(Utils.SYNC_ON_START, true);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        mSyncOnStart = prefs.getBoolean(Utils.SYNC_ON_START, true);
         updateSyncOnOff(syncDataOnStartOnOff);
 
         syncDataOnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = prefs.edit();
-                syncOnStart = !syncOnStart;
+                mSyncOnStart = !mSyncOnStart;
                 updateSyncOnOff(syncDataOnStartOnOff);
-                editor.putBoolean(Utils.SYNC_ON_START, syncOnStart);
+                editor.putBoolean(Utils.SYNC_ON_START, mSyncOnStart);
                 editor.apply();
             }
         });
@@ -95,10 +97,17 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 SharedPreferences.Editor editor = prefs.edit();
-                syncOnStart = !syncOnStart;
+                mSyncOnStart = !mSyncOnStart;
                 updateSyncOnOff(syncDataOnStartOnOff);
-                editor.putBoolean(Utils.SYNC_ON_START, syncOnStart);
+                editor.putBoolean(Utils.SYNC_ON_START, mSyncOnStart);
                 editor.apply();
+            }
+        });
+
+        syncExternalData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchSyncExternalData();
             }
         });
 
@@ -120,7 +129,7 @@ public class SettingsFragment extends Fragment {
                 try {
                     startActivity(Intent.createChooser(emailIntent, "Send email using..."));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    Utils.showToast(context, "Please install an email client");
+                    Utils.showToast(mContext, "Please install an email client");
                 }
             }
         });
@@ -146,7 +155,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void updateSyncOnOff(TextView syncDataOnStartOnOff) {
-        if (syncOnStart) {
+        if (mSyncOnStart) {
             syncDataOnStartOnOff.setText(R.string.on);
         } else {
             syncDataOnStartOnOff.setText(R.string.off);
@@ -154,26 +163,28 @@ public class SettingsFragment extends Fragment {
     }
 
     private void launchLoginFragment() {
-        Fragment fragment = new LoginFragment();
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .addToBackStack(LOGIN)
-                .replace(R.id.container, fragment)
-                .commit();
+        launchFragment(new LoginFragment());
     }
 
     private void launchSyncData() {
         ParseAnalytics.trackEventInBackground(Analytics.SYNCED_DATA);
         if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context);
+            SyncData syncData = new SyncData(mContext);
             syncData.syncAllData((AppCompatActivity) getActivity());
         } else {
-            Utils.showToast(context, Utils.CHECK_INTERNET_MESSAGE);
+            Utils.showToast(mContext, Utils.CHECK_INTERNET_MESSAGE);
         }
     }
 
     private void launchAccountFragment() {
-        Fragment fragment = new AccountFragment();
+        launchFragment(new AccountFragment());
+    }
+
+    private void launchSyncExternalData() {
+        launchFragment(new SyncExternalDataFragment());
+    }
+
+    private void launchFragment(Fragment fragment) {
         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .addToBackStack(LOGIN)
@@ -182,16 +193,16 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setLoginLabels() {
-        userLoggedIn = Utils.checkUserIsLoggedIn(getActivity());
-        if (userLoggedIn) {
-            login.setText(R.string.logout);
-            loggedInAsLabel.setVisibility(View.VISIBLE);
-            loggedInAs.setVisibility(View.VISIBLE);
-            loggedInAs.setText(Utils.getUserName(context));
+        mUserLoggedIn = Utils.checkUserIsLoggedIn(getActivity());
+        if (mUserLoggedIn) {
+            mLogin.setText(R.string.logout);
+            mLoggedInAsLabel.setVisibility(View.VISIBLE);
+            mLoggedInAs.setVisibility(View.VISIBLE);
+            mLoggedInAs.setText(Utils.getUserName(mContext));
         } else {
-            login.setText(R.string.login);
-            loggedInAsLabel.setVisibility(View.GONE);
-            loggedInAs.setVisibility(View.GONE);
+            mLogin.setText(R.string.login);
+            mLoggedInAsLabel.setVisibility(View.GONE);
+            mLoggedInAs.setVisibility(View.GONE);
         }
     }
 
