@@ -70,11 +70,13 @@ public class PageUpdateOperations {
     public ArrayList<PageUpdate> getPageUpdatesForBook(int bookId) {
         db = dbHelper.getReadableDatabase();
         ArrayList<PageUpdate> pageUpdates = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s WHERE %s=0 AND %s=%d",
+        String query = String.format("SELECT * FROM %s WHERE %s=0 AND %s=%d AND %s!=%s",
                 DatabaseHelper.TABLE_PAGE_UPDATES,
                 DatabaseHelper.IS_DELETED,
                 DatabaseHelper.PAGE_UPDATE_BOOK_ID,
-                bookId);
+                bookId,
+                DatabaseHelper.PAGE_UPDATE_DATE,
+                "''");
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {

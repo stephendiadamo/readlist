@@ -37,7 +37,7 @@ import java.util.ArrayList;
 
 public class BookStatsFragment extends Fragment implements LoaderManager.LoaderCallbacks {
 
-
+    private View rootView;
     private Context context;
     private int bookId;
     private ListView readingSessionsListView;
@@ -54,7 +54,7 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(false);
-        View rootView = inflater.inflate(R.layout.fragment_view_book_statistics, container, false);
+        rootView = inflater.inflate(R.layout.fragment_view_book_statistics, container, false);
         context = rootView.getContext();
         bookId = getArguments().getInt(BookAdapter.BOOK_ID);
         Book book = new BookOperations(context).getBook(bookId);
@@ -193,6 +193,7 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
                         getActivity().openContextMenu(view);
                     }
                 });
+                readingSessionsListView.setEmptyView(rootView.findViewById(R.id.view_book_stats_empty_reading_sessions));
                 break;
             case LoaderIDs.PAGE_UPDATE_LOADER_ID:
                 ArrayList<PageUpdate> pageUpdates = (ArrayList<PageUpdate>) data;
@@ -207,6 +208,7 @@ public class BookStatsFragment extends Fragment implements LoaderManager.LoaderC
                         getActivity().openContextMenu(view);
                     }
                 });
+                pageUpdateListView.setEmptyView(rootView.findViewById(R.id.view_book_stats_empty_page_update));
                 break;
         }
     }

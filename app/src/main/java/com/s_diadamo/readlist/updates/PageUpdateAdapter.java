@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.s_diadamo.readlist.R;
-import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
 

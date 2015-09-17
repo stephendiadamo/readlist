@@ -109,9 +109,9 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:weightSum="10"
-        android:layout_height="match_parent">
+        android:weightSum="10">
 
         <TextView
             style="@style/UpdateHeader"
@@ -121,7 +121,13 @@
             android:id="@+id/view_book_stats_reading_sessions_list"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_weight="5"/>
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/view_book_stats_empty_reading_sessions"
+            style="@style/EmptyList"
+            android:layout_marginBottom="30dp"
+            android:text="@string/you_have_no_reading_sessions" />
 
         <TextView
             style="@style/UpdateHeader"
@@ -130,8 +136,14 @@
         <ListView
             android:id="@+id/view_book_stats_page_update_list"
             android:layout_width="fill_parent"
-            android:layout_weight="5"
-            android:layout_height="0dp" />
+            android:layout_height="0dp"
+            android:layout_weight="5" />
+
+        <TextView
+            android:id="@+id/view_book_stats_empty_page_update"
+            style="@style/EmptyList"
+            android:text="@string/you_have_no_page_updates" />
+
     </LinearLayout>
 
 </LinearLayout>

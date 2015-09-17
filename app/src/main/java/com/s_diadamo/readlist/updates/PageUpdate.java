@@ -72,6 +72,10 @@ public class PageUpdate {
     public String getCleanDateAdded() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
         try {
+            if (date.equals("")) {
+                return "";
+            }
+
             Date d = simpleDateFormat.parse(date);
             simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
             return simpleDateFormat.format(d);
