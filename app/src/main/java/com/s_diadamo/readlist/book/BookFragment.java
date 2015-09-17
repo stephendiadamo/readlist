@@ -27,6 +27,7 @@ import com.google.zxing.integration.android.IntentResult;
 import com.parse.ParseAnalytics;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Analytics;
+import com.s_diadamo.readlist.general.LoaderIDs;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.navigationDrawer.NavigationDrawerFragment;
 import com.s_diadamo.readlist.scan.ScanActivity;
@@ -79,8 +80,8 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
 
         setShelfId();
 
-        getLoaderManager().initLoader(BookLoader.ID, null, this);
-        getLoaderManager().initLoader(ShelfLoader.ID, null, this);
+        getLoaderManager().initLoader(LoaderIDs.BOOK_LOADER_ID, null, this);
+        getLoaderManager().initLoader(LoaderIDs.SHELF_LOADER_ID, null, this);
 
         bookListView.setSwipeCloseAllItemsWhenMoveList(true);
         bookListView.setSwipeListViewListener(new SwipeListViewListener() {
@@ -450,9 +451,9 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     @Override
     public Loader onCreateLoader(int id, Bundle args) {
         switch (id) {
-            case BookLoader.ID:
+            case LoaderIDs.BOOK_LOADER_ID:
                 return new BookLoader(context, shelfId);
-            case ShelfLoader.ID:
+            case LoaderIDs.SHELF_LOADER_ID:
                 return new ShelfLoader(context, shelfId);
             default:
                 return null;
@@ -463,7 +464,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
     public void onLoadFinished(Loader loader, Object data) {
         int id = loader.getId();
         switch (id) {
-            case BookLoader.ID:
+            case LoaderIDs.BOOK_LOADER_ID:
                 userBooks = (ArrayList<Book>) data;
                 bookAdapter = new BookAdapter(context, userBooks,
                         prefs.getBoolean(HIDE_COMPLETED_BOOKS, false),
@@ -474,7 +475,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 bookListView.setAdapter(bookAdapter);
                 loadingBooks = false;
                 break;
-            case ShelfLoader.ID:
+            case LoaderIDs.SHELF_LOADER_ID:
                 shelf = (Shelf) data;
                 ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
                 if (ab != null) {

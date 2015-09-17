@@ -53,7 +53,7 @@ public class ReadingSession {
         return lengthOfTime;
     }
 
-    public String getCleanDateAdded() {
+    public String getCleanDate() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
         try {
             Date d = simpleDateFormat.parse(date);

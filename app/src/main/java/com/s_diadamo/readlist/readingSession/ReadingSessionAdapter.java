@@ -41,7 +41,7 @@ public class ReadingSessionAdapter extends ArrayAdapter<ReadingSession> {
         }
 
         ReadingSession readingSession = readingSessions.get(position);
-        sessionHolder.dateAdded.setText(readingSession.getCleanDateAdded());
+        sessionHolder.dateAdded.setText(readingSession.getCleanDate());
         sessionHolder.length.setText(Utils.formatTimeSpentReading(readingSession.getLengthOfTime()));
 
         return row;

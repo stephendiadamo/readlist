@@ -112,7 +112,7 @@ class BookAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         View row = convertView;
-        BookHolder bookHolder;
+        final BookHolder bookHolder;
 
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -162,6 +162,13 @@ class BookAdapter extends BaseAdapter {
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
+
+        final boolean isLent = book.isLent(context);
+        if (isLent) {
+            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
+        } else {
+            bookHolder.bookLentIcon.setVisibility(View.GONE);
+        }
 
         if (book.getNumPages() != 0 && book.getCurrentPage() > 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
@@ -239,8 +246,6 @@ class BookAdapter extends BaseAdapter {
                 PopupMenu popupMenu = new PopupMenu(context, v);
                 MenuInflater inflater = popupMenu.getMenuInflater();
                 inflater.inflate(R.menu.menu_book_more_options, popupMenu.getMenu());
-
-                final boolean isLent = book.isLent(context);
 
                 if (isLent) {
                     popupMenu.getMenu().findItem(R.id.lend_book).setTitle(R.string.unlend_book);
