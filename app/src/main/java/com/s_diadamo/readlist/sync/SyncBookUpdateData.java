@@ -13,6 +13,7 @@ import com.s_diadamo.readlist.updates.BookUpdate;
 import com.s_diadamo.readlist.updates.BookUpdateOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -54,19 +55,28 @@ public class SyncBookUpdateData extends SyncData {
     }
 
     private void updateDeviceBookUpdates(ArrayList<BookUpdate> bookUpdatesOnDevice, ArrayList<BookUpdate> bookUpdatesFromParse, List<ParseObject> parseBookUdpates) {
-        HashSet<Integer> deviceBookUpdateIds = new HashSet<>();
+        HashMap<Integer, Integer> deviceBookUpdateIds = new HashMap<>();
+        int i = 0;
         for (BookUpdate bookUpdate : bookUpdatesOnDevice) {
-            deviceBookUpdateIds.add(bookUpdate.getId());
+            deviceBookUpdateIds.put(bookUpdate.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (BookUpdate bookUpdate : bookUpdatesFromParse) {
-            if (!deviceBookUpdateIds.contains(bookUpdate.getId())) {
+            if (!deviceBookUpdateIds.containsKey(bookUpdate.getId())) {
                 bookUpdateOperations.addBookUpdate(bookUpdate);
                 copyBookUpdateValues(parseBookUdpates.get(i), bookUpdate);
                 parseBookUdpates.get(i).saveEventually();
+            } else {
+                BookUpdate comparisonBookUpdate = bookUpdatesOnDevice.get(deviceBookUpdateIds.get(bookUpdate.getId()));
+                if (!bookUpdatesMatch(comparisonBookUpdate, bookUpdate)) {
+                    bookUpdateOperations.addBookUpdate(bookUpdate);
+                    copyBookUpdateValues(parseBookUdpates.get(i), bookUpdate);
+                    parseBookUdpates.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
     }
 
@@ -105,6 +115,12 @@ public class SyncBookUpdateData extends SyncData {
         parseBookUpdate.put(DatabaseHelper.BOOK_UPDATE_DATE, bookUpdate.getDate());
 
         return parseBookUpdate;
+    }
+
+    private boolean bookUpdatesMatch(BookUpdate deviceBookUpdate, BookUpdate parseBookUpdate) {
+        boolean datesMatch = deviceBookUpdate.getDate().equals(parseBookUpdate.getDate());
+        boolean booksMatch = deviceBookUpdate.getBookId() == parseBookUpdate.getBookId();
+        return datesMatch && booksMatch;
     }
 
     private BookUpdate parseBookUpdateToBookUpdate(ParseObject parseBookUpdate) {

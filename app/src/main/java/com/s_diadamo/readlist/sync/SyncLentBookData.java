@@ -13,6 +13,7 @@ import com.s_diadamo.readlist.lent.LentBook;
 import com.s_diadamo.readlist.lent.LentBookOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,16 +31,18 @@ class SyncLentBookData extends SyncData {
     }
 
     void syncAllLentBooks() {
-        if (showSpinner)
+        if (showSpinner) {
             syncSpinner.addThread();
+        }
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_LENT_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseLentBooks, ParseException e) {
-                if (showSpinner)
+                if (showSpinner) {
                     syncSpinner.endThread();
+                }
 
                 ArrayList<LentBook> lentBooksOnDevice = lentBookOperations.getLentBooks();
                 ArrayList<LentBook> lentBooksFromParse = new ArrayList<>();
@@ -54,19 +57,28 @@ class SyncLentBookData extends SyncData {
     }
 
     private void updateDeviceLentBooks(ArrayList<LentBook> lentBooksOnDevice, ArrayList<LentBook> lentBooksFromParse, List<ParseObject> parseLentBooks) {
-        HashSet<Integer> deviceLentBookIds = new HashSet<>();
+        HashMap<Integer, Integer> deviceLentBookIds = new HashMap<>();
+        int i = 0;
         for (LentBook lentBook : lentBooksOnDevice) {
-            deviceLentBookIds.add(lentBook.getId());
+            deviceLentBookIds.put(lentBook.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (LentBook lentBook : lentBooksFromParse) {
-            if (!deviceLentBookIds.contains(lentBook.getId())) {
+            if (!deviceLentBookIds.containsKey(lentBook.getId())) {
                 lentBookOperations.addLentBook(lentBook);
                 copyLentBookValues(parseLentBooks.get(i), lentBook);
                 parseLentBooks.get(i).saveEventually();
+            } else {
+                LentBook comparison = lentBooksOnDevice.get(deviceLentBookIds.get(lentBook.getId()));
+                if (!comparison.getDateAdded().equals(lentBook.getDateAdded())) {
+                    lentBookOperations.addLentBook(lentBook);
+                    copyLentBookValues(parseLentBooks.get(i), lentBook);
+                    parseLentBooks.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
     }
 

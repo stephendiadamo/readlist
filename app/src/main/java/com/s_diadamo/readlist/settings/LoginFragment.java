@@ -223,7 +223,7 @@ public class LoginFragment extends Fragment {
 
     private void completeLogin() {
         if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context, false);
+            SyncData syncData = new SyncData(context, true, false);
             syncData.syncAllData();
         }
 

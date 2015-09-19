@@ -210,8 +210,13 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         }
 
         if (shelfId == Shelf.DEFAULT_SHELF_ID) {
-            menu.findItem(R.id.edit_shelf).setVisible(false);
-            menu.findItem(R.id.delete_shelf).setVisible(false);
+            if (menu.findItem(R.id.edit_shelf) != null) {
+                menu.findItem(R.id.edit_shelf).setVisible(false);
+            }
+
+            if (menu.findItem(R.id.delete_shelf) != null) {
+                menu.findItem(R.id.delete_shelf).setVisible(false);
+            }
         } else {
             menu.findItem(R.id.hide_shelved_books).setVisible(false);
         }
@@ -478,7 +483,7 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
             case LoaderIDs.SHELF_LOADER_ID:
                 shelf = (Shelf) data;
                 ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
-                if (ab != null) {
+                if (ab != null && shelf != null) {
                     ab.setTitle(shelf.getName());
                     if (shelf.getColour() != Shelf.DEFAULT_COLOR) {
                         ab.setBackgroundDrawable(new ColorDrawable(shelf.getColour()));

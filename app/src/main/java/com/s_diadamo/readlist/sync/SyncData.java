@@ -66,8 +66,8 @@ public class SyncData {
     }
 
     public void syncAllData() {
-        new SyncBookData(context, showSpinner).syncAllBooks();
         new SyncShelfData(context, showSpinner).syncAllShelves();
+        new SyncBookData(context, showSpinner).syncAllBooks();
         new SyncGoalData(context, showSpinner).syncAllGoals();
         new SyncBookUpdateData(context, showSpinner).syncAllBookUpdates();
         new SyncPageUpdateData(context, showSpinner).syncAllPageUpdates();
@@ -77,8 +77,8 @@ public class SyncData {
     }
 
     public void syncAllData(AppCompatActivity activity) {
-        new SyncBookData(context).syncAllBooks();
         new SyncShelfData(context).syncAllShelves(activity);
+        new SyncBookData(context).syncAllBooks();
         new SyncGoalData(context).syncAllGoals();
         new SyncBookUpdateData(context).syncAllBookUpdates();
         new SyncPageUpdateData(context).syncAllPageUpdates();
@@ -183,7 +183,7 @@ public class SyncData {
         new SyncReadingSessionData(context).updateParseReadingSession(readingSession);
     }
 
-    public void deleteReadingSessions(){
+    public void deleteReadingSessions() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_READING_SESSION);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {

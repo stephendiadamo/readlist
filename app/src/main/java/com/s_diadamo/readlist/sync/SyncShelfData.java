@@ -16,6 +16,7 @@ import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,13 +36,17 @@ class SyncShelfData extends SyncData {
     void syncAllShelves() {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        if (showSpinner)
+        if (showSpinner) {
             syncSpinner.addThread();
+        }
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
-                if (showSpinner)
+                if (showSpinner) {
                     syncSpinner.endThread();
+                }
+
                 ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
@@ -57,13 +62,18 @@ class SyncShelfData extends SyncData {
     void syncAllShelves(final AppCompatActivity activity) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_SHELF);
         query.whereEqualTo(Utils.USER_NAME, userName);
-        if (showSpinner)
+
+        if (showSpinner) {
             syncSpinner.addThread();
+        }
+
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseShelves, ParseException e) {
-                if (showSpinner)
+                if (showSpinner) {
                     syncSpinner.endThread();
+                }
+
                 ArrayList<Shelf> shelvesOnDevice = shelfOperations.getAllShelves();
                 ArrayList<Shelf> shelvesFromParse = new ArrayList<>();
                 for (ParseObject parseShelf : parseShelves) {
@@ -79,20 +89,45 @@ class SyncShelfData extends SyncData {
     }
 
     private void updateDeviceShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse, List<ParseObject> parseShelves) {
-        HashSet<Integer> deviceShelfIds = new HashSet<>();
+        HashMap<Integer, Integer> deviceShelfIds = new HashMap<>();
+        int i = 0;
         for (Shelf shelf : shelvesOnDevice) {
-            deviceShelfIds.add(shelf.getId());
+            deviceShelfIds.put(shelf.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (Shelf shelf : shelvesFromParse) {
-            if (!deviceShelfIds.contains(shelf.getId())) {
+            if (!deviceShelfIds.containsKey(shelf.getId())) {
+                int oldId = shelf.getId();
                 shelfOperations.addShelf(shelf);
+                fixShelfRelations(shelf.getId(), oldId);
                 copyShelfValues(parseShelves.get(i), shelf);
-                parseShelves.get(i).saveEventually();
+                try {
+                    parseShelves.get(i).save();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Shelf comparison = shelvesOnDevice.get(deviceShelfIds.get(shelf.getId()));
+                if (!(shelf.getName().equals(comparison.getName()) && shelf.getColour() == comparison.getColour())) {
+                    int oldId = shelf.getId();
+                    shelfOperations.addShelf(shelf);
+                    fixShelfRelations(shelf.getId(), oldId);
+                    copyShelfValues(parseShelves.get(i), shelf);
+                    try {
+                        parseShelves.get(i).save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-            i++;
+            ++i;
         }
+    }
+
+    private void fixShelfRelations(int newId, int oldId) {
+        new FixRelations(userName, newId, oldId, TYPE_BOOK, DatabaseHelper.BOOK_SHELF).execute();
     }
 
     private void updateParseShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {
@@ -167,6 +202,7 @@ class SyncShelfData extends SyncData {
     }
 
     private void copyShelfValues(ParseObject parseShelf, Shelf shelf) {
+        parseShelf.put(READLIST_ID, shelf.getId());
         parseShelf.put(DatabaseHelper.SHELF_NAME, shelf.getName());
         parseShelf.put(DatabaseHelper.SHELF_COLOR, shelf.getColour());
     }
