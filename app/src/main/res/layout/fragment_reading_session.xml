@@ -23,7 +23,6 @@
             android:textStyle="italic" />
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/record_reading_activity_timer"
         android:layout_width="fill_parent"

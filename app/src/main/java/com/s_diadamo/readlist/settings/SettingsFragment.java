@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.settings;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -140,6 +141,7 @@ public class SettingsFragment extends Fragment {
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
             ab.setTitle(R.string.settings);
+            ab.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
         }
 
         return rootView;

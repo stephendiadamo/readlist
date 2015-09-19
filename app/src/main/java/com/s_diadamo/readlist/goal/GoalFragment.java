@@ -2,6 +2,7 @@ package com.s_diadamo.readlist.goal;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
@@ -57,6 +58,7 @@ public class GoalFragment extends Fragment implements LoaderManager.LoaderCallba
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
             ab.setTitle(getResources().getString(R.string.goals));
+            ab.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
         }
 
         return rootView;
