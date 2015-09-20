@@ -67,6 +67,28 @@ public class PageUpdateOperations {
         return pageUpdates;
     }
 
+    public ArrayList<PageUpdate> getPageUpdatesForBook(int bookId) {
+        db = dbHelper.getReadableDatabase();
+        ArrayList<PageUpdate> pageUpdates = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s=0 AND %s=%d AND %s!=%s",
+                DatabaseHelper.TABLE_PAGE_UPDATES,
+                DatabaseHelper.IS_DELETED,
+                DatabaseHelper.PAGE_UPDATE_BOOK_ID,
+                bookId,
+                DatabaseHelper.PAGE_UPDATE_DATE,
+                "''");
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                PageUpdate pageUpdate = parsePageUpdate(cursor);
+                pageUpdates.add(pageUpdate);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return pageUpdates;
+    }
+
     public int getAllTimePagesRead() {
         db = dbHelper.getReadableDatabase();
         int numPages = 0;
@@ -170,7 +192,6 @@ public class PageUpdateOperations {
                 new String[]{String.valueOf(pageUpdate.getId())});
         db.close();
     }
-
 
     public void deletePageUpdate(PageUpdate pageUpdate) {
         db = dbHelper.getWritableDatabase();

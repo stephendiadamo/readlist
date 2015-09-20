@@ -9,8 +9,6 @@ import com.s_diadamo.readlist.shelf.ShelfOperations;
 import java.util.ArrayList;
 
 class BookLoader extends AsyncTaskLoader<ArrayList<Book>> {
-
-    public static final int ID = 0;
     private final Context context;
     private final int shelfId;
 

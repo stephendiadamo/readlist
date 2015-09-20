@@ -8,8 +8,8 @@ android {
         applicationId "com.s_diadamo.readlist"
         minSdkVersion 17
         targetSdkVersion 23
-        versionCode 1234
-        versionName "1.2.3.4"
+        versionCode 1235
+        versionName "1.2.3.5"
     }
     buildTypes {
         release {
@@ -32,20 +32,23 @@ repositories {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
-    compile(
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.6'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.6'],
-            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
-    )
+    compile 'com.google.zxing:core:3.2.0'
+    compile 'com.google.android.gms:play-services-identity:7.8.0'
+
     compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile 'com.journeyapps:zxing-android-embedded:3.0.0@aar'
-    compile 'com.google.zxing:core:3.2.0'
     compile 'com.github.QuadFlask:colorpicker:[0.0.9]'
     compile 'com.parse.bolts:bolts-android:1.2.1'
+
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile fileTree(dir: 'libs', include: 'ParseCrashReporting-*.jar')
     compile('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
         transitive = true
     }
+    compile(
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.4.6'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.4.6'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.4.6']
+    )
 
 }

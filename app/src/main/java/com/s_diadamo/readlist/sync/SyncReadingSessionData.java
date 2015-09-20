@@ -12,6 +12,7 @@ import com.s_diadamo.readlist.readingSession.ReadingSession;
 import com.s_diadamo.readlist.readingSession.ReadingSessionOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,8 +31,9 @@ public class SyncReadingSessionData extends SyncData {
     }
 
     public void syncAllReadingSessions() {
-        if (showSpinner)
+        if (showSpinner) {
             syncSpinner.addThread();
+        }
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_READING_SESSION);
         query.whereEqualTo(Utils.USER_NAME, userName);
@@ -54,18 +56,28 @@ public class SyncReadingSessionData extends SyncData {
     }
 
     private void updateDeviceReadingSessions(ArrayList<ReadingSession> readingSessionsOnDevice, ArrayList<ReadingSession> readingSessionsFromParse, List<ParseObject> parseReadingSessions) {
-        HashSet<Long> deviceReadingSessionIds = new HashSet<>();
-        for (ReadingSession readingSession : readingSessionsOnDevice) {
-            deviceReadingSessionIds.add(readingSession.getId());
-        }
+        HashMap<Long, Integer> deviceReadingSessionIds = new HashMap<>();
         int i = 0;
+        for (ReadingSession readingSession : readingSessionsOnDevice) {
+            deviceReadingSessionIds.put(readingSession.getId(), i);
+            ++i;
+        }
+
+        i = 0;
         for (ReadingSession readingSession : readingSessionsFromParse) {
-            if (!deviceReadingSessionIds.contains(readingSession.getId())) {
+            if (!deviceReadingSessionIds.containsKey(readingSession.getId())) {
                 readingSessionOperations.addReadingSession(readingSession);
                 copyReadingSessionValues(parseReadingSessions.get(i), readingSession);
                 parseReadingSessions.get(i).saveEventually();
+            } else {
+                ReadingSession comparison = readingSessionsOnDevice.get(deviceReadingSessionIds.get(readingSession.getId()));
+                if (!comparison.getDate().equals(readingSession.getDate())) {
+                    readingSessionOperations.addReadingSession(readingSession);
+                    copyReadingSessionValues(parseReadingSessions.get(i), readingSession);
+                    parseReadingSessions.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
     }
 

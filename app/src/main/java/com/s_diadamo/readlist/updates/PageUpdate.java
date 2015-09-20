@@ -2,6 +2,11 @@ package com.s_diadamo.readlist.updates;
 
 import com.s_diadamo.readlist.general.Utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class PageUpdate {
     private int id;
     private final int bookId;
@@ -62,6 +67,22 @@ public class PageUpdate {
 
     public boolean isDeleted() {
         return isDeleted;
+    }
+
+    public String getCleanDateAdded() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Utils.DATE_FORMAT, Locale.CANADA);
+        try {
+            if (date.equals("")) {
+                return "";
+            }
+
+            Date d = simpleDateFormat.parse(date);
+            simpleDateFormat.applyPattern(Utils.CLEAN_DATE_FORMAT);
+            return simpleDateFormat.format(d);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

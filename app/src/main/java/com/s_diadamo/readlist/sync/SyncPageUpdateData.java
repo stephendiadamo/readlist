@@ -12,6 +12,7 @@ import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -52,17 +53,26 @@ public class SyncPageUpdateData extends SyncData {
     }
 
     private void updateDevicePageUpdates(ArrayList<PageUpdate> pageUpdatesOnDevice, ArrayList<PageUpdate> pageUpdatesFromParse, List<ParseObject> parsePageUpdates) {
-        HashSet<Integer> devicePageUpdateIds = new HashSet<>();
+        HashMap<Integer, Integer> devicePageUpdateIds = new HashMap<>();
+        int i = 0;
         for (PageUpdate pageUpdate : pageUpdatesOnDevice) {
-            devicePageUpdateIds.add(pageUpdate.getId());
+            devicePageUpdateIds.put(pageUpdate.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (PageUpdate pageUpdate : pageUpdatesFromParse) {
-            if (!devicePageUpdateIds.contains(pageUpdate.getId())) {
+            if (!devicePageUpdateIds.containsKey(pageUpdate.getId())) {
                 pageUpdateOperations.addPageUpdate(pageUpdate);
                 copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
                 parsePageUpdates.get(i).saveEventually();
+            } else {
+                PageUpdate comparison = pageUpdatesFromParse.get(devicePageUpdateIds.get(pageUpdate.getId()));
+                if (!comparison.getDate().equals(pageUpdate.getDate())) {
+                    pageUpdateOperations.addPageUpdate(pageUpdate);
+                    copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
+                    parsePageUpdates.get(i).saveEventually();
+                }
             }
             i++;
         }
@@ -127,7 +137,7 @@ public class SyncPageUpdateData extends SyncData {
         });
     }
 
-    void copyPageUpdateValues(ParseObject parsePageUpdate, PageUpdate pageUpdate){
+    void copyPageUpdateValues(ParseObject parsePageUpdate, PageUpdate pageUpdate) {
         parsePageUpdate.put(READLIST_ID, pageUpdate.getId());
         parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_BOOK_ID, pageUpdate.getBookId());
         parsePageUpdate.put(DatabaseHelper.PAGE_UPDATE_DATE, pageUpdate.getDate());

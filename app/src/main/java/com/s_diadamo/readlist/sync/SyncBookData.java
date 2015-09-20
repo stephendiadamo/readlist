@@ -13,6 +13,7 @@ import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,16 +31,18 @@ class SyncBookData extends SyncData {
     }
 
     void syncAllBooks() {
-        if (showSpinner)
+        if (showSpinner) {
             syncSpinner.addThread();
+        }
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery(TYPE_BOOK);
         query.whereEqualTo(Utils.USER_NAME, userName);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseBooks, ParseException e) {
-                if (showSpinner)
+                if (showSpinner) {
                     syncSpinner.endThread();
+                }
 
                 ArrayList<Book> booksOnDevice = bookOperations.getAllBooks();
                 ArrayList<Book> booksFromParse = new ArrayList<>();
@@ -54,20 +57,48 @@ class SyncBookData extends SyncData {
     }
 
     private void updateDeviceBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse, List<ParseObject> parseBooks) {
-        HashSet<Integer> deviceBookIds = new HashSet<>();
+        HashMap<Integer, Integer> deviceBookIds = new HashMap<>();
+        int i = 0;
         for (Book book : booksOnDevice) {
-            deviceBookIds.add(book.getId());
+            deviceBookIds.put(book.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (Book book : booksFromParse) {
-            if (!deviceBookIds.contains(book.getId())) {
+            if (!deviceBookIds.containsKey(book.getId())) {
+                int oldBookId = book.getId();
+
+                if (book.getCurrentPage() == book.getNumPages() && book.getNumPages() != 0) {
+                    book.markComplete();
+                }
+
                 bookOperations.addBook(book);
+                fixBookRelations(book.getId(), oldBookId);
                 copyBookValues(parseBooks.get(i), book);
                 parseBooks.get(i).saveEventually();
+            } else {
+                Book comparison = booksOnDevice.get(deviceBookIds.get(book.getId()));
+                if (!booksMatch(comparison, book)) {
+                    int oldBookId = book.getId();
+
+                    if (book.getCurrentPage() == book.getNumPages() && book.getNumPages() != 0) {
+                        book.markComplete();
+                    }
+
+                    bookOperations.addBook(book);
+                    fixBookRelations(book.getId(), oldBookId);
+                    copyBookValues(parseBooks.get(i), book);
+                    parseBooks.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
+    }
+
+    // TODO: Save ISBN numbers... Or some unique identifier
+    private boolean booksMatch(Book deviceBook, Book parseBook) {
+        return deviceBook.getDateAdded().equals(parseBook.getDateAdded());
     }
 
     private void updateParseBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
@@ -96,6 +127,16 @@ class SyncBookData extends SyncData {
         }
 
         ParseObject.saveAllInBackground(booksToSend);
+    }
+
+    private void fixBookRelations(int newBookId, int oldBookId) {
+        fixRelation(newBookId, oldBookId, TYPE_LENT_BOOK, DatabaseHelper.LENT_BOOK_BOOK_ID);
+        fixRelation(newBookId, oldBookId, TYPE_COMMENT, DatabaseHelper.COMMENT_BOOK_ID);
+        fixRelation(newBookId, oldBookId, TYPE_READING_SESSION, DatabaseHelper.READING_SESSION_BOOK_ID);
+    }
+
+    private void fixRelation(int newBookId, int oldBookId, String type, String field) {
+            new FixRelations(userName, newBookId, oldBookId, type, field).execute();
     }
 
     private Book parseBookToBook(ParseObject parseBook) {

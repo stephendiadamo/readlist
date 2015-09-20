@@ -151,6 +151,10 @@
     <string name="your_session_will_be_lost">You haven\'t saved your session. You will lose your data if you leave this screen. Continue?</string>
     <string name="sync_external_data">Sync External Data</string>
     <string name="sync_google_books">Sync Google Books</string>
+    <string name="page_updates">Page Updates</string>
+    <string name="you_have_no_reading_sessions">No reading sessions for this book</string>
+    <string name="you_have_no_page_updates">No page updates for this book</string>
+    <string name="add_books_to_shelf">Add books to shelf</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

@@ -1,6 +1,7 @@
 package com.s_diadamo.readlist.lent;
 
 
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.LoaderManager;
 import android.content.Context;
 import android.support.v4.content.Loader;
@@ -44,6 +45,7 @@ public class LentFragment extends Fragment implements LoaderManager.LoaderCallba
         ActionBar ab = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (ab != null) {
             ab.setTitle(getResources().getString(R.string.lent_books));
+            ab.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
         }
 
         return rootView;

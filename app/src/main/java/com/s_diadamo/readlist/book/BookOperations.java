@@ -149,6 +149,7 @@ public class BookOperations {
     public void deleteBook(Book book) {
         deleteAssociatedLentBooks(book);
         deleteAssociatedComments(book);
+        removeAssoicationWithReadingSessions(book);
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_BOOKS, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
@@ -166,6 +167,18 @@ public class BookOperations {
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_COMMENTS, DatabaseHelper.COMMENT_BOOK_ID + "=?",
                 new String[]{String.valueOf(book.getId())});
+        db.close();
+    }
+
+    private void removeAssoicationWithReadingSessions(Book book) {
+        db = dbHelper.getWritableDatabase();
+        String updateQuery = String.format("UPDATE %s SET %s=%d WHERE %s=%d",
+                DatabaseHelper.TABLE_READING_SESSIONS,
+                DatabaseHelper.READING_SESSION_BOOK_ID,
+                -1,
+                DatabaseHelper.READING_SESSION_BOOK_ID,
+                book.getId());
+        db.execSQL(updateQuery);
         db.close();
     }
 

@@ -33,7 +33,6 @@ import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.lent.LentBook;
 import com.s_diadamo.readlist.lent.LentBookOperations;
-import com.s_diadamo.readlist.readingSession.ReadingSession;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.sync.SyncData;
 import com.s_diadamo.readlist.updates.BookUpdate;
@@ -56,6 +55,7 @@ class BookAdapter extends BaseAdapter {
     private static final String EDIT_BOOK = "EDIT_BOOK";
     private static final String COMMENT_BOOK = "COMMENT_BOOK";
     private static final String BOOK_STATS = "BOOK_STATS";
+    private static final double PAGE_UPDATE_LIMIT = 0.65;
 
     public BookAdapter(Context context, ArrayList<Book> books, boolean hideComplete, boolean hideShelved, FragmentManager fragmentManager) {
         this.context = context;
@@ -112,7 +112,7 @@ class BookAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, final ViewGroup parent) {
         View row = convertView;
-        BookHolder bookHolder;
+        final BookHolder bookHolder;
 
         if (row == null) {
             LayoutInflater inflater = LayoutInflater.from(context);
@@ -162,6 +162,13 @@ class BookAdapter extends BaseAdapter {
         bookHolder.bookTitle.setText(book.getTitle());
         bookHolder.bookAuthor.setText(book.getAuthor());
         bookHolder.dateAdded.setText(book.getCleanDateAdded());
+
+        final boolean isLent = book.isLent(context);
+        if (isLent) {
+            bookHolder.bookLentIcon.setVisibility(View.VISIBLE);
+        } else {
+            bookHolder.bookLentIcon.setVisibility(View.GONE);
+        }
 
         if (book.getNumPages() != 0 && book.getCurrentPage() > 0) {
             int complete = (100 * book.getCurrentPage() / book.getNumPages());
@@ -239,8 +246,6 @@ class BookAdapter extends BaseAdapter {
                 PopupMenu popupMenu = new PopupMenu(context, v);
                 MenuInflater inflater = popupMenu.getMenuInflater();
                 inflater.inflate(R.menu.menu_book_more_options, popupMenu.getMenu());
-
-                final boolean isLent = book.isLent(context);
 
                 if (isLent) {
                     popupMenu.getMenu().findItem(R.id.lend_book).setTitle(R.string.unlend_book);
@@ -353,11 +358,19 @@ class BookAdapter extends BaseAdapter {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         int remainingPages = book.getNumPages() - book.getCurrentPage();
-                        PageUpdate pageUpdate = new PageUpdate(book.getId(), remainingPages);
-                        new PageUpdateOperations(context).
-                                addPageUpdate(pageUpdate);
-                        if (Utils.checkUserIsLoggedIn(context)) {
-                            new SyncData(context).add(pageUpdate);
+                        if (book.getNumPages() > 0) {
+                            PageUpdate pageUpdate;
+                            double percentage = book.getCurrentPage() / book.getNumPages();
+                            if (percentage >= PAGE_UPDATE_LIMIT) {
+                                pageUpdate = new PageUpdate(book.getId(), remainingPages);
+                            } else {
+                                pageUpdate = new PageUpdate(book.getId(), "", remainingPages);
+                            }
+                            new PageUpdateOperations(context).
+                                    addPageUpdate(pageUpdate);
+                            if (Utils.checkUserIsLoggedIn(context)) {
+                                new SyncData(context).add(pageUpdate);
+                            }
                         }
 
                         book.markComplete();

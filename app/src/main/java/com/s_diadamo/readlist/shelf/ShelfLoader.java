@@ -6,7 +6,7 @@ import android.support.v4.content.AsyncTaskLoader;
 
 public class ShelfLoader extends AsyncTaskLoader<Shelf> {
 
-    public static final int ID = 1;
+
     private final Context context;
     private final int shelfId;
 

@@ -12,6 +12,7 @@ import com.s_diadamo.readlist.goal.Goal;
 import com.s_diadamo.readlist.goal.GoalOperations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -52,18 +53,27 @@ class SyncGoalData extends SyncData {
     }
 
     private void updateDeviceGoals(ArrayList<Goal> goalsOnDevice, ArrayList<Goal> goalsFromParse, List<ParseObject> parseGoals) {
-        HashSet<Integer> deviceGoalIds = new HashSet<>();
-        for (Goal goal : goalsOnDevice) {
-            deviceGoalIds.add(goal.getId());
-        }
+        HashMap<Integer, Integer> deviceGoalIds = new HashMap<>();
         int i = 0;
+        for (Goal goal : goalsOnDevice) {
+            deviceGoalIds.put(goal.getId(), i);
+            ++i;
+        }
+        i = 0;
         for (Goal goal : goalsFromParse) {
-            if (!deviceGoalIds.contains(goal.getId())) {
+            if (!deviceGoalIds.containsKey(goal.getId())) {
                 goalOperations.addGoal(goal);
                 copyGoalValues(parseGoals.get(i), goal);
                 parseGoals.get(i).saveEventually();
+            } else {
+                Goal comparison = goalsOnDevice.get(deviceGoalIds.get(goal.getId()));
+                if (!goal.getStartDate().equals(comparison.getStartDate())) {
+                    goalOperations.addGoal(goal);
+                    copyGoalValues(parseGoals.get(i), goal);
+                    parseGoals.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
     }
 

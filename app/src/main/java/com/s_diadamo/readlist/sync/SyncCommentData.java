@@ -13,6 +13,7 @@ import com.s_diadamo.readlist.database.DatabaseHelper;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -54,21 +55,29 @@ class SyncCommentData extends SyncData {
         });
     }
 
-
     private void updateDeviceComments(ArrayList<Comment> commentsOnDevice, ArrayList<Comment> commentsFromParse, List<ParseObject> parseComments) {
-        HashSet<Integer> deviceCommentIds = new HashSet<>();
+        HashMap<Integer, Integer> deviceCommentIds = new HashMap<>();
+        int i = 0;
         for (Comment comment : commentsOnDevice) {
-            deviceCommentIds.add(comment.getId());
+            deviceCommentIds.put(comment.getId(), i);
+            ++i;
         }
 
-        int i = 0;
+        i = 0;
         for (Comment comment : commentsFromParse) {
-            if (!deviceCommentIds.contains(comment.getId())) {
+            if (!deviceCommentIds.containsKey(comment.getId())) {
                 commentOperations.addComment(comment);
                 copyCommentValues(parseComments.get(i), comment);
                 parseComments.get(i).saveEventually();
+            } else {
+                Comment comparison = commentsOnDevice.get(deviceCommentIds.get(comment.getId()));
+                if (!comment.getDateAdded().equals(comparison.getDateAdded())) {
+                    commentOperations.addComment(comment);
+                    copyCommentValues(parseComments.get(i), comment);
+                    parseComments.get(i).saveEventually();
+                }
             }
-            i++;
+            ++i;
         }
     }
 

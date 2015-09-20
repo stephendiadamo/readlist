@@ -7,8 +7,6 @@ import android.content.Context;
 import java.util.ArrayList;
 
 public class ReadingSessionLoader extends AsyncTaskLoader<ArrayList<ReadingSession>> {
-
-    public static final int ID = 7;
     private final Context context;
     private final int bookId;
 

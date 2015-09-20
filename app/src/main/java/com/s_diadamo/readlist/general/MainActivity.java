@@ -77,10 +77,10 @@ public class MainActivity extends AppCompatActivity
             shelfOperations.updateShelf(defaultShelf);
             editor.putBoolean(FIXED_DEFAULT_SHELF_COLOR, true);
         }
-        
+
         if (!prefs.getBoolean(FIXED_REMEMBER_ME_STRING, false)) {
             String rememberMeSet = prefs.getString(Utils.REMEMBER_ME, "");
-            if (rememberMeSet != null && !rememberMeSet.isEmpty()) {
+            if (!rememberMeSet.isEmpty()) {
                 editor.remove(Utils.REMEMBER_ME);
                 if (rememberMeSet.equals("yes")) {
                     editor.putBoolean(Utils.REMEMBER_ME, true);
