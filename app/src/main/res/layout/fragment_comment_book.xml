@@ -13,9 +13,11 @@
 
     <Button
         android:id="@+id/comment_book_add_comment"
+        style="?android:button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:padding="15dp"
         android:text="@string/add_comment" />
 
     <ListView
