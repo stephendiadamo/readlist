@@ -105,7 +105,8 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
                 .appendQueryParameter("access_token", mToken);
 
         String url = builder.build().toString();
-        url += "&fields=" + "items(volumeInfo(authors,imageLinks/thumbnail,pageCount,industryIdentifiers,subtitle,title))";
+        url += "&fields=" + "items(volumeInfo(authors,imageLinks/smallThumbnail,pageCount,industryIdentifiers,subtitle,title))";
+
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,

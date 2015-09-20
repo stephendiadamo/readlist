@@ -13,9 +13,12 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.s_diadamo.readlist.general.API;
 import com.s_diadamo.readlist.book.Book;
 import com.s_diadamo.readlist.shelf.Shelf;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -89,8 +92,6 @@ public class Search {
 
         progressDialog.setCancelable(true);
         progressDialog.setCanceledOnTouchOutside(true);
-
-
         progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
@@ -98,47 +99,34 @@ public class Search {
             }
         });
 
-
-        //TODO: USE THIS!
-//        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                progressDialog.dismiss();
-//                Toast.makeText(context, "WTF", Toast.LENGTH_LONG).show();
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // TODO Auto-generated method stub
-//                progressDialog.dismiss();
-//            }
-//        });
-
-        StringUTF8Request stringUTF8Request = new StringUTF8Request(Request.Method.GET, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                progressDialog.dismiss();
-                if (!cancelledSearch) {
-                    ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(response, shelf);
-                    SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, manager);
-                    searchResultDialog.show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                progressDialog.dismiss();
-                if (!cancelledSearch) {
-                    Toast toast = Toast.makeText(context, "Search failed. Check internet connection and try again.", Toast.LENGTH_LONG);
-                    TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
-                    if (textView != null) {
-                        textView.setGravity(Gravity.CENTER);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        progressDialog.dismiss();
+                        if (!cancelledSearch) {
+                            ArrayList<Book> books = SearchResultJSONParser.getBooksFromJSONResponse(jsonObject, shelf);
+                            SearchResultDialog searchResultDialog = new SearchResultDialog(context, books, manager);
+                            searchResultDialog.show();
+                        }
                     }
-                    toast.show();
-                }
-            }
-        });
-
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(stringUTF8Request);
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        progressDialog.dismiss();
+                        if (!cancelledSearch) {
+                            Toast toast = Toast.makeText(context, "Search failed. Check internet connection and try again.", Toast.LENGTH_LONG);
+                            TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+                            if (textView != null) {
+                                textView.setGravity(Gravity.CENTER);
+                            }
+                            toast.show();
+                        }
+                    }
+                });
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 }

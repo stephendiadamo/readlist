@@ -29,7 +29,7 @@ public class GoogleJSONResultParser {
                 } else {
                     book.setNumPages(0);
                 }
-                book.setCoverPictureUrl(jsonBook.getJSONObject("imageLinks").getString("thumbnail"));
+                book.setCoverPictureUrl(jsonBook.getJSONObject("imageLinks").getString("smallThumbnail"));
                 book.setDateAdded(Utils.getCurrentDate());
                 book.setShelfId(Shelf.DEFAULT_SHELF_ID);
                 book.setColour(Shelf.DEFAULT_COLOR);

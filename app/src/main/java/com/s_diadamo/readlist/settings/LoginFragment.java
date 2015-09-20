@@ -3,6 +3,7 @@ package com.s_diadamo.readlist.settings;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -52,6 +53,8 @@ public class LoginFragment extends Fragment {
     private CheckBox rememberMe;
     private Context context;
     private String emailAddress;
+    private boolean loginCancelled = false;
+    private boolean forgotPasswordCancelled = false;
 
     @Nullable
     @Override
@@ -130,6 +133,8 @@ public class LoginFragment extends Fragment {
 
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Creating account...");
+                    progressDialog.setCancelable(false);
+                    progressDialog.setIndeterminate(false);
                     progressDialog.show();
 
                     user.signUpInBackground(new SignUpCallback() {
@@ -154,19 +159,28 @@ public class LoginFragment extends Fragment {
                 } else if (currentMode == LOGIN_MODE) {
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Logging in...");
+                    progressDialog.setCancelable(true);
+                    progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            loginCancelled = true;
+                        }
+                    });
                     progressDialog.show();
 
                     ParseUser.logInInBackground(userName, password, new LogInCallback() {
                         @Override
                         public void done(ParseUser parseUser, ParseException e) {
                             progressDialog.dismiss();
-                            if (parseUser != null) {
-                                ParseAnalytics.trackEventInBackground(Analytics.LOGGED_IN);
-                                Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
-                                rememberUser(userName, password);
-                                completeLogin();
-                            } else {
-                                Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
+                            if (!loginCancelled) {
+                                if (parseUser != null) {
+                                    ParseAnalytics.trackEventInBackground(Analytics.LOGGED_IN);
+                                    Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show();
+                                    rememberUser(userName, password);
+                                    completeLogin();
+                                } else {
+                                    Toast.makeText(context, "Login failed, please try again", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     });
@@ -179,19 +193,28 @@ public class LoginFragment extends Fragment {
 
                     final ProgressDialog progressDialog = new ProgressDialog(context);
                     progressDialog.setMessage("Verifying...");
+                    progressDialog.setCancelable(true);
+                    progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            forgotPasswordCancelled = true;
+                        }
+                    });
                     progressDialog.show();
                     ParseUser.requestPasswordResetInBackground(emailAddress, new RequestPasswordResetCallback() {
                         @Override
                         public void done(ParseException e) {
                             progressDialog.dismiss();
-                            if (e == null) {
-                                Toast.makeText(context, "An email was sent to your account", Toast.LENGTH_LONG).show();
-                                toggleActionBar(true);
-                                Utils.hideKeyBoard(getActivity());
-                                Utils.launchSettingsFragment(getActivity().getSupportFragmentManager());
-                            } else {
-                                if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS || e.getCode() == ParseException.EMAIL_NOT_FOUND) {
-                                    Toast.makeText(context, "No user associated with this address", Toast.LENGTH_LONG).show();
+                            if (!forgotPasswordCancelled) {
+                                if (e == null) {
+                                    Toast.makeText(context, "An email was sent to your account", Toast.LENGTH_LONG).show();
+                                    toggleActionBar(true);
+                                    Utils.hideKeyBoard(getActivity());
+                                    Utils.launchSettingsFragment(getActivity().getSupportFragmentManager());
+                                } else {
+                                    if (e.getCode() == ParseException.INVALID_EMAIL_ADDRESS || e.getCode() == ParseException.EMAIL_NOT_FOUND) {
+                                        Toast.makeText(context, "No user associated with this address", Toast.LENGTH_LONG).show();
+                                    }
                                 }
                             }
                         }
