@@ -3,9 +3,14 @@ package com.s_diadamo.readlist.syncExternalData;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,37 +20,28 @@ import com.google.android.gms.common.AccountPicker;
 import com.s_diadamo.readlist.R;
 import com.s_diadamo.readlist.general.Utils;
 
+import java.util.concurrent.ExecutionException;
+
 public class SyncExternalDataFragment extends Fragment {
 
-    static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
+    protected static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private View rootView;
     private String mEmail;
-    String SCOPE = "oauth2:https://www.googleapis.com/auth/books";
+    private SharedPreferences mSharedPrefs;
+    private final static String BOOKS_API_SCOPE = "oauth2:https://www.googleapis.com/auth/books";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_sync_external_data, container, false);
-
         TextView syncGoogleData = (TextView) rootView.findViewById(R.id.sync_external_data_google);
-
-
-        // TODO: Check internet connection
         syncGoogleData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mEmail == null) {
-                    pickUserAccount();
-                } else {
-                    if (Utils.isNetworkAvailable((Activity) rootView.getContext())) {
-                        new GetUsernameTask((Activity) rootView.getContext(), mEmail, SCOPE).execute();
-                    } else {
-                        Utils.showToast(rootView.getContext(), "Not connected internet bru");
-                    }
-                }
+                getUsername();
             }
         });
-
+        mSharedPrefs = PreferenceManager.getDefaultSharedPreferences(rootView.getContext());
         return rootView;
     }
 
@@ -57,22 +53,33 @@ public class SyncExternalDataFragment extends Fragment {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        switch (requestCode) {
-            case REQUEST_CODE_PICK_ACCOUNT:
-                if (resultCode == Activity.RESULT_OK) {
-                    mEmail = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-                    getUsername();
-                    break;
-                } else {
-                    Utils.showToast(rootView.getContext(), "Login failed");
-                }
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
+            if (resultCode == Activity.RESULT_OK) {
+                mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+//                if (mEmail != null) {
+//                    SharedPreferences.Editor editor = mSharedPrefs.edit();
+//                    editor.putString("google_account", mEmail);
+//                    editor.apply();
+//                }
+                getUsername();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Utils.showToast(rootView.getContext(), "Cancelled");
+            }
         }
-
-        // TODO: Handle exceptions
+        //TODO: Handle exceptions
     }
 
     private void getUsername() {
-        new GetUsernameTask((Activity) rootView.getContext(), mEmail, SCOPE).execute();
+        if (mEmail == null) {
+            pickUserAccount();
+        } else {
+            if (Utils.isNetworkAvailable((Activity) rootView.getContext())) {
+                AsyncTask<String, String, String> task = new GetUsernameTask(getActivity(), mEmail, BOOKS_API_SCOPE, mSharedPrefs);
+                task.execute();
+            } else {
+                Utils.showToast(rootView.getContext(), "No internet");
+            }
+        }
     }
 }
