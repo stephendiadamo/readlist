@@ -40,6 +40,7 @@ public class Utils {
     public static final String CHECK_INTERNET_MESSAGE = "Please ensure internet connection is available";
     public static final String SYNC_ON_START = "SYNC_ON_START";
     public static final String GOOGLE_USER_TOKEN = "GOOGLE_USER_TOKEN";
+    public static final String CREATE_ACCOUNT_FROM_MAIN = "create_account_from_main";
 
     public static String getCurrentDate() {
         Calendar cal = Calendar.getInstance();
