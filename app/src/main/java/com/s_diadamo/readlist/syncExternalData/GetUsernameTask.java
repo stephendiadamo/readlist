@@ -100,11 +100,12 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
                 .appendPath("v1")
                 .appendPath("mylibrary")
                 .appendPath("bookshelves")
-                .appendPath("1")
+                .appendPath("7")
                 .appendPath("volumes")
                 .appendQueryParameter("access_token", mToken);
 
         String url = builder.build().toString();
+        url += "&fields=" + "items(volumeInfo(authors,imageLinks/thumbnail,pageCount,industryIdentifiers,subtitle,title))";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
                 url,
@@ -113,7 +114,7 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         progressDialog.dismiss();
-
+                        GoogleJSONResultParser.parseGoogleJSONBookData(mActivity, jsonObject);
                     }
                 },
                 new Response.ErrorListener() {
