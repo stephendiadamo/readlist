@@ -94,36 +94,34 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(FIXED_REMEMBER_ME_STRING, true);
         }
 
-        if (!prefs.getBoolean(INFORMED_USER_ABOUT_LOGIN, false)) {
-            if (!prefs.contains(Utils.USER_NAME)) {
-                String message = "Looks like you haven't created an account yet. " +
-                        "To better protect your data, you can store it on the cloud and recover " +
-                        "it when ever you'd like. " +
-                        "Would you like to create an account now? We won't ask again.";
+        if (!prefs.getBoolean(INFORMED_USER_ABOUT_LOGIN, false) && !prefs.contains(Utils.USER_NAME) && new BookOperations(this).getBooksCount() > 0) {
+            String message = "Looks like you haven't created an account yet. " +
+                    "To better protect your data, you can store it on the cloud and recover " +
+                    "it when ever you'd like. " +
+                    "Would you like to create an account now? We won't ask again.";
 
-                new AlertDialog.Builder(this)
-                        .setTitle("You haven't created an account!")
-                        .setMessage(message)
-                        .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Fragment loginFragment = new LoginFragment();
+            new AlertDialog.Builder(this)
+                    .setTitle("You haven't created an account!")
+                    .setMessage(message)
+                    .setCancelable(true)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Fragment loginFragment = new LoginFragment();
 
-                                Bundle bundle = new Bundle();
-                                bundle.putInt(Utils.CREATE_ACCOUNT_FROM_MAIN, 100);
-                                loginFragment.setArguments(bundle);
+                            Bundle bundle = new Bundle();
+                            bundle.putInt(Utils.CREATE_ACCOUNT_FROM_MAIN, 100);
+                            loginFragment.setArguments(bundle);
 
-                                FragmentManager fragmentManager = getSupportFragmentManager();
-                                fragmentManager.beginTransaction()
-                                        .addToBackStack("MAIN")
-                                        .replace(R.id.container, loginFragment)
-                                        .commit();
-                            }
-                        }).setNegativeButton("No thanks", null)
-                        .show();
-            }
-            //editor.putBoolean(INFORMED_USER_ABOUT_LOGIN, true);
+                            FragmentManager fragmentManager = getSupportFragmentManager();
+                            fragmentManager.beginTransaction()
+                                    .addToBackStack("MAIN")
+                                    .replace(R.id.container, loginFragment)
+                                    .commit();
+                        }
+                    }).setNegativeButton("No thanks", null)
+                    .show();
+            editor.putBoolean(INFORMED_USER_ABOUT_LOGIN, true);
         }
 
         try {

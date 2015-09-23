@@ -34,7 +34,9 @@ public class GoogleJSONResultParser {
                 book.setShelfId(Shelf.DEFAULT_SHELF_ID);
                 book.setColour(Shelf.DEFAULT_COLOR);
 
-                bookOperations.addBook(book);
+                if (!bookOperations.hasSimilarBook(book)) {
+                    bookOperations.addBook(book);
+                }
             }
             Utils.showToast(context, "Your Google Play books have been added");
         } catch (JSONException e) {

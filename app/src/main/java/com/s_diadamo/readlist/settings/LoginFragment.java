@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -44,12 +45,10 @@ public class LoginFragment extends Fragment {
     private EditText userNameInput;
     private EditText emailAddressInput;
     private EditText passwordInput;
-    private EditText passwordRepeatInput;
     private Button login;
     private TextView userNameLabel;
     private TextView emailAddressLabel;
     private TextView createAccount;
-    private TextView repeatPasswordLabel;
     private TextView forgotPassword;
     private TextView passwordLabel;
     private CheckBox rememberMe;
@@ -71,13 +70,11 @@ public class LoginFragment extends Fragment {
         emailAddressInput = (EditText) rootView.findViewById(R.id.login_email_address);
         emailAddressLabel = (TextView) rootView.findViewById(R.id.login_email_address_label);
         passwordInput = (EditText) rootView.findViewById(R.id.login_password);
-        passwordRepeatInput = (EditText) rootView.findViewById(R.id.login_password_repeat);
         passwordLabel = (TextView) rootView.findViewById(R.id.login_password_label);
 
         login = (Button) rootView.findViewById(R.id.login_login);
         createAccount = (TextView) rootView.findViewById(R.id.login_create_account);
         forgotPassword = (TextView) rootView.findViewById(R.id.login_forgot_password);
-        repeatPasswordLabel = (TextView) rootView.findViewById(R.id.login_password_repeat_label);
         rememberMe = (CheckBox) rootView.findViewById(R.id.login_remember_me);
 
         if (Utils.checkRememberMe(context)) {
@@ -123,6 +120,7 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         return rootView;
     }
 
@@ -215,20 +213,9 @@ public class LoginFragment extends Fragment {
 
     private void createAccount(String userName, String password) {
         ParseAnalytics.trackEventInBackground(Analytics.STARTED_CREATING_ACCOUNT);
-        String passwordRepeat = passwordRepeatInput.getText().toString();
 
         if (password.length() < 4) {
             Toast.makeText(context, "Please use a longer password", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (passwordRepeat.isEmpty()) {
-            Toast.makeText(context, "Please fill in fields", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!passwordRepeat.equals(password)) {
-            Toast.makeText(context, "Passwords do not match", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -313,9 +300,6 @@ public class LoginFragment extends Fragment {
         passwordInput.setVisibility(View.VISIBLE);
         rememberMe.setVisibility(View.GONE);
 
-        repeatPasswordLabel.setVisibility(View.VISIBLE);
-        passwordRepeatInput.setVisibility(View.VISIBLE);
-
         login.setText("Create Account");
 
         createAccount.setText("Cancel");
@@ -334,9 +318,6 @@ public class LoginFragment extends Fragment {
         passwordLabel.setVisibility(View.VISIBLE);
         passwordInput.setVisibility(View.VISIBLE);
         rememberMe.setVisibility(View.VISIBLE);
-
-        repeatPasswordLabel.setVisibility(View.GONE);
-        passwordRepeatInput.setVisibility(View.GONE);
 
         login.setText("Login");
 
@@ -357,9 +338,6 @@ public class LoginFragment extends Fragment {
         passwordLabel.setVisibility(View.GONE);
         passwordInput.setVisibility(View.GONE);
         rememberMe.setVisibility(View.GONE);
-
-        repeatPasswordLabel.setVisibility(View.GONE);
-        passwordRepeatInput.setVisibility(View.GONE);
 
         login.setText("Send Email");
 

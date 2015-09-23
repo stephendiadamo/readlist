@@ -3,7 +3,9 @@ package com.s_diadamo.readlist.book;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.s_diadamo.readlist.database.DatabaseHelper;
 
@@ -180,6 +182,22 @@ public class BookOperations {
                 book.getId());
         db.execSQL(updateQuery);
         db.close();
+    }
+
+    public boolean hasSimilarBook(Book book) {
+        db = dbHelper.getReadableDatabase();
+        String checkForData = String.format("SELECT * FROM %s WHERE %s=\"%s\" AND %s=\"%s\"",
+                DatabaseHelper.TABLE_BOOKS,
+                DatabaseHelper.BOOK_TITLE,
+                book.getTitle(),
+                DatabaseHelper.BOOK_AUTHOR,
+                book.getAuthor());
+
+        Cursor cursor = db.rawQuery(checkForData, null);
+        boolean hasElement = cursor.moveToFirst();
+        cursor.close();
+        db.close();
+        return hasElement;
     }
 
     private Book parseBook(Cursor cursor) {

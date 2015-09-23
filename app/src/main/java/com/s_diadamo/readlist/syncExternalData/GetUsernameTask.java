@@ -53,7 +53,7 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
             return GoogleAuthUtil.getToken(mActivity, mEmail, mScope);
         } catch (UserRecoverableAuthException userRecoverableException) {
             userRecoverableException.printStackTrace();
-            mActivity.startActivityForResult(userRecoverableException.getIntent(), SyncExternalDataFragment.REQUEST_CODE_PICK_ACCOUNT);
+            mActivity.startActivityForResult(userRecoverableException.getIntent(), ImportExternalDataFragment.REQUEST_CODE_PICK_ACCOUNT);
             Log.e("----FAIL----", "CRASH1");
         } catch (GoogleAuthException fatalException) {
             fatalException.printStackTrace();

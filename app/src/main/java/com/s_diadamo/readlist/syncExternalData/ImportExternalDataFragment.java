@@ -22,7 +22,7 @@ import com.s_diadamo.readlist.general.Utils;
 
 import java.util.concurrent.ExecutionException;
 
-public class SyncExternalDataFragment extends Fragment {
+public class ImportExternalDataFragment extends Fragment {
 
     protected static final int REQUEST_CODE_PICK_ACCOUNT = 1000;
     private View rootView;
@@ -57,16 +57,14 @@ public class SyncExternalDataFragment extends Fragment {
         if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             if (resultCode == Activity.RESULT_OK) {
                 mEmail = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
-//                if (mEmail != null) {
-//                    SharedPreferences.Editor editor = mSharedPrefs.edit();
-//                    editor.putString("google_account", mEmail);
-//                    editor.apply();
-//                }
                 getUsername();
             } else if (resultCode == Activity.RESULT_CANCELED) {
                 Utils.showToast(rootView.getContext(), "Cancelled");
             }
+        } else {
+            Utils.showToast(rootView.getContext(), "Sign in failed. Please try again.");
         }
+
         //TODO: Handle exceptions
     }
 

@@ -8,6 +8,6 @@
     <TextView
         android:id="@+id/sync_external_data_google"
         style="@style/SettingsItem"
-        android:text="@string/sync_google_books" />
+        android:text="@string/import_from_google_books" />
 
 </LinearLayout>

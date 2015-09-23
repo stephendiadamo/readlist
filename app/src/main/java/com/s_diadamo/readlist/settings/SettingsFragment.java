@@ -23,7 +23,7 @@ import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
-import com.s_diadamo.readlist.syncExternalData.SyncExternalDataFragment;
+import com.s_diadamo.readlist.syncExternalData.ImportExternalDataFragment;
 
 public class SettingsFragment extends Fragment {
     private static final String LOGIN = "LOGIN";
@@ -183,7 +183,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void launchSyncExternalData() {
-        launchFragment(new SyncExternalDataFragment());
+        launchFragment(new ImportExternalDataFragment());
     }
 
     private void launchFragment(Fragment fragment) {

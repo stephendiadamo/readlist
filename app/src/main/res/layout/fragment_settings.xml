@@ -42,7 +42,7 @@
     <TextView
         android:id="@+id/settings_sync_external_data"
         style="@style/SettingsItem"
-        android:text="@string/sync_external_data" />
+        android:text="@string/import_external_data" />
 
     <View
         android:layout_width="fill_parent"
