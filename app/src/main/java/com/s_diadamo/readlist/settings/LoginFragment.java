@@ -261,7 +261,7 @@ public class LoginFragment extends Fragment {
 
     private void completeLogin() {
         if (Utils.isNetworkAvailable(getActivity())) {
-            SyncData syncData = new SyncData(context, true, false);
+            SyncData syncData = new SyncData(context, true);
             syncData.syncAllData();
         }
 

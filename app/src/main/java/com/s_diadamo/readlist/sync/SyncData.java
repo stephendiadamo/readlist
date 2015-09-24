@@ -41,20 +41,8 @@ public class SyncData {
         this.context = context;
         this.userName = Utils.getUserName(context);
         this.syncSpinner = MultiProcessSpinner.getInstance();
-        this.syncSpinner.setCancelable(false);
         this.syncSpinner.setInfo(context, "Syncing data...");
         this.showSpinner = showSpinner;
-    }
-
-    public SyncData(Context context, boolean showSpinner, boolean fromMain) {
-        this.context = context;
-        this.userName = Utils.getUserName(context);
-        this.syncSpinner = MultiProcessSpinner.getInstance();
-        this.syncSpinner.setInfo(context, "Syncing data...");
-        this.showSpinner = showSpinner;
-        if (fromMain) {
-            syncSpinner.setCancelable(true);
-        }
     }
 
     public SyncData(Context context) {

@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity
 
         if (prefs.getBoolean(Utils.SYNC_ON_START, true)) {
             if (Utils.checkUserIsLoggedIn(this) && Utils.isNetworkAvailable(this)) {
-                SyncData syncData = new SyncData(this, true, true);
+                SyncData syncData = new SyncData(this, true);
                 syncData.syncAllData(this);
             }
         }

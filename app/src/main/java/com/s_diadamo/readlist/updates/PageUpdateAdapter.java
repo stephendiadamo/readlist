@@ -41,7 +41,7 @@ public class PageUpdateAdapter extends ArrayAdapter<PageUpdate> {
 
         PageUpdate pageUpdate = mPageUpdates.get(position);
         updateHolder.dateAdded.setText(pageUpdate.getCleanDateAdded());
-        updateHolder.pages.setText(String.valueOf(pageUpdate.getPages()));
+        updateHolder.pages.setText(String.valueOf(pageUpdate.getPages()) + " page"  + (pageUpdate.getPages() == 1 ? "" : "s"));
 
         return row;
     }

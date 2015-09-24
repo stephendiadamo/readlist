@@ -67,7 +67,7 @@ public class SyncPageUpdateData extends SyncData {
                 copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
                 parsePageUpdates.get(i).saveEventually();
             } else {
-                PageUpdate comparison = pageUpdatesFromParse.get(devicePageUpdateIds.get(pageUpdate.getId()));
+                PageUpdate comparison = pageUpdatesOnDevice.get(devicePageUpdateIds.get(pageUpdate.getId()));
                 if (!comparison.getDate().equals(pageUpdate.getDate())) {
                     pageUpdateOperations.addPageUpdate(pageUpdate);
                     copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);

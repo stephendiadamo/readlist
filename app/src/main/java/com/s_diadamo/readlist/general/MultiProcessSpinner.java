@@ -11,7 +11,6 @@ public class MultiProcessSpinner {
     private int runningThreads;
     private ProgressDialog progressDialog;
     private String syncMessage;
-    private boolean cancelable;
 
     private MultiProcessSpinner() {
         this.runningThreads = 0;
@@ -31,17 +30,13 @@ public class MultiProcessSpinner {
         }
     }
 
-    public void setCancelable(boolean cancelable) {
-        this.cancelable = cancelable;
-    }
-
     public void addThread() {
         runningThreads++;
         if (runningThreads == 1) {
             progressDialog = new ProgressDialog(context);
             progressDialog.setMessage(syncMessage);
-            progressDialog.setCancelable(cancelable);
-            progressDialog.setCanceledOnTouchOutside(cancelable);
+            progressDialog.setCancelable(true);
+            progressDialog.setCanceledOnTouchOutside(true);
             progressDialog.show();
         }
     }

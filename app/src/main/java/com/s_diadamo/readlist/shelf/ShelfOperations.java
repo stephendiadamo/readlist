@@ -190,6 +190,7 @@ public class ShelfOperations {
 
     public void deleteShelf(Shelf shelf) {
         removeAssociatedBooks(shelf);
+
         db = dbHelper.getWritableDatabase();
         db.delete(DatabaseHelper.TABLE_SHELVES, DatabaseHelper.KEY_ID + "=?",
                 new String[]{String.valueOf(shelf.getId())});
