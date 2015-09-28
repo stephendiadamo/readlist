@@ -157,6 +157,7 @@
     <string name="add_books_to_shelf">Add books to shelf</string>
     <string name="import_external_data">Import external data</string>
     <string name="import_from_google_books">Import from Google Books</string>
+    <string name="export_book_csv">Export Books as CSV</string>
 
     <string-array name="navigation_element_names">
         <item>All Books</item>

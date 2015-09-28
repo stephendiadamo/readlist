@@ -65,6 +65,12 @@
                 android:id="@+id/hide_shelved_books"
                 android:checkable="true"
                 android:title="@string/hide_shelved_books" />
+            <item
+                android:id="@+id/sync_data"
+                android:title="@string/sync_data" />
+            <item
+                android:id="@+id/export_books"
+                android:title="@string/export_book_csv" />
         </menu>
     </item>
 </menu>

@@ -36,7 +36,6 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
         mEmail = email;
         mScope = scope;
         mPrefs = prefs;
-
     }
 
     @Override
@@ -53,11 +52,10 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
             return GoogleAuthUtil.getToken(mActivity, mEmail, mScope);
         } catch (UserRecoverableAuthException userRecoverableException) {
             userRecoverableException.printStackTrace();
-            mActivity.startActivityForResult(userRecoverableException.getIntent(), ImportExternalDataFragment.REQUEST_CODE_PICK_ACCOUNT);
-            Log.e("----FAIL----", "CRASH1");
+            mActivity.startActivityForResult(userRecoverableException.getIntent(),
+                    ImportExternalDataFragment.REQUEST_CODE_PICK_ACCOUNT);
         } catch (GoogleAuthException fatalException) {
             fatalException.printStackTrace();
-            Log.e("----FAIL----", "CRASH2");
         }
         return null;
     }
@@ -79,17 +77,20 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
         String token = null;
         try {
             token = fetchToken();
-            Log.i("---TOKEN---", token);
         } catch (IOException e) {
-            Log.e("---FAILED---", " FAIL");
+            e.printStackTrace();
         }
         return token;
     }
 
     private void getUserBooks() {
+        if (mToken == null || mToken.isEmpty()) {
+            Utils.showToast(mActivity, "Google authorization failed");
+            return;
+        }
 
-        progressDialog = ProgressDialog.show(mActivity, null, "Google account OK. Fetching books.");
-        progressDialog.setCancelable(true);
+        progressDialog = ProgressDialog.show(mActivity, null, "Google account is valid, fetching books...");
+        progressDialog.setCancelable(false);
         progressDialog.setIndeterminate(false);
         progressDialog.show();
 
@@ -122,10 +123,8 @@ public class GetUsernameTask extends AsyncTask<String, String, String> {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
                         progressDialog.dismiss();
-                        Log.i("---VOLLEY ERROR---", volleyError.toString());
                     }
                 });
         RequestQueueSingleton.getInstance(mActivity).addToRequestQueue(jsonObjectRequest);
-
     }
 }

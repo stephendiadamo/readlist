@@ -149,7 +149,6 @@ public class MainActivity extends AppCompatActivity
                     progressDialog.dismiss();
                 }
             }).run();
-
             editor.putBoolean(FIXED_DUPLICATE_DATA, true);
         }
 
@@ -173,17 +172,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void deleteDuplicateBooks() {
-        HashSet<String> addedDates = new HashSet<>();
-        HashSet<String> titles = new HashSet<>();
+        HashSet<Tuple> seenBooks = new HashSet<>();
         BookOperations bookOperations = new BookOperations(context);
         ArrayList<Book> books = bookOperations.getAllBooks();
+        Tuple<String, String> currentBook;
         for (Book book : books) {
-            if (addedDates.contains(book.getDateAdded()) && titles.contains(book.getTitle())) {
+            currentBook = new Tuple<>(book.getTitle(), book.getDateAdded());
+            if (seenBooks.contains(currentBook)) {
                 book.delete();
                 bookOperations.updateBook(book);
             } else {
-                addedDates.add(book.getDateAdded());
-                titles.add(book.getTitle());
+                seenBooks.add(currentBook);
             }
         }
     }
@@ -208,9 +207,9 @@ public class MainActivity extends AppCompatActivity
         HashSet<Tuple> bookUpdateList = new HashSet<>();
         BookUpdateOperations bookUpdateOperations = new BookUpdateOperations(this);
         ArrayList<BookUpdate> bookUpdates = bookUpdateOperations.getAllBookUpdates();
-        Tuple currentBookUpdate;
+        Tuple<String, Integer> currentBookUpdate;
         for (BookUpdate bookUpdate : bookUpdates) {
-            currentBookUpdate = new Tuple(bookUpdate.getDate(), bookUpdate.getBookId());
+            currentBookUpdate = new Tuple<>(bookUpdate.getDate(), bookUpdate.getBookId());
             if (bookUpdateList.contains(currentBookUpdate)) {
                 bookUpdate.delete();
                 bookUpdateOperations.updateBookUpdate(bookUpdate);
@@ -326,13 +325,13 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public class Tuple {
-        public final String dateAdded;
-        public final int bookId;
+    public class Tuple<X, Y> {
+        public X x;
+        public Y y;
 
-        public Tuple(String date, int bookId) {
-            this.dateAdded = date;
-            this.bookId = bookId;
+        public Tuple(X x, Y y) {
+            this.x = x;
+            this.y = y;
         }
 
         public boolean equals(Object arg) {
@@ -340,15 +339,15 @@ public class MainActivity extends AppCompatActivity
             if (arg == null) return false;
             if (arg instanceof Tuple) {
                 Tuple other = (Tuple) arg;
-                return this.bookId == other.bookId && this.dateAdded.equals(other.dateAdded);
+                return this.x.equals(other.x) && this.y.equals(other.y);
             }
             return false;
         }
 
         public int hashCode() {
             int res = 5;
-            res = res * 17 + bookId;
-            res = res * 17 + dateAdded.hashCode();
+            res = res * 17 + x.hashCode();
+            res = res * 17 + y.hashCode();
             return res;
         }
     }

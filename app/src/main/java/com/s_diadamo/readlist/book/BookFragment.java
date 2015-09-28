@@ -2,6 +2,8 @@ package com.s_diadamo.readlist.book;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.v4.app.LoaderManager;
 import android.content.Intent;
 import android.support.v4.content.Loader;
@@ -35,7 +37,11 @@ import com.s_diadamo.readlist.search.Search;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfAddEditFragment;
 import com.s_diadamo.readlist.shelf.ShelfLoader;
+import com.s_diadamo.readlist.sync.SyncData;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -275,6 +281,20 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
         } else if (id == R.id.sort_by_completion) {
             sortBooksByCompletion();
             return true;
+        } else if (id == R.id.sync_data) {
+            if (!Utils.isNetworkAvailable(getActivity())) {
+                Utils.showToast(context, Utils.CHECK_INTERNET_MESSAGE);
+                return true;
+            }
+            if (Utils.checkUserIsLoggedIn(context)) {
+                new SyncData(context).syncAllData();
+            } else {
+                Utils.showToast(context, "You must be logged in to sync data");
+            }
+            return true;
+        } else if (id == R.id.export_books) {
+            exportBookList();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -495,6 +515,38 @@ public class BookFragment extends Fragment implements LoaderManager.LoaderCallba
                 break;
         }
         updateVisibleBooks();
+    }
+
+    private void exportBookList() {
+        ArrayList<Book> books = bookOperations.getAllValidBooks();
+        StringBuilder builder = new StringBuilder();
+        for (Book book : books) {
+            builder.append(book.getTitle());
+            builder.append(",");
+            builder.append(book.getAuthor());
+            builder.append("\n");
+        }
+        String bookCSV = builder.toString();
+        try {
+            File outFile = Environment.getExternalStorageDirectory();
+            if (outFile.canWrite()) {
+                File directory = new File(outFile.getAbsolutePath() + "/readlist");
+                if (directory.mkdirs()) ;
+                File file = new File(directory, "ReadlistBookData.csv");
+                FileOutputStream outputStream = new FileOutputStream(file);
+                outputStream.write(bookCSV.getBytes());
+                outputStream.close();
+
+                Uri csvData = Uri.fromFile(file);
+                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Readlist book data");
+                sendIntent.putExtra(Intent.EXTRA_STREAM, csvData);
+                sendIntent.setType("text/html");
+                startActivity(sendIntent);
+            }
+        } catch (Exception e) {
+            Utils.showToast(context, "Failed to export data");
+        }
     }
 
     @Override
