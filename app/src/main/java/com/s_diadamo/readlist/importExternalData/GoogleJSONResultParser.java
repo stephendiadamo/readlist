@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist.syncExternalData;
+package com.s_diadamo.readlist.importExternalData;
 
 import android.content.Context;
 

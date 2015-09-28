@@ -23,7 +23,7 @@ import com.s_diadamo.readlist.general.Analytics;
 import com.s_diadamo.readlist.general.MainActivity;
 import com.s_diadamo.readlist.general.Utils;
 import com.s_diadamo.readlist.sync.SyncData;
-import com.s_diadamo.readlist.syncExternalData.ImportExternalDataFragment;
+import com.s_diadamo.readlist.importExternalData.ImportExternalDataFragment;
 
 public class SettingsFragment extends Fragment {
     private static final String LOGIN = "LOGIN";
@@ -40,6 +40,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container, false);
         mContext = rootView.getContext();
+        mUserLoggedIn = Utils.checkUserIsLoggedIn(mContext);
         setHasOptionsMenu(false);
 
         mLogin = (TextView) rootView.findViewById(R.id.settings_login);
@@ -195,7 +196,6 @@ public class SettingsFragment extends Fragment {
     }
 
     private void setLoginLabels() {
-        mUserLoggedIn = Utils.checkUserIsLoggedIn(getActivity());
         if (mUserLoggedIn) {
             mLogin.setText(R.string.logout);
             mLoggedInAsLabel.setVisibility(View.VISIBLE);

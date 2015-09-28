@@ -143,7 +143,7 @@ public class Utils {
 
     public static boolean checkRememberMe(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return prefs.getBoolean(Utils.REMEMBER_ME, false);
+        return prefs.getBoolean(REMEMBER_ME, false);
     }
 
     public static void logout(Context context) {

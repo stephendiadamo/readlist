@@ -1,4 +1,4 @@
-package com.s_diadamo.readlist.syncExternalData;
+package com.s_diadamo.readlist.importExternalData;
 
 import android.app.Activity;
 import android.app.ProgressDialog;

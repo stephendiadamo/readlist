@@ -1,6 +1,8 @@
 package com.s_diadamo.readlist.general;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -29,11 +31,14 @@ import com.s_diadamo.readlist.settings.SettingsFragment;
 import com.s_diadamo.readlist.shelf.Shelf;
 import com.s_diadamo.readlist.shelf.ShelfOperations;
 import com.s_diadamo.readlist.sync.SyncData;
+import com.s_diadamo.readlist.updates.BookUpdate;
+import com.s_diadamo.readlist.updates.BookUpdateOperations;
 import com.s_diadamo.readlist.updates.PageUpdate;
 import com.s_diadamo.readlist.updates.PageUpdateOperations;
 import com.s_diadamo.readlist.updates.StatisticsFragment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -42,10 +47,12 @@ public class MainActivity extends AppCompatActivity
     private static final String FIXED_REMEMBER_ME_STRING = "FIXED_REMEMBER_ME_STRING";
     private static final String FIXED_DEFAULT_SHELF_COLOR = "FIXED_DEFAULT_SHELF_COLOR";
     private static final String INFORMED_USER_ABOUT_LOGIN = "INFORMED_USER_ABOUT_LOGIN";
+    private static final String FIXED_DUPLICATE_DATA = "FIXED_DUPLICATE_DATA";
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
     public static ImageLoader imageLoader;
     public static String PACKAGE_NAME;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
         imageLoader = new ImageLoader(this);
+        context = this;
         init();
 
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
@@ -124,6 +132,27 @@ public class MainActivity extends AppCompatActivity
             editor.putBoolean(INFORMED_USER_ABOUT_LOGIN, true);
         }
 
+
+        if (!prefs.getBoolean(FIXED_DUPLICATE_DATA, false)) {
+            final ProgressDialog progressDialog = new ProgressDialog(this);
+            progressDialog.setMessage("Hold tight, some adjustments to the database are being made.");
+            progressDialog.setCancelable(false);
+            progressDialog.setCanceledOnTouchOutside(false);
+            progressDialog.show();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    deleteDuplicateBooks();
+                    deleteDuplicatePageUpdates();
+                    deleteDuplicateBookUpdates();
+                    progressDialog.dismiss();
+                }
+            }).run();
+
+            editor.putBoolean(FIXED_DUPLICATE_DATA, true);
+        }
+
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), 0);
             PACKAGE_NAME = pInfo.versionName;
@@ -141,6 +170,54 @@ public class MainActivity extends AppCompatActivity
         editor.apply();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.ActionBarColor)));
+    }
+
+    private void deleteDuplicateBooks() {
+        HashSet<String> addedDates = new HashSet<>();
+        HashSet<String> titles = new HashSet<>();
+        BookOperations bookOperations = new BookOperations(context);
+        ArrayList<Book> books = bookOperations.getAllBooks();
+        for (Book book : books) {
+            if (addedDates.contains(book.getDateAdded()) && titles.contains(book.getTitle())) {
+                book.delete();
+                bookOperations.updateBook(book);
+            } else {
+                addedDates.add(book.getDateAdded());
+                titles.add(book.getTitle());
+            }
+        }
+    }
+
+    private void deleteDuplicatePageUpdates() {
+        HashSet<Triple> pageUpdateList = new HashSet<>();
+        PageUpdateOperations pageUpdateOperations = new PageUpdateOperations(context);
+        ArrayList<PageUpdate> pageUpdates = pageUpdateOperations.getAllPageUpdates();
+        Triple curPageUpdate;
+        for (PageUpdate pageUpdate : pageUpdates) {
+            curPageUpdate = new Triple(pageUpdate.getDate(), pageUpdate.getBookId(), pageUpdate.getPages());
+            if (pageUpdateList.contains(curPageUpdate)) {
+                pageUpdate.delete();
+                pageUpdateOperations.updatePageUpdate(pageUpdate);
+            } else {
+                pageUpdateList.add(curPageUpdate);
+            }
+        }
+    }
+
+    private void deleteDuplicateBookUpdates() {
+        HashSet<Tuple> bookUpdateList = new HashSet<>();
+        BookUpdateOperations bookUpdateOperations = new BookUpdateOperations(this);
+        ArrayList<BookUpdate> bookUpdates = bookUpdateOperations.getAllBookUpdates();
+        Tuple currentBookUpdate;
+        for (BookUpdate bookUpdate : bookUpdates) {
+            currentBookUpdate = new Tuple(bookUpdate.getDate(), bookUpdate.getBookId());
+            if (bookUpdateList.contains(currentBookUpdate)) {
+                bookUpdate.delete();
+                bookUpdateOperations.updateBookUpdate(bookUpdate);
+            } else {
+                bookUpdateList.add(currentBookUpdate);
+            }
+        }
     }
 
     @Override
@@ -211,7 +288,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onDestroy() {
         if (Utils.checkRememberMe(this)) {
-            Utils.logout(this);
+            Utils.logout(context);
         }
         super.onDestroy();
     }
@@ -219,4 +296,61 @@ public class MainActivity extends AppCompatActivity
     public void closeDrawer() {
         mNavigationDrawerFragment.closeDrawer();
     }
+
+    private class Triple {
+        int bookId, pages;
+        String dateAdded;
+
+        Triple(String dateAdded, int bookID, int pages) {
+            this.dateAdded = dateAdded;
+            this.bookId = bookID;
+            this.pages = pages;
+        }
+
+        public boolean equals(Object arg) {
+            if (this == arg) return true;
+            if (arg == null) return false;
+            if (arg instanceof Triple) {
+                Triple other = (Triple) arg;
+                return this.bookId == other.bookId && this.pages == other.pages && this.dateAdded.equals(other.dateAdded);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            int res = 5;
+            res = res * 17 + bookId;
+            res = res * 17 + pages;
+            res = res * 17 + dateAdded.hashCode();
+            return res;
+        }
+    }
+
+    public class Tuple {
+        public final String dateAdded;
+        public final int bookId;
+
+        public Tuple(String date, int bookId) {
+            this.dateAdded = date;
+            this.bookId = bookId;
+        }
+
+        public boolean equals(Object arg) {
+            if (this == arg) return true;
+            if (arg == null) return false;
+            if (arg instanceof Tuple) {
+                Tuple other = (Tuple) arg;
+                return this.bookId == other.bookId && this.dateAdded.equals(other.dateAdded);
+            }
+            return false;
+        }
+
+        public int hashCode() {
+            int res = 5;
+            res = res * 17 + bookId;
+            res = res * 17 + dateAdded.hashCode();
+            return res;
+        }
+    }
+
 }
