@@ -60,14 +60,13 @@ class SearchResultDialog extends AlertDialog.Builder {
                     BookOperations bookOperations = new BookOperations(context);
                     boolean loggedIn = Utils.checkUserIsLoggedIn(context);
 
-                    SyncData syncData = new SyncData(context);
                     SparseBooleanArray booleanArray = bookListView.getCheckedItemPositions();
 
                     for (int i = 0; i < books.size(); i++) {
                         if (booleanArray.get(i)) {
                             bookOperations.addBook(books.get(i));
                             if (loggedIn) {
-                                syncData.add(books.get(i));
+                                new SyncData(context).add(books.get(i));
                             }
                         }
                     }
