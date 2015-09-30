@@ -66,9 +66,12 @@ public class SyncReadingSessionData extends SyncData {
         i = 0;
         for (ReadingSession readingSession : readingSessionsFromParse) {
             if (!deviceReadingSessionIds.containsKey(readingSession.getId())) {
+                long oldId = readingSession.getId();
                 readingSessionOperations.addReadingSession(readingSession);
-                copyReadingSessionValues(parseReadingSessions.get(i), readingSession);
-                parseReadingSessions.get(i).saveEventually();
+                if (readingSession.getId() != oldId) {
+                    copyReadingSessionValues(parseReadingSessions.get(i), readingSession);
+                    parseReadingSessions.get(i).saveEventually();
+                }
             } else {
                 ReadingSession comparison = readingSessionsOnDevice.get(deviceReadingSessionIds.get(readingSession.getId()));
                 if (!comparison.getDate().equals(readingSession.getDate())) {

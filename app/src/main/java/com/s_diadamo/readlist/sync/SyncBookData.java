@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 class SyncBookData extends SyncData {
     private final BookOperations bookOperations;
@@ -74,9 +76,11 @@ class SyncBookData extends SyncData {
                 }
 
                 bookOperations.addBook(book);
-                fixBookRelations(book.getId(), oldBookId);
-                copyBookValues(parseBooks.get(i), book);
-                parseBooks.get(i).saveEventually();
+                if (book.getId() != oldBookId) {
+                    fixBookRelations(book.getId(), oldBookId);
+                    copyBookValues(parseBooks.get(i), book);
+                    parseBooks.get(i).saveEventually();
+                }
             } else {
                 Book comparison = booksOnDevice.get(deviceBookIds.get(book.getId()));
                 if (!booksMatch(comparison, book)) {
@@ -98,7 +102,9 @@ class SyncBookData extends SyncData {
 
     // TODO: Save ISBN numbers... Or some unique identifier
     private boolean booksMatch(Book deviceBook, Book parseBook) {
-        return deviceBook.getDateAdded().equals(parseBook.getDateAdded());
+        return deviceBook.getDateAdded().equals(parseBook.getDateAdded())
+                && deviceBook.getTitle().equals(parseBook.getTitle());
+
     }
 
     private void updateParseBooks(ArrayList<Book> booksOnDevice, ArrayList<Book> booksFromParse) {
@@ -130,13 +136,20 @@ class SyncBookData extends SyncData {
     }
 
     private void fixBookRelations(int newBookId, int oldBookId) {
-        fixRelation(newBookId, oldBookId, TYPE_LENT_BOOK, DatabaseHelper.LENT_BOOK_BOOK_ID);
-        fixRelation(newBookId, oldBookId, TYPE_COMMENT, DatabaseHelper.COMMENT_BOOK_ID);
-        fixRelation(newBookId, oldBookId, TYPE_READING_SESSION, DatabaseHelper.READING_SESSION_BOOK_ID);
+        final CountDownLatch signalBookSync = new CountDownLatch(3);
+
+        fixRelation(newBookId, oldBookId, TYPE_LENT_BOOK, DatabaseHelper.LENT_BOOK_BOOK_ID, signalBookSync);
+        fixRelation(newBookId, oldBookId, TYPE_COMMENT, DatabaseHelper.COMMENT_BOOK_ID, signalBookSync);
+        fixRelation(newBookId, oldBookId, TYPE_READING_SESSION, DatabaseHelper.READING_SESSION_BOOK_ID, signalBookSync);
+        try {
+            signalBookSync.await(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
-    private void fixRelation(int newBookId, int oldBookId, String type, String field) {
-            new FixRelations(userName, newBookId, oldBookId, type, field).execute();
+    private void fixRelation(int newBookId, int oldBookId, String type, String field, CountDownLatch signal) {
+        new FixRelations(userName, newBookId, oldBookId, type, field, signal).execute();
     }
 
     private Book parseBookToBook(ParseObject parseBook) {

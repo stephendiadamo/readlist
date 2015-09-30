@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 class SyncShelfData extends SyncData {
     private final ShelfOperations shelfOperations;
@@ -101,12 +103,14 @@ class SyncShelfData extends SyncData {
             if (!deviceShelfIds.containsKey(shelf.getId())) {
                 int oldId = shelf.getId();
                 shelfOperations.addShelf(shelf);
-                fixShelfRelations(shelf.getId(), oldId);
-                copyShelfValues(parseShelves.get(i), shelf);
-                try {
-                    parseShelves.get(i).save();
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                if (oldId != shelf.getId()) {
+                    fixShelfRelations(shelf.getId(), oldId);
+                    copyShelfValues(parseShelves.get(i), shelf);
+                    try {
+                        parseShelves.get(i).save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 Shelf comparison = shelvesOnDevice.get(deviceShelfIds.get(shelf.getId()));
@@ -127,7 +131,13 @@ class SyncShelfData extends SyncData {
     }
 
     private void fixShelfRelations(int newId, int oldId) {
-        new FixRelations(userName, newId, oldId, TYPE_BOOK, DatabaseHelper.BOOK_SHELF).execute();
+        CountDownLatch waitForShelf = new CountDownLatch(1);
+        new FixRelations(userName, newId, oldId, TYPE_BOOK, DatabaseHelper.BOOK_SHELF, waitForShelf).execute();
+        try {
+            waitForShelf.await(30, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateParseShelves(ArrayList<Shelf> shelvesOnDevice, ArrayList<Shelf> shelvesFromParse) {

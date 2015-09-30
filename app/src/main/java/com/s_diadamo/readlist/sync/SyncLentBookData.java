@@ -67,9 +67,12 @@ class SyncLentBookData extends SyncData {
         i = 0;
         for (LentBook lentBook : lentBooksFromParse) {
             if (!deviceLentBookIds.containsKey(lentBook.getId())) {
+                int oldId = lentBook.getId();
                 lentBookOperations.addLentBook(lentBook);
-                copyLentBookValues(parseLentBooks.get(i), lentBook);
-                parseLentBooks.get(i).saveEventually();
+                if (oldId != lentBook.getId()) {
+                    copyLentBookValues(parseLentBooks.get(i), lentBook);
+                    parseLentBooks.get(i).saveEventually();
+                }
             } else {
                 LentBook comparison = lentBooksOnDevice.get(deviceLentBookIds.get(lentBook.getId()));
                 if (!comparison.getDateAdded().equals(lentBook.getDateAdded())) {

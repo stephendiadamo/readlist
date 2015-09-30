@@ -66,9 +66,12 @@ class SyncCommentData extends SyncData {
         i = 0;
         for (Comment comment : commentsFromParse) {
             if (!deviceCommentIds.containsKey(comment.getId())) {
+                int oldId = comment.getId();
                 commentOperations.addComment(comment);
-                copyCommentValues(parseComments.get(i), comment);
-                parseComments.get(i).saveEventually();
+                if (oldId != comment.getId()) {
+                    copyCommentValues(parseComments.get(i), comment);
+                    parseComments.get(i).saveEventually();
+                }
             } else {
                 Comment comparison = commentsOnDevice.get(deviceCommentIds.get(comment.getId()));
                 if (!comment.getDateAdded().equals(comparison.getDateAdded())) {

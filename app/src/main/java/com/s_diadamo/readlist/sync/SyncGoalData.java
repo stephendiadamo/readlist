@@ -62,9 +62,12 @@ class SyncGoalData extends SyncData {
         i = 0;
         for (Goal goal : goalsFromParse) {
             if (!deviceGoalIds.containsKey(goal.getId())) {
+                int oldId = goal.getId();
                 goalOperations.addGoal(goal);
-                copyGoalValues(parseGoals.get(i), goal);
-                parseGoals.get(i).saveEventually();
+                if (oldId != goal.getId()) {
+                    copyGoalValues(parseGoals.get(i), goal);
+                    parseGoals.get(i).saveEventually();
+                }
             } else {
                 Goal comparison = goalsOnDevice.get(deviceGoalIds.get(goal.getId()));
                 if (!goal.getStartDate().equals(comparison.getStartDate())) {

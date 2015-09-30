@@ -63,9 +63,12 @@ public class SyncPageUpdateData extends SyncData {
         i = 0;
         for (PageUpdate pageUpdate : pageUpdatesFromParse) {
             if (!devicePageUpdateIds.containsKey(pageUpdate.getId())) {
+                int oldId = pageUpdate.getId();
                 pageUpdateOperations.addPageUpdate(pageUpdate);
-                copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
-                parsePageUpdates.get(i).saveEventually();
+                if (oldId != pageUpdate.getId()) {
+                    copyPageUpdateValues(parsePageUpdates.get(i), pageUpdate);
+                    parsePageUpdates.get(i).saveEventually();
+                }
             } else {
                 PageUpdate comparison = pageUpdatesOnDevice.get(devicePageUpdateIds.get(pageUpdate.getId()));
                 if (!comparison.getDate().equals(pageUpdate.getDate())) {

@@ -65,9 +65,12 @@ public class SyncBookUpdateData extends SyncData {
         i = 0;
         for (BookUpdate bookUpdate : bookUpdatesFromParse) {
             if (!deviceBookUpdateIds.containsKey(bookUpdate.getId())) {
+                int oldId = bookUpdate.getId();
                 bookUpdateOperations.addBookUpdate(bookUpdate);
-                copyBookUpdateValues(parseBookUdpates.get(i), bookUpdate);
-                parseBookUdpates.get(i).saveEventually();
+                if (bookUpdate.getId() != oldId) {
+                    copyBookUpdateValues(parseBookUdpates.get(i), bookUpdate);
+                    parseBookUdpates.get(i).saveEventually();
+                }
             } else {
                 BookUpdate comparisonBookUpdate = bookUpdatesOnDevice.get(deviceBookUpdateIds.get(bookUpdate.getId()));
                 if (!bookUpdatesMatch(comparisonBookUpdate, bookUpdate)) {

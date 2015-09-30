@@ -8,6 +8,7 @@ import com.parse.ParseQuery;
 import com.s_diadamo.readlist.general.Utils;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class FixRelations extends AsyncTask<Void, Void, Void> {
 
@@ -16,13 +17,15 @@ public class FixRelations extends AsyncTask<Void, Void, Void> {
     private final int mOldId;
     private final String mType;
     private final String mField;
+    private final CountDownLatch mSignal;
 
-    public FixRelations(String userName, int newId, int oldId, String type, String field) {
+    public FixRelations(String userName, int newId, int oldId, String type, String field, CountDownLatch signal) {
         mUserName = userName;
         mNewId = newId;
         mOldId = oldId;
         mType = type;
         mField = field;
+        mSignal = signal;
     }
 
     @Override
@@ -36,6 +39,7 @@ public class FixRelations extends AsyncTask<Void, Void, Void> {
                 object.put(mField, mNewId);
             }
             ParseObject.saveAll(objects);
+            mSignal.countDown();
         } catch (ParseException e) {
             e.printStackTrace();
         }
