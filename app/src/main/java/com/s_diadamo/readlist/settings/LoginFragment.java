@@ -125,8 +125,8 @@ public class LoginFragment extends Fragment {
     }
 
     private void proceedWithAction() {
-        final String userName = userNameInput.getText().toString();
-        final String password = passwordInput.getText().toString();
+        final String userName = userNameInput.getText().toString().trim();
+        final String password = passwordInput.getText().toString().trim();
 
         if (currentMode != FORGOT_PASSWORD_MODE) {
             if (userName.isEmpty() || password.isEmpty()) {

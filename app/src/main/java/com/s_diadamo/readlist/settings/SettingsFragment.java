@@ -62,6 +62,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
                 if (mUserLoggedIn) {
                     Utils.logout(mContext);
+                    mUserLoggedIn = false;
                     setLoginLabels();
                 } else {
                     launchLoginFragment();
@@ -207,5 +208,4 @@ public class SettingsFragment extends Fragment {
             mLoggedInAs.setVisibility(View.GONE);
         }
     }
-
 }

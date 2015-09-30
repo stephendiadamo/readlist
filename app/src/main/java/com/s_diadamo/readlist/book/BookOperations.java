@@ -160,15 +160,25 @@ public class BookOperations {
 
     public void deleteAssociatedLentBooks(Book book) {
         db = dbHelper.getWritableDatabase();
-        db.delete(DatabaseHelper.TABLE_LENT_BOOKS, DatabaseHelper.LENT_BOOK_BOOK_ID + "=?",
-                new String[]{String.valueOf(book.getId())});
+        String flagLentBooksDeletedQuery = String.format("UPDATE %s SET %s=%d WHERE %s=%d",
+                DatabaseHelper.TABLE_LENT_BOOKS,
+                DatabaseHelper.IS_DELETED,
+                1,
+                DatabaseHelper.LENT_BOOK_BOOK_ID,
+                book.getId());
+        db.execSQL(flagLentBooksDeletedQuery);
         db.close();
     }
 
     private void deleteAssociatedComments(Book book) {
         db = dbHelper.getWritableDatabase();
-        db.delete(DatabaseHelper.TABLE_COMMENTS, DatabaseHelper.COMMENT_BOOK_ID + "=?",
-                new String[]{String.valueOf(book.getId())});
+        String flagCommentsAsDeletedQuery = String.format("UPDATE %s SET %s=%d WHERE %s=%d",
+                DatabaseHelper.TABLE_COMMENTS,
+                DatabaseHelper.IS_DELETED,
+                1,
+                DatabaseHelper.COMMENT_BOOK_ID,
+                book.getId());
+        db.execSQL(flagCommentsAsDeletedQuery);
         db.close();
     }
 
